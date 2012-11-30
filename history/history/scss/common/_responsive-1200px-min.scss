@@ -1,0 +1,26 @@
+// LARGE DESKTOP & UP
+// ------------------
+
+@media (min-width: 1200px) {
+
+// Fixed grid
+    @include grid-core(60px, 20px);
+
+// Fluid grid
+    @include grid-fluid(6.75000000000%, 1.710000000000%);
+
+// Input grid
+    @include grid-input(60px, 20px);
+
+// Thumbnails
+    .thumbnails {
+        margin-left: -30px;
+    }
+    .thumbnails > li {
+        margin-left: 30px;
+    }
+    .row-fluid .thumbnails {
+        margin-left: 0;
+    }
+
+}

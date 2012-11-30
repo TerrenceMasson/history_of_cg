@@ -1,0 +1,267 @@
+.gallery-wrapper {
+    width: 100%;
+}
+
+.gallery-block-wrapper {
+    @extend .clearfix;
+    background-color: $black;
+    padding: $fluidGridGutterWidth 0;
+    position: relative;
+}
+
+.gallery-window {
+    margin-bottom: $fluidGridGutterWidth;
+    width: 100%;
+
+    .modal-header {
+        padding: 0;
+        position: absolute;
+        right: $fluidGridGutterWidth;
+        top: $fluidGridGutterWidth;
+    }
+    .modal {
+        background-color: transparent;
+        border-radius: 5px;
+    }
+
+    .modal-body {
+        border-radius: 5px;
+        padding: 0px;
+
+        img {
+            display: block;
+        }
+    }
+    .close, .browse-image {
+        visibility: hidden;
+    }
+    a.browse-image {
+        background-color: $white;
+        color: $black;
+
+        &:hover {
+            background-color: $grayLight;
+            color: white;
+        }
+    }
+    .close {
+        @include opacity(75);
+        color: $grayLighter;
+    }
+}
+
+.gallery-content {
+    display: none;
+}
+
+.gallery {
+    @extend .clearfix;
+    margin: 0 auto;
+    min-height: 75px;
+    overflow:hidden;
+    position:relative;
+    width: ($fluidGridColumnWidth * 10) + ($fluidGridGutterWidth * 11);
+
+    .gallery-thumbs {
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 2000em;
+    }
+
+    .active {
+        cursor: default;
+        position: relative;
+    }
+
+    .thumb {
+        background-color: $white;
+        cursor: pointer;
+        display: inline-block;
+        max-height: 100px;
+        margin-left: 5px;
+        position: relative;
+
+        img {
+            max-height: 75px;
+        }
+    }
+}
+
+.span4 {
+    .gallery-window {
+        margin: 0;
+    }
+    .gallery {
+        width: ($fluidGridColumnWidth * 9) + ($fluidGridGutterWidth * 10);
+
+        .carousel-control {
+            &.right {
+                right: 7px;
+            }
+            &.left {
+                left: 7px;
+            }
+        }
+    }
+    .carousel-control {
+        font-size: 13px;
+        height: 15px;
+        line-height: 13px;
+        width: 15px;
+
+        &.left {
+            left: 5px;
+        }
+
+        &.right {
+            right: 5px;
+        }
+    }
+}
+
+.gallery-block {
+    float: left;
+}
+
+.gallery-window {
+    .modal-header {
+        border-bottom: none;
+    }
+
+    .modal-body {
+        max-height: 600px;
+        text-align: middle;
+    }
+}
+
+.carousel {
+    position: relative;
+    margin-bottom: $baseLineHeight;
+    line-height: 1;
+}
+
+.carousel-inner {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.carousel {
+
+    .item {
+        display: none;
+        position: relative;
+        @include transition(.6s ease-in-out left);
+    }
+
+    // Account for jankitude on images
+    .item > img {
+        display: block;
+        line-height: 1;
+    }
+
+    .active,
+    .next,
+    .prev { display: block; }
+
+    .active {
+        left: 0;
+    }
+
+    .next,
+    .prev {
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .next {
+        left: 100%;
+    }
+    .prev {
+        left: -100%;
+    }
+    .next.left,
+    .prev.right {
+        left: 0;
+    }
+
+    .active.left {
+        left: -100%;
+    }
+    .active.right {
+        left: 100%;
+    }
+
+}
+
+.carousel-control {
+    @include border-radius(23px);
+    background-color: #4c4c4c;
+    color: $white;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 400;
+    height: 30px;
+    left: 10px;
+    line-height: 25px;
+    position: absolute;
+    text-align: center;
+    top: 40%;
+    width: 30px;
+
+    // we can't have this transition here
+    // because webkit cancels the carousel
+    // animation if you trip this while
+    // in the middle of another animation
+    // ;_;
+    // .transition(opacity .2s linear);
+
+    // Reposition the right one
+    &.right {
+        left: auto;
+        right: 10px;
+    }
+
+    // Hover state
+    &:hover {
+        background-color: $grayDark;
+        color: $white;
+        text-decoration: none;
+    }
+
+    &.disabled {
+        background-color: #c9c9c9;
+        &:hover {
+            background-color: #c9c9c9;
+            cursor: default;
+        }
+    }
+
+    &.large {
+        @include border-radius(25px);
+        font-size: 42px;
+        font-weight: bold;
+        height: 45px;
+        line-height: 40px;
+        width: 45px;
+    }
+}
+
+// Caption for text below images
+// -----------------------------
+
+.carousel-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 15px 5px;
+    background: $grayDark;
+    background: rgba(0,0,0,.75);
+}
+.carousel-caption h4,
+.carousel-caption p {
+    color: $white;
+}

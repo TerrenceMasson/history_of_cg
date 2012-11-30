@@ -1,0 +1,30 @@
+.hero-unit {
+    padding: 1em 1.5em;
+    border: 1px solid red;
+
+    h1, h2, h3, h4, p {
+        color: $white;
+        font-weight: normal;
+    }
+
+    h1, h2 {
+        text-transform: uppercase;
+    }
+
+    h1 {
+
+    }
+
+    h2 {
+
+    }
+
+    h3 {
+
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+}

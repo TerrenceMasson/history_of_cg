@@ -1,0 +1,42 @@
+.table {
+    thead th {
+        vertical-align: middle;
+    }
+    th, td {
+        &.left {
+            text-align: left;
+        }
+        &.right {
+            text-align: right;
+        }
+        &.center {
+            text-align: center;
+        }
+    }
+}
+
+th {
+    &.header {
+        cursor: pointer;
+    }
+    .icon-sort {
+        margin-left: 10px;
+    }
+    &.headerSortUp .icon-sort {
+        @extend .icon-chevron-up;
+        color: blue;
+    }
+    &.headerSortDown .icon-sort {
+        @extend .icon-chevron-down;
+    }
+}
+
+td {
+    [class^="custom-icon-"],
+    [class*=" custom-icon-"],
+    [class^="icon-"],
+    [class*=" icon-"] {
+        display: block;
+        margin: 0 auto;
+    }
+}

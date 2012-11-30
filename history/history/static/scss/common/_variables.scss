@@ -1,0 +1,200 @@
+// VARIABLES
+// Variables to customize the look and feel of Bootstrap
+// -----------------------------------------------------
+
+
+
+// LINK COLORS
+// -----------
+
+$linkColor:             #08c !default;
+$linkColorHover:        darken($linkColor, 15) !default;
+
+
+// Grays
+$black:                 #000 !default;
+$grayDarker:            #222 !default;
+$grayDark:              #333 !default;
+$grayMedium:            #ededed;
+$gray:                  #666 !default;
+$grayLight:             #E3E3E3;
+$grayLighter:           #f1f1f1;
+$grayLightest:          #f7f7f7;
+$alabaster:             #fbfbfb;
+$white:                 #ffffff !default;
+
+// Accent colors
+$blue:                  #009fc2;
+$blueActive:            #006fec;
+$blueDark:              #0064cd !default;
+$green:                 #46a546 !default;
+$red:                   #e2223d;
+$yellow:                #ffc40d !default;
+$orange:                #ff7800;
+$orangeDark:            darken($orange, 5%);
+$flamingo:              #f15c22;
+$pink:                  #c3325f !default;
+$purple:                #7a43b6 !default;
+
+
+$inputBackground:       #fffffb;
+$inputBorderDark:       #cfcfcf;
+$inputBorderLight:      lighten($inputBorderDark, 10%);
+$inputBorderDarkError:  #d8b5b5;
+$inputBorderLightError: #ffdfdf;
+
+// Typography
+$baseFontSize:          16px;
+$baseFontFamily:        'Arial Narrow', Arial, sans-serif;
+$baseLineHeight:        20px;
+$textColor:             $grayDark !default;
+$disabledTextColor:     lighten($gray, 20%);
+
+$headingsFontFamily:    "UniversCondensed", Arial, sans-serif;
+$headingsAltFontFamily: "UniversCondensed", Arial, sans-serif;
+$headingsFontWeight:    normal;
+$headingsColor:         inherit !default; // empty to use BS default, $textColor
+
+
+// Tables
+// -------------------------
+$tableBackground:                   transparent !default; // overall background-color
+$tableBackgroundAccent:             #f9f9f9 !default; // for striping
+$tableBackgroundHover:              #f5f5f5 !default; // for hover
+$tableBorder:                       #ddd !default; // table and cell border
+
+
+// Buttons
+// -------------------------
+$btnBackground:                     #ff7200;
+$btnBackgroundHighlight:            #ce3100;
+$btnBorder:                         #ccc !default;
+
+$btnPrimaryBackground:              $linkColor !default;
+$btnPrimaryBackgroundHighlight:     adjust-hue($btnPrimaryBackground, 15%) !default;
+
+$btnInfoBackground:                 $white;
+$btnInfoBackgroundHighlight:        darken($white, 5%);
+
+$btnSuccessBackground:              #62c462 !default;
+$btnSuccessBackgroundHighlight:     #51a351 !default;
+
+$btnWarningBackground:              lighten($orange, 15%) !default;
+$btnWarningBackgroundHighlight:     $orange !default;
+
+$btnDangerBackground:               #ee5f5b !default;
+$btnDangerBackgroundHighlight:      #bd362f !default;
+
+$btnInverseBackground:              $gray !default;
+$btnInverseBackgroundHighlight:     $grayDarker !default;
+
+
+// Forms
+// -------------------------
+$inputBackground:               $white !default;
+$inputBorder:                   $inputBorderDark;
+$inputBorderRadius:             2px;
+$inputDisabledBackground:       $grayLighter !default;
+$formActionsBackground:         #f5f5f5 !default;
+$inputHeight:                   25px;
+$labelColor:                    #333;
+
+// Dropdowns
+// -------------------------
+$dropdownBackground:            $white !default;
+$dropdownBorder:                rgba(0,0,0,.2) !default;
+$dropdownLinkColor:             $textColor;
+$dropdownLinkColorHover:        $grayDarker;
+$dropdownLinkBackgroundHover:   $grayLight;
+
+// COMPONENT VARIABLES
+// --------------------------------------------------
+
+// Z-index master list
+// Used for a bird's eye view of components dependent on the z-axis
+// Try to avoid customizing these :)
+$zindexDropdown:        1000 !default;
+$zindexPopover:         1010 !default;
+$zindexTooltip:         1020 !default;
+$zindexFixedNavbar:     1030 !default;
+$zindexModalBackdrop:   1040 !default;
+$zindexModal:           1050 !default;
+
+// Input placeholder text color
+$placeholderText:       $grayLight !default;
+
+// Hr border color
+// -------------------------
+$hrBorder:                $grayLighter !default;
+
+// Navbar
+// -------------------------
+$navbarHeight:                    40px !default;
+$navbarBackground:                $blue;
+$navbarBackgroundHighlight:       $blue;
+
+$navbarText:                      $white;
+$navbarLinkColor:                 $white;
+$navbarLinkColorHover:            $grayLighter;
+$navbarLinkColorActive:           $grayLighter;
+$navbarLinkBackgroundHover:       transparent !default;
+$navbarLinkBackgroundActive:      $navbarBackground !default;
+
+$navbarSearchBackground:          lighten($navbarBackground, 25%) !default;
+$navbarSearchBackgroundFocus:     $white !default;
+$navbarSearchBorder:              darken($navbarSearchBackground, 30%) !default;
+$navbarSearchPlaceholderColor:    #ccc !default;
+$navbarBrandColor:                $navbarLinkColor !default;
+
+// Hero unit
+// -------------------------
+$heroUnitBackground:              $grayLighter !default;
+$heroUnitHeadingColor:            inherit !default;
+$heroUnitLeadColor:               inherit !default;
+
+// Form states and alerts
+$warningText:             #c09853 !default;
+$warningBackground:       #fcf8e3 !default;
+$warningBorder:           darken(adjust-hue($warningBackground, -10), 3%) !default;
+
+$errorText:               #b94a48 !default;
+$errorBackground:         #f2dede !default;
+$errorBorder:             darken(adjust-hue($errorBackground, -10), 3%) !default;
+
+$successText:             #468847 !default;
+$successBackground:       #dff0d8 !default;
+$successBorder:           darken(adjust-hue($successBackground, -10), 5%) !default;
+
+$infoText:                #3a87ad !default;
+$infoBackground:          #d9edf7 !default;
+$infoBorder:              darken(adjust-hue($infoBackground, -10), 7%) !default;
+
+// GRID
+// ----
+
+$gridColumns:             12;
+$gridColumnWidth:         60px;
+$gridGutterWidth:         20px;
+$quarterGridGutterWidth:  $gridGutterWidth / 4;
+$halfGridGutterWidth:     $gridGutterWidth / 2;
+$doubleGridGutterWidth:   $gridGutterWidth * 2;
+$gridRowWidth:            ($gridColumns * $gridColumnWidth) + ($gridGutterWidth * ($gridColumns - 1));
+
+// Fluid grid
+// -------------------------
+$fluidGridColumnWidth:    6.382978723404%;
+$fluidGridGutterWidth:    2.127659574468%;
+$halfFluidGridGutterWidth:    $fluidGridGutterWidth / 2;
+$doubleFluidGridGutterWidth:  $fluidGridGutterWidth * 2;
+
+// FORM
+// ----
+$input-mini-width:       90px;
+$input-small-width:      150px;
+$input-medium-width:     185px;
+$input-large-width:      290px;
+$input-xlarge-width:     390px;
+$input-xxlarge-width:    450px;
+
+$iconSpritePath:         '/static/img/glyphicons-halflings.png';
+$iconWhiteSpritePath:    '/static/img/glyphicons-halflings-white.png';

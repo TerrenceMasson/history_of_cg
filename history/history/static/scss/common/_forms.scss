@@ -1,0 +1,817 @@
+/* Select */
+@import "form/*.png";
+@include all-form-sprites;
+$form-map: sprite-map("form/*.png");
+
+$form-boolean-height: form-sprite-height(checkbox);
+$form-boolean-width: form-sprite-width(checkbox);
+
+$form-input-height: form-sprite-height(select);
+$form-input-width: form-sprite-width(select);
+
+.input-mini{ width: $input-mini-width; }
+.input-small { width: $input-small-width; }
+.input-medium { width: $input-medium-width; }
+.input-large { width: $input-large-width; }
+.input-xlarge { width: $input-xlarge-width; }
+.input-xxlarge { width: $input-xxlarge-width; }
+
+.input-full { width: 97%; }
+
+form {
+    margin: 0;
+
+    &.form-horizontal {
+        .control-label {
+            text-align: left;
+            width: 30%;
+        }
+        .controls {
+            margin-left: 33%;
+        }
+    }
+
+    &.large-inputs input {
+        @extend .input-large;
+    }
+
+    input, textarea {
+        width: 95%;
+    }
+
+    label, .form-label {
+        color: $labelColor;
+        cursor: pointer;
+        font-weight: normal;
+        text-transform: capitalize;
+
+        &.disabled {
+            color: $grayLight;
+        }
+    }
+    .form-label {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+    .help-text {
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+}
+
+button.center {
+    display: block;
+}
+
+$control-buffer: $inputHeight + 7px;
+div.controls {
+    &.input-mini {
+        width: $input-mini-width + $control-buffer;
+    }
+    &.input-small {
+        width: $input-small-width + $control-buffer;
+    }
+    &.input-medium {
+        width: $input-medium-width + $control-buffer;
+    }
+    &.input-large {
+        width: $input-large-width + $control-buffer;
+    }
+    &.input-xlarge {
+        width: $input-xlarge-width + $control-buffer;
+    }
+    &.input-xxlarge {
+        width: $input-xxlarge-width + $control-buffer;
+    }
+}
+
+div.grouped-select-mini, div.input-mini {
+
+    div.selector {
+        display: inline-block;
+        padding-right: 7px;
+        width: 83px;
+
+        &.hover, &.focus, &.active {
+            width: 83px;
+        }
+
+        span {
+            background-position: sprite-position($form-map, select, -($form-input-width - $input-mini-width));
+            width: 83px - 18px;
+        }
+
+        select {
+            width: 83px;
+        }
+    }
+}
+div.input-small {
+    width: $input-small-width + 7px;
+    div.selector {
+        width: $input-small-width;
+
+        &.hover, &.focus, &.active {
+            width: $input-small-width;
+        }
+
+        span {
+            background-position: sprite-position($form-map, select, -($form-input-width - $input-small-width));
+            width: $input-small-width - 25px;
+        }
+
+        select {
+            width: $input-small-width;
+        }
+    }
+}
+div.input-medium {
+    width: $input-medium-width + 7px;
+    div.selector {
+        width: $input-medium-width;
+
+        &.hover, &.focus, &.active {
+            width: $input-medium-width;
+        }
+
+        span {
+            background-position: sprite-position($form-map, select, -($form-input-width - $input-medium-width));
+            width: $input-medium-width - 25px;
+        }
+
+        select {
+            width: $input-medium-width;
+        }
+    }
+}
+div.input-large {
+    div.selector {
+        width: $input-large-width;
+
+        &.hover, &.focus, &.active {
+            width: $input-large-width;
+        }
+
+        span {
+            background-position: sprite-position($form-map, select, -($form-input-width - $input-large-width));
+            width: $input-large-width - 25px;
+        }
+
+        select {
+            width: $input-large-width;
+        }
+    }
+}
+div.input-xlarge {
+    div.selector {
+        width: $input-xlarge-width;
+
+        &.hover, &.focus, &.active {
+            width: $input-xlarge-width;
+        }
+
+        span {
+            background-position: sprite-position($form-map, select, -($form-input-width - $input-xlarge-width));
+            width: $input-xlarge-width - 25px;
+        }
+
+        select {
+            width: $input-xlarge-width;
+        }
+    }
+}
+div.input-xxlarge {
+    div.selector {
+        width: $input-xxlarge-width;
+
+        &.hover, &.focus, &.active {
+            width: $input-xxlarge-width;
+        }
+
+        span {
+            background-position: sprite-position($form-map, select, -($form-input-width - $input-xxlarge-width));
+            width: $input-xxlarge-width - 25px;
+        }
+
+        select {
+            width: $input-xxlarge-width;
+        }
+    }
+}
+
+$fixedSelectorWidth: 216px;
+@media (max-width: 979px) {
+    div {
+        &.input-xxlarge, .input-xlarge, .input-large, .input-medium {
+            width: $fixedSelectorWidth + 7;
+            div.selector {
+                width: $fixedSelectorWidth;
+
+                &.hover, &.focus, &.active {
+                    width: $fixedSelectorWidth;
+                }
+
+                span {
+                    background-position: sprite-position($form-map, select, -($form-input-width - $fixedSelectorWidth));
+                    width: $fixedSelectorWidth - 25px;
+                }
+
+                select {
+                    width: $fixedSelectorWidth;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    form input {
+        width: $fixedSelectorWidth;
+    }
+}
+
+.control-group {
+    ul, ol {
+        list-style: none;
+        margin: 0;
+    }
+    li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    &.error div.selector {
+        margin-bottom: 7px;
+    }
+}
+
+
+
+label[class*="span"] {
+    margin-left: 0;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+    font-size: 16px;
+    height: $inputHeight;
+    line-height: $inputHeight;
+}
+
+textarea {
+    height: $inputHeight * 5;
+    resize: none;
+}
+
+select, input[type="file"]  {
+    height: 32px;
+    line-height: 32px;
+}
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+    background-color: $inputBackground;
+    border-top-color: $inputBorderDark;
+    border-right-color: $inputBorderLight;
+    border-bottom-color: $inputBorderLight;
+    border-left-color: $inputBorderDark;
+
+    &:focus {
+        border-color: $inputBorderDark;
+        @include box-shadow(0 0 6px lighten(#ee5f5b, 20%));
+    }
+
+    &.disabled {
+        color: $grayLight;
+    }
+}
+
+input:focus:required:invalid,
+textarea:focus:required:invalid,
+select:focus:required:invalid {
+    color: $gray;
+    border-color: $inputBorderDark;
+    &:focus {
+        border-color: $inputBorderDark;
+        @include box-shadow(0 0 6px lighten(#ee5f5b, 20%));
+    }
+}
+select {
+    border-top: 2px solid $inputBorderDark;
+}
+select:focus {
+    outline: 5px auto $inputBorderDark;
+}
+
+/*.btn {
+    color: $white;
+    border: 2px solid $btnBorderLight;
+    border-bottom: 1px solid $btnBorderDark;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    text-shadow: none;
+}
+
+.btn:hover {
+    @include buttonBackground($btnBackgroundHighlight, $btnBackground);
+    border: 2px solid $btnBorderDark;
+    border-bottom: 1px solid $btnBorderLight;
+    background-position: 0 0;
+    color: $btnTextHover;
+    text-shadow: none;
+}*/
+
+.btn-full {
+    display: block;
+}
+
+
+.btn-fixed {
+
+    &.small {
+        width: 50px;
+    }
+
+    &.medium {
+        width: 100px;
+    }
+
+    &.large {
+        width: 150px;
+    }
+
+    &.xlarge {
+        width: 200px;
+    }
+
+    &.xxlarge {
+        width: 250px;
+    }
+}
+
+.help-inline {
+    background-color: $grayLighter;
+    padding: 5px 10px;
+    vertical-align: top;
+}
+
+.help-block {
+    color: $red;
+}
+
+/*
+
+Uniform Theme
+---
+For use with the Uniform plugin:
+http://pixelmatrixdesign.com/uniform/
+---
+Generated by Uniform Theme Generator:
+http://pixelmatrixdesign.com/uniform/themer.html
+
+*/
+
+/* Global Declaration */
+
+
+div.selector,
+div.selector span,
+div.checker span,
+div.radio span,
+div.uploader,
+div.uploader span.action {
+    @extend .form-sprite;
+    background-repeat: no-repeat;
+}
+
+.selector,
+.radio,
+.checker,
+.uploader,
+.selector *,
+.radio *,
+.checker *,
+.uploader *{
+    margin: 0;
+    padding: 0;
+}
+
+/* SPRITES */
+
+
+div.selector select {
+/* change these to adjust positioning of select element */
+    top: 4px;
+    left: 8px;
+}
+
+div.selector.focus,
+div.selector.active,
+div.checker.focus,
+div.checker.active,
+div.radio.focus,
+div.radio.active {
+    border-color: $inputBorderDark;
+    @include box-shadow(0 0 6px lighten(#ee5f5b, 20%));
+}
+
+div.selector,
+div.selector.hover,
+div.selector.focus,
+div.selector.active {
+    background-position: sprite-position($form-map, select-nub, -1px);
+    line-height: $form-input-height;
+    height: $form-input-height;
+    text-align: left;
+    width: $input-medium-width;
+}
+
+div.selector span {
+    background-position: sprite-position($form-map, select, -($form-input-width - $input-medium-width));
+    height: $form-input-height;
+    line-height: $form-input-height;
+
+    &.default {
+        color: #CCC;
+    }
+}
+
+/* Checkbox */
+
+div.checker {
+    width: $form-boolean-width;
+    height: $form-boolean-height;
+}
+
+div.checker input {
+    width: $form-boolean-width;
+    height: $form-boolean-height;
+}
+
+div.checker span {
+    @extend .form-checkbox;
+    background-position: sprite-position($form-map, checkbox);
+    height: $form-boolean-height;
+    width: $form-boolean-width;
+}
+
+div.checker span.checked {
+    background-position: sprite-position($form-map, checkbox-checked);
+}
+
+/* Radio */
+
+.radio, .checkbox { padding-left: 0; }
+
+div.radio {
+    width: $form-boolean-width;
+    height: $form-boolean-height;
+}
+
+div.radio input {
+    width: $form-boolean-width;
+    height: $form-boolean-height;
+}
+
+div.radio span {
+    height: $form-boolean-height;
+    width: $form-boolean-width;
+    background-position: sprite-position($form-map, radio);
+}
+
+div.radio span.checked {
+    background-position: sprite-position($form-map, radio-checked);
+}
+
+/* Uploader */
+
+div.uploader {
+    @extend .form-input;
+    height: $form-input-height;
+}
+
+div.uploader span.action {
+    @extend .form-input;
+    height: $form-input-height;
+    line-height: $form-input-height;
+}
+
+div.uploader span.filename {
+    height: $form-input-height;
+/* change this line to adjust positioning of filename area */
+    margin: 2px 0px 2px 2px;
+    line-height: $form-input-height;
+}
+
+div.uploader.focus,
+div.uploader.hover,
+div.uploader:hover {
+    @extend .form-input;
+}
+
+div.uploader.focus span.action,
+div.uploader.hover span.action,
+div.uploader:hover span.action {
+    @extend .form-input;
+}
+
+div.uploader.active span.action,
+div.uploader:active span.action {
+    @extend .form-input;
+}
+
+div.uploader.focus.active span.action,
+div.uploader:focus.active span.action,
+div.uploader.focus:active span.action,
+div.uploader:focus:active span.action {
+    @extend .form-input;
+}
+
+div.uploader.disabled {
+    @extend .form-input;
+}
+
+div.uploader.disabled span.action {
+    @extend .form-input;
+}
+
+/* PRESENTATION */
+
+/* Select */
+div.selector {
+    margin-bottom: 9px;
+    width: $input-medium-width;
+
+    &.invalid {
+        border: 1px solid #B94A48;
+        @include border-radius(2px);
+    }
+}
+
+div.selector select {
+    width: $input-medium-width;
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    border: solid 1px #fff;
+}
+
+div.selector span {
+    padding: 0px 25px 0px 2px;
+    cursor: pointer;
+}
+
+div.selector span {
+    color: #666;
+    width: $input-medium-width;
+    text-shadow: 0 1px 0 #fff;
+}
+
+div.selector.disabled span {
+    color: $grayLight;
+}
+
+/* Checker */
+div.checker {
+    margin-right: 10px;
+}
+
+/* Radio */
+div.radio {
+    margin-right: 10px;
+}
+
+/* Uploader */
+div.uploader {
+    width: $input-medium-width;
+    margin-bottom: $inputHeight;
+    cursor: pointer;
+}
+
+div.uploader span.action {
+    width: 85px;
+    text-align: center;
+    text-shadow: #fff 0px 1px 0px;
+    background-color: #fff;
+}
+
+div.uploader span.filename {
+    color: #777;
+    width: 82px;
+    border-right: solid 1px #bbb;
+    font-size: 90%;
+}
+
+div.uploader input {
+    width: $input-medium-width;
+}
+
+div.uploader.disabled span.action {
+    color: $grayLight;
+}
+
+div.uploader.disabled span.filename {
+    border-color: #ddd;
+    color: $grayLight;
+}
+/*
+
+CORE FUNCTIONALITY
+
+Not advised to edit stuff below this line
+-----------------------------------------------------
+*/
+
+.selector select:focus, .radio input:focus, .checker input:focus, uploader input:focus {
+    outline: 0;
+}
+
+/* Select */
+
+div.selector {
+    display: inline-block;
+    position: relative;
+    padding-left: 7px;
+    overflow: hidden;
+    vertical-align: middle;
+
+    /* for the bootstrap dropdowns */
+    &.dropdown {
+        overflow: visible;
+    }
+}
+
+div.selector span {
+    display: block;
+    float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+div.selector select {
+    position: absolute;
+    opacity: 0;
+    height: $inputHeight;
+    border: none;
+    background: none;
+}
+
+/* Checker */
+
+div.checker {
+    position: relative;
+    float: left;
+}
+
+div.checker span {
+    display: block;
+    float: left;
+    text-align: center;
+}
+
+div.checker input {
+    opacity: 0;
+    display: inline-block;
+    background: none;
+}
+
+/* Radio */
+
+div.radio {
+    position: relative;
+    float: left;
+}
+
+div.radio span {
+    display: block;
+    float: left;
+    text-align: center;
+}
+
+div.radio input {
+    opacity: 0;
+    text-align: center;
+    display: inline-block;
+    background: none;
+}
+
+/* Uploader */
+
+div.uploader {
+    position: relative;
+    float: left;
+    overflow: hidden;
+}
+
+div.uploader span.action {
+    float: left;
+    display: inline;
+    padding: 2px 0px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+div.uploader span.filename {
+    padding: 0px 10px;
+    float: left;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+div.uploader input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    float: right;
+    height: $inputHeight;
+    border: none;
+}
+
+/* START TOGGLER STYLES */
+
+$form-toggle-height: form-sprite-height(toggle);
+$form-toggle-width: form-sprite-width(toggle);
+$form-toggle-frame-width: form-sprite-width(toggle-frame);
+
+label.itoggle,
+label.itoggle span {
+    cursor: pointer;
+    height: $form-toggle-height;
+    text-indent: -9999px;
+    width: $form-toggle-frame-width;
+}
+label.itoggle {
+    @extend .form-toggle;
+    display: inline-block;
+    float: left;
+    font-weight: normal;
+
+    &.disabled {
+        cursor: default;
+        span {
+            @extend .form-toggle-frame-disabled;
+            cursor: default;
+        }
+    }
+}
+
+label.itoggle span {
+    @extend .form-toggle-frame;
+    display: block;
+    width: $form-toggle-frame-width;
+}
+
+label.itoggle.iToff{
+    background-position: sprite-position($form-map, toggle, -37px);
+}
+
+input.iT_checkbox{
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+/*
+	If you want the corners to be
+	transparent, add these two lines
+	to the main block above. Only
+	works on webkit and mozilla browsers
+	For more reliable results, make your
+	own png using the supplied .psd
+
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+*/

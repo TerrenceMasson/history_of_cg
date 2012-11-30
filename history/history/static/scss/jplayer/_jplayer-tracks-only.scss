@@ -1,0 +1,47 @@
+.simple {
+
+
+    .jp-no-solution {
+        display: none;
+    }
+}
+
+.media-review {
+    .jp-playlist {
+        a {
+            padding: 0em 1em;
+        }
+        .item-title {
+            padding: 0;
+        }
+    }
+}
+
+.napa-playlist {
+    .item-title {
+        padding-left: 1em;
+    }
+
+    .jp-audio {
+        width: 100%;
+    }
+
+    .icon-playlist-item {
+        @extend .icon-play;
+    }
+
+    .jp-playlist-playing {
+        .icon-playlist-item {
+            @extend .icon-pause;
+        }
+    }
+
+    .jp-playlist-paused {
+        .icon-playlist-item {
+            @extend .icon-play;
+        }
+    }
+    label {
+        margin-top: 10px;
+    }
+}

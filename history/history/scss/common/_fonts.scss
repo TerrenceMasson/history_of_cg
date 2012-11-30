@@ -1,0 +1,20 @@
+/***************************************************
+Fonts
+***************************************************/
+
+@font-face {
+    font-family: 'UniversCondensed';
+    src: url('/static/fonts/UniversLT-Condensed.eot');
+    src: url('/static/fonts/UniversLT-Condensed.eot?#iefix') format("embedded-opentype"), url('/static/fonts/UniversLT-Condensed.woff') format("woff"), url('/static/fonts/UniversLT-Condensed.ttf') format("truetype"), url('/static/fonts/UniversLT-Condensed.svg#InterstateRegular') format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'UniversCondensedOblique';
+    src: url('/static/fonts/UniversLT-CondensedOblique.eot');
+    src: url('/static/fonts/UniversLT-CondensedOblique.eot?#iefix') format("embedded-opentype"), url('/static/fonts/UniversLT-CondensedOblique.woff') format("woff"), url('/static/fonts/UniversLT-CondensedOblique.ttf') format("truetype"), url('/static/fonts/UniversLT-CondensedOblique.svg#InterstateRegular') format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
