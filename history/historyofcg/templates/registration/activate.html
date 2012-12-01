@@ -1,0 +1,24 @@
+{% extends 'default/base.html' %}
+{% load staticfiles %}
+{% block body_header %}
+<header id="masthead">
+    <div class="branding unitx2">
+        <a href="/"><img src="{% static 'img/logoSm.png' %}" alt="People Behind the Pixels"></a>    </div>
+    <div class="topRight internal">
+        <a href="/accounts/login/">login</a>
+    </div>
+    <div class="topSearch">
+        <form id="searchForm" class="search unitx2 cf">
+            <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+            <button class="searchBtn" title="Search">Search</button>
+        </form>
+    </div>
+    <div class="cf"></div>
+</header>
+{% endblock %}
+{% block content %}
+    <body>
+        <h2>Your account is now active!</h2>
+        <a href="/accounts/login">Login</a>
+    </body>
+{% endblock %}

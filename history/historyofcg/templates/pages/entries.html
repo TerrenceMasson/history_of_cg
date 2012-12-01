@@ -1,0 +1,88 @@
+{% extends 'default/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div id="content">
+        <div class="message" style="display: none;"></div>
+        <div class="timeline">
+            <img src="{% static 'img/timeline/timeline.png' %}">
+            <div class="tooltip" style="left: 187px; top: 505px; display: none;">Timeline coming soon!</div>
+        </div>
+        <!-- start of page content -->
+        <section class="entryMast">
+            <h1 class="entryTitle organization">Pixar Animation Studios</h1>
+            <div class="catBarContainer">
+                <ul class="catBar">
+                    <li class="category project"><a href="#" data-filter=".project">Projects</a></li>
+                    <li class="category person"><a href="#" data-filter=".person">People</a></li>
+                    <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
+                    <li class="category event"><a href="#" data-filter=".event">Events</a></li>
+                    <li class="editEntry"><a href="/entries/edit/pixar-animation-studios">Edit Entry</a></li>
+                    <div class="cf"></div>
+                </ul>
+            </div>
+        </section>
+        <section class="tagLists">
+            <div class="" style="display:none;">
+                <ul>
+                    {% for tag in tag_list %}
+                        <li class="{{ tag.name }}" data-filter="*" checked="checked">{{ tag.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <section class="mosaicBody">
+            <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
+                <li class="dynamic organization">
+                    <p>{{ page.description }}</p>
+                </li>
+                {% for is in image_stories %}
+                    <li class="tile story story-image {% for t in is.tags.all %} {{ t.name }}{% endfor %} isotope-item">
+                        <div class="container">
+                            <img src="{{ is.url }}">
+                        </div>
+                        <div class="bottom-link">
+                            <span>{{ is.description }}</span>
+                            <span class="story-type story-type-icon-image"></span>
+                            <div class="cf"></div>
+                        </div>
+                    </li>
+                {% endfor %}
+                {% for vs in video_stories %}
+                    <li class="tile story story-video {% for t in vs.tags.all %} {{ t.name }}{% endfor %} isotope-item">
+                        <div class="container">
+                            <div class='lite' style='width:478px; height:359px' id="{{ vs.video }}"></div>
+                        </div>
+                        <div class="bottom-link">
+                            <span>{{ vs.description }}</span>
+                            <span class="story-type story-type-icon-video"></span>
+                            <div class="cf"></div>
+                        </div>
+                    </li>
+                {% endfor %}
+                {% for ts in text_stories %}
+                    <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %} isotope-item">
+                        <div class="container">
+                            <p>{{ ts.text|truncatewords:80 }}</p>
+                        </div>
+                        <div class="bottom-link">
+                            <span>{{ ts.title }}</span>
+                            <span class="story-type story-type-icon-text"></span>
+                            <div class="cf"></div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="entryInfo" style="display: none;">
+            <input type="hidden" class="entryName" value="Pixar Animation Studios">
+            <input type="hidden" class="entryId" value="6">
+            <input type="hidden" class="entryCategory" value="organization">
+            <div class="entryDescription">
+                <p>
+                    {{ page.description }}
+                </p>
+            </div>
+        </section>
+    </div>
+{% endblock %}

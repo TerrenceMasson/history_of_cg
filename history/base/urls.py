@@ -16,7 +16,11 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'historyofcg.views.home')
+    url(r'^$', 'historyofcg.views.home'),
+    url(r'^about/', 'historyofcg.views.about'),
+    url(r'^accounts/', include('registration.urls')),
+    url(r'^pages/(?P<s>\w+)/', 'historyofcg.views.view_source_entries'),
+    url(r'^entry/add/', 'historyofcg.views.add_entry')
 )
 
 urlpatterns += staticfiles_urlpatterns()

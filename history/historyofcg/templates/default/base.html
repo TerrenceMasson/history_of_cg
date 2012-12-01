@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% spaceless %}
+    <!--[if IE 8]>
+<html class="ie8"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="https://www.facebook.com/2008/fbml"
+      dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}"
+      xml:lang="{% firstof LANGUAGE_CODE 'en' %}"
+      lang="{% firstof LANGUAGE_CODE 'en' %}">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="ie8"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="https://www.facebook.com/2008/fbml"
+      dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}"
+      xml:lang="{% firstof LANGUAGE_CODE 'en' %}"
+      lang="{% firstof LANGUAGE_CODE 'en' %}">
+<!--<![endif]-->
+{% endspaceless %}
+    <head>
+        <meta charset="UTF-8">
+        <title>People Behind the Pixels</title>
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/baseline.reset.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/jquery-ui.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-about.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-content.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-youtube.css' %}">
+
+        <script type="text/javascript" src="{% static 'js/libs/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/URI.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery.lazyload.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/lite-youtube-min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery.isotope.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput.js' %}"></script>
+
+        <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/entry.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/content.js' %}"></script>
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body class="wrapper">
+        <div id="page">
+            <header id="masthead">
+                <div class="branding unitx2">
+                    <a href="/"><img src="{% static 'img/logoSm.png' %}" alt="People Behind the Pixels"></a>    </div>
+
+                    <div class="topRight internal">
+                        <a href="/about">About</a>
+                        {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a><a href="/accounts/register">Register</a>{% endif %}
+                        {% if request.user.is_authenticated %}<a href="/accounts/logout">Logout</a><a href="/entry/add">Add an Entry</a> {% endif %}
+                        <!--<div class="form-container"><form action="" method="post" accept-charset="utf-8">
+                            <div class="input text required">
+                                <input type="text" name="" maxlength="200" id="UserEmail" placeholder="Email">
+                            </div>
+                            <div class="input password required">
+                                <input type="password" name="" maxlength="200" id="UserPassword" placeholder="Password">
+                            </div>
+                            <div class="submit">
+                                <input type="submit" value="Login">
+                            </div>
+                        </form>
+                        </div>
+                        -->
+                    </div>
+                    </div>
+                <div class="topSearch">
+                    <form id="searchForm" class="search unitx2 cf">
+                        <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                        <button class="searchBtn" title="Search">Search</button>
+                    </form>
+                </div>
+                <div class="cf"></div>
+                {% block body_header %} {% endblock %}
+            </header>
+            {% block content %} {% endblock %}
+            {% block body_footer %} {% endblock %}
+        </div>
+        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox" aria-activedescendant="ui-active-menuitem" style="z-index: 1; top: 0px; left: 0px; display: none;"></ul>
+    </body>
+</html>

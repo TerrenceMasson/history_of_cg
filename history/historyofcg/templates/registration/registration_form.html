@@ -1,0 +1,23 @@
+{% extends 'default/base.html' %}
+{% block content %}
+    <form action="/accounts/register/" method="POST" id="signup-form">{% csrf_token %}
+        {{ form.username.errors }}
+        <label>Username:</label>
+        {{ form.username }}
+
+        {{ form.email.errors }}
+        <label>Email:</label>
+        {{ form.email }}
+
+        {{ form.password1.errors }}
+        <label>Password:</label>
+        {{ form.password1 }}
+
+        {{ form.password2.errors }}
+        <label>Repeat:</label>
+        {{ form.password2 }}
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </form>
+{% endblock %}

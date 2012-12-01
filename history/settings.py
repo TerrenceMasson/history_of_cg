@@ -109,7 +109,7 @@ ROOT_URLCONF = 'base.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'base.wsgi.application'
 
-TEMPLATE_DIRS = ('C:/wamp/www/dj_history/historyofcg/templates',)
+TEMPLATE_DIRS = ('C:/Users/Kyle/Documents/GitHub/dj_history/history\historyofcg/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -122,7 +122,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'history',
+    'historyofcg',
+    'base',
+    'registration',
+    'south'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -153,3 +156,8 @@ LOGGING = {
         },
     }
 }
+
+ACCOUNT_ACTIVATION_DAYS = 0
+EMAIL_HOST = 'localhost:8000'
+DEFAULT_FROM_EMAIL = 'noreplay@localhost'
+LOGIN_REDIRECT_URL = '/'

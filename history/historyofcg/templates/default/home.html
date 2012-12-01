@@ -1,0 +1,57 @@
+{% load staticfiles %}
+    <head>
+        <meta charset="UTF-8">
+        <title>People Behind the Pixels</title>
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/baseline.reset.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/jquery-ui.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
+
+
+        <script type="text/javascript" src="{% static 'js/libs/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
+    </head>
+    <body id="homeWrapper" class="wrapper">
+        <div class="message" style="display:none;"></div>
+        <div class="spacer"></div>
+        <div id="page">
+            <header>
+            <div class="topRight unitx2">
+                <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+                <a href="/about">About</a>
+                {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a><a href="/accounts/register">Register</a>{% endif %}
+                {% if request.user.is_authenticated %}<a href="accounts/logout">Logout</a><a href="/entry/add">Add an Entry</a> {% endif %}
+            </div>
+            </div>
+            <div id="homeBranding">
+                <img src="{% static 'img/logo.png' %}" alt="People Behind the Pixels">
+            </div>
+        </header>
+            <section>
+                <div id="homeSearch">
+                    <form id="searchForm">
+                        <fieldset class="search">
+                            <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                            <button class="searchBtn" title="Search">Search</button>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="timeline">
+                    <img src="{% static 'img/timeline/timeline.png' %}">
+                    <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
+                </div>
+                {% for entry in updated_entries %}
+                    <div class="recent-story">
+                        <span class="story-title">{{ entry.name|safe }}</span>
+                        <br>
+                        <span class="story-description">{{ entry.description|safe }}</span>
+                        <br>
+                        <span class="story-story">{{ entry.text|safe }}</span>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+    </body>
+</html>
