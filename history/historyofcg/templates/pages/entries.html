@@ -9,14 +9,14 @@
         </div>
         <!-- start of page content -->
         <section class="entryMast">
-            <h1 class="entryTitle organization">Pixar Animation Studios</h1>
+            <h1 class="entryTitle organization">{{ page.name }}</h1>
             <div class="catBarContainer">
                 <ul class="catBar">
                     <li class="category project"><a href="#" data-filter=".project">Projects</a></li>
                     <li class="category person"><a href="#" data-filter=".person">People</a></li>
                     <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
                     <li class="category event"><a href="#" data-filter=".event">Events</a></li>
-                    <li class="editEntry"><a href="/entries/edit/pixar-animation-studios">Edit Entry</a></li>
+                    <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>
                     <div class="cf"></div>
                 </ul>
             </div>
@@ -36,36 +36,36 @@
                     <p>{{ page.description }}</p>
                 </li>
                 {% for is in image_stories %}
-                    <li class="tile story story-image {% for t in is.tags.all %} {{ t.name }}{% endfor %} isotope-item">
+                    <li class="tile story story-image {% for t in is.tags.all %} {{ t.name }}{% endfor %} isotope-item" data-image="{{ is.image|safe }}"">
                         <div class="container">
-                            <img src="{{ is.url }}">
+                            <img src="{{ is.image }}">
                         </div>
                         <div class="bottom-link">
-                            <span>{{ is.description }}</span>
+                            <span class="opener">{{ is.title }}</span>
                             <span class="story-type story-type-icon-image"></span>
                             <div class="cf"></div>
                         </div>
                     </li>
                 {% endfor %}
                 {% for vs in video_stories %}
-                    <li class="tile story story-video {% for t in vs.tags.all %} {{ t.name }}{% endfor %} isotope-item">
+                    <li class="tile story story-video {% for t in vs.tags.all %} {{ t.name }}{% endfor %} isotope-item" data-video="{{ vs.video|safe }}">
                         <div class="container">
                             <div class='lite' style='width:478px; height:359px' id="{{ vs.video }}"></div>
                         </div>
                         <div class="bottom-link">
-                            <span>{{ vs.description }}</span>
+                            <span class="opener">{{ vs.title }}</span>
                             <span class="story-type story-type-icon-video"></span>
                             <div class="cf"></div>
                         </div>
                     </li>
                 {% endfor %}
                 {% for ts in text_stories %}
-                    <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %} isotope-item">
+                    <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %} isotope-item" data-full-text="{{ ts.text|safe }}">
                         <div class="container">
-                            <p>{{ ts.text|truncatewords:80 }}</p>
+                            <p>{{ ts.text|truncatewords:60 }}</p>
                         </div>
                         <div class="bottom-link">
-                            <span>{{ ts.title }}</span>
+                            <span class="opener">{{ ts.title }}</span>
                             <span class="story-type story-type-icon-text"></span>
                             <div class="cf"></div>
                         </div>

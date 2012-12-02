@@ -1,0 +1,346 @@
+{% extends 'default/base.html' %}
+{% load staticfiles %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles-form.css' %}" once="1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/token-input.css' %}" once="1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/token-input-hcg.css' %}" once="1">
+
+    <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entry.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entry-stub.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entry-extras.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div id="content">
+    <div class="message" style="display: none;"></div>
+    <div class="form-container">
+    <form action="/edit/page/{{ page.vanity_url }}/" id="EntryEditForm" method="POST">
+        <div id="toolbar">
+            <div class="title"><h1>Edit Entry</h1></div>
+            <div class="publish-status">Published</div>
+            <div class="view"><a class="button organization-hover" href="/pages/{{ page.vanity_url }}">View Entry</a></div>
+            <div class="save">
+                <button class="organization-hover">Save Draft</button>
+                <button class="publish-button organization-hover">Unpublish</button>
+                <input type="hidden" name="data[Entry][published]" class="publish" value="0">
+            </div>
+            <div class="cf"></div>
+        </div>
+        <span class="required">* Required</span>
+        <div id="main-stub" class="stub section-in-form">
+            <ul class="required-labels all-labels">
+                <li class="label-entry-type labels">Type of entry <span class="required">*</span></li>
+                <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
+                <li class="label-entry-slug labels">Permalink</li>
+                <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
+            </ul>
+            <ul class="required-fields all-fields">
+                <li class="entry-type fields">
+                    {{ form.type.errors }}
+                    {{ form.type.as_input }}
+                </li>
+                <li class="entry-name fields">
+                    <input type="hidden" class="entry-id" name="data[Entry][id]" value="6">
+                    <input name="data[Entry][name]" id="entryName" value="Pixar Animation Studios" maxlength="200" type="text" class="organization ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">        </li>
+                <li class="entry-slug fields">
+                    <input type="text" name="data[Entry][slug]" value="pixar-animation-studios" class="organization">
+                </li>
+                <li class="entry-tags fields">
+                    <ul class="token-input-list-hcg tags organization"><li class="token-input-token-hcg" data-uniqueid="u1"><p>Animation</p><span class="token-input-delete-token-hcg">×</span></li><li class="token-input-token-hcg" data-uniqueid="u2"><p>Motion Pictures</p><span class="token-input-delete-token-hcg">×</span></li><li class="token-input-token-hcg" data-uniqueid="u3"><p>Software</p><span class="token-input-delete-token-hcg">×</span></li><li class="token-input-input-token-hcg"><input type="text" autocomplete="off" style="outline: none; width: 30px;" tabindex="0"><tester style="position: absolute; top: -9999px; left: -9999px; width: auto; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; letter-spacing: normal; white-space: nowrap;"></tester></li></ul><input type="hidden" name="data[tags]" class="tags organization" value="11,12,13">
+                </li>
+            </ul>
+            <div class="cf"></div>
+        </div>
+        <div class="basics section-in-form">
+            <ul class="basic-labels all-labels">
+                <li class="label-entry-description labels">Description<span class="required"> *</span></li>
+                <li class="label-entry-homepage labels" style="top: 170px;">Homepage URL</li>
+                <li class="label-entry-date labels" style="margin-top: 175px;"><span class="label">Established Date</span><span class="required"> *</span></li>
+                <li class="label-entry-date-2 labels" style="display: none;"><span class="label">Closing Date</span></li>
+            </ul>
+            <ul class="basic-fields all-fields">
+                <li class="entry-description fields">
+                    <textarea name="data[Entry][description]" id="entry-description-box" class="need-helper organization" rows="10" cols="30">Pixar was formed in 1986 when Steven Jobs (of Apple and NeXT computer fame) purchased the Lucasfilm Computer Graphics Division from George Lucas. George had decided about a year before that he did not want to continue a hardware development effort in-house. He also did not at that time want to pursue computer-generated animation (as did the employees). He therefore agreed to allow Edwin Catmull, Alvy Ray Smith, and the rest of the employees of the Lucasfilm Computer Division to seek out investors so they could spin off into their own company. Many different options were explored over the course of that year. In the end, the negotiations went down to the very last minute with the outcome not always certain. The deal that was finally made called for $5 million dollars to purchase the division with an additional $5 million for immediate capital investment.
+                        Founding members included (in alphabetical order): Tony Apodaca, Loren Carpenter, Ed Catmull, Rob Cook, David DeFrancesco, Tom Duff, Craig Good, Ralph Guggenheim, Pat Hanrahan, Sam Lefler, Darwyn Peachey, Tom Porter, Eben Ostby, Bill Reeves, Alvy Ray Smith, and Rodney Stock.
+                    </textarea>            <span id="helper-descript" class="helper-popups organization-border">
+                Tell us some details about this entry. Don't worry about too much technical data, just give us an idea of what this entry is about. This description will be displayed on the entries page.
+            </span>
+                </li>
+                <li class="entry-source fields"><input type="checkbox" id="entry-source" name="data[source_selected]">
+                    <label for="entry-source">I got this description from somewhere else</label>
+                </li>
+                <li class="source-title" style="display: none;">
+                    <label>Source:</label><input type="text" name="data[Entry][source_name]" value="" class="organization">
+                </li>
+                <li class="source-url" style="display: none;">
+                    <label>URL (if applicable):</label><input type="text" name="data[Entry][source_url]" value="" class="organization">
+                </li>
+                <li class="entry-homepage fields">
+                    <input type="text" id="entry-homepage" class="need-helper organization" name="data[Entry][homepage_url]" value="">
+                </li>
+                <li class="entry-date fields">
+                    <input type="text" id="entry-date-box-1" class="datepicker need-helper organization hasDatepicker" value="01/01/1986" placeholder="MM/DD/YYYY">
+                    <input type="hidden" name="data[Entry][date_1]" id="entry-date-box-1-helper" value="1986-01-01 00:00:00">            <span id="helper-date" class="helper-popups organization-border">When was this organization founded?</span>
+                </li>
+                <li class="entry-date-2-selected fields" style=""><input type="checkbox" id="entry-date-selected" name="data[date_selected]">
+                    <label for="entry-date-selected">This organization no longer exists</label>
+                </li>
+                <li class="entry-date-2 fields" style="display: none;">
+                    <input type="text" id="entry-date-box-2" class="datepicker need-helper organization hasDatepicker" value="" placeholder="MM/DD/YYYY">
+                    <input type="hidden" name="data[Entry][date_2]" id="entry-date-box-2-helper">            <span id="helper-date" class="helper-popups organization-border">When did this organization close?</span>
+                </li>
+            </ul>
+            <div class="cf"></div>
+        </div>
+        <div class="save">
+            <button class="organization-hover">Save Draft</button>
+            <button class="publish-button organization-hover">Unpublish</button>
+            <input type="hidden" name="data[Entry][published]" class="publish" value="0">
+        </div>
+    </form>
+    <div class="stories-col section-in-form">
+        <ul class="story-explanation">
+            <li class="label-story-header labels"><h2>Add a Story or Media</h2></li>
+            <li class="story-helpertext"><p>Did you contribute to the development of an innovative technology or project? Did you have a chance to work with someone brimming with amazing talent? Here is a chance to share them!</p></li>
+            <li class="share"><button class="btn-story organization-hover">Share Stories or Add Media</button></li>
+        </ul>
+        <div class="cf"></div>
+        <div class="stories new" id="story-template" style="display: none;">
+            <p class="story-collapsed-heading">
+                <span class="title organization">New Story</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <span class="story-type"></span>
+                <span class="info">Not Saved</span>
+            </p>
+            <div class="story-collapsed">
+                <div class="tabs">
+                    <ul class="tabs_nav">
+                        <li class="tabs_link"><a href="#type-1">Text</a></li>
+                        <li class="tabs_link"><a href="#type-2">Image</a></li>
+                        <li class="tabs_link"><a href="#type-3">Video</a></li>
+                    </ul>
+                    <div class="tab-content" data-tab="type-1">
+                        <form action="/stories/add_or_edit" method="post" accept-charset="utf-8">
+                            <input type="hidden" class="story-type" name="data[Story][story_type_id]" value="3">
+                            <ul class="story-labels all-labels">
+                                <li class="label-story-title labels">Title</li>
+                                <li class="label-story-date labels">Date</li>
+                                <li class="label-story-story labels">Story</li>
+                                <li class="label-story-author labels">Author</li>
+                            </ul>
+                            <ul class="story-fields all-fields">
+                                <li class="story-title fields">
+                                    <input type="text" name="data[Story][title]" class="need-helper organization" value="" placeholder="New Story">
+                                    <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
+                                </li>
+                                <li class="story-date fields">
+                                    <input type="text" class="datepicker need-helper organization" value="" placeholder="MM/DD/YYYY">
+                                    <input name="data[Story][date]" type="hidden" value="">
+                                    <span id="helper-story-date" class="helper-popups organization-border">When did this story take place?</span>
+                                </li>
+                                <li class="story-body fields">
+                                    <textarea class="need-helper organization" name="data[Story][story]" rows="10" cols="30"></textarea>
+                                    <span id="helper-story-story" class="helper-popups organization-border">What happened? Who was involved? Remember, this is isn't an encyclopedia entry, give us the inside story!</span>
+                                </li>
+                                <li class="story-author fields">
+                                    <input type="text" class="need-helper organization ui-autocomplete-input" value="" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                                    <input type="hidden" class="author-id" name="data[Story][author_id]" value="">
+                                    <span id="helper-story-author" class="helper-popups need-helper organization-border">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
+                                </li>
+                                <li class="story-source fields">
+                                    <input type="checkbox" class="story-source-checkbox" name="data[source_selected]" value="yes">
+                                    <label for="story-source">I got this description from somewhere else</label>
+                                </li>
+                                <li class="source-title" style="display: none;">
+                                    <label>Source:</label><input type="text" name="data[Story][source_name]" class="organization">
+                                </li>
+                                <li class="source-url" style="display: none;">
+                                    <label>URL (if applicable):</label><input type="text" name="data[Story][source_url]" class="organization">
+                                </li>
+                                <li class="story-save save">
+                                    <button class="organization-hover">Save Story</button>
+                                    <button class="publish-button organization-hover">Publish Story</button>
+                                    <input type="hidden" class="publish" name="data[Story][published]" value="1">
+                                </li>
+                            </ul>
+                            <div class="cf"></div>
+                            <input type="hidden" class="story-id" name="data[Story][id]" value="">
+                        </form>
+                        <div class="cf"></div>
+                    </div>
+                    <div class="tab-content" data-tab="type-2">
+                        <form action="/stories/add_or_edit" method="post" accept-charset="utf-8">
+                            <input type="hidden" class="story-type" name="data[Story][story_type_id]" value="2">
+                            <ul class="story-labels all-labels">
+                                <li class="label-story-title labels">Title</li>
+                                <li class="label-story-url labels">URL</li>
+                            </ul>
+                            <ul class="story-fields all-fields">
+                                <li class="story-title fields">
+                                    <input type="text" name="data[Story][title]" class="need-helper organization" value="" placeholder="New Story">
+                                    <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
+                                </li>
+                                <li class="story-url fields">
+                                    <input type="text" name="data[Story][url]" class="need-helper organization" value="">
+                                    <span id="helper-story-date" class="helper-popups organization-border">Paste or type a URL to the media in here.</span>
+                                </li>
+                                <li class="story-preview">
+                                </li>
+                                <li class="story-save save">
+                                    <button class="organization-hover">Save Story</button>
+                                    <button class="publish-button organization-hover">Publish Story</button>
+                                    <input type="hidden" class="publish" name="data[Story][published]" value="1">
+                                </li>
+                            </ul>
+                            <div class="cf"></div>
+                            <input type="hidden" class="story-id" name="data[Story][id]" value="">
+                        </form>
+                        <div class="cf"></div>
+                    </div>
+                    <div class="tab-content" data-tab="type-3">
+                        <form action="/stories/add_or_edit" method="post" accept-charset="utf-8">
+                            <input type="hidden" class="story-type" name="data[Story][story_type_id]" value="1">
+                            <ul class="story-labels all-labels">
+                                <li class="label-story-title labels">Title</li>
+                                <li class="label-story-url labels">URL</li>
+                            </ul>
+                            <ul class="story-fields all-fields">
+                                <li class="story-title fields">
+                                    <input type="text" name="data[Story][title]" class="need-helper organization" value="" placeholder="New Story">
+                                    <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
+                                </li>
+                                <li class="story-url fields">
+                                    <input type="text" name="data[Story][url]" class="need-helper organization" value="">
+                                    <input type="hidden" name="data[Story][video]" class="video-id" value="">
+                                    <span id="helper-story-date" class="helper-popups organization-border">Paste or type a URL to the media in here.</span>
+                                </li>
+                                <li class="story-preview">
+                                </li>
+                                <li class="story-save save">
+                                    <button class="organization-hover">Save Story</button>
+                                    <button class="publish-button organization-hover">Publish Story</button>
+                                    <input type="hidden" class="publish" name="data[Story][published]" value="1">
+                                </li>
+                            </ul>
+                            <div class="cf"></div>
+                            <input type="hidden" class="story-id" name="data[Story][id]" value="">
+                        </form>
+                        <div class="cf"></div>
+                    </div>
+                    <div class="cf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-column">
+        <h2>Create connections</h2>
+        <p>Think of some other topics, subjects or categories that this post relates to? Make the connections between entries here!</p>
+        <div class="connections-col section-in-form">
+            <div class="stub" id="connection-form">
+                <form action="/connections/add" method="post" accept-charset="utf-8">
+                    <ul class="required-fields all-fields">
+                        <li class="entry-name fields connection-fields">
+                            <input type="text" placeholder="Entry name" name="data[Entry][name]" value="" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                            <input type="hidden" class="entry-id" name="data[connection_id]" value="">
+                        </li>
+                        <li class="entry-type fields connection-fields extra" style="display: none;">
+                            <select class="entry-type-select" name="data[Entry][category_id]">
+                                <option value="" selected="selected">-- Type of Entry --</option>
+                                <option value="1">A Person</option>
+                                <option value="2">A Project</option>
+                                <option value="3">An Organization</option>
+                                <option value="4">An Event</option>
+                            </select>
+                        </li>
+                        <li class="entry-tags fields connection-fields extra" style="display: none;">
+                            <ul class="token-input-list-hcg tags"><li class="token-input-input-token-hcg"><input type="text" autocomplete="off" style="outline: none;" tabindex="0" placeholder="Add a tag"><tester style="position: absolute; top: -9999px; left: -9999px; width: auto; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; letter-spacing: normal; white-space: nowrap;"></tester></li></ul><input type="hidden" placeholder="Related tags" name="data[tags]" class="tags" value="">
+                        </li>
+                    </ul>
+                    <div class="cf"></div>
+                    <button class="organization-hover">Connect entries</button>
+                </form>
+            </div>
+            <div class="connections" id="connection-template" style="display: none;">
+                <span class="name"></span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="4">
+                <span class="name">Edwin Catmull</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="191">
+                <span class="name">Rob Cook</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="192">
+                <span class="name">Alvy Ray Smith</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="193">
+                <span class="name">Pat Hanrahan </span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="194">
+                <span class="name">Loren Carpenter</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="195">
+                <span class="name">Eben Ostby</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="196">
+                <span class="name">Ralph Guggenheim</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="197">
+                <span class="name">Rodney Stock</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections person" data-id="198">
+                <span class="name">David DiFrancesco</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections project" data-id="3">
+                <span class="name">Toy Story</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections organization" data-id="8">
+                <span class="name">New York Institute of Technology</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections organization" data-id="14">
+                <span class="name">Industrial Light &amp; Magic</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections project" data-id="28">
+                <span class="name">Monsters, Inc.</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections project" data-id="322">
+                <span class="name">CAPS ( Computer Animation Production System )</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+            <div class="connections project" data-id="346">
+                <span class="name">REYES</span>
+                <span class="delete ui-icon ui-icon-close"></span>
+                <div class="cf"></div>
+            </div>
+        </div>
+    </div></div>
+    </div>
+{% endblock %}

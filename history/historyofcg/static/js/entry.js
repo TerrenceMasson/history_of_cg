@@ -242,8 +242,8 @@ $(function() {
                 $('li.label-entry-homepage').css("top","273px");
             }
             else {
-                $('.basics .label-entry-date').css('margin-top','175px');
-                $('li.label-entry-homepage').css("top","170px"); 
+                $('.basics .label-entry-date').css('margin-top','145px');
+                $('li.label-entry-homepage').css("top","145px");
                 $('.basics .source-title').hide();
                 $('.basics .source-url').hide();
             }

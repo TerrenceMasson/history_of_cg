@@ -53,7 +53,7 @@
                     <div class="topRight internal">
                         <a href="/about">About</a>
                         {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a><a href="/accounts/register">Register</a>{% endif %}
-                        {% if request.user.is_authenticated %}<a href="/accounts/logout">Logout</a><a href="/entry/add">Add an Entry</a> {% endif %}
+                        {% if request.user.is_authenticated %}<a href="/accounts/logout">Logout</a><a href="/add/page">Add a Page</a><span>Hello, {{ request.user }}!</span>{% endif %}
                         <!--<div class="form-container"><form action="" method="post" accept-charset="utf-8">
                             <div class="input text required">
                                 <input type="text" name="" maxlength="200" id="UserEmail" placeholder="Email">

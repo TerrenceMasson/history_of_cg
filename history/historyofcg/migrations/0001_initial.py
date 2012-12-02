@@ -31,11 +31,11 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('city', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
             ('state', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('country', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(unique=True, null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(unique=True, null=True, blank=True)),
         ))
         db.send_create_signal('historyofcg', ['Location'])
 
@@ -44,8 +44,9 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('vanity_url', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
             ('description', self.gf('django.db.models.fields.TextField')(null=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=40)),
         ))
         db.send_create_signal('historyofcg', ['Page'])
 
@@ -54,7 +55,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
         ))
         db.send_create_signal('historyofcg', ['Source'])
@@ -64,7 +65,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
             ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['historyofcg.Category'])),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
@@ -74,6 +75,7 @@ class Migration(SchemaMigration):
             ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['historyofcg.Source'])),
             ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['historyofcg.Page'])),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
         ))
         db.send_create_signal('historyofcg', ['Entry'])
 
@@ -87,33 +89,52 @@ class Migration(SchemaMigration):
 
         # Adding model 'Story'
         db.create_table('historyofcg_story', (
-            ('entry_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['historyofcg.Entry'], unique=True, primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
             ('date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
+            ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['historyofcg.Page'])),
+            ('source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['historyofcg.Source'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
         ))
         db.send_create_signal('historyofcg', ['Story'])
+
+        # Adding M2M table for field tags on 'Story'
+        db.create_table('historyofcg_story_tags', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('story', models.ForeignKey(orm['historyofcg.story'], null=False)),
+            ('tag', models.ForeignKey(orm['historyofcg.tag'], null=False))
+        ))
+        db.create_unique('historyofcg_story_tags', ['story_id', 'tag_id'])
 
         # Adding model 'VideoStory'
         db.create_table('historyofcg_videostory', (
             ('story_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['historyofcg.Story'], unique=True, primary_key=True)),
-            ('video', self.gf('django.db.models.fields.URLField')(max_length=200)),
+            ('video', self.gf('django.db.models.fields.CharField')(unique=True, max_length=40)),
         ))
         db.send_create_signal('historyofcg', ['VideoStory'])
 
         # Adding model 'ImageStory'
         db.create_table('historyofcg_imagestory', (
             ('story_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['historyofcg.Story'], unique=True, primary_key=True)),
-            ('image', self.gf('django.db.models.fields.URLField')(max_length=200)),
+            ('image', self.gf('django.db.models.fields.URLField')(unique=True, max_length=200)),
         ))
         db.send_create_signal('historyofcg', ['ImageStory'])
 
         # Adding model 'TextStory'
         db.create_table('historyofcg_textstory', (
             ('story_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['historyofcg.Story'], unique=True, primary_key=True)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
+            ('text', self.gf('django.db.models.fields.TextField')(unique=True)),
         ))
         db.send_create_signal('historyofcg', ['TextStory'])
+
+        # Adding model 'Connection'
+        db.create_table('historyofcg_connection', (
+            ('entry_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['historyofcg.Entry'], unique=True, primary_key=True)),
+            ('image', self.gf('django.db.models.fields.URLField')(unique=True, max_length=200)),
+        ))
+        db.send_create_signal('historyofcg', ['Connection'])
 
 
     def backwards(self, orm):
@@ -141,6 +162,9 @@ class Migration(SchemaMigration):
         # Deleting model 'Story'
         db.delete_table('historyofcg_story')
 
+        # Removing M2M table for field tags on 'Story'
+        db.delete_table('historyofcg_story_tags')
+
         # Deleting model 'VideoStory'
         db.delete_table('historyofcg_videostory')
 
@@ -149,6 +173,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'TextStory'
         db.delete_table('historyofcg_textstory')
+
+        # Deleting model 'Connection'
+        db.delete_table('historyofcg_connection')
 
 
     models = {
@@ -195,6 +222,11 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '15'})
         },
+        'historyofcg.connection': {
+            'Meta': {'object_name': 'Connection', '_ormbases': ['historyofcg.Entry']},
+            'entry_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['historyofcg.Entry']", 'unique': 'True', 'primary_key': 'True'}),
+            'image': ('django.db.models.fields.URLField', [], {'unique': 'True', 'max_length': '200'})
+        },
         'historyofcg.entry': {
             'Meta': {'object_name': 'Entry'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['historyofcg.Category']"}),
@@ -205,27 +237,28 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['historyofcg.Location']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['historyofcg.Page']"}),
             'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'source': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['historyofcg.Source']"}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['historyofcg.Tag']", 'symmetrical': 'False'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'historyofcg.imagestory': {
             'Meta': {'object_name': 'ImageStory', '_ormbases': ['historyofcg.Story']},
-            'image': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
+            'image': ('django.db.models.fields.URLField', [], {'unique': 'True', 'max_length': '200'}),
             'story_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['historyofcg.Story']", 'unique': 'True', 'primary_key': 'True'})
         },
         'historyofcg.location': {
             'Meta': {'object_name': 'Location'},
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'city': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'country': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'state': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         'historyofcg.page': {
@@ -234,22 +267,28 @@ class Migration(SchemaMigration):
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'}),
+            'vanity_url': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'})
         },
         'historyofcg.source': {
             'Meta': {'object_name': 'Source'},
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         },
         'historyofcg.story': {
-            'Meta': {'object_name': 'Story', '_ormbases': ['historyofcg.Entry']},
+            'Meta': {'object_name': 'Story'},
             'date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'entry_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['historyofcg.Entry']", 'unique': 'True', 'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['historyofcg.Page']"}),
+            'source': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['historyofcg.Source']"}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['historyofcg.Tag']", 'symmetrical': 'False'}),
+            'title': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'historyofcg.tag': {
             'Meta': {'object_name': 'Tag'},
@@ -261,12 +300,12 @@ class Migration(SchemaMigration):
         'historyofcg.textstory': {
             'Meta': {'object_name': 'TextStory', '_ormbases': ['historyofcg.Story']},
             'story_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['historyofcg.Story']", 'unique': 'True', 'primary_key': 'True'}),
-            'text': ('django.db.models.fields.TextField', [], {})
+            'text': ('django.db.models.fields.TextField', [], {'unique': 'True'})
         },
         'historyofcg.videostory': {
             'Meta': {'object_name': 'VideoStory', '_ormbases': ['historyofcg.Story']},
             'story_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['historyofcg.Story']", 'unique': 'True', 'primary_key': 'True'}),
-            'video': ('django.db.models.fields.URLField', [], {'max_length': '200'})
+            'video': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'})
         }
     }
 

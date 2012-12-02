@@ -1,0 +1,74 @@
+{% extends 'default/base.html' %}
+{% load staticfiles %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles-form.css' %}" once="1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/token-input.css' %}" once="1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/token-input-hcg.css' %}" once="1">
+
+    <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entry.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entry-stub.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div id="content">
+        <div class="message" style="display: none;"></div>
+        <div class="form-container">
+            <div id="toolbar">
+                <h1>Add a Page</h1>
+                <span class="required">* Required</span>
+            </div>
+            <form action="/add/page/" method="POST" id="EntryAddForm">{% csrf_token %}
+                <div id="main-stub" class="stub section-in-form">
+                    <ul class="required-labels all-labels">
+                        <li class="label-entry-type labels">Type of entry <span class="required">*</span></li>
+                        <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
+                        <li class="label-entry-name labels">Vanity URL <span class="required">*</span></li>
+                        <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
+                    </ul>
+                    <ul class="required-fields all-fields">
+                        <li class="entry-type fields">
+                            {{ form.type.errors }}
+                            {{ form.type }}
+                        </li>
+                        <li class="entry-name fields">
+                            {{ form.name.errors }}
+                            {{ form.name }}
+                        </li>
+                        <li class="entry-name fields">
+                            {{ form.vanity_url.errors }}
+                            {{ form.vanity_url }}
+                        </li>
+                        <li class="entry-tags fields">
+                            {{ form.tags.errors }}
+                            {{ form.tags }}
+                        </li>
+                    </ul>
+                    <div class="cf"></div>
+                </div>
+                <div class="basics section-in-form">
+                    <ul class="basic-labels all-labels">
+                        <li class="label-entry-description labels"><span class="label">Description <span class="required"></span></span></li>
+                        <li class="label-entry-homepage labels">Homepage</li>
+                        <li class="label-entry-date labels"><span class="label">Date Established</span><span class="required"> *</span></li>
+                    </ul>
+                    <ul class="basic-fields all-fields">
+                        <li class="entry-description fields">
+                            {{ form.description.errors }}
+                            {{ form.description }}
+                        </li>
+                        <li class="entry-homepage fields">
+                            {{ form.homepage.errors }}
+                            {{ form.homepage }}
+                        </li>
+                        <li class="entry-date fields">
+                            {{ form.date_established.errors }}
+                            {{ form.date_established }}
+                        </li>
+                    </ul>
+                    <div class="cf"></div>
+                </div>
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

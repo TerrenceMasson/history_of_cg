@@ -23,7 +23,7 @@ class EntryAdmin(admin.ModelAdmin):
 
 class StoryAdmin(admin.ModelAdmin):
     model = Story
-    list_display = ('id', 'title', 'page', 'date', 'url', 'date_created', 'date_modified')
+    list_display = ('id', 'title', 'page', 'date', 'source', 'user', 'date_created', 'date_modified')
 
 class VideoStoryAdmin(admin.ModelAdmin):
     model = VideoStory
@@ -35,11 +35,11 @@ class ImageStoryAdmin(admin.ModelAdmin):
 
 class TextStoryAdmin(admin.ModelAdmin):
     model = TextStory
-    list_display = ('id', 'story', 'date_created', 'date_modified')
+    list_display = ('id', 'text', 'date_created', 'date_modified')
 
 class PageAdmin(admin.ModelAdmin):
     model = Page
-    list_display = ('title', 'date_created', 'date_modified')
+    list_display = ('name', 'vanity_url', 'date_created', 'date_modified')
 
 class ConnectionAdmin(admin.ModelAdmin):
     model = Connection

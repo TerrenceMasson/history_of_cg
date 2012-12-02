@@ -1,5 +1,5 @@
 from django.db import models
-from history.base.models import BaseModel
+from base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 
 # Create your models here.
@@ -20,31 +20,36 @@ class Tag(BaseModel):
         return self.name
 
 class Location(BaseModel):
-    city = models.CharField(max_length=50)
+    city = models.CharField(max_length=50, unique=True)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True, unique=True)
+    longitude = models.FloatField(blank=True, null=True, unique=True)
 
     def __unicode__(self):
         return self.city
 
 class Page(BaseModel):
-    title = models.CharField(max_length=20)
-    description = models.TextField(null=True)
+    type = models.ForeignKey(Category)
+    name = models.CharField(max_length=40, unique=True)
+    vanity_url = models.CharField(max_length=20, unique=True)
+    tags = models.ManyToManyField(Tag)
+    description = models.TextField()
+    homepage = models.URLField(blank=True, null=True)
+    date_established = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
-        return self.title
+        return self.name
 
 class Source(BaseModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     url = models.URLField()
 
     def __unicode__(self):
         return self.name
 
 class Entry(BaseModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     category = models.ForeignKey(Category)
     description = models.TextField()
     user = models.ForeignKey(User)
@@ -60,27 +65,31 @@ class Entry(BaseModel):
     def __unicode__(self):
         return self.name
 
-class Story(Entry):
-    title = models.CharField(max_length=50)
+class Story(BaseModel):
+    title = models.CharField(max_length=50, unique=True)
     date = models.DateTimeField(blank=True, null=True)
+    page = models.ForeignKey(Page)
+    tags = models.ManyToManyField(Tag)
+    source = models.ForeignKey(Source)
+    user = models.ForeignKey(User)
 
     def __unicode__(self):
         return self.title
 
 class VideoStory(Story):
-    video = models.CharField(max_length=40)
+    video = models.CharField(max_length=200, unique=True)
 
     def save(self, *args, **kwargs):
         if "?v=" in self.video:
-            video = self.video.split('?v=')[1].__unicode__()
+            self.video = self.video.split('?v=')[1]
 
         super(VideoStory, self).save(*args, **kwargs)
 
 class ImageStory(Story):
-    image = models.URLField()
+    image = models.URLField(unique=True)
 
 class TextStory(Story):
-    text = models.TextField()
+    text = models.TextField(unique=True)
 
 class Connection(Entry):
-    image = models.URLField()
+    image = models.URLField(unique=True)

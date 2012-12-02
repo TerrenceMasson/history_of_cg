@@ -159,7 +159,7 @@ header#masthead {
     text-align: center;
     z-index: 200; }
 
-.topRight, .topRight a, .topRight .menu-item, .topRight .search {
+.topRight, .topRight a, .topRight .menu-item, .topRight .search, .topRight span {
   float: right; }
 
 .topRight {
@@ -254,6 +254,12 @@ header#masthead {
   position: absolute;
   right: 0;
   top: 50px; }
+
+.topRight span {
+    border-left: 1px #3B464F solid;
+    border-right: 1px #161A1E solid;
+    padding: 7px 20px;
+}
 
 .search input.searchBox {
   background-color: #141414;
