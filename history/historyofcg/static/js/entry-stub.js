@@ -47,7 +47,7 @@ $(function() {
           },
           select: function( event, ui ) {
             //redirect to content page for that entry
-            window.location = "/entries/view/"+ui.item.slug;
+            window.location = "/pages/"+ui.item.slug;
 
             return false;
           },

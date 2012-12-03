@@ -20,7 +20,7 @@
             <form action="/add/page/" method="POST" id="EntryAddForm">{% csrf_token %}
                 <div id="main-stub" class="stub section-in-form">
                     <ul class="required-labels all-labels">
-                        <li class="label-entry-type labels">Type of entry <span class="required">*</span></li>
+                        <li class="label-entry-type labels">Type of Page <span class="required">*</span></li>
                         <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
                         <li class="label-entry-name labels">Vanity URL <span class="required">*</span></li>
                         <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
@@ -39,8 +39,8 @@
                             {{ form.vanity_url }}
                         </li>
                         <li class="entry-tags fields">
-                            {{ form.tags.errors }}
-                            {{ form.tags }}
+                            <ul class="token-input-list-hcg tags organization">
+                            </ul>
                         </li>
                     </ul>
                     <div class="cf"></div>

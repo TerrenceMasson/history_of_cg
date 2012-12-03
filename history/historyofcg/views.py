@@ -53,11 +53,9 @@ def edit_page(request, vanity_url):
     page = Page.objects.get(vanity_url = vanity_url)
     user_stories = Story.objects.filter(user__id = request.user.id)
     connections = Connection.objects.filter(page__vanity_url = vanity_url)
-
     if request.method == 'POST':
         form = PageForm(request.POST)
         if form.is_valid():
-            #VALIDATE NIGGA
 
             return redirect('/pages/{}'.format(vanity_url))
 
