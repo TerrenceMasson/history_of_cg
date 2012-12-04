@@ -19,6 +19,10 @@ class Tag(BaseModel):
     def __unicode__(self):
         return self.name
 
+    @classmethod
+    def search(cls, query):
+        return cls.objects.filter(name__icontains=query)
+
 class Location(BaseModel):
     city = models.CharField(max_length=50, unique=True)
     state = models.CharField(max_length=50)
@@ -36,7 +40,7 @@ class Page(BaseModel):
     tags = models.ManyToManyField(Tag)
     description = models.TextField()
     homepage = models.URLField(blank=True, null=True)
-    date_established = models.DateTimeField(blank=True, null=True)
+    date_established = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -53,8 +57,8 @@ class Entry(BaseModel):
     category = models.ForeignKey(Category)
     description = models.TextField()
     user = models.ForeignKey(User)
-    date_1 = models.DateTimeField(blank=True, null=True)
-    date_2 = models.DateTimeField(blank=True, null=True)
+    date_1 = models.DateField(blank=True, null=True)
+    date_2 = models.DateField(blank=True, null=True)
     location = models.ForeignKey(Location)
     published = models.BooleanField()
     source = models.ForeignKey(Source)

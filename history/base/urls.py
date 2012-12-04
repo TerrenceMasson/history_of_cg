@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^pages/(?P<s>\w+)/', 'historyofcg.views.view_source_entries'),
     url(r'^add/page/$', 'historyofcg.views.add_page'),
     url(r'^edit/page/(?P<vanity_url>\w+)/$', 'historyofcg.views.edit_page'),
+    url(r"^(?P<app_label>\w+)/(?P<model>\w+)$", "historyofcg.views.search", name="djtokeninput_search")
 )
 
 urlpatterns += staticfiles_urlpatterns()

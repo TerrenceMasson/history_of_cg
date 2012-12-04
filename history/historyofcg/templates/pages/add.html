@@ -5,9 +5,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/token-input.css' %}" once="1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/token-input-hcg.css' %}" once="1">
 
-    <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput-1.6.0-min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/djtokeninput.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/entry.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/entry-stub.js' %}"></script>
 {% endblock %}
 {% block content %}
     <div id="content">
@@ -39,8 +39,8 @@
                             {{ form.vanity_url }}
                         </li>
                         <li class="entry-tags fields">
-                            <ul class="token-input-list-hcg tags organization">
-                            </ul>
+                            {{ form.tags.errors }}
+                            {{ form.tags }}
                         </li>
                     </ul>
                     <div class="cf"></div>
@@ -62,7 +62,9 @@
                         </li>
                         <li class="entry-date fields">
                             {{ form.date_established.errors }}
-                            {{ form.date_established }}
+                            <input type="text" id="entry-date-box-1 id_date_established" name="date_established" class="datepicker need-helper none hasDatepicker" value="" placeholder="MM/DD/YYYY">
+                            <input type="hidden" name="data[Entry][date_1]" id="entry-date-box-1-helper" value="">
+                            <span id="helper-date" class="helper-popups">When did this <i>Project/Event</i> take place? This will define where your entry goes on the timeline.</span>
                         </li>
                     </ul>
                     <div class="cf"></div>
