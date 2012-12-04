@@ -16,7 +16,13 @@ class PageForm(ModelForm):
     class Meta:
         model = Page
         widgets = {
-            'type': forms.Select(attrs={'class': 'entry-type-select none', 'id': 'EntryCategoryId'})
+            'type': forms.Select(attrs={'class': 'entry-type-select none', 'id': 'EntryCategoryId'}),
         }
+
+class StoryForm(ModelForm):
+
+    class Meta:
+        model = Story
+
 
 __author__ = 'Kyle'

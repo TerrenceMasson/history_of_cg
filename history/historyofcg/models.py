@@ -41,6 +41,9 @@ class Page(BaseModel):
     description = models.TextField()
     homepage = models.URLField(blank=True, null=True)
     date_established = models.DateField(blank=True, null=True)
+    published = models.BooleanField(default=False)
+    user = models.ForeignKey(User)
+    connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
 
     def __unicode__(self):
         return self.name

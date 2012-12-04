@@ -1,0 +1,35 @@
+<div class="right-column">
+    <h2>Create connections</h2>
+    <p>Think of some other topics, subjects or categories that this post relates to? Make the connections between entries here!</p>
+    <div class="connections-col section-in-form">
+        <div class="stub" id="connection-form">
+            <form action="/connections/add" method="post" accept-charset="utf-8">
+                <ul class="required-fields all-fields">
+                    <li class="entry-name fields connection-fields">
+                        <input type="text" placeholder="Entry name" name="data[Entry][name]" value="" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                        <input type="hidden" class="entry-id" name="data[connection_id]" value="">
+                    </li>
+                    <li class="entry-type fields connection-fields extra" style="display: none;">
+                        <select class="entry-type-select" name="data[Entry][category_id]">
+                            <option value="" selected="selected">-- Type of Entry --</option>
+                            <option value="1">A Person</option>
+                            <option value="2">A Project</option>
+                            <option value="3">An Organization</option>
+                            <option value="4">An Event</option>
+                        </select>
+                    </li>
+                    <li class="entry-tags fields connection-fields extra" style="display: none;">
+                        <ul class="token-input-list-hcg tags"><li class="token-input-input-token-hcg"><input type="text" autocomplete="off" style="outline: none;" tabindex="0" placeholder="Add a tag"><tester style="position: absolute; top: -9999px; left: -9999px; width: auto; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; letter-spacing: normal; white-space: nowrap;"></tester></li></ul><input type="hidden" placeholder="Related tags" name="data[tags]" class="tags" value="">
+                    </li>
+                </ul>
+                <div class="cf"></div>
+                <button class="organization-hover">Connect entries</button>
+            </form>
+        </div>
+        <div class="connections" id="connection-template" style="display: none;">
+            <span class="name"></span>
+            <span class="delete ui-icon ui-icon-close"></span>
+            <div class="cf"></div>
+        </div>
+    </div>
+</div>

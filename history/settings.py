@@ -11,6 +11,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
+    ('kyle', 'gordon117@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -91,7 +92,7 @@ SECRET_KEY = ')9d)j0btj_)tbxro8pw_vbt)$gv(m$#qth@f1jw&amp;yb$z=z3p%!'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,6 +101,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    #'historyofcg.middleware.HttpResponseNotAllowedMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -109,7 +111,7 @@ ROOT_URLCONF = 'base.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'base.wsgi.application'
 
-TEMPLATE_DIRS = ('C:/Users/Kyle/Documents/GitHub/dj_history/history\historyofcg/templates',)
+TEMPLATE_DIRS = ('C:/Users/Kyle/Documents/GitHub/dj_history/history/historyofcg/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

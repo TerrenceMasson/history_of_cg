@@ -1,27 +1,91 @@
-function change_publish_ui(button, publish, value) {
-    var $publish = $(button).siblings('.publish');
+$(document).ready(function(){
 
-    if(publish === "publish") {
-        if(value === 1) {
-            $(button).html('Unpublish Story');
-            $publish.val('0');
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
         }
-        else if(value === 0) {
-            $(button).html('Publish Story');
-            $publish.val('1');
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    $('.publish-page').click(function() {
+        console.log($(this));
+        if ($(this)[0].innerText == 'PUBLISH') {
+            ___url = "/publish/page/"+$(this)[0].getAttribute('data-vanity-url')+"/"
+            $.ajax({
+                type: "POST",
+                url: ___url,
+                success: function(action) {
+                    $('.publish-page').html('UNPUBLISH');
+                    $('.publish-status').html('PUBLISHED');
+                }
+            })
+        } else {
+            ___url = "/unpublish/page/"+$(this)[0].getAttribute('data-vanity-url')+"/"
+            $.ajax({
+                type: "POST",
+                url: ___url,
+                success: function(action) {
+                    $('.publish-page').html('PUBLISH');
+                    $('.publish-status').html('UNPUBLISHED');
+                }
+            })
+        }
+    });
+
+    story_toggler = $('.btn-story');
+
+    function showStoryForm(e) {
+        story_toggler.addClass('loading');
+        $.ajax({
+            url : story_toggler[0].getAttribute('data-href'),
+            dataType : 'html',
+            async : true
+        }).done(function(content, status, xhr) {
+            if (content) {
+                $('.story-container').html(content).removeClass('hide')
+            }
+        });
+    }
+
+    function handleStoryClick(e) {
+        e.preventDefault();
+        if (story_toggler.hasClass('disabled') === false) {
+            story_toggler.addClass('disabled');
+            showStoryForm();
         }
     }
-    else if(publish === "draft") {
-        // disable draft
-        if(value === 'disable') {
-            $publish.attr('disabled', true);
-        }
-        else if(value === 'enable') {
-            $publish.removeAttr('disabled');
-        }
+    if (story_toggler.length) {
+        story_toggler.on('click', handleStoryClick);
     }
-}
 
+    $('.story-collapsed-heading .delete').click(function() {
+        $('.story-container').html(content).addClass('hide')
+    });
+});
 
 $(function() {
     // stupid
@@ -210,7 +274,7 @@ $(function() {
                   $.datepicker._defaults.dateFormat,
                   selectedDate, instance.settings );
             $('#entry-date-box-1').datepicker( "option", option, date );
-          },
+          }
         });
 
         show_second_date($('.basics #entry-date-selected').is(':checked'));

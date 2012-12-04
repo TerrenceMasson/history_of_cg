@@ -7,7 +7,6 @@
 
     <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput-1.6.0-min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/djtokeninput.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/entry.js' %}"></script>
 {% endblock %}
 {% block content %}
     <div id="content">
@@ -49,7 +48,7 @@
                     <ul class="basic-labels all-labels">
                         <li class="label-entry-description labels"><span class="label">Description <span class="required"></span></span></li>
                         <li class="label-entry-homepage labels">Homepage</li>
-                        <li class="label-entry-date labels"><span class="label">Date Established</span><span class="required"> *</span></li>
+                        <li class="label-entry-date labels"><span class="label">Date Established</span></li>
                     </ul>
                     <ul class="basic-fields all-fields">
                         <li class="entry-description fields">
@@ -62,9 +61,7 @@
                         </li>
                         <li class="entry-date fields">
                             {{ form.date_established.errors }}
-                            <input type="text" id="entry-date-box-1 id_date_established" name="date_established" class="datepicker need-helper none hasDatepicker" value="" placeholder="MM/DD/YYYY">
-                            <input type="hidden" name="data[Entry][date_1]" id="entry-date-box-1-helper" value="">
-                            <span id="helper-date" class="helper-popups">When did this <i>Project/Event</i> take place? This will define where your entry goes on the timeline.</span>
+                            {{ form.date_established }}
                         </li>
                     </ul>
                     <div class="cf"></div>
