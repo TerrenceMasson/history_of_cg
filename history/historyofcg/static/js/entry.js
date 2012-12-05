@@ -82,8 +82,8 @@ $(document).ready(function(){
         story_toggler.on('click', handleStoryClick);
     }
 
-    $('.story-collapsed-heading .delete').click(function() {
-        $('.story-container').html(content).addClass('hide')
+    $('.ui-icon-close').click(function() {
+        $('.story-container').css('display:hide')
     });
 });
 
