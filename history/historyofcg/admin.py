@@ -13,29 +13,25 @@ class LocationAdmin(admin.ModelAdmin):
     model = Location
     list_display = ('id', 'city', 'state', 'country', 'latitude', 'longitude', 'date_created', 'date_modified')
 
-class SourceAdmin(admin.ModelAdmin):
-    model = Source
-    list_display = ('id', 'name', 'url', 'date_created', 'date_modified')
-
 class EntryAdmin(admin.ModelAdmin):
     model = Entry
-    list_display = ('id', 'name', 'category', 'description', 'user', 'date_1', 'date_2', 'location', 'published', 'source', 'date_created', 'date_modified')
+    list_display = ('id', 'name', 'category', 'description', 'user', 'date_1', 'date_2', 'location', 'published', 'date_created', 'date_modified')
 
 class StoryAdmin(admin.ModelAdmin):
     model = Story
-    list_display = ('id', 'title', 'page', 'date', 'source', 'user', 'date_created', 'date_modified')
+    list_display = ('id', 'title', 'page', 'date', 'user', 'date_created', 'date_modified')
 
-class VideoStoryAdmin(admin.ModelAdmin):
+class VideoStoryAdmin(StoryAdmin):
     model = VideoStory
-    list_display = ('id', 'video', 'date_created', 'date_modified')
+    list_display = ('id', 'title', 'video', 'date_created', 'date_modified')
 
-class ImageStoryAdmin(admin.ModelAdmin):
+class ImageStoryAdmin(StoryAdmin):
     model = ImageStory
-    list_display = ('id', 'image', 'date_created', 'date_modified')
+    list_display = ('id', 'title', 'image', 'date_created', 'date_modified')
 
-class TextStoryAdmin(admin.ModelAdmin):
+class TextStoryAdmin(StoryAdmin):
     model = TextStory
-    list_display = ('id', 'text', 'date_created', 'date_modified')
+    list_display = ('id', 'title', 'text', 'date_created', 'date_modified')
 
 class PageAdmin(admin.ModelAdmin):
     model = Page
@@ -48,7 +44,6 @@ class ConnectionAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Location, LocationAdmin)
-admin.site.register(Source, SourceAdmin)
 admin.site.register(Entry, EntryAdmin)
 admin.site.register(Story, StoryAdmin)
 admin.site.register(VideoStory, VideoStoryAdmin)

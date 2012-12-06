@@ -2,7 +2,7 @@ $(function() {
 
   var $connection_form_tags = null;
 
-  function new_story() {
+  /*function new_story() {
     // only do this if there are no other new story templates
     if( $('.stories-col .stories.new').length <= 1) {
       //append new form to stories
@@ -44,7 +44,7 @@ $(function() {
       $storyform.fadeIn();
       $('.stories:last .story-collapsed').slideDown();
     }
-  }
+  }*/
 
   //
   // create a new connection object by cloning template
@@ -612,10 +612,10 @@ $(function() {
   }
 
 
-  function init() {
+  /*function init() {
     // populate stories section with user's stories
     // bind events
-    $('.share .btn-story').click( new_story );
+    //$('.share .btn-story').click( new_story );
 
     // setup stories
     $('.stories').each(function() {
@@ -635,9 +635,9 @@ $(function() {
     $('.connections').each(function() {
       bind_connection_delete(this);
     });
-  }
+  }*/
 
 
   // start!
-  init();
+  //init();
 });

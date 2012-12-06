@@ -8,7 +8,10 @@
     <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput-1.6.0-min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/djtokeninput.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/jquery.form.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/entry-extras.js' %}"></script>
+
+    <script type="text/javascript">
+        $('.tabs-min').tabs();
+    </script>
 
 {% endblock %}
 {% block content %}
@@ -17,12 +20,7 @@
         <div class="form-container">
             <div id="toolbar">
                 <div class="title"><h1>Edit Entry</h1></div>
-                <div class="publish-status">
-                    {% if page.published %}
-                        Published
-                    {% else %}
-                        Not Published
-                    {% endif %}
+                <div class="publish-status">{% if page.published %}Published{% else %}Not Published{% endif %}
                 </div>
                 <div class="view"><a class="button organization-hover" href="/pages/{{ page.vanity_url }}">View Entry</a></div>
                 <div class="save">
@@ -91,7 +89,17 @@
                     <li class="share"><button class="btn-story organization-hover" data-href="/share/story/{{ page.vanity_url }}/">Share Stories or Add Media</button></li>
                 </ul>
                 <div class="story-container hide"></div>
+                {% for story in user_text_stories %}
+                    {% include 'pages/edit_story.html' %}
+                {% endfor %}
+                {% for story in user_image_stories %}
+                    {% include 'pages/edit_story.html' %}
+                {% endfor %}
+                {% for story in user_video_stories %}
+                    {% include 'pages/edit_story.html' %}
+                {% endfor %}
             </div>
+            {% include 'pages/create_connections.html' %}
         </div>
     </div>
 {% endblock %}

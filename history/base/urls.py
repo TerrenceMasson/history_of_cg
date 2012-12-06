@@ -23,10 +23,14 @@ urlpatterns = patterns('',
     url(r'^pages/(?P<s>\w+)/$', 'historyofcg.views.view_source_entries'),
     url(r'^add/page/$', 'historyofcg.views.add_page', name="add_page"),
     url(r'^edit/page/(?P<vanity_url>\w+)/$', 'historyofcg.views.edit_page'),
+    url(r'^edit/story/(?P<type>\w+)/(?P<id>\d+)/$', 'historyofcg.views.edit_story'),
     url(r'^unpublish/page/(?P<vanity_url>\w+)/$', 'historyofcg.views.unpublish_page'),
     url(r'^publish/page/(?P<vanity_url>\w+)/$', 'historyofcg.views.publish_page'),
+    url(r'^publish/story/(?P<id>\d+)/$', 'historyofcg.views.publish_story'),
+    url(r'^unpublish/story/(?P<id>\d+)/$', 'historyofcg.views.unpublish_story'),
     url(r'^share/story/(?P<vanity_url>\w+)/$', 'historyofcg.views.share_story'),
-    url(r'^tags/(?P<app_label>\w+)/(?P<model>\w+)$', "historyofcg.views.search", name="djtokeninput_search")
+    url(r'^save/story/(?P<story_type>\w+)/(?P<vanity_url>\w+)/$', 'historyofcg.views.new_story'),
+    url(r'^tags/(?P<app_label>\w+)/(?P<model>\w+)$', "historyofcg.views.search", name="djtokeninput_search"),
 )
 
 urlpatterns += staticfiles_urlpatterns()

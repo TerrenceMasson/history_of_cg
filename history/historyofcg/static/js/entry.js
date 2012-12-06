@@ -85,6 +85,53 @@ $(document).ready(function(){
     $('.ui-icon-close').click(function() {
         $('.story-container').css('display:hide')
     });
+
+    $('#TextStorySaveForm').submit(function(e) {
+        $.ajax({
+            data: $(this).serialize(), // get the form data
+            type: $(this).attr('method'), // GET or POST
+            url: $(this).attr('action'), // the file to call
+            success: function(action) {
+                $('.story-save-button').html('SAVED');
+            }
+        });
+        return false;
+    });
+
+    $('p.story-collapsed-heading').click(function(e) {
+        e.preventDefault();
+        console.log($(this).next());
+        $(this).next().slideDown();
+        $(this).removeClass('story-collapsed-heading');
+        $(this).addClass('story-opened-heading');
+    });
+
+    $('.story-publish-button').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        if ($(this)[0].innerText == 'PUBLISH') {
+            ___url = "/publish/story/"+$(this)[0].getAttribute('data-id')+"/"
+            $.ajax({
+                type: "POST",
+                url: ___url,
+                success: function(action) {
+                    console.log($(this));
+                    button.html('UNPUBLISH');
+                    $('.info').html('Published');
+                }
+            })
+        } else {
+            ___url = "/unpublish/story/"+$(this)[0].getAttribute('data-id')+"/"
+            $.ajax({
+                type: "POST",
+                url: ___url,
+                success: function(action) {
+                    button.html('PUBLISH');
+                    $('.info').html('Saved');
+                }
+            })
+        }
+    });
 });
 
 $(function() {

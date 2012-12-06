@@ -1,7 +1,6 @@
 from django import forms
 from widgets import TokenWidget
 
-
 class TokenField(forms.ModelMultipleChoiceField):
     kwargs_for_widget = ("search_url",)
     widget = TokenWidget

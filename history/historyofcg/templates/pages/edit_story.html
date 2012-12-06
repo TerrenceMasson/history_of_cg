@@ -1,0 +1,100 @@
+<div class="cf"></div>
+<div class="stories edit" style="">
+    <p class="story-collapsed-heading">
+        <span class="title {{ story.type }}">{{ story.title }}</span>
+        <span class="delete ui-icon ui-icon-close"></span>
+        <span class="story-type"></span>
+        <span class="info">{% if story.published %}Published{% else %}Saved{% endif %}</span>
+    </p>
+    <div class="story-collapsed" style="display: none;">
+        {% if story.text %}
+            <form action="/edit/story/text/{{ story.id }}/" method="POST" accept-charset="utf-8" id="TextStoryEditForm">{% csrf_token %}
+                <ul class="story-labels all-labels">
+                    <li class="label-story-title labels">Title</li>
+                    <li class="label-story-date labels">Date</li>
+                    <li class="label-story-source labels">Source</li>
+                    <li class="label-story-story labels">Story</li>
+                </ul>
+                <ul class="story-fields all-fields">
+                    <li class="story-title fields">
+                        <input type="text" name="title" id="id_title" class="need-helper organization" value="{{ story.title|safe }}">
+                        <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
+                    </li>
+                    <li class="story-date fields">
+                        <input type="text" name="date" id="id_date" class="need-helper organization" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                    </li>
+                    <li class="story-source fields">
+                        <input type="text" name="source" id="id_source" class="need-helper organization" value="{{ story.source|safe }}">
+                    </li>
+                    <li class="story-body fields">
+                        <textarea id="id_text" rows="10" cols="40" name="text" class="event">{{ story.text }}</textarea>
+                        <span id="helper-story-body" class="helper-popups organization-border">Paste or type the story in here.</span>
+                    </li>
+                    <li>
+                        <button class="organization-hover">Save Story</button>
+                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}Unpublish{% else %}Publish{% endif %}</button>
+                    </li>
+                </ul>
+                <div class="cf" style="display: none;"></div>
+            </form>
+        {% endif %}
+        {% if story.image %}
+            <form action="/edit/story/image/{{ story.id }}/" method="post" accept-charset="utf-8">{% csrf_token %}
+                <ul class="story-labels all-labels">
+                    <li class="label-story-title labels">Title</li>
+                    <li class="label-story-date labels">Date</li>
+                    <li class="label-story-url labels">Image URL</li>
+                </ul>
+                <ul class="story-fields all-fields">
+                    <li class="story-title fields">
+                        <input type="text" name="title" id="id_title" class="need-helper organization" value="{{ story.title }}">
+                        <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
+                    </li>
+                    <li class="story-date fields">
+                        <input type="text" name="date" id="id_date" class="need-helper organization" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                    </li>
+                    <li class="story-url fields">
+                        <input type="text" name="image" id="id_image" class="need-helper organization" value="{{ story.image }}">
+                    </li>
+                    <li class="story-save save">
+                        <button class="organization-hover">Save Story</button>
+                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}Unpublish{% else %}Publish{% endif %}</button>
+                    </li>
+                </ul>
+                <div class="cf" style="display: none;"></div>
+                <input type="hidden" class="story-id" name="data[Story][id]" value="">
+            </form>
+        {% endif %}
+        {% if story.video %}
+            <form action="/edit/story/video/{{ story.id }}/" method="post" accept-charset="utf-8">
+                <input type="hidden" class="story-type" name="data[Story][story_type_id]" value="1">
+                <ul class="story-labels all-labels">
+                    <li class="label-story-title labels">Title</li>
+                    <li class="label-story-date labels">Date</li>
+                    <li class="label-story-url labels">Video URL</li>
+                </ul>
+                <ul class="story-fields all-fields">
+                    <li class="story-title fields">
+                        <input type="text" name="title" id="id_title" class="need-helper organization" value="{{ story.title }}">
+                        <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
+                    </li>
+                    <li class="story-date fields">
+                        <input type="text" name="date" id="id_date" class="need-helper organization" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                    </li>
+                    <li class="story-url fields">
+                        <input type="text" name="image" id="id_video" class="need-helper organization" value="{{ story.image }}">
+                    </li>
+                    <li class="story-save save">
+                        <button class="organization-hover">Save Story</button>
+                        <button class="publish-button organization-hover">Publish Story</button>
+                        <input type="hidden" class="publish" name="data[Story][published]" value="1">
+                    </li>
+                </ul>
+                <div class="cf" style="display: none;"></div>
+                <input type="hidden" class="story-id" name="data[Story][id]" value="">
+            </form>
+        {% endif %}
+        <div class="cf" style="display: none;"></div>
+    </div>
+    <div class="cf" style="display: none;"></div>
+</div>

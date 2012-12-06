@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import forms
 from base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 
@@ -48,13 +49,6 @@ class Page(BaseModel):
     def __unicode__(self):
         return self.name
 
-class Source(BaseModel):
-    name = models.CharField(max_length=50, unique=True)
-    url = models.URLField()
-
-    def __unicode__(self):
-        return self.name
-
 class Entry(BaseModel):
     name = models.CharField(max_length=50, unique=True)
     category = models.ForeignKey(Category)
@@ -64,7 +58,6 @@ class Entry(BaseModel):
     date_2 = models.DateField(blank=True, null=True)
     location = models.ForeignKey(Location)
     published = models.BooleanField()
-    source = models.ForeignKey(Source)
     page = models.ForeignKey(Page)
     tags = models.ManyToManyField(Tag)
     url = models.URLField()
@@ -74,11 +67,11 @@ class Entry(BaseModel):
 
 class Story(BaseModel):
     title = models.CharField(max_length=50, unique=True)
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
     page = models.ForeignKey(Page)
-    tags = models.ManyToManyField(Tag)
-    source = models.ForeignKey(Source)
     user = models.ForeignKey(User)
+    source = models.CharField(max_length=200, blank=True, null=True)
+    published = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.title
