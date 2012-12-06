@@ -1,4 +1,50 @@
-$(document).ready(function() {
+$(function() {
+    // Get pagename
+    var path = window.location.pathname;
+    var pagename = path.substring(path.lastIndexOf("/") + 1)
+    pagename = pagename.toLowerCase();
+   $('#searchBox').autocomplete({
+       source: "/get/pages/",
+       minLength: 1,
+       focus: function( event, ui ) {
+           $( "#searchBox" ).val( ui.item['name'] );
+           console.log(ui.item);
+           return false;
+       },
+       select: function( event, ui ) {
+           //redirect to content page for that entry
+           window.location = "/pages/"+ui.item['name'];
+
+           return false;
+       }
+   }).data( "autocomplete" )._renderItem = function( ul, item ) {
+       var re = new RegExp(this.term, "i");
+       var match = item.name.match(re);
+       var t = item['name'].replace(re,"<span class='autocomplete-name-term-highlight'>" +
+           match +
+           "</span>");
+
+       var innerContent = "<a><span class='autocomplete-name'>"+ t +"</span><span class='autocomplete-category-box "+item['type']+"'></span>";
+
+       if(pagename === "") {
+           innerContent += "<span class='autocomplete-category "+item['type']+"'>" + item['type'].toUpperCase() + "</span>";
+       }
+
+       innerContent += "</a>";
+
+       return $( "<li></li>" )
+           .data( "item.autocomplete", item )
+           .append( innerContent )
+           .appendTo( ul );
+   };
+});
+
+
+
+
+
+
+/*$(document).ready(function() {
 
     // Returns the given string with its first letter upper cased
     function upperCaseWord(str) {
@@ -43,7 +89,7 @@ $(document).ready(function() {
                        window.location = "/entries/add/"+searchtext.replace(/ /g, "_");
                    }
 
-                  */
+
                    window.location = "/search/entries/"+searchtext.replace(/ /g, "+");
                }
            });
@@ -89,4 +135,4 @@ $(document).ready(function() {
             .append( innerContent )
             .appendTo( ul );
     };
-});
+});*/

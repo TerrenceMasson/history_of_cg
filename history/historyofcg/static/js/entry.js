@@ -132,6 +132,32 @@ $(document).ready(function(){
             })
         }
     });
+
+    $('.connect-entries-button').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/add/connection/"+button[0].getAttribute('data-vanity-url')+"/"+$( "#connectionSearchBox")[0].value+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+                window.location = "/edit/page/"+button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
+
+    $('.delete').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/remove/connection/"+button[0].getAttribute('data-vanity-url')+"/"+button[0].getAttribute('data-name')+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+                window.location = "/edit/page/"+button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
 });
 
 $(function() {
@@ -202,18 +228,6 @@ $(function() {
         }
     }
 
-
-    function show_second_date(show) {
-        if (show) {
-            $('.basics .entry-date-2').fadeIn();
-            $('.basics .label-entry-date-2').fadeIn();
-        }
-        else {
-            $('.basics .entry-date-2').hide();
-            $('.basics .label-entry-date-2').hide();
-        }
-    }
-
     function change_date_fields(t) {
         var $dateLabel = $('.basics .label-entry-date span.label');
         var $dateHelperText = $('.basics .entry-date .helper-popups');
@@ -226,27 +240,6 @@ $(function() {
         // date 1 section
         $dateLabel.html(dateInfo[t].dateLabel);
         $dateHelperText.html(dateInfo[t].helperText);
-
-        // project is the only type without a second date
-        if(t !== 'project' && t !== 'none') {
-            $secondDateLabel.html(dateInfo[t].secondDateLabel);
-            $secondDateHelperText.html(dateInfo[t].secondHelperText);
-            $secondDateCheckboxLabel.html(dateInfo[t].secondDateCheckboxLabel);
-
-            // show all second date related fields and labels
-            $secondDate.show();
-            $secondDateLabel.parent().show();
-            $secondDateCheckboxLabel.parent().show();
-
-            // is the checkbox checked? if so show the second date
-            show_second_date($secondDateCheckbox.is(':checked'));
-        }
-        else {
-            // hide the second date sections
-            $secondDateLabel.parent().hide();
-            $secondDateCheckboxLabel.parent().hide();
-            $secondDate.hide();
-        }
     }
 
     function change_date_fields_with(t) {
@@ -324,12 +317,6 @@ $(function() {
           }
         });
 
-        show_second_date($('.basics #entry-date-selected').is(':checked'));
-        $('.basics #entry-date-selected').click(function() {
-            show_second_date(this.checked);
-        });
-
-
         // ----------------- HELPER TEXTS - basics
         $('.need-helper')
           .focus(function () {
@@ -337,40 +324,6 @@ $(function() {
           })
           .focusout(function () {
             $(this).siblings('.helper-popups').fadeOut();
-        });
-
-        // ----------------- SOURCES - basic information -----------------
-        show_source($('.basics #entry-source').is(':checked'));
-        $('.basics #entry-source').click(function(){
-            show_source(this.checked);
-        });
-
-        function show_source(show) {
-            if (show) {
-                $('.basics .source-title').fadeIn();
-                $('.basics .source-url').fadeIn();
-                $('.basics .label-entry-date').css('margin-top','280px');
-                $('li.label-entry-homepage').css("top","273px");
-            }
-            else {
-                $('.basics .label-entry-date').css('margin-top','145px');
-                $('li.label-entry-homepage').css("top","145px");
-                $('.basics .source-title').hide();
-                $('.basics .source-url').hide();
-            }
-        }
-
-        var $allpublish = $('.form-container form .save .publish');
-
-        // init entry save buttons
-        $('.form-container form .save button').click( function() {
-
-          if(!$(this).hasClass('publish-button')) {
-            // save draft, do not publish
-            $allpublish.attr('disabled', true);
-          }
-
-          return true;
         });
     }
 

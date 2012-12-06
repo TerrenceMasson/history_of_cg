@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.template import RequestContext
+from django.utils import simplejson
 from django.views.decorators.http import require_safe
 from base.decorators import render_to
 from forms import PageForm, TextStoryForm, ImageStoryForm, VideoStoryForm
@@ -31,6 +32,7 @@ def view_source_entries(request, s):
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
     page = Page.objects.get(vanity_url=s, user=request.user)
+    connections = page.connections
 
     return locals()
 
@@ -79,7 +81,7 @@ def add_page(request):
 def edit_page(request, vanity_url):
     page = Page.objects.get(vanity_url = vanity_url)
     user_stories = Story.objects.filter(user__id = request.user.id, page = page)
-    connections = Connection.objects.filter(page__vanity_url = vanity_url)
+    connections = page.connections
     user_text_stories = TextStory.objects.filter(user__id = request.user.id, page = page)
     user_image_stories = ImageStory.objects.filter(user__id = request.user.id, page = page)
     user_video_stories = VideoStory.objects.filter(user__id = request.user.id, page = page)
@@ -312,5 +314,43 @@ def publish_story(request, id):
     story = Story.objects.get(id = id)
     story.published = True
     story.save()
+
+    return HttpResponse('')
+
+def get_pages(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        pages = Page.objects.filter(name__icontains = q, published = True)[0:20]
+        results = []
+        for page in pages:
+            page_json = {
+                "name": str(page.name),
+                "type": str(page.type.name)
+            }
+            results.append(page_json)
+        data = simplejson.dumps(results)
+        print data
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype=mimetype)
+
+@require_POST
+def add_connection(request, connect_to, to_connect):
+    page_connect_to = Page.objects.get(vanity_url = connect_to, published = True)
+    page_to_connect = Page.objects.get(vanity_url = to_connect, published = True)
+
+    page_connect_to.connections.add(page_to_connect)
+    page_connect_to.save()
+
+    return HttpResponse('')
+
+@require_POST
+def remove_connection(request, remove_to, to_remove):
+    page_remove_to = Page.objects.get(vanity_url = remove_to, published = True)
+    page_to_remove = Page.objects.get(vanity_url = to_remove, published = True)
+
+    page_remove_to.connections.remove(page_to_remove)
+    page_remove_to.save()
 
     return HttpResponse('')

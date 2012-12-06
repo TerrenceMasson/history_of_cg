@@ -8,7 +8,7 @@
         <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
 
 
-        <script type="text/javascript" src="{% static 'js/libs/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery-1.8.3.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
@@ -33,7 +33,7 @@
                 <div id="homeSearch">
                     <form id="searchForm">
                         <fieldset class="search">
-                            <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                            <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" id="searchBox">
                             <button class="searchBtn" title="Search">Search</button>
                         </fieldset>
                     </form>

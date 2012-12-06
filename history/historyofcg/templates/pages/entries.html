@@ -71,6 +71,18 @@
                         </div>
                     </li>
                 {% endfor %}
+                {% for connection in connections.all %}
+                    <li class="tile connection {{ connection.type.name }} isotope-item">
+                        <div class="container">
+                            <img src="http://visualfx.com/photos_files/Media/R23PO/R23PO.jpg?disposition=download">
+                        </div>
+                        <div class="bottom-link">
+                            <span>{{ connection.name }}</span>
+                            <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span class="triangle"></span></a>
+                            <div class="cf"></div>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
         </section>
 
