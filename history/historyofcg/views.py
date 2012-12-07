@@ -360,3 +360,4 @@ def remove_connection(request, remove_to, to_remove):
 @require_POST
 def up_vote_story(request, story):
     if request.is_ajax():
+        pass
