@@ -9,65 +9,67 @@
     <script type="text/javascript" src="{% static 'js/libs/djtokeninput.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <div id="content">
-        <div class="message" style="display: none;"></div>
-        <div class="form-container">
-            <div id="toolbar">
-                <h1>Add a Page</h1>
-                <span class="required">* Required</span>
-            </div>
-            <form action="/add/page/" method="POST" id="EntryAddForm">{% csrf_token %}
-                <div id="main-stub" class="stub section-in-form">
-                    <ul class="required-labels all-labels">
-                        <li class="label-entry-type labels">Type of Page <span class="required">*</span></li>
-                        <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
-                        <li class="label-entry-name labels">Vanity URL <span class="required">*</span></li>
-                        <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
-                    </ul>
-                    <ul class="required-fields all-fields">
-                        <li class="entry-type fields">
-                            {{ form.type.errors }}
-                            {{ form.type }}
-                        </li>
-                        <li class="entry-name fields">
-                            {{ form.name.errors }}
-                            {{ form.name }}
-                        </li>
-                        <li class="entry-name fields">
-                            {{ form.vanity_url.errors }}
-                            {{ form.vanity_url }}
-                        </li>
-                        <li class="entry-tags fields">
-                            {{ form.tags.errors }}
-                            {{ form.tags }}
-                        </li>
-                    </ul>
-                    <div class="cf"></div>
-                </div>
-                <div class="basics section-in-form">
-                    <ul class="basic-labels all-labels">
-                        <li class="label-entry-description labels"><span class="label">Description <span class="required"></span></span></li>
-                        <li class="label-entry-homepage labels">Homepage</li>
-                        <li class="label-entry-date labels"><span class="label">Date Established</span></li>
-                    </ul>
-                    <ul class="basic-fields all-fields">
-                        <li class="entry-description fields">
-                            {{ form.description.errors }}
-                            {{ form.description }}
-                        </li>
-                        <li class="entry-homepage fields">
-                            {{ form.homepage.errors }}
-                            {{ form.homepage }}
-                        </li>
-                        <li class="entry-date fields">
-                            {{ form.date_established.errors }}
-                            {{ form.date_established }}
-                        </li>
-                    </ul>
-                    <div class="cf"></div>
-                </div>
-                <input type="submit" value="Submit" />
-            </form>
+    <div class="form-container">
+        <div id="toolbar">
+            <h1>Add a Page</h1>
+            <span class="required">* Required</span>
         </div>
+        <form action="/add/page/" method="POST" id="EntryAddForm">{% csrf_token %}
+            <div id="main-stub" class="stub section-in-form">
+                <ul class="required-labels all-labels">
+                    <li class="label-entry-type labels" style="margin-top: 10px;">Type of Page <span class="required">*</span></li>
+                    <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
+                    <li class="label-entry-name labels">Vanity URL <span class="required">*</span></li>
+                    <li class="label-entry-name labels">Image URL <span class="required">*</span></li>
+                    <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
+                </ul>
+                <ul class="required-fields all-fields">
+                    <li class="entry-type fields">
+                        {{ form.type.errors }}
+                        {{ form.type }}
+                    </li>
+                    <li class="entry-name fields">
+                        {{ form.name.errors }}
+                        {{ form.name }}
+                    </li>
+                    <li class="entry-name fields">
+                        {{ form.vanity_url.errors }}
+                        {{ form.vanity_url }}
+                    </li>
+                    <li class="entry-image fields">
+                        <input name="image" id="id_image" type="text" class="need-helper {{ page.type }}">
+                        <span id="helper-story-body" class="helper-popups {{ page.type }}-border">Put a URL for the image you want to represent your page!</span>
+                    </li>
+                    <li class="entry-tags fields">
+                        {{ form.tags.errors }}
+                        {{ form.tags }}
+                    </li>
+                </ul>
+                <div class="cf"></div>
+            </div>
+            <div class="basics section-in-form">
+                <ul class="basic-labels all-labels">
+                    <li class="label-entry-description labels" style="margin-top: 10px;">Description <span class="required"></span></li>
+                    <li class="label-entry-date labels" style="margin-top: 140px;">Homepage</li>
+                    <li class="label-entry-date labels">Date Established</li>
+                </ul>
+                <ul class="basic-fields all-fields">
+                    <li class="entry-description fields">
+                        {{ form.description.errors }}
+                        {{ form.description }}
+                    </li>
+                    <li class="entry-homepage fields">
+                        {{ form.homepage.errors }}
+                        {{ form.homepage }}
+                    </li>
+                    <li class="entry-date fields">
+                        <input name="date_established" id="id_date_established" type="text" class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
+                        <span id="helper-story-date" class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
+                    </li>
+                </ul>
+                <div class="cf"></div>
+            </div>
+            <input type="submit" value="Submit" />
+        </form>
     </div>
 {% endblock %}

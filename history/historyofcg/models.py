@@ -45,6 +45,7 @@ class Page(BaseModel):
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
+    image = models.URLField()
 
     def __unicode__(self):
         return self.name
@@ -72,6 +73,8 @@ class Story(BaseModel):
     user = models.ForeignKey(User)
     source = models.CharField(max_length=200, blank=True, null=True)
     published = models.BooleanField(default=False)
+    thumbs_up = models.IntegerField(default=0)
+    thumbs_down = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.title

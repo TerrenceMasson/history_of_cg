@@ -31,7 +31,7 @@ def view_source_entries(request, s):
     video_stories = VideoStory.objects.filter(page__vanity_url = s, published = True)
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
-    page = Page.objects.get(vanity_url=s, user=request.user)
+    page = Page.objects.get(vanity_url=s)
     connections = page.connections
 
     return locals()
@@ -50,6 +50,7 @@ def add_page(request):
             page_vanity_url = form.cleaned_data['vanity_url']
             page_tags = form.cleaned_data['tags']
             page_homepage = form.cleaned_data['homepage']
+            page_image = form.cleaned_data['image']
             page_date = form.cleaned_data['date_established']
 
             page = Page.objects.create(
@@ -59,9 +60,9 @@ def add_page(request):
                 vanity_url = page_vanity_url,
                 homepage = page_homepage,
                 date_established = page_date,
-                user = request.user
+                user = request.user,
+                image = page_image
             )
-
             page.save()
 
             page.tags = page_tags
@@ -97,6 +98,7 @@ def edit_page(request, vanity_url):
             page.description = form.cleaned_data['description']
             page.homepage = form.cleaned_data['homepage']
             page.date = form.cleaned_data['date_established']
+            page.image = form.cleaned_data['image']
 
             page.save()
             print 'saved'
@@ -354,3 +356,7 @@ def remove_connection(request, remove_to, to_remove):
     page_remove_to.save()
 
     return HttpResponse('')
+
+@require_POST
+def up_vote_story(request, story):
+    if request.is_ajax():

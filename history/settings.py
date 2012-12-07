@@ -120,6 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.webdesign',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -128,6 +129,7 @@ INSTALLED_APPS = (
     'base',
     'registration',
     'south',
+    'password_reset'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,6 +162,7 @@ LOGGING = {
 }
 
 ACCOUNT_ACTIVATION_DAYS = 0
-EMAIL_HOST = 'localhost:8000'
-DEFAULT_FROM_EMAIL = 'noreplay@localhost'
+#EMAIL_HOST = 'www.historyofcg.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@historyofcg.com'
 LOGIN_REDIRECT_URL = '/'

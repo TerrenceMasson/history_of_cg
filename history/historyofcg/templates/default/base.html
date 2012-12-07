@@ -49,9 +49,17 @@
                     <a href="/"><img src="{% static 'img/logoSm.png' %}" alt="People Behind the Pixels"></a>
                 </div>
                 <div class="topRight internal">
+                    <a href="mailto:feedback@visualfx.com?Subject=Feedback%for%History%of%CG">Feedback?</a>
                     <a href="/about">About</a>
-                    {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a><a href="/accounts/register">Register</a>{% endif %}
-                    {% if request.user.is_authenticated %}<a href="/accounts/logout">Logout</a><a href="/add/page">Add a Page</a><span>Hello, {{ request.user }}!</span>{% endif %}
+                    {% if not request.user.is_authenticated %}
+                        <a href="/accounts/login">Login</a>
+                        <a href="/accounts/register">Register</a>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        <a href="/accounts/logout">Logout</a>
+                        <a href="/add/page">Add a Page</a>
+                        <span>Hello, {{ request.user }}!</span>
+                    {% endif %}
                     <!--<div class="form-container"><form action="" method="post" accept-charset="utf-8">
                         <div class="input text required">
                             <input type="text" name="" maxlength="200" id="UserEmail" placeholder="Email">
@@ -75,7 +83,10 @@
                 <div class="cf"></div>
                 {% block body_header %} {% endblock %}
             </header>
-            {% block content %} {% endblock %}
+            <div id="content">
+                <div class="message" style="display: none;"></div>
+                {% block content %} {% endblock %}
+            </div>
             {% block body_footer %} {% endblock %}
         </div>
         <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox" aria-activedescendant="ui-active-menuitem" style="z-index: 1; top: 0px; left: 0px; display: none;"></ul>

@@ -20,6 +20,16 @@ class PageForm(ModelForm):
         }
         exclude = ('user', 'published', 'connections', 'published')
 
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['date_established'].widget.format = '%d/%m/%Y'
+
+        # at the same time, set the input format on the date field like you want it:
+        self.fields['date_established'].input_formats = ['%d/%m/%Y', '%Y']
+
+        # set initial value for the field
+        self.fields['date_established'].initial = datetime.date.today()
+
 class TextStoryForm(ModelForm):
 
     class Meta:
@@ -34,7 +44,7 @@ class TextStoryForm(ModelForm):
         self.fields['date'].widget.format = '%d/%m/%Y'
 
         # at the same time, set the input format on the date field like you want it:
-        self.fields['date'].input_formats = ['%d/%m/%Y']
+        self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
 
         # set initial value for the field
         self.fields['date'].initial = datetime.date.today()
@@ -47,6 +57,11 @@ class ImageStoryForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['date'].widget.format = '%d/%m/%Y'
+
+        # at the same time, set the input format on the date field like you want it:
+        self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
+
         # set initial value for the field
         self.fields['date'].initial = datetime.date.today()
 
@@ -61,7 +76,7 @@ class VideoStoryForm(ModelForm):
         self.fields['date'].widget.format = '%d/%m/%Y'
 
         # at the same time, set the input format on the date field like you want it:
-        self.fields['date'].input_formats = ['%d/%m/%Y']
+        self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
 
         # set initial value for the field
         self.fields['date'].initial = datetime.date.today()

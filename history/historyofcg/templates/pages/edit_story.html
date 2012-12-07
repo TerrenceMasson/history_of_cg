@@ -17,14 +17,14 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        <input type="text" name="title" id="id_title" class="need-helper organization" value="{{ story.title|safe }}">
+                        <input type="text" name="title" id="id_title" class="need-helper {{ page.type }}" value="{{ story.title|safe }}">
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper organization" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                        <input type="text" name="date" id="id_date" class="need-helper {{ page.type }}" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
                     </li>
                     <li class="story-source fields">
-                        <input type="text" name="source" id="id_source" class="need-helper organization" value="{{ story.source|safe }}">
+                        <input type="text" name="source" id="id_source" class="need-helper {{ page.type }}" value="{{ story.source|safe }}">
                     </li>
                     <li class="story-body fields">
                         <textarea id="id_text" rows="10" cols="40" name="text" class="event">{{ story.text }}</textarea>

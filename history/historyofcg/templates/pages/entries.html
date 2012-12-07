@@ -74,7 +74,7 @@
                 {% for connection in connections.all %}
                     <li class="tile connection {{ connection.type.name }} isotope-item">
                         <div class="container">
-                            <img src="http://visualfx.com/photos_files/Media/R23PO/R23PO.jpg?disposition=download">
+                            <img src="{{ connection.image }}">
                         </div>
                         <div class="bottom-link">
                             <span>{{ connection.name }}</span>

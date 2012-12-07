@@ -13,7 +13,7 @@
     width:375px;
 }
     #homeSearch .search input.searchBox {
-        height:25px;
+        height:37px;
         width:325px;
     }
     #homeSearch .search button.searchBtn {
@@ -36,4 +36,9 @@ div.timeline {
 
 .recent-story {
     text-align: center;
+}
+
+.whats-next {
+    width: 990px;
+    margin: 0 auto;
 }

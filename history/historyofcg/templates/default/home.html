@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles %}{% load webdesign %}
     <head>
         <meta charset="UTF-8">
         <title>People Behind the Pixels</title>
@@ -20,6 +20,7 @@
             <header>
             <div class="topRight unitx2">
                 <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+                <a href="mailto:feedback@visualfx.com?Subject=Feedback%for%History%of%CG">Feedback?</a>
                 <a href="/about">About</a>
                 {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a><a href="/accounts/register">Register</a>{% endif %}
                 {% if request.user.is_authenticated %}<a href="accounts/logout">Logout</a><a href="/add/page">Add a Page</a><span>Hello, {{ request.user }}!</span>{% endif %}
@@ -42,15 +43,23 @@
                     <img src="{% static 'img/timeline/timeline.png' %}">
                     <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
                 </div>
-                {% for entry in updated_entries %}
-                    <div class="recent-story">
-                        <span class="story-title">{{ entry.name|safe }}</span>
+                <div class="whats-next">
+                    <span><h1>UPCOMING FEATURES:</h1></span>
+                    <div class="new-feature">
+                        <h3 class="section-title">The Timeline</h3>
+                        <p>{% lorem 2 %}</p>
                         <br>
-                        <span class="story-description">{{ entry.description|safe }}</span>
-                        <br>
-                        <span class="story-story">{{ entry.text|safe }}</span>
                     </div>
-                {% endfor %}
+                    <div class="new-feature">
+                        <h3 class="section-title">Recently Updated Stories</h3>
+                        <p>{% lorem 2 %}</p>
+                        <br>
+                    </div>
+                    <div class="new-feature">
+                        <h3 class="section-title">Tag Cloud</h3>
+                        <p>{% lorem 2 %}</p>
+                    </div>
+                </div>
             </section>
         </div>
     </body>
