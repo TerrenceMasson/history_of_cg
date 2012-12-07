@@ -14,9 +14,10 @@ framework.
 
 """
 import os
+import site
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "base.settings")
-
+site.addsitedir('/path/to/your/virtualenv/lib/python2.6/site-packages')
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
