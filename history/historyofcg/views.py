@@ -27,7 +27,10 @@ def about(request):
 #@require_safe
 @render_to('pages/entries.html')
 def view_source_entries(request, s):
-    page = Page.objects.get(published = True, vanity_url=s)
+    if request.user.is_authenticated():
+        page = Page.objects.get(user__id = request.user.id, vanity_url=s)
+    else:
+        page = Page.objects.get(published = True, vanity_url = s)
 
     image_stories = ImageStory.objects.filter(page__vanity_url = s, published = True)
     text_stories = TextStory.objects.filter(page__vanity_url = s, published = True)
