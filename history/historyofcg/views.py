@@ -329,7 +329,8 @@ def get_pages(request):
         for page in pages:
             page_json = {
                 "name": str(page.name),
-                "type": str(page.type.name)
+                "type": str(page.type.name),
+                "vanity-url": str(page.vanity_url)
             }
             results.append(page_json)
         data = simplejson.dumps(results)
