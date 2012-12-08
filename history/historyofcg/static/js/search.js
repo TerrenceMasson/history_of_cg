@@ -13,7 +13,7 @@ $(function() {
        },
        select: function( event, ui ) {
            //redirect to content page for that entry
-           window.location = "/pages/"+ui.item['vanity-url'];
+           window.location = "/pages/"+ui.item['vanity_url'];
 
            return false;
        }
