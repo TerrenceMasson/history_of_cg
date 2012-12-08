@@ -27,15 +27,12 @@ def about(request):
 #@require_safe
 @render_to('pages/entries.html')
 def view_source_entries(request, s):
+    page = Page.objects.get(published = True, vanity_url=s)
+
     image_stories = ImageStory.objects.filter(page__vanity_url = s, published = True)
     text_stories = TextStory.objects.filter(page__vanity_url = s, published = True)
     video_stories = VideoStory.objects.filter(page__vanity_url = s, published = True)
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
-
-    page = Page.objects.get(
-        published = True,
-        vanity_url=s
-    )
 
     connections = page.connections
 
@@ -85,7 +82,7 @@ def add_page(request):
 #@require_safe
 @render_to('pages/edit.html')
 def edit_page(request, vanity_url):
-    page = Page.objects.get(vanity_url = vanity_url, user = request.user)
+    page = Page.objects.get(vanity_url = vanity_url, user__id = request.user.id)
     user_stories = Story.objects.filter(user__id = request.user.id, page = page)
     connections = page.connections
     user_text_stories = TextStory.objects.filter(user__id = request.user.id, page = page)
