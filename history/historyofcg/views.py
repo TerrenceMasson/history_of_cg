@@ -33,8 +33,8 @@ def view_source_entries(request, s):
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
     page = Page.objects.get(
-        Q(vanity_url=s),
-        Q(published = True) | Q(user = request.user)
+        Q(published = True) | Q(user = request.user),
+        vanity_url=s
     )
 
     connections = page.connections
@@ -85,7 +85,7 @@ def add_page(request):
 #@require_safe
 @render_to('pages/edit.html')
 def edit_page(request, vanity_url):
-    page = Page.objects.get(vanity_url = vanity_url)
+    page = Page.objects.get(vanity_url = vanity_url, user = request.user)
     user_stories = Story.objects.filter(user__id = request.user.id, page = page)
     connections = page.connections
     user_text_stories = TextStory.objects.filter(user__id = request.user.id, page = page)
