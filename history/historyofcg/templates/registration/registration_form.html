@@ -5,6 +5,14 @@
         <label>Username:</label>
         {{ form.username }}
 
+        {{ form.first_name.errors }}
+        <label>First Name:</label>
+        {{ form.first_name }}
+
+        {{ form.last_name.errors }}
+        <label>Last Name:</label>
+        {{ form.last_name }}
+
         {{ form.email.errors }}
         <label>Email:</label>
         {{ form.email }}

@@ -34,7 +34,6 @@ urlpatterns = patterns('',
     url(r'^get/pages/$', 'historyofcg.views.get_pages', name='get_pages'),
     url(r'^add/connection/(?P<connect_to>\w+)/(?P<to_connect>\w+)/$', 'historyofcg.views.add_connection', name='add_connection'),
     url(r'^remove/connection/(?P<remove_to>\w+)/(?P<to_remove>\w+)/$', 'historyofcg.views.remove_connection', name='remove_connection'),
-    url(r'^password/', include('password_reset.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()

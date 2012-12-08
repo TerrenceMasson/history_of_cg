@@ -2,7 +2,5 @@ Django==1.4.2
 Fabric==1.5.1
 South==0.7.6
 distribute==0.6.32
-django-password-reset==0.3
-django-registration==0.8
 paramiko==1.9.0
 virtualenv==1.8.4

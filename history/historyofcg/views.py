@@ -333,7 +333,7 @@ def get_pages(request):
             page_json = {
                 "name": str(page.name),
                 "type": str(page.type.name),
-                "vanity_url": str(page.vanity_url)
+                "vanity": str(page.vanity_url)
             }
             results.append(page_json)
         data = simplejson.dumps(results)

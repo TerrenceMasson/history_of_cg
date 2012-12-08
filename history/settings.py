@@ -128,8 +128,7 @@ INSTALLED_APPS = (
     'historyofcg',
     'base',
     'registration',
-    'south',
-    'password_reset'
+    'south'
 )
 
 # A sample logging configuration. The only tangible logging
