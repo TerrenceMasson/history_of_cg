@@ -33,7 +33,7 @@ def view_source_entries(request, s):
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
     page = Page.objects.get(
-        Q(published = True) | Q(user = request.user),
+        published = True,
         vanity_url=s
     )
 
