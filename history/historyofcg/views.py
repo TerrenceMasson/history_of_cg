@@ -337,7 +337,6 @@ def get_pages(request):
             }
             results.append(page_json)
         data = simplejson.dumps(results)
-        print data
     else:
         data = 'fail'
     mimetype = 'application/json'
