@@ -2,6 +2,7 @@ import json
 import datetime
 from django import http
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.template import RequestContext
@@ -31,7 +32,11 @@ def view_source_entries(request, s):
     video_stories = VideoStory.objects.filter(page__vanity_url = s, published = True)
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
-    page = Page.objects.get(vanity_url=s)
+    page = Page.objects.get(
+        Q(vanity_url=s),
+        Q(published = True) | Q(user = request.user)
+    )
+
     connections = page.connections
 
     return locals()
@@ -69,7 +74,7 @@ def add_page(request):
             page.save()
 
             print 'page saved'
-            return redirect('/pages/{}'.format(page_vanity_url)) # Redirect after POST
+            return redirect('/edit/page/{}'.format(page_vanity_url)) # Redirect after POST
         else:
             print 'invalid form'
     else:
