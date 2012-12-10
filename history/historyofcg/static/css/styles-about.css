@@ -148,6 +148,18 @@
 		left: 464px;
 		top: 65px;
 	}
+
+#kyle {
+    display: block;
+    font-size:0;
+    height: 320px;
+    position: absolute;
+    text-indent:9999px;
+    width:80px;
+    z-index: 506;
+    left: 635px;
+    top: 82px;
+}
 	
 /*-------------------- about the CREATORS section BIOS BOX ------------*/
 .right-info {

@@ -1,28 +1,4 @@
 $(function() {
-    var buttonText = {
-        'signupOrLogin': {
-            'login': 'Not signed up yet?',
-            'signup': 'Already have an account?'
-        }
-    };
-
-    $('#login_button').click(function() {
-        // slide down the login/signup box
-        $('#login_box').slideToggle();
-
-        return false;
-    });
-
-    $('#login_box .signup-or-login a').click(function() {
-
-        // toggle signup and login forms
-        var signup = $(this).parent().hasClass('login');
-
-        toggleSignupForm(signup);
-
-        return false;
-    });
-
     var $dialog = $('<div></div>')
         .html('')
         .dialog({
@@ -107,46 +83,6 @@ $(function() {
         console.log('entry filled');
 
         $dialog.dialog("option", "title", story.innerText);
-
-        /*$dialog.dialog("option", "buttons", {
-            "<": function() {
-                if (container[0].previousElementSibling) {
-                    console.log('next element previous button');
-                    container = container.prev();
-                    if (container.hasClass('story-image')) {
-                        $dialog.html('<img style="width:590px;" src='+container[0].getAttribute('data-image')+'>');
-                    }
-                    if (container.hasClass('story-video')) {
-                        $dialog.html('<div class="container"><embed src="http://www.youtube.com/v/'+container[0].getAttribute('data-video')+'" type="application/x-shockwave-flash" width="590px" height="443" allowscriptaccess="always"></div>');
-                    }
-                    if (container.hasClass('story-text')) {
-                        $dialog.html('<div class="container"><span>'+container[0].getAttribute('data-full-text')+'</span></div>');
-                    }
-                    $dialog.dialog("option", "title", container.innerText);
-                    $dialog.dialog("option", "position", {my:"center", at:"center", of: window});
-                }
-            },
-            "X": function() {
-                $dialog.dialog("close");
-            },
-            ">": function() {
-                if (container[0].nextElementSibling) {
-                    console.log('next element previous button');
-                    container = container.next();
-                    if (container.hasClass('story-image')) {
-                        $dialog.html('<img style="width:590px;" src='+container[0].getAttribute('data-image')+'>');
-                    }
-                    if (container.hasClass('story-video')) {
-                        $dialog.html('<div class="container"><embed src="http://www.youtube.com/v/'+container[0].getAttribute('data-video')+'" type="application/x-shockwave-flash" width="590px" height="443" allowscriptaccess="always"></div>');
-                    }
-                    if (container.hasClass('story-text')) {
-                        $dialog.html('<div class="container"><span>'+container[0].getAttribute('data-full-text')+'</span></div>');
-                    }
-                    $dialog.dialog("option", "title", container.innerText);
-                    $dialog.dialog("option", "position", {my:"center", at:"center", of: window});
-                }
-            }
-        });*/
         $dialog.dialog('option', 'buttons', reset_buttons());
         console.log('buttons drawn');
         $dialog.dialog('open');
