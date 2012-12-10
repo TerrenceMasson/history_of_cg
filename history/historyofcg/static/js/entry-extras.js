@@ -8,11 +8,13 @@ $(document).ready(function() {
         minLength: 1,
         focus: function( event, ui ) {
             $( "#connectionSearchBox" ).val( ui.item['name'] );
+            $("#connectionSearchBox")[0].setAttribute('data-vanity-url', ui.item['vanity']);
             return false;
         },
         select: function( event, ui ) {
             //redirect to content page for that entry
             $( "#connectionSearchBox" ).val( ui.item['name'] );
+            $("#connectionSearchBox")[0].setAttribute('data-vanity-url', ui.item['vanity']);
             return false;
         }
     }).data( "autocomplete" )._renderItem = function( ul, item ) {

@@ -136,7 +136,7 @@ $(document).ready(function(){
     $('.connect-entries-button').click(function(e) {
         e.preventDefault();
         button = $(this);
-        url = "/add/connection/"+button[0].getAttribute('data-vanity-url')+"/"+$( "#connectionSearchBox")[0].value+"/";
+        url = "/add/connection/"+button[0].getAttribute('data-vanity-url')+"/"+$( "#connectionSearchBox")[0].getAttribute('data-vanity-url')+"/";
         $.ajax({
             type: "POST",
             url: url,
@@ -155,6 +155,32 @@ $(document).ready(function(){
             url: url,
             success: function(action) {
                 window.location = "/edit/page/"+button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
+
+    $('.story-up-arrow').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/vote/up/"+button[0].getAttribute('data-story-id')+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+
+            }
+        })
+    });
+
+    $('.story-down-arrow').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/vote/down/"+button[0].getAttribute('data-story-id')+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+
             }
         })
     });

@@ -16,7 +16,7 @@
         {% for connection in connections.all %}
         <div class='connections {{ connection.type }}'>
             <span class='name'>{{ connection.name }}</span>
-            <span class='delete ui-icon ui-icon-close' data-vanity-url="{{ page.vanity_url }}" data-name="{{ connection.name }}"></span>
+            <span class='delete ui-icon ui-icon-close' data-vanity-url="{{ page.vanity_url }}" data-name="{{ connection.vanity_url }}"></span>
             <div class="cf"></div>
         </div>
         {% endfor %}

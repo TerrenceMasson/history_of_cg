@@ -73,11 +73,15 @@ class Story(BaseModel):
     user = models.ForeignKey(User)
     source = models.CharField(max_length=200, blank=True, null=True)
     published = models.BooleanField(default=False)
-    thumbs_up = models.IntegerField(default=0)
-    thumbs_down = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.title
+
+class Review(BaseModel):
+    type = models.CharField(choices=(("UP","up"),("DOWN", 'down')), max_length=4)
+    user = models.ForeignKey(User)
+    story = models.ForeignKey(Story)
+    page = models.ForeignKey(Page)
 
 class VideoStory(Story):
     video = models.CharField(max_length=200, unique=True)

@@ -18,6 +18,23 @@ from django.views.decorators.http import require_POST
 def home(request):
     updated_entries = TextStory.objects.all()
 
+    if request.user.is_authenticated():
+        if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
+            show_badge1 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 2:
+            show_badge2 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 3:
+            show_badge3 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 4:
+            show_badge4 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
+            show_badge5 = True
+
+
     return render_to_response('default/home.html', locals())
 
 #@require_safe
@@ -36,6 +53,8 @@ def view_source_entries(request, s):
     text_stories = TextStory.objects.filter(page__vanity_url = s, published = True)
     video_stories = VideoStory.objects.filter(page__vanity_url = s, published = True)
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
+
+    user_reviews = Review.objects.filter(user__id = request.user.id)
 
     connections = page.connections
 
@@ -363,6 +382,53 @@ def remove_connection(request, remove_to, to_remove):
     return HttpResponse('')
 
 @require_POST
-def up_vote_story(request, story):
-    if request.is_ajax():
-        pass
+def up_vote_story(request, story_id):
+    if request.is_ajax() & request.user.is_authenticated():
+        if not Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "UP"):
+
+            if Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "DOWN"):
+                Review.objects.get(story__id = story_id, user__id = request.user.id, type = "DOWN").delete()
+
+            _story = Story.objects.get(id = story_id)
+
+            Review.objects.create(
+                type = "UP",
+                user = request.user,
+                story = _story,
+                page = _story.page
+            ).save()
+
+            return HttpResponse('')
+
+        return HttpResponse('')
+
+@require_POST
+def down_vote_story(request, story_id):
+    if request.is_ajax() & request.user.is_authenticated():
+        if not Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "DOWN"):
+
+            if Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "UP"):
+                Review.objects.get(story__id = story_id, user__id = request.user.id, type = "UP").delete()
+
+            _story = Story.objects.get(id = story_id)
+
+            Review.objects.create(
+                type = "DOWN",
+                user = request.user,
+                story = _story,
+                page = _story.page
+            ).save()
+
+            return HttpResponse('')
+
+        return HttpResponse('')
+
+@render_to('pages/user.html')
+def user_page(request, i):
+    if request.user.id == int(i):
+        user = request.user
+        user_pages = Page.objects.filter(user__id = user.id)
+
+        return locals()
+    else:
+        return HttpResponseNotFound()

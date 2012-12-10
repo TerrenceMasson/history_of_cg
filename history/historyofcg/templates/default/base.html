@@ -58,7 +58,7 @@
                     {% if request.user.is_authenticated %}
                         <a href="/accounts/logout">Logout</a>
                         <a href="/add/page">Add a Page</a>
-                        <span>Hello, {{ request.user }}!</span>
+                        <a href="/user/{{ request.user.id }}/">Your Pages</a>
                     {% endif %}
                     <!--<div class="form-container"><form action="" method="post" accept-charset="utf-8">
                         <div class="input text required">

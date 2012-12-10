@@ -41,6 +41,10 @@ class ConnectionAdmin(admin.ModelAdmin):
     model = Connection
     list_display = ('image',)
 
+class ReviewAdmin(admin.ModelAdmin):
+    model = Review
+    list_display = ('type', 'user', 'story', 'page')
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Location, LocationAdmin)
@@ -51,5 +55,6 @@ admin.site.register(ImageStory, ImageStoryAdmin)
 admin.site.register(TextStory, TextStoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(Connection, ConnectionAdmin)
+admin.site.register(Review, ReviewAdmin)
 
 __author__ = 'Kyle'
