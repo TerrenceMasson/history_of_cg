@@ -3,12 +3,12 @@
 	font-family:Helvetica, sans-serif;
 	font-size:75%;
 	}
-#HOCGtitle, #HOCGcreators {
+#HOCGtitle, #HOCGcreators, #HOCGnewcrew {
 	background-color:#0F0F0F;
 	margin: 0 auto;
 	padding:0;
 }
-	#HOCGtitle h3, #HOCGcreators h3 {
+	#HOCGtitle h3, #HOCGcreators h3, #HOCGnewcrew h3 {
 		color:#DBDBDB;
 		font-family:Helvetica, sans-serif!important;
 		font-weight:bold;
@@ -17,7 +17,9 @@
 		padding: 5px 0;
 		width:575px;
 		}
-			#HOCGcreators h3 {width:990px!important;}
+			#HOCGcreators h3, #HOCGnewcrew h3 {width:990px!important;}
+
+#HOCGcreators h3, #HOCGnewcrew h3 {width:990px!important;}
 .about-section {
 	background-image:url("../img/shadesBg.png");
 	margin:0 auto;
@@ -64,6 +66,12 @@
     min-height:375px;
     position:relative;
 	}
+.newCrew {
+    margin: 0 auto;
+    width: 990px;
+    min-height:375px;
+    position:relative;
+}
 .groupPhoto {
 	background: url('../img/groupPhotoLarge.jpg');
 	width: 600px; 
@@ -72,6 +80,15 @@
 	z-index:3;
 	float:left;
 	margin-top: 10px;
+}
+.newGroupPhoto {
+    background: url('../img/kyleNewCrew.gif');
+    width: 600px;
+    height: 400px;
+    position:relative;
+    z-index:3;
+    float:right;
+    margin-top: 10px;
 }
 .groupPhotoArrow {
 	background: url('../img/groupPhotoArrow.png');
@@ -138,13 +155,18 @@
 	margin-top:13px;
 	width:280px;
 }
+.left-info {
+    float:left;
+    margin-top:13px;
+    width:280px;
+}
 .moreInfo {
 	background-color: #1a1c1d;
 	border: 1px solid #ffffff;
 	color: #e6e6e6;
 	display:none;
 	float:right;
-	width: 325px;
+	width: 280px;
 }
 	.bio-top {
 		height:110px;
