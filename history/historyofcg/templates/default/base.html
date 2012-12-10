@@ -60,19 +60,21 @@
                         <a href="/add/page">Add a Page</a>
                         <a href="/user/{{ request.user.id }}/">Your Pages</a>
                     {% endif %}
-                    <!--<div class="form-container"><form action="" method="post" accept-charset="utf-8">
-                        <div class="input text required">
-                            <input type="text" name="" maxlength="200" id="UserEmail" placeholder="Email">
-                        </div>
-                        <div class="input password required">
-                            <input type="password" name="" maxlength="200" id="UserPassword" placeholder="Password">
-                        </div>
-                        <div class="submit">
-                            <input type="submit" value="Login">
-                        </div>
-                    </form>
-                    </div>
-                    -->
+                    {% if show_badge1 %}
+                        <span class="user-badge user-badge-one"></span>
+                    {% endif %}
+                    {% if show_badge2 %}
+                        <span class="user-badge user-badge-two"></span>
+                    {% endif %}
+                    {% if show_badge3 %}
+                        <span class="user-badge user-badge-three"></span>
+                    {% endif %}
+                    {% if show_badge4 %}
+                        <span class="user-badge user-badge-four"></span>
+                    {% endif %}
+                    {% if show_badge5 %}
+                        <span class="user-badge user-badge-five"></span>
+                    {% endif %}
                 </div>
                 <div class="topSearch">
                     <form id="searchForm" class="search unitx2 cf">

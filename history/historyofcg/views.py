@@ -39,11 +39,42 @@ def home(request):
 
 #@require_safe
 def about(request):
+    if request.user.is_authenticated():
+        if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
+            show_badge1 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 2:
+            show_badge2 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 3:
+            show_badge3 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 4:
+            show_badge4 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
+            show_badge5 = True
     return render_to_response('default/about.html', locals())
 
 #@require_safe
 @render_to('pages/entries.html')
 def view_source_entries(request, s):
+    if request.user.is_authenticated():
+        if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
+            show_badge1 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 2:
+            show_badge2 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 3:
+            show_badge3 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 4:
+            show_badge4 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
+            show_badge5 = True
+
     if request.user.is_authenticated():
         page = Page.objects.get(user__id = request.user.id, vanity_url=s)
     else:
@@ -64,6 +95,22 @@ def view_source_entries(request, s):
 #@require_POST
 @render_to('pages/add.html')
 def add_page(request):
+    if request.user.is_authenticated():
+        if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
+            show_badge1 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 2:
+            show_badge2 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 3:
+            show_badge3 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 4:
+            show_badge4 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
+            show_badge5 = True
+
     if request.method == 'POST':
         form = PageForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -104,6 +151,22 @@ def add_page(request):
 #@require_safe
 @render_to('pages/edit.html')
 def edit_page(request, vanity_url):
+    if request.user.is_authenticated():
+        if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
+            show_badge1 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 2:
+            show_badge2 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 3:
+            show_badge3 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 4:
+            show_badge4 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
+            show_badge5 = True
+
     page = Page.objects.get(vanity_url = vanity_url, user__id = request.user.id)
     user_stories = Story.objects.filter(user__id = request.user.id, page = page)
     connections = page.connections
@@ -425,6 +488,22 @@ def down_vote_story(request, story_id):
 
 @render_to('pages/user.html')
 def user_page(request, i):
+    if request.user.is_authenticated():
+        if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
+            show_badge1 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 2:
+            show_badge2 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 3:
+            show_badge3 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 4:
+            show_badge4 = True
+
+        elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
+            show_badge5 = True
+
     if request.user.id == int(i):
         user = request.user
         user_pages = Page.objects.filter(user__id = user.id)
