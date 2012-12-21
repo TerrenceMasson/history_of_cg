@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     url(r'^save/story/(?P<story_type>\w+)/(?P<vanity_url>\w+)/$', 'historyofcg.views.new_story'),
     url(r'^vote/up/(?P<story_id>\d+)/$', 'historyofcg.views.up_vote_story'),
     url(r'^vote/down/(?P<story_id>\d+)/$', 'historyofcg.views.down_vote_story'),
+    url(r'^vote/none/(?P<story_id>\d+)/$', 'historyofcg.views.no_vote_story'),
 
     url(r'^tags/(?P<app_label>\w+)/(?P<model>\w+)$', "historyofcg.views.search", name="djtokeninput_search"),
     url(r'^get/pages/$', 'historyofcg.views.get_pages', name='get_pages'),

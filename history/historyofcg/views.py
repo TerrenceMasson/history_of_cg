@@ -487,6 +487,18 @@ def down_vote_story(request, story_id):
 
         return HttpResponse('')
 
+@require_POST
+def no_vote_story(request, story_id):
+    if request.is_ajax() & request.user.is_authenticated():
+        if Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "DOWN"):
+
+            vote = Review.objects.get(story__id = story_id, user__id = request.user.id, type = "DOWN")
+            vote.delete()
+
+            return HttpResponse('')
+
+        return HttpResponse('')
+
 @render_to('pages/user.html')
 def user_page(request, i):
     if request.user.is_authenticated():

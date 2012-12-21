@@ -15,7 +15,7 @@
         <script type="text/javascript" src="{% static 'js/libs/jquery.isotope.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/content.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/home.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
     </head>
     <body id="homeWrapper" class="wrapper">
@@ -47,6 +47,9 @@
                     {% if show_badge5 %}
                         <span class="user-badge user-badge-five"></span>
                     {% endif %}
+                    {% ifusergroup pioneer %}
+                        <span class="user-badge user-badge-pioneer"></span>
+                    {% endifusergroup %}
                 {% endif %}
             </div>
             </div>
@@ -66,40 +69,25 @@
                 <div class="timeline">
                     <img src="{% static 'img/timeline/timeline.png' %}">
                     <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
+                    <span><h1>RECENTLY UPDATED ENTRIES:</h1></span>
                 </div>
-                <section class="entryMast">
-                    <h1 class="entryTitle organization">{{ page.name }}</h1>
-                    <div class="catBarContainer">
-                        <ul class="catBar">
-                            <li class="category project"><a href="#" data-filter=".project">Projects</a></li>
-                            <li class="category person"><a href="#" data-filter=".person">People</a></li>
-                            <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
-                            <li class="category event"><a href="#" data-filter=".event">Events</a></li>
-                            <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>
+                <div id="updated-entries-container" class="isotope cf">
+                {% for entry in updated_entries %}
+                    <div class="tile connection {{ entry.type.name }} isotope-item">
+                        <div class="container">
+                            <img src="{{ entry.image }}">
+                        </div>
+                        <div class="bottom-link">
+                            {% if entry|object_user_is:'pioneer' %}
+                                <a href="/about/pioneers/" class="connection-user-pioneer"></a>
+                            {% endif %}
+                            <span>{{ entry.name }}</span>
+                            <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
                             <div class="cf"></div>
-                        </ul>
+                        </div>
                     </div>
-                </section>
-                <section class="mosaicBody">
-                    <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden;">
-                        <li class="dynamic organization"></li>
-                        {% for entry in updated_entries %}
-                            <li class="tile connection {{ entry.type.name }} isotope-item">
-                                <div class="container">
-                                    <img src="{{ entry.image }}">
-                                </div>
-                                <div class="bottom-link">
-                                    {% if entry|object_user_is:'pioneer' %}
-                                        <a href="/about/pioneers/" class="connection-user-pioneer"></a>
-                                    {% endif %}
-                                    <span>{{ entry.name }}</span>
-                                    <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
-                                    <div class="cf"></div>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </section>
+                {% endfor %}
+                </div>
                 <div class="whats-next">
                     <span><h1>UPCOMING FEATURES:</h1></span>
                     {% for feature in upcoming_features %}

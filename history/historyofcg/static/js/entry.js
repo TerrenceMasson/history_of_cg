@@ -159,7 +159,62 @@ $(document).ready(function(){
         })
     });
 
-    $('.story-up-arrow').click(function(e) {
+    function cycle_vote_color(button) {
+        console.log(button.hasClass("no-vote"));
+        if (button.hasClass("no-vote")) {
+            button.removeClass("no-vote");
+            button.addClass("up-vote");
+            button.unbind('click');
+            button.click(function(e) {
+                e.preventDefault();
+                button = $(this);
+                url = "/vote/down/"+button[0].getAttribute('data-story-id')+"/";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(action) {
+                        cycle_vote_color(button);
+                    }
+                })
+            });
+        }
+        else if (button.hasClass("up-vote")) {
+            button.removeClass("up-vote");
+            button.addClass("down-vote");
+            button.unbind('click');
+            button.click(function(e) {
+                e.preventDefault();
+                button = $(this);
+                url = "/vote/none/"+button[0].getAttribute('data-story-id')+"/";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(action) {
+                        cycle_vote_color(button);
+                    }
+                })
+            });
+        }
+        else if (button.hasClass("down-vote")) {
+            button.removeClass("down-vote");
+            button.addClass("no-vote");
+            button.unbind('click');
+            button.click(function(e) {
+                e.preventDefault();
+                button = $(this);
+                url = "/vote/up/"+button[0].getAttribute('data-story-id')+"/";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(action) {
+                        cycle_vote_color(button);
+                    }
+                })
+            });
+        }
+    }
+
+    $('.no-vote').click(function(e) {
         e.preventDefault();
         button = $(this);
         url = "/vote/up/"+button[0].getAttribute('data-story-id')+"/";
@@ -167,12 +222,12 @@ $(document).ready(function(){
             type: "POST",
             url: url,
             success: function(action) {
-
+                cycle_vote_color(button);
             }
         })
     });
 
-    $('.story-down-arrow').click(function(e) {
+    $('.up-vote').click(function(e) {
         e.preventDefault();
         button = $(this);
         url = "/vote/down/"+button[0].getAttribute('data-story-id')+"/";
@@ -180,7 +235,20 @@ $(document).ready(function(){
             type: "POST",
             url: url,
             success: function(action) {
+                cycle_vote_color(button);
+            }
+        })
+    });
 
+    $('.down-vote').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/vote/none/"+button[0].getAttribute('data-story-id')+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+                cycle_vote_color(button);
             }
         })
     });

@@ -1,6 +1,7 @@
 from django import template
 from django.template import resolve_variable, NodeList
 from django.contrib.auth.models import Group
+from historyofcg.models import Review
 
 register = template.Library()
 
@@ -10,6 +11,16 @@ def object_user_is(value, arg):
     if expected_group:
         if expected_group[0] in value.user.groups.all():
             return True
+
+@register.filter
+def user_vote_cast(value, arg):
+    story = value
+    if Review.objects.filter(story__id = story.id, user__id = arg ):
+        vote = Review.objects.filter(story__id = story.id, user__id = arg )[0]
+
+        return "{}-vote".format(vote.type.lower())
+    else:
+        return "no-vote"
 
 @register.tag()
 def ifusergroup(parser, token):

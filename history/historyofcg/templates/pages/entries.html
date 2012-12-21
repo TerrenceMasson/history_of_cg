@@ -71,8 +71,7 @@
                         <div class="bottom-link">
                             <span class="opener">{{ ts.title }}</span>
                             <span class="story-type story-type-icon-text"></span>
-                            <span class="story-type story-up-arrow" data-story-id="{{ ts.id }}"></span>
-                            <span class="story-type story-down-arrow" data-story-id="{{ ts.id }}"></span>
+                            <span class="story-type {{ ts|user_vote_cast:request.user.id }}" data-story-id="{{ ts.id }}"></span>
                             <div class="cf"></div>
                         </div>
                     </li>

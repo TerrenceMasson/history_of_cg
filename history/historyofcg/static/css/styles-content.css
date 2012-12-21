@@ -298,16 +298,21 @@ ul.mosaicContainer li.tile.story.pioneer .bottom-link {
       background-position: -46px 0;
       background-repeat: no-repeat;
       width: 25px; }
-    ul.mosaicContainer li.tile .bottom-link span.story-type.story-up-arrow {
+    ul.mosaicContainer li.tile .bottom-link span.story-type.up-vote {
         background: url("../img/up_arrow.gif");
         background-position: 1px 0;
         background-repeat: no-repeat;
         width: 25px; }
-    ul.mosaicContainer li.tile .bottom-link span.story-type.story-down-arrow {
+    ul.mosaicContainer li.tile .bottom-link span.story-type.down-vote {
         background: url("../img/down_arrow.gif");
         background-position: 1px 0;
         background-repeat: no-repeat;
         width: 25px; }
+    ul.mosaicContainer li.tile .bottom-link span.story-type.no-vote {
+        background: url("../img/cake.icon.png");
+        background-repeat: no-repeat;
+        width: 25px; }
+
 
 ul.mosaicContainer li.tile.connection .bottom-link a.link-button {
   width: 30px;
@@ -379,25 +384,41 @@ ul.mosaicContainer .event .bottom-link {
   pointer-events: none;
   z-index: 1; }
 
+/**** Isotope CSS3 transitions ****/
+
 .isotope,
 .isotope .isotope-item {
-  -webkit-transition-duration: 0.8s;
-  -moz-transition-duration: 0.8s;
-  transition-duration: 0.8s; }
+    -webkit-transition-duration: 0.8s;
+    -moz-transition-duration: 0.8s;
+    -ms-transition-duration: 0.8s;
+    -o-transition-duration: 0.8s;
+    transition-duration: 0.8s;
+}
 
 .isotope {
-  -webkit-transition-property: height, width;
-  -moz-transition-property: height, width;
-  transition-property: height, width; }
+    -webkit-transition-property: height, width;
+    -moz-transition-property: height, width;
+    -ms-transition-property: height, width;
+    -o-transition-property: height, width;
+    transition-property: height, width;
+}
 
 .isotope .isotope-item {
-  -webkit-transition-property: -webkit-transform, opacity;
-  -moz-transition-property: -moz-transform, opacity;
-  transition-property: transform, opacity; }
+    -webkit-transition-property: -webkit-transform, opacity;
+    -moz-transition-property:    -moz-transform, opacity;
+    -ms-transition-property:     -ms-transform, opacity;
+    -o-transition-property:      -o-transform, opacity;
+    transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
 
 .isotope.no-transition,
 .isotope.no-transition .isotope-item,
 .isotope .isotope-item.no-transition {
-  -webkit-transition-duration: 0s;
-  -moz-transition-duration: 0s;
-  transition-duration: 0s; }
+    -webkit-transition-duration: 0s;
+    -moz-transition-duration: 0s;
+    -ms-transition-duration: 0s;
+    -o-transition-duration: 0s;
+    transition-duration: 0s;
+}
