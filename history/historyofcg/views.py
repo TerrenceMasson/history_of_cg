@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 # Create your views here.
 #@require_safe
 def home(request):
-    updated_entries = TextStory.objects.all()
+    updated_entries = Page.objects.order_by('-date_modified')[:4]
 
     if request.user.is_authenticated():
         if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
@@ -34,6 +34,7 @@ def home(request):
         elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
             show_badge5 = True
 
+    upcoming_features = UpcomingFeature.objects.filter(display = True)
 
     return render_to_response('default/home.html', locals())
 

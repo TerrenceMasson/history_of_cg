@@ -1,4 +1,4 @@
-{% load staticfiles %}{% load webdesign %}
+{% load staticfiles %}{% load webdesign %}{% load hocgtags %}
     <head>
         <meta charset="UTF-8">
         <title>People Behind the Pixels</title>
@@ -6,12 +6,17 @@
         <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/jquery-ui.css' %}">
         <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles.css' %}">
         <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
+        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-content.css' %}">
 
 
         <script type="text/javascript" src="{% static 'js/libs/jquery-1.8.3.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/URI.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/jquery.isotope.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/content.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
     </head>
     <body id="homeWrapper" class="wrapper">
         <div class="message" style="display:none;"></div>
@@ -62,22 +67,49 @@
                     <img src="{% static 'img/timeline/timeline.png' %}">
                     <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
                 </div>
+                <section class="entryMast">
+                    <h1 class="entryTitle organization">{{ page.name }}</h1>
+                    <div class="catBarContainer">
+                        <ul class="catBar">
+                            <li class="category project"><a href="#" data-filter=".project">Projects</a></li>
+                            <li class="category person"><a href="#" data-filter=".person">People</a></li>
+                            <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
+                            <li class="category event"><a href="#" data-filter=".event">Events</a></li>
+                            <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>
+                            <div class="cf"></div>
+                        </ul>
+                    </div>
+                </section>
+                <section class="mosaicBody">
+                    <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden;">
+                        <li class="dynamic organization"></li>
+                        {% for entry in updated_entries %}
+                            <li class="tile connection {{ entry.type.name }} isotope-item">
+                                <div class="container">
+                                    <img src="{{ entry.image }}">
+                                </div>
+                                <div class="bottom-link">
+                                    {% if entry|object_user_is:'pioneer' %}
+                                        <a href="/about/pioneers/" class="connection-user-pioneer"></a>
+                                    {% endif %}
+                                    <span>{{ entry.name }}</span>
+                                    <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
+                                    <div class="cf"></div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
                 <div class="whats-next">
                     <span><h1>UPCOMING FEATURES:</h1></span>
+                    {% for feature in upcoming_features %}
                     <div class="new-feature">
-                        <h3 class="section-title">The Timeline</h3>
-                        <p>{% lorem 2 %}</p>
+                        <h3 class="section-title">{{ feature.name }}</h3>
+                        <p>{{ feature.text }}</p>
                         <br>
                     </div>
-                    <div class="new-feature">
-                        <h3 class="section-title">Recently Updated Stories</h3>
-                        <p>{% lorem 2 %}</p>
-                        <br>
-                    </div>
-                    <div class="new-feature">
-                        <h3 class="section-title">Tag Cloud</h3>
-                        <p>{% lorem 2 %}</p>
-                    </div>
+
+                    {% endfor %}
                 </div>
             </section>
         </div>

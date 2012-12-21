@@ -45,6 +45,10 @@ class ReviewAdmin(admin.ModelAdmin):
     model = Review
     list_display = ('type', 'user', 'story', 'page')
 
+class UpcomingFeatureAdmin(admin.ModelAdmin):
+    model = UpcomingFeature
+    list_display = ('name', 'date_created', 'date_modified')
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Location, LocationAdmin)
@@ -56,5 +60,6 @@ admin.site.register(TextStory, TextStoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(Connection, ConnectionAdmin)
 admin.site.register(Review, ReviewAdmin)
+admin.site.register(UpcomingFeature, UpcomingFeatureAdmin)
 
 __author__ = 'Kyle'

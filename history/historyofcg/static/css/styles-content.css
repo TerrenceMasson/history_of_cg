@@ -224,6 +224,10 @@ ul.mosaicContainer li.tile.story {
   border: 1px solid #696969;
   box-shadow: 0 0 10px 0px #000; }
 
+ul.mosaicContainer li.tile.story.pioneer {
+    border: 1px solid #b8860b;
+    box-shadow: 0 0 10px 0px #000; }
+
 ul.mosaicContainer li.tile .container p {
   margin: 10px;
   font-size: 13px;
@@ -250,6 +254,13 @@ ul.mosaicContainer li.tile .bottom-link {
   text-decoration: none;
   color: #fff;
   overflow: hidden; }
+ul.mosaicContainer li.tile.story.pioneer .bottom-link {
+    display: block;
+    width: 100%;
+    background-color: #b8860b;
+    text-decoration: none;
+    color: #2f4f4f;
+    overflow: hidden; }
   ul.mosaicContainer li.tile .bottom-link span {
     line-height: 19px;
     padding: 7px 0 2px 0; }
@@ -305,6 +316,15 @@ ul.mosaicContainer li.tile.connection .bottom-link a.link-button {
   background-color: #fff;
   opacity: 0.5;
   position: relative; }
+
+ul.mosaicContainer li.tile.connection a.connection-user-pioneer {
+    width: 30px;
+    height: 30px;
+    float: left;
+    background: url("http://interactive.usc.edu/membersmedia/sfisher/Siggraph08%20logo.jpg");
+    background-position: 250px 200px;
+    opacity: 0.5;
+    position: relative; }
 
 ul.mosaicContainer li.tile.connection .bottom-link a.link-button span.triangle {
   position: absolute;

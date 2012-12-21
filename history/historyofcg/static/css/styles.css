@@ -533,3 +533,7 @@ form#login-form, form#signup-form {
     height: 14px;
     padding: 5px 14px;
 }
+.user-badge.user-badge-pioneer {
+    height: 14px;
+    padding: 5px 14px;
+}

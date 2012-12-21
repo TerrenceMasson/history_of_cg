@@ -1,5 +1,5 @@
 {% extends 'default/base.html' %}
-{% load staticfiles %}
+{% load staticfiles %}{% load hocgtags %}
 {% block content %}
     <div id="content">
         <div class="message" style="display: none;"></div>
@@ -36,7 +36,7 @@
                     <p>{{ page.description }}</p>
                 </li>
                 {% for is in image_stories %}
-                    <li class="tile story story-image {% for t in is.tags.all %} {{ t.name }}{% endfor %} isotope-item" data-image="{{ is.image|safe }}"">
+                    <li class="tile story story-image{% for t in is.tags.all %}{{ t.name }}{% endfor %}{% if is|object_user_is:'pioneer' %}pioneer {% endif %}isotope-item" data-image="{{ is.image|safe }}"">
                         <div class="container">
                             <img src="{{ is.image }}">
                         </div>
@@ -64,7 +64,7 @@
                     </li>
                 {% endfor %}
                 {% for ts in text_stories %}
-                    <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %} isotope-item" data-full-text="{{ ts.text|safe }}">
+                    <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %}{% if ts|object_user_is:'pioneer' %} pioneer {% endif %}isotope-item" data-full-text="{{ ts.text|safe }}">
                         <div class="container">
                             <p>{{ ts.text|truncatewords:60 }}</p>
                         </div>
@@ -83,6 +83,9 @@
                             <img src="{{ connection.image }}">
                         </div>
                         <div class="bottom-link">
+                            {% if connection|object_user_is:'pioneer' %}
+                                <a href="/about/pioneers/" class="connection-user-pioneer"></a>
+                            {% endif %}
                             <span>{{ connection.name }}</span>
                             <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span class="triangle"></span></a>
                             <div class="cf"></div>

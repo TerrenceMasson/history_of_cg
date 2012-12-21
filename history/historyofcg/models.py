@@ -3,6 +3,11 @@ from django.forms import forms
 from base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 
+class UpcomingFeature(BaseModel):
+    name = models.CharField(max_length=20)
+    text = models.TextField()
+    display = models.BooleanField()
+
 # Create your models here.
 class Category(BaseModel):
     # 1 -> person
