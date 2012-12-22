@@ -41,7 +41,7 @@ class Location(BaseModel):
 
 class Page(BaseModel):
     type = models.ForeignKey(Category)
-    name = models.CharField(max_length=40, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     vanity_url = models.CharField(max_length=20, unique=True)
     tags = models.ManyToManyField(Tag)
     description = models.TextField()
