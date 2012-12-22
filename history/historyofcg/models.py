@@ -21,6 +21,7 @@ class Category(BaseModel):
 
 class Tag(BaseModel):
     name = models.CharField(max_length=20)
+    approved = models.BooleanField()
 
     def __unicode__(self):
         return self.name
@@ -42,7 +43,7 @@ class Location(BaseModel):
 class Page(BaseModel):
     type = models.ForeignKey(Category)
     name = models.CharField(max_length=100, unique=True)
-    vanity_url = models.CharField(max_length=20, unique=True)
+    vanity_url = models.CharField(max_length=100, unique=True)
     tags = models.ManyToManyField(Tag)
     description = models.TextField()
     homepage = models.URLField(blank=True, null=True)
@@ -55,24 +56,8 @@ class Page(BaseModel):
     def __unicode__(self):
         return self.name
 
-class Entry(BaseModel):
-    name = models.CharField(max_length=50, unique=True)
-    category = models.ForeignKey(Category)
-    description = models.TextField()
-    user = models.ForeignKey(User)
-    date_1 = models.DateField(blank=True, null=True)
-    date_2 = models.DateField(blank=True, null=True)
-    location = models.ForeignKey(Location)
-    published = models.BooleanField()
-    page = models.ForeignKey(Page)
-    tags = models.ManyToManyField(Tag)
-    url = models.URLField()
-
-    def __unicode__(self):
-        return self.name
-
 class Story(BaseModel):
-    title = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=50)
     date = models.DateField(blank=True, null=True)
     page = models.ForeignKey(Page)
     user = models.ForeignKey(User)
@@ -89,7 +74,7 @@ class Review(BaseModel):
     page = models.ForeignKey(Page)
 
 class VideoStory(Story):
-    video = models.CharField(max_length=200, unique=True)
+    video = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
         if "?v=" in self.video:
@@ -98,10 +83,7 @@ class VideoStory(Story):
         super(VideoStory, self).save(*args, **kwargs)
 
 class ImageStory(Story):
-    image = models.URLField(unique=True)
+    image = models.URLField()
 
 class TextStory(Story):
-    text = models.TextField(unique=True)
-
-class Connection(Entry):
-    image = models.URLField(unique=True)
+    text = models.TextField()

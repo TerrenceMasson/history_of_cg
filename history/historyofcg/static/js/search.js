@@ -26,10 +26,6 @@ $(function() {
 
        var innerContent = "<a><span class='autocomplete-name'>"+ t +"</span><span class='autocomplete-category-box "+item['type']+"'></span>";
 
-       if(pagename === "") {
-           innerContent += "<span class='autocomplete-category "+item['type']+"'>" + item['type'].toUpperCase() + "</span>";
-       }
-
        innerContent += "</a>";
 
        return $( "<li></li>" )
