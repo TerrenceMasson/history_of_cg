@@ -35,7 +35,7 @@ class TextStoryAdmin(StoryAdmin):
 
 class PageAdmin(admin.ModelAdmin):
     model = Page
-    list_display = ('name', 'vanity_url', 'published', 'type', 'user', 'date_created', 'date_modified')
+    list_display = ('id', 'name', 'vanity_url', 'published', 'type', 'user', 'date_created', 'date_modified')
 
 class ConnectionAdmin(admin.ModelAdmin):
     model = Connection
