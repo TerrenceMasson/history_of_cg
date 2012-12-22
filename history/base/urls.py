@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^about/$', 'historyofcg.views.about'),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
-    url(r'^pages/(?P<s>\w+)/$', 'historyofcg.views.view_source_entries'),
+    url(r'^pages/(?P<s>[-\w]+)/$', 'historyofcg.views.view_source_entries'),
     url(r'^add/page/$', 'historyofcg.views.add_page', name="add_page"),
     url(r'^edit/page/(?P<vanity_url>\w+)/$', 'historyofcg.views.edit_page'),
     url(r'^unpublish/page/(?P<vanity_url>\w+)/$', 'historyofcg.views.unpublish_page'),
