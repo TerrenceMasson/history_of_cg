@@ -13191,7 +13191,7 @@ The Blinn shading model was later expanded upon by Ken Torrance and Rob Cook at 
 	</row>
 	<row>
 		<field name="id">11</field>
-		<field name="title">NYIT</field>
+		<field name="title">NYIT 2</field>
 		<field name="story_type_id">2</field>
 		<field name="date" xsi:nil="true" />
 		<field name="story" xsi:nil="true" />
