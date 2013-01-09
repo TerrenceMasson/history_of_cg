@@ -56,9 +56,9 @@ class GroupCheckNode(template.Node):
         self.nodelist_false = nodelist_false
 
     def render(self, context):
-        if 'user' in context:
+        if "user" in context:
             user = context['user']
-        if 'request' in context:
+        if "request" in context:
             user = context['request'].user
 
         if not user.is_authenticated():
