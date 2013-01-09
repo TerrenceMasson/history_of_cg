@@ -56,9 +56,12 @@ class GroupCheckNode(template.Node):
         self.nodelist_false = nodelist_false
 
     def render(self, context):
+        print context
         if "request" in context:
+            print 'request'
             user = context['request'].user
         elif "user" in context:
+            print 'user'
             user = context['user']
 
 
