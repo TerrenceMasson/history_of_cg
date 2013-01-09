@@ -3,7 +3,7 @@
     <div id="content">
     <section class="timeline">
     {% for page in user_pages %}
-        <h1 class="entryTitle"><a href="/edit/page/{{ page.vanity_url }}/">{{ page.name }}</a>&nbsp; &nbsp;{% if page.published %} published {% else %} not published {% endif %}</h1>
+        <h2 class="entryTitle"><a href="/edit/page/{{ page.vanity_url }}/">{{ page.name }}</a>&nbsp; &nbsp;{% if page.published %} published {% else %} not published {% endif %}</h2>
     {% endfor %}
     </section>
     </div>
