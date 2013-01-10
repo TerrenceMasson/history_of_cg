@@ -16,7 +16,7 @@
                     <li class="category person"><a href="#" data-filter=".person">People</a></li>
                     <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
                     <li class="category event"><a href="#" data-filter=".event">Events</a></li>
-                    <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>
+                    {% if user.is_authenticated %}<li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>{% endif %}
                     <div class="cf"></div>
                 </ul>
             </div>

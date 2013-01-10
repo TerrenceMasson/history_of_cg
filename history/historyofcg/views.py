@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 # Create your views here.
 #@require_safe
 def home(request):
-    updated_entries = Page.objects.order_by('-date_modified')[:4]
+    updated_entries = Page.objects.filter(published = True).order_by('-date_modified')[:4]
 
     if request.user.is_authenticated():
         if len(Review.objects.filter(type = "UP", user__id = request.user.id)) == 1:
