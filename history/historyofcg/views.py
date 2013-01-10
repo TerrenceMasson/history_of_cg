@@ -76,10 +76,7 @@ def view_source_entries(request, s):
         elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
             show_badge5 = True
 
-    if request.user.is_authenticated():
-        page = Page.objects.get(user__id = request.user.id, vanity_url=s)
-    else:
-        page = Page.objects.get(published = True, vanity_url = s)
+    page = Page.objects.get(published = True, vanity_url = s)
 
     image_stories = ImageStory.objects.filter(page__vanity_url = s, published = True)
     text_stories = TextStory.objects.filter(page__vanity_url = s, published = True)
@@ -119,7 +116,7 @@ def add_page(request):
             page_type = form.cleaned_data['type']
             page_name = form.cleaned_data['name']
             page_description = form.cleaned_data['description']
-            page_vanity_url = form.cleaned_data['vanity_url']
+            page_vanity_url = form.cleaned_data['name'].replace(' ', '-').replace('_', '-')
             page_tags = form.cleaned_data['tags']
             page_homepage = form.cleaned_data['homepage']
             page_image = form.cleaned_data['image']
@@ -168,7 +165,7 @@ def edit_page(request, vanity_url):
         elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
             show_badge5 = True
 
-    page = Page.objects.get(vanity_url = vanity_url, user__id = request.user.id)
+    page = Page.objects.get(vanity_url = vanity_url)
     user_stories = Story.objects.filter(user__id = request.user.id, page = page)
     connections = page.connections
     user_text_stories = TextStory.objects.filter(user__id = request.user.id, page = page)
@@ -181,7 +178,6 @@ def edit_page(request, vanity_url):
 
             page.type = form.cleaned_data['type']
             page.name = form.cleaned_data['name']
-            page.vanity_url = form.cleaned_data['vanity_url']
             page.tags = form.cleaned_data['tags']
             page.description = form.cleaned_data['description']
             page.homepage = form.cleaned_data['homepage']

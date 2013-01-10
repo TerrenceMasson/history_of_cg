@@ -19,7 +19,6 @@
                 <ul class="required-labels all-labels">
                     <li class="label-entry-type labels" style="margin-top: 10px;">Type of Page <span class="required">*</span></li>
                     <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
-                    <li class="label-entry-name labels">Vanity URL <span class="required">*</span></li>
                     <li class="label-entry-name labels">Image URL <span class="required">*</span></li>
                     <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
                 </ul>
@@ -31,10 +30,6 @@
                     <li class="entry-name fields">
                         {{ form.name.errors }}
                         {{ form.name }}
-                    </li>
-                    <li class="entry-name fields">
-                        {{ form.vanity_url.errors }}
-                        {{ form.vanity_url }}
                     </li>
                     <li class="entry-image fields">
                         <input name="image" id="id_image" type="text" class="need-helper {{ page.type }}">
