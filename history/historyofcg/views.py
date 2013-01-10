@@ -166,11 +166,11 @@ def edit_page(request, vanity_url):
             show_badge5 = True
 
     page = Page.objects.get(vanity_url = vanity_url)
-    user_stories = Story.objects.filter(user__id = request.user.id, page = page)
+    user_stories = Story.objects.filter(page = page)
     connections = page.connections
-    user_text_stories = TextStory.objects.filter(user__id = request.user.id, page = page)
-    user_image_stories = ImageStory.objects.filter(user__id = request.user.id, page = page)
-    user_video_stories = VideoStory.objects.filter(user__id = request.user.id, page = page)
+    user_text_stories = TextStory.objects.filter(page = page)
+    user_image_stories = ImageStory.objects.filter(page = page)
+    user_video_stories = VideoStory.objects.filter(page = page)
 
     if request.method == 'POST':
         form = PageForm(request.POST, instance=page)
