@@ -18,7 +18,7 @@ class PageForm(ModelForm):
         widgets = {
             'type': Select(attrs={'class': 'entry-type-select none', 'id': 'EntryCategoryId'}),
         }
-        exclude = ('user', 'published', 'connections', 'published', 'vanity_url')
+        exclude = ('user', 'published', 'connections', 'published', 'vanity_url', 'image')
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
