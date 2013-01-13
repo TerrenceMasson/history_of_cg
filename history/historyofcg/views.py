@@ -83,8 +83,6 @@ def view_source_entries(request, s):
     video_stories = VideoStory.objects.filter(page__vanity_url = s, published = True)
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
-    user_reviews = Review.objects.filter(user__id = request.user.id)
-
     connections = page.connections
 
     return locals()
@@ -444,10 +442,10 @@ def remove_connection(request, remove_to, to_remove):
 @require_POST
 def up_vote_story(request, story_id):
     if request.is_ajax() & request.user.is_authenticated():
-        if not Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "UP"):
+        if not Review.objects.filter(story__id = story_id, type = "UP"):
 
-            if Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "DOWN"):
-                Review.objects.get(story__id = story_id, user__id = request.user.id, type = "DOWN").delete()
+            if Review.objects.filter(story__id = story_id, type = "DOWN"):
+                Review.objects.get(story__id = story_id, type = "DOWN").delete()
 
             _story = Story.objects.get(id = story_id)
 
@@ -465,10 +463,10 @@ def up_vote_story(request, story_id):
 @require_POST
 def down_vote_story(request, story_id):
     if request.is_ajax() & request.user.is_authenticated():
-        if not Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "DOWN"):
+        if not Review.objects.filter(story__id = story_id, type = "DOWN"):
 
-            if Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "UP"):
-                Review.objects.get(story__id = story_id, user__id = request.user.id, type = "UP").delete()
+            if Review.objects.filter(story__id = story_id, type = "UP"):
+                Review.objects.get(story__id = story_id, type = "UP").delete()
 
             _story = Story.objects.get(id = story_id)
 
@@ -486,9 +484,9 @@ def down_vote_story(request, story_id):
 @require_POST
 def no_vote_story(request, story_id):
     if request.is_ajax() & request.user.is_authenticated():
-        if Review.objects.filter(story__id = story_id, user__id = request.user.id, type = "DOWN"):
+        if Review.objects.filter(story__id = story_id, type = "DOWN"):
 
-            vote = Review.objects.get(story__id = story_id, user__id = request.user.id, type = "DOWN")
+            vote = Review.objects.get(story__id = story_id, type = "DOWN")
             vote.delete()
 
             return HttpResponse('')

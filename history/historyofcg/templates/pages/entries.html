@@ -41,10 +41,11 @@
                             <img src="{{ is.image }}">
                         </div>
                         <div class="bottom-link">
-                            <span class="opener">{{ is.title }}</span>
+                            <span class="opener">{{ is.title|truncatechars:"15" }}</span>
                             <span class="story-type story-type-icon-image"></span>
-                            <span class="story-type story-up-arrow" data-story-id="{{ is.id }}"></span>
-                            <span class="story-type story-down-arrow" data-story-id="{{ is.id }}"></span>
+                            {% if request.user.is_authenticated %}
+                            <span class="story-type {{ is|user_vote_cast:request.user.id }}" data-story-id="{{ is.id }}"></span>
+                            {% endif %}
                             <div class="cf"></div>
                         </div>
                     </li>
@@ -55,10 +56,11 @@
                             <div class='lite' style='width:478px; height:359px' id="{{ vs.video }}"></div>
                         </div>
                         <div class="bottom-link">
-                            <span class="opener">{{ vs.title }}</span>
+                            <span class="opener">{{ vs.title|truncatechars:"15" }}</span>
                             <span class="story-type story-type-icon-video"></span>
-                            <span class="story-type story-up-arrow" data-story-id="{{ vs.id }}"></span>
-                            <span class="story-type story-down-arrow" data-story-id="{{ vs.id }}"></span>
+                            {% if request.user.is_authenticated %}
+                            <span class="story-type {{ vs|user_vote_cast:request.user.id }}" data-story-id="{{ vs.id }}"></span>
+                            {% endif %}
                             <div class="cf"></div>
                         </div>
                     </li>
@@ -69,9 +71,11 @@
                             <p>{{ ts.text|truncatewords:60 }}</p>
                         </div>
                         <div class="bottom-link">
-                            <span class="opener">{{ ts.title }}</span>
+                            <span class="opener">{{ ts.title|truncatechars:"15" }}</span>
                             <span class="story-type story-type-icon-text"></span>
+                            {% if request.user.is_authenticated %}
                             <span class="story-type {{ ts|user_vote_cast:request.user.id }}" data-story-id="{{ ts.id }}"></span>
+                            {% endif %}
                             <div class="cf"></div>
                         </div>
                     </li>
@@ -85,7 +89,7 @@
                             {% if connection|object_user_is:'pioneer' %}
                                 <a href="/about/pioneers/" class="connection-user-pioneer"></a>
                             {% endif %}
-                            <span>{{ connection.name }}</span>
+                            <span>{{ connection.name|truncatechars:"15" }}</span>
                             <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span class="triangle"></span></a>
                             <div class="cf"></div>
                         </div>
