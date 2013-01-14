@@ -1,6 +1,7 @@
 import datetime
 import hashlib
 import random
+from django.core.mail import send_mail
 import re
 
 from django.conf import settings
@@ -263,5 +264,5 @@ class RegistrationProfile(models.Model):
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
         
-        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email])
     
