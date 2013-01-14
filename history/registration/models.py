@@ -256,13 +256,11 @@ class RegistrationProfile(models.Model):
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
                     'site': site}
-        subject = render_to_string('registration/activation_email_subject.txt',
-                                   ctx_dict)
+        subject = 'Activate your account'
         # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
         
-        message = render_to_string('registration/activation_email.txt',
-                                   ctx_dict)
+        message = 'Your activation key: {0}\nPlease use this link to activate your account:\nhttp://stage.historyofcg.com/accounts/activate/{0}/\nAfter activation you can login to the site:\nhttp://stage.historyofcg.com/accounts/login/'.format(self.activation_key)
         
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email])
     
