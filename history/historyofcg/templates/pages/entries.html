@@ -36,7 +36,7 @@
                     <p>{{ page.description }}</p>
                 </li>
                 {% for is in image_stories %}
-                    <li class="tile story story-image{% for t in is.tags.all %}{{ t.name }}{% endfor %}{% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item" data-image="{{ is.image|safe }}"">
+                    <li class="tile story story-image double-size{% for t in is.tags.all %}{{ t.name }}{% endfor %}{% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item" data-image="{{ is.image|safe }}"">
                         <div class="container">
                             <img src="{{ is.image }}">
                         </div>
