@@ -33,10 +33,12 @@
         <section class="mosaicBody">
             <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
                 <li class="dynamic organization">
-                    <p>{{ page.description }}</p>
+                    <p>{{ page.description|truncatewords:120 }}</p>
                 </li>
                 {% for is in image_stories %}
-                    <li class="tile story story-image double-size{% for t in is.tags.all %}{{ t.name }}{% endfor %}{% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item" data-image="{{ is.image|safe }}"">
+                    <li class="tile story story-image {% if is.image|get_img_width >= 478 %}double-size {% endif %}
+                    {% for t in is.tags.all %}{{ t.name }}{% endfor %}
+                    {% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item" data-image="{{ is.image|safe }}">
                         <div class="container">
                             <img src="{{ is.image }}">
                         </div>
@@ -68,7 +70,7 @@
                 {% for ts in text_stories %}
                     <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %}{% if ts|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item" data-full-text="{{ ts.text|safe }}">
                         <div class="container">
-                            <p>{{ ts.text|truncatewords:60 }}</p>
+                            <p>{{ ts.text|truncatewords:80 }}</p>
                         </div>
                         <div class="bottom-link">
                             <span class="opener">{{ ts.title|truncatechars:"15" }}</span>
