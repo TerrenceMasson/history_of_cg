@@ -1,14 +1,23 @@
+<script>
+    $(document).ready(function() {
+        $('body').on('ready', '.tabs-min', function() {
+            print('loaded');
+            $(this).tabs('enabled');
+        });
+    });
+</script>
+
 <div class="cf"></div>
 <div class="stories new" style="">
-    <p class="story-collapsed-heading">
+    <p class="story-opened-heading">
         <span class="title {{ page.type }}">New Story</span>
         <span class="delete ui-icon ui-icon-close"></span>
         <span class="story-type"></span>
         <span class="info">Not Saved</span>
     </p>
-    <div class="story-collapsed" style="display: block;">
-        <div class="tabs-min">
-            <ul>
+    <div class="story-opened" style="display: block;">
+        <div class="tabs-min ui-tabs all-fields">
+            <ul class="ui-tabs-nav">
                 <li><a href="#tabs-1">Text</a></li>
                 <li><a href="#tabs-2">Image</a></li>
                 <li><a href="#tabs-3">Video</a></li>
@@ -22,20 +31,19 @@
                         <li class="label-story-story labels">Story<span class="required"> *</span></li>
                     </ul>
                     <ul class="story-fields all-fields">
-                        <li class="story-title fields">
-                            {{ form.title.error }}
-                            {{ form.title }}
+                        <li class="entry-date fields">
+                            <input name="title" id="id_title" type="text" class="need-helper {{ page.type }}">
                         </li>
-                        <li class="story-date fields">
+                        <li class="story-date fields {{ page.type }}">
                             {{ form.date.errors }}
                             {{ form.date }}
                             <span id="helper-story-date" class="helper-popups organization-border">When did this story take place?</span>
                         </li>
-                        <li class="story-source fields">
+                        <li class="story-source fields {{ page.type }}">
                             {{ form.source.errors }}
                             {{ form.source }}
                         </li>
-                        <li class="story-body fields">
+                        <li class="story-body fields {{ page.type }}">
                             {{ form.text.errors }}
                             {{ form.text }}
                             <span id="helper-story-story" class="helper-popups organization-border">What happened? Who was involved? Remember, this is isn't an encyclopedia entry, give us the inside story!</span>

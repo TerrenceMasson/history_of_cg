@@ -486,6 +486,7 @@ form#login-form, form#signup-form {
 .tabs-min .ui-widget-header {
     background: transparent;
     border: none;
+    display: block;
     border-bottom: 1px solid #c0c0c0;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
@@ -496,14 +497,14 @@ form#login-form, form#signup-form {
     border: none;
 }
 .tabs-min .ui-state-active {
-    background: transparent url(img/uiTabsArrow.png) no-repeat bottom center;
+    background: transparent url(../img/uiTabsArrow.png) no-repeat bottom center;
     border: none;
 }
 .tabs-min .ui-state-default a {
     color: #c0c0c0;
 }
 .tabs-min .ui-state-active a {
-    color: #459E00;
+    /*color: #459E00;*/
 }
 /* ================== USER BADGES ====================== */
 .user-badge {
