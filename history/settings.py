@@ -19,7 +19,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '{}/db.db'.format(PROJECT_PATH),                      # Or path to database file if using sqlite3.
+        'NAME': '{}/db.db'.format(PROJECT_CONTAINER_PATH),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -111,7 +111,7 @@ ROOT_URLCONF = 'base.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'base.wsgi.application'
 
-TEMPLATE_DIRS = ('C:/Users/Kyle/Documents/GitHub/dj_history/history/historyofcg/templates',)
+TEMPLATE_DIRS = ('{}/templates'.format(PROJECT_PATH),)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
