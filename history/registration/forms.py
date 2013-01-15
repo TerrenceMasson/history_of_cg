@@ -43,7 +43,7 @@ class RegistrationForm(forms.Form):
                                 label=_("Password (again)"))
 
     first_name = forms.CharField(widget=forms.TextInput(attrs=attrs_dict), label=_("First Name"))
-    last_name = forms.CharField(widget=forms.TextInput(attrs=attrs_dict), label=_("Lastst Name"))
+    last_name = forms.CharField(widget=forms.TextInput(attrs=attrs_dict), label=_("Last Name"))
     
     def clean_username(self):
         """

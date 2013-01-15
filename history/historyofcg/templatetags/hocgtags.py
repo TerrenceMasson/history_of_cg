@@ -89,8 +89,6 @@ class GroupCheckNode(template.Node):
 def get_img_width(value):
     header = urllib2.urlopen(value).read(24)
     return_list = getImageInfo(header)
-
-    print 'c', return_list[0], 'w', return_list[1], 'h', return_list[2]
     return int(return_list[1])
 
 def getImageInfo(data):
@@ -151,5 +149,5 @@ def getImageInfo(data):
         except ValueError:
             pass
 
-    return content_type, width, height
+    return [content_type, width, height]
 __author__ = 'Kyle'
