@@ -22,9 +22,10 @@ class PageForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields['date_established'].widget.format = '%m/%d/%Y'
+        print args
+        self.fields['date_established'].widget.format = "%m/%d/%Y"
 
-        # at the same time, set the input format on the date field like you want it:
+            # at the same time, set the input format on the date field like you want it:
         self.fields['date_established'].input_formats = ['%m/%d/%Y', '%Y']
 
 class TextStoryForm(ModelForm):
@@ -42,6 +43,9 @@ class TextStoryForm(ModelForm):
 
         # at the same time, set the input format on the date field like you want it:
         self.fields['date'].input_formats = ['%m/%d/%Y', '%Y']
+
+        # set initial value for the field
+        self.fields['date'].initial = datetime.date.today()
 
 class ImageStoryForm(ModelForm):
 

@@ -13,24 +13,14 @@ $(function() {
 
 
     $('.opener').click(function() {
-        console.log('clicked');
         var story = $(this)[0];
-        var container = $(this).parent().parent();
-
-
-        if (container[0].nextElementSibling) {
-            console.log('next');
-            console.log(container[0].nextElementSibling);
-        } else if (container[0].previousElementSibling) {
-            console.log('previous');
-            console.log(container.prev());
-        }
+        var container = $(this);
 
         function reset_buttons() {
             var buttons = {};
-            if (container[0].previousElementSibling) {
+            if (container[0].previousElementSibling && container[0].previousElementSibling.getAttribute('class').indexOf('dynamic') == -1) {
                 buttons["<"] = function() {
-                    console.log('next element previous button');
+                    console.log('previous button');
                     container = container.prev();
                     if (container.hasClass('story-image')) {
                         $dialog.html('<img style="width:590px;" src='+container[0].getAttribute('data-image')+'>');
@@ -49,9 +39,9 @@ $(function() {
             buttons["X"] = function() {
                 $dialog.dialog("close");
             };
-            if (container[0].nextElementSibling) {
+            if (container[0].nextElementSibling && container[0].nextElementSibling.getAttribute('class').indexOf('connection') == -1) {
                 buttons[">"] = function() {
-                    console.log('next element previous button');
+                    console.log('next button');
                     container = container.next();
                     if (container.hasClass('story-image')) {
                         $dialog.html('<img style="width:590px;" src='+container[0].getAttribute('data-image')+'>');
@@ -62,7 +52,7 @@ $(function() {
                     if (container.hasClass('story-text')) {
                         $dialog.html('<div class="container"><span>'+container[0].getAttribute('data-full-text')+'</span></div>');
                     }
-                    $dialog.dialog("option", "title", container.innerText);
+                    $dialog.dialog("option", "title", 'Story story_id of story_total');
                     $dialog.dialog("option", "position", {my:"center", at:"center", of: window});
                     $dialog.dialog('option', 'buttons', reset_buttons());
                 };
@@ -82,7 +72,7 @@ $(function() {
         }
         console.log('entry filled');
 
-        $dialog.dialog("option", "title", story.innerText);
+        $dialog.dialog("option", "title", 'Story story_id of story_total');
         $dialog.dialog('option', 'buttons', reset_buttons());
         console.log('buttons drawn');
         $dialog.dialog('open');

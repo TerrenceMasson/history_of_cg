@@ -341,10 +341,7 @@ def edit_story(request, type, id):
             story.source = form.cleaned_data['source']
             story.text = form.cleaned_data['text']
             if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) != 3 : return HttpResponse('')
-                d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                story.date = d.strftime('%Y-%m-%d')
+                story.date = form.cleaned_data['date']
                 story.save()
             else :
                 story.save()
@@ -358,10 +355,7 @@ def edit_story(request, type, id):
             story.source = form.cleaned_data['source']
             story.image = form.cleaned_data['image']
             if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) != 3 : return HttpResponse('')
-                d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                story.date = d.strftime('%Y-%m-%d')
+                story.date = form.cleaned_data['date']
                 story.save()
             else :
                 story.save()
@@ -375,10 +369,7 @@ def edit_story(request, type, id):
             story.source = form.cleaned_data['source']
             story.video = form.cleaned_data['video']
             if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) != 3 : return HttpResponse('')
-                d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                story.date = d.strftime('%Y-%m-%d')
+                story.date = form.cleaned_data['date']
                 story.save()
             else :
                 story.save()
