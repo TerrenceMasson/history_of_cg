@@ -22,7 +22,6 @@ class PageForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        print args
         self.fields['date_established'].widget.format = "%m/%d/%Y"
 
             # at the same time, set the input format on the date field like you want it:

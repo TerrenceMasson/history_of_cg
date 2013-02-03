@@ -22,6 +22,7 @@ class Category(BaseModel):
 class Tag(BaseModel):
     name = models.CharField(max_length=20)
     approved = models.BooleanField()
+    old_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -52,6 +53,7 @@ class Page(BaseModel):
     user = models.ForeignKey(User)
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
     image = models.URLField()
+    old_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -63,6 +65,7 @@ class Story(BaseModel):
     user = models.ForeignKey(User)
     source = models.CharField(max_length=200, blank=True, null=True)
     published = models.BooleanField(default=False)
+    old_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.title
