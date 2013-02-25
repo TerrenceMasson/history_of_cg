@@ -72,8 +72,9 @@
                             {{ form.homepage }}
                         </li>
                         <li class="entry-date fields">
-                            <input name="date_established" id="id_date_established" type="text" class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
-                            <span id="helper-story-date" class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
+                            {{ form.date_established.errors }}
+                            {{ form.date_established }}
+                            <span id="helper-story-date-established" class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
                         </li>
                     </ul>
                     <div class="cf"></div>

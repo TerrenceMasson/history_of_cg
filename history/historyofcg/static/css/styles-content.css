@@ -316,9 +316,9 @@ ul.mosaicContainer li.tile.story.pioneer .bottom-link {
 
 ul.mosaicContainer li.tile.connection .bottom-link a.link-button {
   width: 30px;
-  height: 30px;
+  #height: 30px;
   float: right;
-  background-color: #fff;
+  #background-color: #fff;
   opacity: 0.5;
   position: relative; }
 
@@ -350,7 +350,7 @@ ul.mosaicContainer li.tile .bottom-link span {
   font-family: Gotham, Helvetica, sans-serif;
   float: left;
   font-size: 14px;
-  width: 65%; }
+  width: 75%; }
 
 ul.mosaicContainer .person {
   border: 1px solid #00b9db !important; }

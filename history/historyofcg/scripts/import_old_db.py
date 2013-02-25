@@ -3,7 +3,11 @@ from xml.etree import ElementTree
 from django.contrib.auth.models import User
 from historyofcg.models import Page, Category, Story, VideoStory, ImageStory, TextStory, Tag
 
-tree = ElementTree.parse('historyofcg/scripts/file.xml')
+try:
+    tree = ElementTree.parse('historyofcg/scripts/file.xml')
+except IOError:
+    tree = ElementTree.parse('history/historyofcg/scripts/file.xml')
+
 root = tree.getroot()
 def populate_page():
     Page.objects.all().delete()
@@ -82,7 +86,7 @@ def initial_stories_fill():
                                 #this is just temporary, really sloppy but works T_T
                                 page = Page.objects.get(id = 1),
                                 published = row_data['published'] == '1',
-                                text = row_data['story'],
+                                text = row_data['story'].encode('utf-8'),
                                 date_created = date(int(row_data['created'][:4]),int(row_data['created'][5:7]),int(row_data['created'][8:10])),
                                 date_modified = date(int(row_data['modified'][:4]),int(row_data['modified'][5:7]),int(row_data['modified'][8:10])),
                                 old_id = row_data['id']

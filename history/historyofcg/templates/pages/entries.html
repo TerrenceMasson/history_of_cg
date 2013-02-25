@@ -76,7 +76,7 @@
                         data-full-text="{{ ts.text|safe }}"
                         data-title="{{ ts.title|safe }}">
                         <div class="container">
-                            <p>{{ ts.text|truncatewords:80 }}</p>
+                            <p>{{ ts.text|safe|truncatewords:80 }}</p>
                         </div>
                         <div class="bottom-link">
                             <span>{{ ts.title|truncatechars:"14" }}</span>
@@ -97,7 +97,7 @@
                             {% if connection|object_user_is:'pioneer' %}
                                 <a href="/about/pioneers/" class="connection-user-pioneer"></a>
                             {% endif %}
-                            <span>{{ connection.name|truncatechars:"14" }}</span>
+                            <span>{{ connection.name|truncatechars:"19" }}</span>
                             <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span class="triangle"></span></a>
                             <div class="cf"></div>
                         </div>

@@ -179,11 +179,12 @@ def edit_page(request, vanity_url):
             page.tags = form.cleaned_data['tags']
             page.description = form.cleaned_data['description']
             page.homepage = form.cleaned_data['homepage']
-            page.date = form.cleaned_data['date_established']
+            page.date_established = form.cleaned_data['date_established']
             page.image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
 
             page.save()
             print 'saved'
+            print page.date_established
             return redirect('/pages/{}'.format(vanity_url))
     else:
         form = PageForm(instance=page)
