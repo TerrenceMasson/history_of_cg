@@ -350,7 +350,7 @@ ul.mosaicContainer li.tile .bottom-link span {
   font-family: Gotham, Helvetica, sans-serif;
   float: left;
   font-size: 14px;
-  width: 75%; }
+  #width: 75%; }
 
 ul.mosaicContainer .person {
   border: 1px solid #00b9db !important; }

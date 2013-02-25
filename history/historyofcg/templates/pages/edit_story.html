@@ -21,7 +21,7 @@
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper {{ page.type }}" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                        <input type="text" name="date" id="id_date" class="need-helper {{ page.type }}" {% if story.date %}value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}"{% endif %}>
                     </li>
                     <li class="story-source fields">
                         <input type="text" name="source" id="id_source" class="need-helper {{ page.type }}" value="{{ story.source|safe }}">
@@ -51,7 +51,7 @@
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper organization" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                        <input type="text" name="date" id="id_date" class="need-helper organization" {% if story.date %}value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}"{% endif %}>
                     </li>
                     <li class="story-url fields">
                         <input type="text" name="image" id="id_image" class="need-helper organization" value="{{ story.image }}">
@@ -79,7 +79,7 @@
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper organization" value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}">
+                        <input type="text" name="date" id="id_date" class="need-helper organization" {% if story.date %}value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}"{% endif %}>
                     </li>
                     <li class="story-url fields">
                         <input type="text" name="image" id="id_video" class="need-helper organization" value="{{ story.image }}">

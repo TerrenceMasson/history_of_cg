@@ -47,9 +47,6 @@ class TextStoryForm(ModelForm):
         # at the same time, set the input format on the date field like you want it:
         self.fields['date'].input_formats = ['%m/%d/%Y', '%Y']
 
-        # set initial value for the field
-        self.fields['date'].initial = datetime.date.today()
-
 class ImageStoryForm(ModelForm):
 
     class Meta:
@@ -63,9 +60,6 @@ class ImageStoryForm(ModelForm):
         # at the same time, set the input format on the date field like you want it:
         self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
 
-        # set initial value for the field
-        self.fields['date'].initial = datetime.date.today()
-
 class VideoStoryForm(ModelForm):
 
     class Meta:
@@ -78,8 +72,5 @@ class VideoStoryForm(ModelForm):
 
         # at the same time, set the input format on the date field like you want it:
         self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
-
-        # set initial value for the field
-        self.fields['date'].initial = datetime.date.today()
 
 __author__ = 'Kyle'
