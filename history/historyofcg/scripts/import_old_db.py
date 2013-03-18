@@ -24,19 +24,35 @@ def populate_page():
                        print 'page already exists'
                     else:
                         if row_data['slug']:
-                            Page.objects.create(
-                                old_id = row_data['id'],
-                                name = row_data['name'],
-                                date_created = date(int(row_data['created'][:4]),int(row_data['created'][5:7]),int(row_data['created'][8:10])),
-                                date_modified = date(int(row_data['modified'][:4]),int(row_data['modified'][5:7]),int(row_data['modified'][8:10])),
-                                published = False if row_data['published']=='0' else True,
-                                type = Category.objects.get(id = int(row_data['category_id'])),
-                                user = User.objects.get(id = 1),
-                                vanity_url = row_data['slug'][:100],
-                                homepage = row_data['homepage_url'],
-                                description = row_data['description'] if row_data['description'] else " ",
-                                image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
-                            ).save()
+                            if row_data['date_1']:
+                                Page.objects.create(
+                                    old_id = row_data['id'],
+                                    name = row_data['name'],
+                                    date_created = date(int(row_data['created'][:4]),int(row_data['created'][5:7]),int(row_data['created'][8:10])),
+                                    date_modified = date(int(row_data['modified'][:4]),int(row_data['modified'][5:7]),int(row_data['modified'][8:10])),
+                                    published = False if row_data['published']=='0' else True,
+                                    type = Category.objects.get(id = int(row_data['category_id'])),
+                                    user = User.objects.get(id = 1),
+                                    vanity_url = row_data['slug'][:100],
+                                    homepage = row_data['homepage_url'],
+                                    description = row_data['description'] if row_data['description'] else " ",
+                                    date_established = date(int(row_data['date_1'][:4]),int(row_data['date_1'][5:7]),int(row_data['date_1'][8:10])),
+                                    image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
+                                ).save()
+                            else:
+                                Page.objects.create(
+                                    old_id = row_data['id'],
+                                    name = row_data['name'],
+                                    date_created = date(int(row_data['created'][:4]),int(row_data['created'][5:7]),int(row_data['created'][8:10])),
+                                    date_modified = date(int(row_data['modified'][:4]),int(row_data['modified'][5:7]),int(row_data['modified'][8:10])),
+                                    published = False if row_data['published']=='0' else True,
+                                    type = Category.objects.get(id = int(row_data['category_id'])),
+                                    user = User.objects.get(id = 1),
+                                    vanity_url = row_data['slug'][:100],
+                                    homepage = row_data['homepage_url'],
+                                    description = row_data['description'] if row_data['description'] else " ",
+                                    image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
+                                ).save()
 
 def initial_stories_fill():
     Story.objects.all().delete()
