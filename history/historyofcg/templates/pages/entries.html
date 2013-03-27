@@ -91,7 +91,8 @@
                 {% for connection in connections.all %}
                     <li class="tile connection {{ connection.type.name }} isotope-item">
                         <div class="container">
-                            <img src="{{ connection.image }}">
+                            {% if connection.image %}<img src="{{ connection.image }}">{% endif %}
+                            {% if not connection.image %}<img src="{{ connection|get_random_image }}">{% endif %}
                         </div>
                         <div class="bottom-link">
                             {% if connection|object_user_is:'pioneer' %}

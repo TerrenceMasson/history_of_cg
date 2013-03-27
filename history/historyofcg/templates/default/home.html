@@ -74,7 +74,8 @@
                 {% for entry in updated_entries %}
                     <div class="tile connection {{ entry.type.name }} isotope-item">
                         <div class="container">
-                            <img src="{{ entry.image }}">
+                            {% if entry.image %}<img src="{{ entry.image }}">{% endif %}
+                            {% if not entry.image %}<img src="{{ entry|get_random_image }}">{% endif %}
                         </div>
                         <div class="bottom-link">
                             {% if entry|object_user_is:'pioneer' %}

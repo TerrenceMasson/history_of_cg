@@ -32,12 +32,11 @@ def populate_page():
                                     date_modified = date(int(row_data['modified'][:4]),int(row_data['modified'][5:7]),int(row_data['modified'][8:10])),
                                     published = False if row_data['published']=='0' else True,
                                     type = Category.objects.get(id = int(row_data['category_id'])),
-                                    user = User.objects.get(id = 1),
+                                    user = User.objects.get(username = 'Tman'),
                                     vanity_url = row_data['slug'][:100],
                                     homepage = row_data['homepage_url'],
                                     description = row_data['description'] if row_data['description'] else " ",
                                     date_established = date(int(row_data['date_1'][:4]),int(row_data['date_1'][5:7]),int(row_data['date_1'][8:10])),
-                                    image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
                                 ).save()
                             else:
                                 Page.objects.create(
@@ -47,11 +46,10 @@ def populate_page():
                                     date_modified = date(int(row_data['modified'][:4]),int(row_data['modified'][5:7]),int(row_data['modified'][8:10])),
                                     published = False if row_data['published']=='0' else True,
                                     type = Category.objects.get(id = int(row_data['category_id'])),
-                                    user = User.objects.get(id = 1),
+                                    user = User.objects.get(username = 'Tman'),
                                     vanity_url = row_data['slug'][:100],
                                     homepage = row_data['homepage_url'],
-                                    description = row_data['description'] if row_data['description'] else " ",
-                                    image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
+                                    description = row_data['description'] if row_data['description'] else " "
                                 ).save()
 
 def initial_stories_fill():

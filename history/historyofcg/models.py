@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import forms
 from base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
+from random import choice
 
 class UpcomingFeature(BaseModel):
     name = models.CharField(max_length=20)
@@ -52,7 +53,7 @@ class Page(BaseModel):
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
-    image = models.URLField()
+    image = models.URLField(blank=True, null=True)
     old_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __unicode__(self):

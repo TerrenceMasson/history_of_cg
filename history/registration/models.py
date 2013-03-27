@@ -263,6 +263,6 @@ class RegistrationProfile(models.Model):
         
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
-        
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email])
+        print 'blah'
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['{}'.format(self.user.email)])
     
