@@ -37,7 +37,11 @@
                     <p>{{ page.description|truncatewords:120 }}</p>
                 </li>
                 {% for is in image_stories %}
-                    <li class="tile story story-image opener {% if is.image|get_img_width >= 478 %}double-size {% endif %}
+                    {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
+                    {# and random chooses one item randomly out of this list #}
+                    {% with rnd="12"|make_list|random %}
+                    <li class="tile story story-image opener {% if rnd == "1" %}double-size{% endif %}"
+                    {% endwith %}
                         {% for t in is.tags.all %}{{ t.name }}{% endfor %}
                         {% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
                         data-image="{{ is.image|safe }}"
