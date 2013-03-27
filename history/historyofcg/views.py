@@ -12,6 +12,7 @@ from base.decorators import render_to
 from forms import PageForm, TextStoryForm, ImageStoryForm, VideoStoryForm
 from models import *
 from django.views.decorators.http import require_POST
+import itertools
 
 # Create your views here.
 #@require_safe
@@ -84,6 +85,15 @@ def view_source_entries(request, s):
     all_stories = Story.objects.filter(page__vanity_url = s, published = True)
 
     connections = page.connections
+
+    tag_dict = []
+    __present_values = []
+    for c in connections.all() :
+        for tag in c.tags.all() :
+            if tag.name not in __present_values:
+                tag_dict.append([c.type.name, tag.name])
+                __present_values.append(tag.name)
+    print tag_dict
 
     return locals()
 

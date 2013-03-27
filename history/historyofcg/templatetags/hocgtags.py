@@ -19,6 +19,17 @@ def get_random_image(value):
         return choice(images).image
 
 @register.filter
+def get_connection_tags(value):
+    return_me = {}
+    for page in value:
+        for tag in page.tags.all():
+            if tag.name not in return_me.values():
+                return_me[page.type.name] = tag.name
+    print return_me.viewvalues()
+
+    return return_me
+
+@register.filter
 def object_user_is(value, arg):
     expected_group = Group.objects.filter(name=arg)
     if expected_group:

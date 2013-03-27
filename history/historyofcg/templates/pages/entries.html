@@ -24,15 +24,16 @@
         <section class="tagLists">
             <div class="" style="display:none;">
                 <ul>
-                    {% for tag in tag_list %}
-                        <li class="{{ tag.name }}" data-filter="*" checked="checked">{{ tag.name }}</li>
+                    <li class="all" style=""><input type="checkbox" data-filter="*" checked="checked">All</li>
+                    {% for k,v in tag_dict %}
+                        <li class="{{ k }}" style="display: inline-block"><input type="checkbox" data-filter=".{{ v.split|join:"-" }}">{{ v }}</li>
                     {% endfor %}
                 </ul>
             </div>
         </section>
         <section class="mosaicBody">
             <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
-                <li class="dynamic organization">
+                <li class="dynamic {{ page.type }}">
                     <p>{{ page.description|truncatewords:120 }}</p>
                 </li>
                 {% for is in image_stories %}
@@ -89,7 +90,7 @@
                     </li>
                 {% endfor %}
                 {% for connection in connections.all %}
-                    <li class="tile connection {{ connection.type.name }} isotope-item">
+                    <li class="tile connection {{ connection.type.name }} {% for tag in connection.tags.all %}{{ tag.name.split|join:"-" }} {% endfor %}isotope-item">
                         <div class="container">
                             {% if connection.image %}<img src="{{ connection.image }}">{% endif %}
                             {% if not connection.image %}<img src="{{ connection|get_random_image }}">{% endif %}
