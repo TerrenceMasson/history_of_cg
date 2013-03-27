@@ -34,7 +34,7 @@
         <section class="mosaicBody">
             <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
                 <li class="dynamic {{ page.type }}">
-                    <p>{{ page.description|truncatewords:120 }}</p>
+                    <p>{{ page.description|truncatewords:120|safe }}</p>
                 </li>
                 {% for is in image_stories %}
                     {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
@@ -81,7 +81,7 @@
                         data-full-text="{{ ts.text|safe }}"
                         data-title="{{ ts.title|safe }}">
                         <div class="container">
-                            <p>{{ ts.text|safe|truncatewords:80 }}</p>
+                            <p>{{ ts.text|truncatewords:80|safe }}</p>
                         </div>
                         <div class="bottom-link">
                             <span>{{ ts.title|truncatechars:"14" }}</span>
@@ -111,14 +111,13 @@
                 {% endfor %}
             </ul>
         </section>
-
         <section class="entryInfo" style="display: none;">
-            <input type="hidden" class="entryName" value="Pixar Animation Studios">
-            <input type="hidden" class="entryId" value="6">
-            <input type="hidden" class="entryCategory" value="organization">
+            <input type="hidden" class="entryName" value="{{ page.name }}">
+            <input type="hidden" class="entryId" value="{{ page.id }}">
+            <input type="hidden" class="entryCategory" value="{{ page.type }}">
             <div class="entryDescription">
                 <p>
-                    {{ page.description }}
+                    {{ page.description|truncatewords:120|safe }}
                 </p>
             </div>
         </section>

@@ -18,10 +18,6 @@ def get_random_image(value):
     else:
         return choice(images).image
 
-@register.simple_tag()
-def random_double_size():
-    return uniform(0,2) > 1
-
 @register.filter
 def object_user_is(value, arg):
     expected_group = Group.objects.filter(name=arg)
