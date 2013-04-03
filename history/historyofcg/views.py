@@ -77,7 +77,10 @@ def view_source_entries(request, s):
         elif len(Review.objects.filter(type = "UP", user__id = request.user.id)) >= 5:
             show_badge5 = True
 
-    page = Page.objects.get(published = True, vanity_url = s)
+    if Page.objects.filter(published = True, vanity_url = s):
+        page = Page.objects.get(published = True, vanity_url = s)
+    else:
+        return render_to_response('errors/entry_does_not_exist.html', locals())
 
     image_stories = ImageStory.objects.filter(page__vanity_url = s, published = True)
     text_stories = TextStory.objects.filter(page__vanity_url = s, published = True)

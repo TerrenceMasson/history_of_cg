@@ -1,0 +1,10 @@
+{% extends 'default/base.html' %}
+{% load hocgtags %}
+{% block content %}
+    <div class="content_nf">
+        <h1>"{{ s|replace:"-/ " }}" has not been published yet</h1>
+        <p>To view this entry, check it's contents on the 'Edit' page then click 'Publish'.</p>
+        <br>
+        <p><a class="button" href="/edit/page/{{ s }}">Edit this entry</a></p>
+    </div>
+{% endblock %}

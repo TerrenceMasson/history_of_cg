@@ -11,6 +11,21 @@ from random import choice, uniform
 register = template.Library()
 
 @register.filter
+def replace(value, args):
+    # fancy syntax -> args are split by a /
+    # first arg is the value to replace in the string
+    # second is what to replace it with
+    print args
+    to_replace = args.split('/')[0]
+    print to_replace
+    replace_with = args.split('/')[1]
+    print len(replace_with)
+
+    split = value.replace(to_replace, replace_with)
+
+    return split
+
+@register.filter
 def get_random_image(value):
     images = ImageStory.objects.filter(page__vanity_url = value.vanity_url, published = True)
     if len(images) == 0:
