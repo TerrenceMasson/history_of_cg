@@ -130,7 +130,6 @@ def add_page(request):
             page_vanity_url = form.cleaned_data['name'].replace(' ', '-').replace('_', '-')
             page_tags = form.cleaned_data['tags']
             page_homepage = form.cleaned_data['homepage']
-            page_image = None
             page_date = form.cleaned_data['date_established']
 
             page = Page.objects.create(
@@ -140,8 +139,7 @@ def add_page(request):
                 vanity_url = page_vanity_url,
                 homepage = page_homepage,
                 date_established = page_date,
-                user = request.user,
-                image = page_image
+                user = request.user
             )
             page.save()
 
@@ -193,7 +191,6 @@ def edit_page(request, vanity_url):
             page.description = form.cleaned_data['description']
             page.homepage = form.cleaned_data['homepage']
             page.date_established = form.cleaned_data['date_established']
-            page.image = None
 
             page.save()
             print 'saved'
