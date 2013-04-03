@@ -1,4 +1,4 @@
-from history.historyofcg.models import Page
+from historyofcg.models import Page
 
 def remove_page_images():
     pages = Page.objects.all()
