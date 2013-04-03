@@ -130,7 +130,7 @@ def add_page(request):
             page_vanity_url = form.cleaned_data['name'].replace(' ', '-').replace('_', '-')
             page_tags = form.cleaned_data['tags']
             page_homepage = form.cleaned_data['homepage']
-            page_image = "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
+            page_image = None
             page_date = form.cleaned_data['date_established']
 
             page = Page.objects.create(
