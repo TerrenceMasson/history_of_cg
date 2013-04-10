@@ -1,10 +1,10 @@
 <div class="cf"></div>
 <div class="stories edit" style="">
     <p class="story-collapsed-heading">
-        <span class="title {{ story.type }}">{{ story.title|truncatewords:"7" }}</span>
+        <span class="title {{ story.type }}">{{ story.title|truncatechars:"35" }}</span>
         <span class="delete ui-icon ui-icon-close" data-story-id="{{ story.id }}" data-vanity-url="{{ page.vanity_url }}"></span>
         <span class="story-type"></span>
-        <span class="info">{% if story.published %}Published{% else %}Saved{% endif %}</span>
+        <span class="info" id="{{ story.id }}">{% if story.published %}Published{% else %}Saved{% endif %}</span>
     </p>
     <div class="story-collapsed" style="display: none;">
         {% if story.text %}

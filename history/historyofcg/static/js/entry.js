@@ -122,15 +122,14 @@ $(document).ready(function(){
     $('.story-publish-button').click(function(e) {
         e.preventDefault();
         button = $(this);
-        if ($(this)[0].innerText == 'PUBLISH') {
-            ___url = "/publish/story/"+$(this)[0].getAttribute('data-id')+"/"
+        if (button[0].innerText == 'PUBLISH') {
+            ___url = "/publish/story/"+button[0].getAttribute('data-id')+"/"
             $.ajax({
                 type: "POST",
                 url: ___url,
                 success: function(action) {
-                    console.log($(this));
                     button.html('UNPUBLISH');
-                    $('.info').html('Published');
+                    $('#'+button[0].getAttribute('data-id')).html('Published');
                 }
             })
         } else {
@@ -140,7 +139,7 @@ $(document).ready(function(){
                 url: ___url,
                 success: function(action) {
                     button.html('PUBLISH');
-                    $('.info').html('Saved');
+                    $('#'+button[0].getAttribute('data-id')).html('Saved');
                 }
             })
         }
