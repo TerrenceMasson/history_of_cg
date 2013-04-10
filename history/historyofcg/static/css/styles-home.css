@@ -158,9 +158,7 @@ div.timeline {
 
 .tile.connection .bottom-link a.link-button {
     width: 30px;
-    height: 30px;
     float: right;
-    background-color: #fff;
     opacity: 0.5;
     position: relative; }
 

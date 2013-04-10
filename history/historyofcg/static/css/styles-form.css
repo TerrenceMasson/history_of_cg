@@ -209,6 +209,11 @@ div.form-container form div.basics ul.basic-labels li.label-entry-homepage {
     top: 170px;
 }
 
+div.form-container form div.basics ul.basic-labels li.label-entry-source {
+    position: relative;
+    top: 30px;
+}
+
 div.form-container form div.basics ul.basic-labels li.label-entry-date {
     position: relative;
     top: 30px;

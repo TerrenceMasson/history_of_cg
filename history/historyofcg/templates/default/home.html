@@ -78,10 +78,7 @@
                             {% if not entry.image %}<img src="{{ entry|get_random_image }}">{% endif %}
                         </div>
                         <div class="bottom-link">
-                            {% if entry|object_user_is:'pioneer' %}
-                                <a href="/about/pioneers/" class="connection-user-pioneer"></a>
-                            {% endif %}
-                            <span>{{ entry.name }}</span>
+                            <span>{{ entry.name|truncatechars:"14" }}</span>
                             <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
                             <div class="cf"></div>
                         </div>

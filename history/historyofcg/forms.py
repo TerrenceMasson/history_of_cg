@@ -31,7 +31,7 @@ class PageForm(ModelForm):
                                                          '%m/%d/%y',              # '10/25/06'
                                                          '%Y', '%y',)
         for f in self.fields:
-            self.fields[f].widget.attrs = {'class': 'organization'}
+            self.fields[f].widget.attrs = {'class': 'need-helper organization'}
 
         self.fields['type'].widget.attrs = {'class' : 'entry-type-select organization'}
 

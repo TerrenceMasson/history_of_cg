@@ -520,3 +520,11 @@ def user_page(request, i):
         return locals()
     else:
         return HttpResponseNotFound()
+
+@require_POST
+def delete_story(request, id):
+    story = Story.objects.get(id = id)
+
+    story.delete()
+
+    return HttpResponse('')

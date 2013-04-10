@@ -104,19 +104,19 @@ $(document).ready(function(){
         $(this).tabs('enable');
     });
 
-    $('body').on('click', 'p.story-collapsed-heading', function(e) {
+    $('body').on('click', 'p.story-collapsed-heading span.title', function(e) {
         e.preventDefault();
-        console.log($(this).next());
-        $(this).next().slideDown();
-        $(this).removeClass('story-collapsed-heading');
-        $(this).addClass('story-opened-heading');
+        console.log($(this).parent().next());
+        $(this).parent().next().slideDown();
+        $(this).parent().removeClass('story-collapsed-heading');
+        $(this).parent().addClass('story-opened-heading');
     });
 
-    $('body').on('click', 'p.story-opened-heading', function(e) {
+    $('body').on('click', 'p.story-opened-heading span.title', function(e) {
         e.preventDefault();
-        $(this).next().slideUp();
-        $(this).removeClass('story-opened-heading');
-        $(this).addClass('story-collapsed-heading');
+        $(this).parent().next().slideUp();
+        $(this).parent().removeClass('story-opened-heading');
+        $(this).parent().addClass('story-collapsed-heading');
     });
 
     $('.story-publish-button').click(function(e) {
@@ -159,10 +159,23 @@ $(document).ready(function(){
         })
     });
 
-    $('.delete').click(function(e) {
+    $('div.connections span.delete').click(function(e) {
         e.preventDefault();
         button = $(this);
         url = "/remove/connection/"+button[0].getAttribute('data-vanity-url')+"/"+button[0].getAttribute('data-name')+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+                window.location = "/edit/page/"+button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
+
+    $('p.story-collapsed-heading span.delete').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/delete/story/"+button[0].getAttribute('data-story-id')+"/";
         $.ajax({
             type: "POST",
             url: url,
@@ -336,7 +349,7 @@ $(function() {
     }
 
     function change_date_fields(t) {
-        var $dateLabel = $('.basics .label-entry-date span.label');
+        var $dateLabel = $('.basics .label-entry-date');
         var $dateHelperText = $('.basics .entry-date .helper-popups');
         var $secondDateLabel = $('.basics .label-entry-date-2 span.label');
         var $secondDateHelperText = $('.basics .entry-date-2 .helper-popups');
