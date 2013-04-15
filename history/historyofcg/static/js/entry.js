@@ -107,19 +107,19 @@ $(document).ready(function () {
         $(this).tabs('enable');
     });
 
-    $('body').on('click', 'p.story-collapsed-heading span.title', function (e) {
+    $('body').on('click', '.story-collapsed-heading', function (e) {
         e.preventDefault();
         console.log($(this).parent().next());
-        $(this).parent().next().slideDown();
-        $(this).parent().removeClass('story-collapsed-heading');
-        $(this).parent().addClass('story-opened-heading');
+        $(this).next().slideDown();
+        $(this).removeClass('story-collapsed-heading');
+        $(this).addClass('story-opened-heading');
     });
 
-    $('body').on('click', 'p.story-opened-heading span.title', function (e) {
+    $('body').on('click', '.story-opened-heading', function (e) {
         e.preventDefault();
-        $(this).parent().next().slideUp();
-        $(this).parent().removeClass('story-opened-heading');
-        $(this).parent().addClass('story-collapsed-heading');
+        $(this).next().slideUp();
+        $(this).removeClass('story-opened-heading');
+        $(this).addClass('story-collapsed-heading');
     });
 
     $('.story-publish-button').click(function (e) {
