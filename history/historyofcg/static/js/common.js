@@ -15,6 +15,7 @@ $(function () {
     $('.opener').click(function () {
         var story = $(this)[0];
         var container = $(this);
+        console.log(container);
 
         function reset_buttons() {
             var buttons = {};

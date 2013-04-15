@@ -47,10 +47,10 @@
                         {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
                         {# and random chooses one item randomly out of this list #}
                         {% with rnd="12"|make_list|random %}
-                            <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}"
+                        <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}"
                         {% endwith %}
                         {% for t in s.tags.all %}{{ t.name }}{% endfor %}
-                    {% if s|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
+                        {% if s|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
                         data-image="{{ s.image|safe }}"
                         data-title="{{ s.title|safe }}">
                         <div class="container opener">
