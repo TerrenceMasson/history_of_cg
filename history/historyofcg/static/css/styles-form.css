@@ -380,6 +380,7 @@ div.form-container div.stories-col div.stories p.story-collapsed-heading {
     position: relative;
     width: 505px;
 }
+
 div.form-container div.stories-col div.stories p.story-collapsed-heading span.delete {
     float: right;
 }

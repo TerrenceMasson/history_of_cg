@@ -1,7 +1,7 @@
 ul.token-input-list-hcg {
-    overflow: hidden; 
-	height:auto!important;
-    min-height: 19px!important;
+    overflow: hidden;
+    height: auto !important;
+    min-height: 19px !important;
     width: 300px;
     border: 0;
     cursor: text;
@@ -26,29 +26,30 @@ ul.token-input-list-hcg li input {
 }
 
 li.token-input-token-hcg {
-    overflow: hidden; 
-    height: auto !important; 
-    margin: 0 2px!important;
+    overflow: hidden;
+    height: auto !important;
+    margin: 0 2px !important;
     padding: 1px 1px 1px 3px;
-	background-color:#141414;
-	background-image: linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -o-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -moz-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -webkit-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -ms-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
+    background-color: #141414;
+    background-image: linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
     cursor: default;
     border: 1px solid #888;
     font-size: 0.98em;
     float: left;
     white-space: nowrap;
 }
-	li.token-input-token-hcg p {
-		padding:3px auto!important;
-	}
+
+li.token-input-token-hcg p {
+    padding: 3px auto !important;
+}
 
 .inputFormSections .token-input-input-token-hcg input {
-	height:auto!important;
-	width:auto!important;
+    height: auto !important;
+    width: auto !important;
 }
 
 li.token-input-token-hcg p {
@@ -91,9 +92,11 @@ li.token-input-input-token-hcg {
     padding: 1px;
     list-style-type: none;
 }
+
 li.token-input-dragged-token-hcg {
     opacity: 0;
 }
+
 li.token-input-dragged-clone-hcg {
     position: absolute;
     margin: 5px 0 0 5px;
@@ -103,6 +106,7 @@ li.token-input-dragged-clone-hcg {
     font-family: Verdana;
     cursor: move;
 }
+
 li.token-input-dragged-clone-hcg span {
     display: none;
 }
@@ -118,26 +122,26 @@ li.token-input-insert-after-hcg {
 div.token-input-dropdown-hcg {
     position: absolute;
     width: 300px;
-    
+
     background-color: #141414;
-    background-image: linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -o-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -moz-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -webkit-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    background-image: -ms-linear-gradient(bottom, rgb(21,21,21) 0%, rgb(29,29,29) 100%);
-    border: 1px solid lighten(#1d1e22,10%);
-    border-radius:5px;
+    background-image: linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(21, 21, 21) 0%, rgb(29, 29, 29) 100%);
+    border: 1px solid lighten(#1d1e22, 10%);
+    border-radius: 5px;
     box-shadow: 0 0 1px 1.5px #0f0f0f;
     -moz-box-shadow: 0 0 1px 1.5px #0f0f0f;
     -webkit-box-shadow: 0 0 1px 1.5px #0f0f0f;
 
-    margin-top:3px;
-    padding:10px;
+    margin-top: 3px;
+    padding: 10px;
     overflow: hidden;
-    
+
     cursor: default;
-    //font-size: 0.96em;
-    //font-family: Verdana;
+/ / font-size : 0.96 em;
+/ / font-family : Verdana;
     z-index: 999;
     color: #fff;
 }
@@ -155,19 +159,29 @@ div.token-input-dropdown-hcg ul {
 }
 
 div.token-input-dropdown-hcg ul li {
-    border-bottom:1px #222 solid;
-    padding:5px 0;
+    border-bottom: 1px #222 solid;
+    padding: 5px 0;
     margin: 0;
     list-style-type: none;
 }
 
 div.token-input-dropdown-hcg ul li.token-input-dropdown-item-hcg {
-    //background-color: #fff;
-}
+
+/
+/
+background-color: #fff
+
+;
+    }
 
 div.token-input-dropdown-hcg ul li.token-input-dropdown-item2-hcg {
-    //background-color: #fff;
-}
+
+/
+/
+background-color: #fff
+
+;
+    }
 
 div.token-input-dropdown-hcg ul li em {
     font-weight: bold;

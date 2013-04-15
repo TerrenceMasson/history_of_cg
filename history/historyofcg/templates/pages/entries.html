@@ -5,18 +5,21 @@
         <div class="message" style="display: none;"></div>
         <div class="timeline">
             <img src="{% static 'img/timeline/timeline.png' %}">
+
             <div class="tooltip" style="left: 187px; top: 505px; display: none;">Timeline coming soon!</div>
         </div>
         <!-- start of page content -->
         <section class="entryMast">
             <h1 class="entryTitle {{ page.type }}">{{ page.name }}</h1>
+
             <div class="catBarContainer">
                 <ul class="catBar">
                     <li class="category project"><a href="#" data-filter=".project">Projects</a></li>
                     <li class="category person"><a href="#" data-filter=".person">People</a></li>
                     <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
                     <li class="category event"><a href="#" data-filter=".event">Events</a></li>
-                    {% if user.is_authenticated %}<li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>{% endif %}
+                    {% if user.is_authenticated %}
+                        <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>{% endif %}
                     <div class="cf"></div>
                 </ul>
             </div>
@@ -26,13 +29,16 @@
                 <ul>
                     <li class="all" style=""><input type="checkbox" data-filter="*" checked="checked">All</li>
                     {% for k,v in tag_dict %}
-                        <li class="{{ k }}" style="display: inline-block"><input type="checkbox" data-filter=".{{ v.split|join:"-" }}">{{ v }}</li>
+                        <li class="{{ k }}" style="display: inline-block"><input type="checkbox"
+                                                                                 data-filter=".{{ v.split|join:"-" }}">{{ v }}
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
         </section>
         <section class="mosaicBody">
-            <ul class="mosaicContainer cf isotope" style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
+            <ul class="mosaicContainer cf isotope"
+                style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
                 <li class="dynamic {{ page.type }}">
                     <p>{{ page.description|truncatewords:120|safe }}</p>
                 </li>
@@ -40,23 +46,24 @@
                     {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
                     {# and random chooses one item randomly out of this list #}
                     {% with rnd="12"|make_list|random %}
-                    <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}"
+                        <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}"
                     {% endwith %}
-                        {% for t in is.tags.all %}{{ t.name }}{% endfor %}
-                        {% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
-                        data-image="{{ is.image|safe }}"
-                        data-title="{{ is.title|safe }}">
-                        <div class="container opener">
-                            <img src="{{ is.image }}">
-                        </div>
-                        <div class="bottom-link">
-                            <span class="opener">{{ is.title|truncatechars:"14" }}</span>
-                            <span class="story-type story-type-icon-image"></span>
-                            {% if request.user.is_authenticated %}
-                            <span class="story-type {{ is|user_vote_cast:request.user.id }}" data-story-id="{{ is.id }}"></span>
-                            {% endif %}
-                            <div class="cf"></div>
-                        </div>
+                {% for t in is.tags.all %}{{ t.name }}{% endfor %}
+                {% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
+                    data-image="{{ is.image|safe }}"
+                    data-title="{{ is.title|safe }}">
+                    <div class="container opener">
+                        <img src="{{ is.image }}">
+                    </div>
+                    <div class="bottom-link">
+                        <span class="opener">{{ is.title|truncatechars:"14" }}</span>
+                        <span class="story-type story-type-icon-image"></span>
+                        {% if request.user.is_authenticated %}
+                            <span class="story-type {{ is|user_vote_cast:request.user.id }}"
+                                  data-story-id="{{ is.id }}"></span>
+                        {% endif %}
+                        <div class="cf"></div>
+                    </div>
                     </li>
                 {% endfor %}
                 {% for vs in video_stories %}
@@ -70,7 +77,8 @@
                             <span class="opener">{{ vs.title|truncatechars:"14" }}</span>
                             <span class="story-type story-type-icon-video"></span>
                             {% if request.user.is_authenticated %}
-                            <span class="story-type {{ vs|user_vote_cast:request.user.id }}" data-story-id="{{ vs.id }}"></span>
+                                <span class="story-type {{ vs|user_vote_cast:request.user.id }}"
+                                      data-story-id="{{ vs.id }}"></span>
                             {% endif %}
                             <div class="cf"></div>
                         </div>
@@ -87,14 +95,16 @@
                             <span class="opener">{{ ts.title|truncatechars:"14" }}</span>
                             <span class="story-type story-type-icon-text"></span>
                             {% if request.user.is_authenticated %}
-                            <span class="story-type {{ ts|user_vote_cast:request.user.id }}" data-story-id="{{ ts.id }}"></span>
+                                <span class="story-type {{ ts|user_vote_cast:request.user.id }}"
+                                      data-story-id="{{ ts.id }}"></span>
                             {% endif %}
                             <div class="cf"></div>
                         </div>
                     </li>
                 {% endfor %}
                 {% for connection in connections.all %}
-                    <li class="tile connection {{ connection.type.name }} {% for tag in connection.tags.all %}{{ tag.name.split|join:"-" }} {% endfor %}isotope-item">
+                    <li class="tile connection {{ connection.type.name }}
+                            {% for tag in connection.tags.all %}{{ tag.name.split|join:"-" }} {% endfor %}isotope-item">
                         <div class="container">
                             {% if connection.image %}<img src="{{ connection.image }}">{% endif %}
                             {% if not connection.image %}<img src="{{ connection|get_random_image }}">{% endif %}
@@ -104,7 +114,9 @@
                                 <a href="/about/pioneers/" class="connection-user-pioneer"></a>
                             {% endif %}
                             <span>{{ connection.name|truncatechars:"19" }}</span>
-                            <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span class="triangle"></span></a>
+                            <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span
+                                    class="triangle"></span></a>
+
                             <div class="cf"></div>
                         </div>
                     </li>
@@ -115,6 +127,7 @@
             <input type="hidden" class="entryName" value="{{ page.name }}">
             <input type="hidden" class="entryId" value="{{ page.id }}">
             <input type="hidden" class="entryCategory" value="{{ page.type }}">
+
             <div class="entryDescription">
                 <p>
                     {{ page.description|truncatewords:120|safe }}

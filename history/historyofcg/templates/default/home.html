@@ -1,102 +1,106 @@
 {% load staticfiles %}{% load webdesign %}{% load hocgtags %}
-    <head>
-        <meta charset="UTF-8">
-        <title>People Behind the Pixels</title>
-        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/baseline.reset.css' %}">
-        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/jquery-ui.css' %}">
-        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles.css' %}">
-        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
-        <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-content.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <title>People Behind the Pixels</title>
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/baseline.reset.css' %}">
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/jquery-ui.css' %}">
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles.css' %}">
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-content.css' %}">
 
-        <script type="text/javascript" src="{% static 'js/libs/jquery-1.8.3.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/libs/URI.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/libs/jquery.isotope.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/home.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
-    </head>
-    <body id="homeWrapper" class="wrapper">
-        <div class="message" style="display:none;"></div>
-        <div class="spacer"></div>
-        <div id="page">
-            <header id="masthead">
-            <div class="topRight unitx2">
-                <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
-                <a href="mailto:feedback@visualfx.com?Subject=Feedback%20for%20History%20of%20CG">Feedback?</a>
-                <a href="/about">About</a>
-                {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a>{% endif %}
-                {% if request.user.is_authenticated %}
-                    <a href="accounts/logout">Logout</a>
-                    <a href="/add/page">Add an Entry</a>
-                    <a href="/user/{{ request.user.id }}/">Your Pages</a>
-                    {% if show_badge1 %}
-                        <span class="user-badge user-badge-one"></span>
-                    {% endif %}
-                    {% if show_badge2 %}
-                        <span class="user-badge user-badge-two"></span>
-                    {% endif %}
-                    {% if show_badge3 %}
-                        <span class="user-badge user-badge-three"></span>
-                    {% endif %}
-                    {% if show_badge4 %}
-                        <span class="user-badge user-badge-four"></span>
-                    {% endif %}
-                    {% if show_badge5 %}
-                        <span class="user-badge user-badge-five"></span>
-                    {% endif %}
-                    {% ifusergroup pioneer %}
-                        <span class="user-badge user-badge-pioneer"></span>
-                    {% endifusergroup %}
+    <script type="text/javascript" src="{% static 'js/libs/jquery-1.8.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/URI.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/jquery.isotope.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/home.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+</head>
+<body id="homeWrapper" class="wrapper">
+<div class="message" style="display:none;"></div>
+<div class="spacer"></div>
+<div id="page">
+    <header id="masthead">
+        <div class="topRight unitx2">
+            <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+            <a href="mailto:feedback@visualfx.com?Subject=Feedback%20for%20History%20of%20CG">Feedback?</a>
+            <a href="/about">About</a>
+            {% if not request.user.is_authenticated %}<a href="/accounts/login">Login</a>{% endif %}
+            {% if request.user.is_authenticated %}
+                <a href="accounts/logout">Logout</a>
+                <a href="/add/page">Add an Entry</a>
+                <a href="/user/{{ request.user.id }}/">Your Pages</a>
+                {% if show_badge1 %}
+                    <span class="user-badge user-badge-one"></span>
                 {% endif %}
-            </div>
-            </div>
-            <div id="homeBranding">
-                <img src="{% static 'img/logo.png' %}" alt="People Behind the Pixels">
-            </div>
-        </header>
-            <section>
-                <div id="homeSearch">
-                    <form id="searchForm">
-                        <fieldset class="search">
-                            <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" id="searchBox">
-                            <button class="searchBtn" title="Search">Search</button>
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="timeline">
-                    <img src="{% static 'img/timeline/timeline.png' %}">
-                    <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
-                    <span><h1>RECENTLY UPDATED ENTRIES:</h1></span>
-                </div>
-                <div id="updated-entries-container" class="isotope cf">
-                {% for entry in updated_entries %}
-                    <div class="tile connection {{ entry.type.name }} isotope-item">
-                        <div class="container">
-                            {% if entry.image %}<img src="{{ entry.image }}">{% endif %}
-                            {% if not entry.image %}<img src="{{ entry|get_random_image }}">{% endif %}
-                        </div>
-                        <div class="bottom-link">
-                            <span>{{ entry.name|truncatechars:"14" }}</span>
-                            <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
-                            <div class="cf"></div>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-                <div class="whats-next">
-                    <span><h1>UPCOMING FEATURES:</h1></span>
-                    {% for feature in upcoming_features %}
-                    <div class="new-feature">
-                        <h3 class="section-title">{{ feature.name }}</h3>
-                        <p>{{ feature.text }}</p>
-                        <br>
-                    </div>
-
-                    {% endfor %}
-                </div>
-            </section>
+                {% if show_badge2 %}
+                    <span class="user-badge user-badge-two"></span>
+                {% endif %}
+                {% if show_badge3 %}
+                    <span class="user-badge user-badge-three"></span>
+                {% endif %}
+                {% if show_badge4 %}
+                    <span class="user-badge user-badge-four"></span>
+                {% endif %}
+                {% if show_badge5 %}
+                    <span class="user-badge user-badge-five"></span>
+                {% endif %}
+                {% ifusergroup pioneer %}
+                    <span class="user-badge user-badge-pioneer"></span>
+                {% endifusergroup %}
+            {% endif %}
         </div>
-    </body>
+</div>
+<div id="homeBranding">
+    <img src="{% static 'img/logo.png' %}" alt="People Behind the Pixels">
+</div>
+</header>
+<section>
+    <div id="homeSearch">
+        <form id="searchForm">
+            <fieldset class="search">
+                <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off"
+                       role="textbox" aria-autocomplete="list" aria-haspopup="true" id="searchBox">
+                <button class="searchBtn" title="Search">Search</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="timeline">
+        <img src="{% static 'img/timeline/timeline.png' %}">
+
+        <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
+        <span><h1>RECENTLY UPDATED ENTRIES:</h1></span>
+    </div>
+    <div id="updated-entries-container" class="isotope cf">
+        {% for entry in updated_entries %}
+            <div class="tile connection {{ entry.type.name }} isotope-item">
+                <div class="container">
+                    {% if entry.image %}<img src="{{ entry.image }}">{% endif %}
+                    {% if not entry.image %}<img src="{{ entry|get_random_image }}">{% endif %}
+                </div>
+                <div class="bottom-link">
+                    <span>{{ entry.name|truncatechars:"14" }}</span>
+                    <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
+
+                    <div class="cf"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="whats-next">
+        <span><h1>UPCOMING FEATURES:</h1></span>
+        {% for feature in upcoming_features %}
+            <div class="new-feature">
+                <h3 class="section-title">{{ feature.name }}</h3>
+
+                <p>{{ feature.text }}</p>
+                <br>
+            </div>
+
+        {% endfor %}
+    </div>
+</section>
+</div>
+</body>
 </html>

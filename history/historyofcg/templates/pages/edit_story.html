@@ -2,13 +2,16 @@
 <div class="stories edit" style="">
     <p class="story-collapsed-heading">
         <span class="title {{ story.type }}">{{ story.title|truncatechars:"35" }}</span>
-        <span class="delete ui-icon ui-icon-close" data-story-id="{{ story.id }}" data-vanity-url="{{ page.vanity_url }}"></span>
+        <span class="delete ui-icon ui-icon-close" data-story-id="{{ story.id }}"
+              data-vanity-url="{{ page.vanity_url }}"></span>
         <span class="story-type"></span>
         <span class="info" id="{{ story.id }}">{% if story.published %}Published{% else %}Saved{% endif %}</span>
     </p>
+
     <div class="story-collapsed" style="display: none;">
         {% if story.text %}
-            <form action="/edit/story/text/{{ story.id }}/" method="POST" accept-charset="utf-8" id="TextStoryEditForm">{% csrf_token %}
+            <form action="/edit/story/text/{{ story.id }}/" method="POST" accept-charset="utf-8"
+                  id="TextStoryEditForm">{% csrf_token %}
                 <ul class="story-labels all-labels">
                     <li class="label-story-title labels">Title</li>
                     <li class="label-story-date labels">Date</li>
@@ -29,7 +32,8 @@
                     <li class="story-source fields">
                         {{ form.source.errors }}
                         {{ form.source }}
-                        <span id="helper-story-source" class="helper-popups need-helper organization-border" style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
+                        <span id="helper-story-source" class="helper-popups need-helper organization-border"
+                              style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
                     </li>
                     <li class="story-body fields">
                         {{ form.text.errors }}
@@ -38,7 +42,8 @@
                     </li>
                     <li>
                         <button class="organization-hover">Save Story</button>
-                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}Unpublish{% else %}Publish{% endif %}</button>
+                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}
+                            Unpublish{% else %}Publish{% endif %}</button>
                     </li>
                 </ul>
                 <div class="cf" style="display: none;"></div>
@@ -68,7 +73,8 @@
                     </li>
                     <li class="story-save save">
                         <button class="organization-hover">Save Story</button>
-                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}Unpublish{% else %}Publish{% endif %}</button>
+                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}
+                            Unpublish{% else %}Publish{% endif %}</button>
                     </li>
                 </ul>
                 <div class="cf" style="display: none;"></div>

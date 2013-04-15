@@ -14,7 +14,7 @@ class TokenWidget(forms.TextInput):
         js = (
             "js/libs/jquery-tokeninput-1.6.0-min.js",
             "js/libs/djtokeninput.js"
-            )
+        )
 
     def __init__(self, attrs=None, **kwargs):
         super(TokenWidget, self).__init__(attrs)
@@ -29,8 +29,8 @@ class TokenWidget(forms.TextInput):
         """
 
         return dict([
-        (cls._camelcase(key), val)
-        for key, val in settings.items()
+            (cls._camelcase(key), val)
+            for key, val in settings.items()
         ])
 
     @staticmethod
@@ -54,8 +54,8 @@ class TokenWidget(forms.TextInput):
 
         if value is not None:
             settings["prePopulate"] = [
-            {"id": pk, "name": unicode(self.choices.queryset.get(pk=pk))}
-            for pk in value
+                {"id": pk, "name": unicode(self.choices.queryset.get(pk=pk))}
+                for pk in value
             ]
 
         attrs["data-settings"] = json.dumps(settings)

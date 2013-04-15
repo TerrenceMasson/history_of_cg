@@ -1,7 +1,7 @@
 .timeline {
-    height:175px;
-    margin:0 auto;
-    width:990px;
+    height: 175px;
+    margin: 0 auto;
+    width: 990px;
 }
 
 #line {
@@ -25,15 +25,16 @@
 }
 
 #slider.ui-slider {
-    background: none; 
-    border:0; 
+    background: none;
+    border: 0;
     margin: 0 auto;
     position: relative;
 }
+
 #slider .ui-handle-helper-parent {
     position: relative;
-    width: 100%; 
-    height: 15px; 
+    width: 100%;
+    height: 15px;
     margin: 0 auto;
 }
 
@@ -86,24 +87,31 @@
 .events li ul .timeline-event.person a {
     background: transparent url('../images/timeline/person-button.png') center no-repeat;
 }
+
 .events li ul .timeline-event.person a:hover {
     background: transparent url('../images/timeline/person-button-hover.png') center no-repeat;
 }
+
 .events li ul .timeline-event.project a {
     background: transparent url('../images/timeline/project-button.png') center no-repeat;
 }
+
 .events li ul .timeline-event.project a:hover {
     background: transparent url('../images/timeline/project-button-hover.png') center no-repeat;
 }
+
 .events li ul .timeline-event.organization a {
     background: transparent url('../images/timeline/organization-button.png') center no-repeat;
 }
+
 .events li ul .timeline-event.organization a:hover {
     background: transparent url('../images/timeline/organization-button-hover.png') center no-repeat;
 }
+
 .events li ul .timeline-event.event a {
     background: transparent url('../images/timeline/event-button.png') center no-repeat;
 }
+
 .events li ul .timeline-event.event a:hover {
     background: transparent url('../images/timeline/event-button-hover.png') center no-repeat;
 }

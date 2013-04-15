@@ -8,11 +8,11 @@ version 0.5
 /******************** Reset ********************/
 html, body, div, span, a, img,
 h1, h2, h3, h4, h5, h6, hgroup, p,
-dl, dialog, dt, dd, ol, ul, li, 
-abbr, acronym, address, b, big, blockquote, 
-cite, code, del, dfn, em, i, ins, kbd, pre, q, 
-samp, tt, var, small, strong, sub, sup, 
-object, iframe, form, fieldset, label, legend, 
+dl, dialog, dt, dd, ol, ul, li,
+abbr, acronym, address, b, big, blockquote,
+cite, code, del, dfn, em, i, ins, kbd, pre, q,
+samp, tt, var, small, strong, sub, sup,
+object, iframe, form, fieldset, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, footer, header, nav, section,
 figure, menu, time, mark, audio, video {
@@ -29,6 +29,7 @@ figure, menu, time, mark, audio, video {
     outline: 0;
     background: transparent;
 }
+
 textarea {
     font-family: inherit;
     font-size: 100%;
@@ -39,16 +40,29 @@ textarea {
     margin: 0;
     padding: 0;
 }
+
 article, aside, footer, header, nav, section,
-dialog, figure, hgroup, menu { display: block; }
+dialog, figure, hgroup, menu {
+    display: block;
+}
 
 h1, h2, h3, h4, h5, h6 {
     font-size: 100%;
     font-weight: normal;
 }
-del, ins { text-decoration: none; }
-ol, ul { list-style: none; }
-nav ul { list-style-type: none; }
+
+del, ins {
+    text-decoration: none;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
 table {
     border-collapse: separate;
     border-spacing: 0;
@@ -56,11 +70,21 @@ table {
     width: auto;
     height: auto;
 }
-:focus { outline: 0; }
-blockquote:before, blockquote:after, q:before, q:after	{
+
+:focus {
+    outline: 0;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
     content: "";
 }
-blockquote, q { quotes: "" ""; }
-input { margin: 0; }
+
+blockquote, q {
+    quotes: "" "";
+}
+
+input {
+    margin: 0;
+}
 
 

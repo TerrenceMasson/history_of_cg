@@ -1,6 +1,5 @@
-
 // initialize Isotope
-$(function() {
+$(function () {
     var $container = $('#updated-entries-container')
     $container.isotope({
         itemSelector: ".tile",
@@ -17,7 +16,7 @@ $(function() {
 
 
 // update columnWidth on window resize
-$(window).smartresize(function(){
+$(window).smartresize(function () {
     $container.isotope({
         // update columnWidth to a percentage of container width
         masonry: { columnWidth: $container.width() / 5 }

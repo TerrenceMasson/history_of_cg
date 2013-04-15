@@ -23,10 +23,15 @@
                 <div class="title"><h1>Edit Entry</h1></div>
                 <div class="publish-status">{% if page.published %}Published{% else %}Not Published{% endif %}
                 </div>
-                <div class="view"><a class="button organization-hover" href="/pages/{{ page.vanity_url }}">View Entry</a></div>
+                <div class="view"><a class="button organization-hover" href="/pages/{{ page.vanity_url }}">View
+                    Entry</a></div>
                 <div class="save">
-                    {% if page.published %}<button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">Unpublish</button>
-                    {% else %}<button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">Publish</button>
+                    {% if page.published %}
+                        <button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">
+                        Unpublish</button>
+                        {% else %}
+                        <button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">Publish
+                        </button>
                     {% endif %}
                 </div>
                 <div class="cf"></div>
@@ -58,11 +63,12 @@
                 </div>
                 <div class="basics section-in-form">
                     <ul class="basic-labels all-labels">
-                        <li class="label-entry-description labels" style="margin-top: 10px;">Description <span class="required"></span></li>
+                        <li class="label-entry-description labels" style="margin-top: 10px;">Description <span
+                                class="required"></span></li>
                         <li class="label-entry-source labels" style="margin-top: 140px;">Homepage</li>
                         <li class="label-entry-date labels">Date Established</li>
                         {% if page.type.name == 'person' %}
-                        <li class="label-entry-date labels">Date Deceased (if applicable)</li>
+                            <li class="label-entry-date labels">Date Deceased (if applicable)</li>
                         {% endif %}
                     </ul>
                     <ul class="basic-fields all-fields">
@@ -84,19 +90,26 @@
                         </li>
                         {% if page.type.name == 'person' %}
                             <li class="entry-date-2 fields">
-                                <input name="date_deceased" id="id_date_deceased" type="text" class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
+                                <input name="date_deceased" id="id_date_deceased" type="text"
+                                       class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
                             </li>
                         {% endif %}
                     </ul>
                     <div class="cf"></div>
                 </div>
-                <input type="submit" value="{% if page.published %}Save{% else %}Save Draft{% endif %}" />
+                <input type="submit" value="{% if page.published %}Save{% else %}Save Draft{% endif %}"/>
             </form>
             <div class="stories-col section-in-form">
                 <ul class="story-explanation">
                     <li class="label-story-header labels"><h2>Add a Story or Media</h2></li>
-                    <li class="story-helpertext"><p>Did you contribute to the development of an innovative technology or project? Did you have a chance to work with someone brimming with amazing talent? Here is a chance to share them!</p></li>
-                    <li class="share"><button class="btn-story organization-hover" data-href="/share/story/{{ page.vanity_url }}/">Share Stories or Add Media</button></li>
+                    <li class="story-helpertext"><p>Did you contribute to the development of an innovative technology or
+                        project? Did you have a chance to work with someone brimming with amazing talent? Here is a
+                        chance to share them!</p></li>
+                    <li class="share">
+                        <button class="btn-story organization-hover" data-href="/share/story/{{ page.vanity_url }}/">
+                            Share Stories or Add Media
+                        </button>
+                    </li>
                 </ul>
                 <div class="story-container hide"></div>
                 {% for story in user_text_stories %}

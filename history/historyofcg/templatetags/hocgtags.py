@@ -10,6 +10,7 @@ from random import choice, uniform
 
 register = template.Library()
 
+
 @register.filter
 def replace(value, args):
     # fancy syntax -> args are split by a /
@@ -25,13 +26,15 @@ def replace(value, args):
 
     return split
 
+
 @register.filter
 def get_random_image(value):
-    images = ImageStory.objects.filter(page__vanity_url = value.vanity_url, published = True)
+    images = ImageStory.objects.filter(page__vanity_url=value.vanity_url, published=True)
     if len(images) == 0:
         return "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
     else:
         return choice(images).image
+
 
 @register.filter
 def object_user_is(value, arg):
@@ -40,15 +43,17 @@ def object_user_is(value, arg):
         if expected_group[0] in value.user.groups.all():
             return True
 
+
 @register.filter
 def user_vote_cast(value, arg):
     story = value
-    if Review.objects.filter(story__id = story.id, user__id = arg ):
-        vote = Review.objects.filter(story__id = story.id, user__id = arg )[0]
+    if Review.objects.filter(story__id=story.id, user__id=arg):
+        vote = Review.objects.filter(story__id=story.id, user__id=arg)[0]
 
         return "{}-vote".format(vote.type.lower())
     else:
         return "no-vote"
+
 
 @register.tag()
 def ifusergroup(parser, token):
@@ -92,7 +97,6 @@ class GroupCheckNode(template.Node):
             print 'user'
             user = context['user']
 
-
         if not user.is_authenticated():
             return self.nodelist_false.render(context)
 
@@ -105,7 +109,6 @@ class GroupCheckNode(template.Node):
         except Group.DoesNotExist:
             return self.nodelist_false.render(context)
 
-
         return self.nodelist_false.render(context)
 
 
@@ -114,6 +117,7 @@ def get_img_width(value):
     header = urllib2.urlopen(value).read(24)
     return_list = getImageInfo(header)
     return int(return_list[1])
+
 
 def getImageInfo(data):
     data = str(data)
@@ -164,7 +168,7 @@ def getImageInfo(data):
                     h, w = struct.unpack(">HH", jpeg.read(4))
                     break
                 else:
-                    jpeg.read(int(struct.unpack(">H", jpeg.read(2))[0])-2)
+                    jpeg.read(int(struct.unpack(">H", jpeg.read(2))[0]) - 2)
                 b = jpeg.read(1)
             width = int(w)
             height = int(h)
@@ -174,4 +178,6 @@ def getImageInfo(data):
             pass
 
     return [content_type, width, height]
+
+
 __author__ = 'Kyle'

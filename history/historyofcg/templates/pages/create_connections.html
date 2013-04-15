@@ -1,6 +1,9 @@
 <div class="right-column">
     <h2>Create connections</h2>
-    <p>Think of some other topics, subjects or categories that this post relates to? Make the connections between entries here!</p>
+
+    <p>Think of some other topics, subjects or categories that this post relates to? Make the connections between
+        entries here!</p>
+
     <div class="connections-col section-in-form">
         <div class="stub" id="connection-form">
             <form action="/connections/add" method="post" accept-charset="utf-8">
@@ -10,15 +13,19 @@
                     </li>
                 </ul>
                 <div class="cf"></div>
-                <button class="connect-entries-button organization-hover" data-vanity-url="{{ page.vanity_url }}">Connect entries</button>
+                <button class="connect-entries-button organization-hover" data-vanity-url="{{ page.vanity_url }}">
+                    Connect entries
+                </button>
             </form>
         </div>
         {% for connection in connections.all %}
-        <div class='connections {{ connection.type }}'>
-            <span class='name'>{{ connection.name }}</span>
-            <span class='delete ui-icon ui-icon-close' data-vanity-url="{{ page.vanity_url }}" data-name="{{ connection.vanity_url }}"></span>
-            <div class="cf"></div>
-        </div>
+            <div class='connections {{ connection.type }}'>
+                <span class='name'>{{ connection.name }}</span>
+                <span class='delete ui-icon ui-icon-close' data-vanity-url="{{ page.vanity_url }}"
+                      data-name="{{ connection.vanity_url }}"></span>
+
+                <div class="cf"></div>
+            </div>
         {% endfor %}
     </div>
 </div>

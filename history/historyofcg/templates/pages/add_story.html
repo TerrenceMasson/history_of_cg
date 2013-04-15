@@ -1,6 +1,6 @@
 <script>
-    $(document).ready(function() {
-        $('body').on('ready', '.tabs-min', function() {
+    $(document).ready(function () {
+        $('body').on('ready', '.tabs-min', function () {
             print('loaded');
             $(this).tabs('enabled');
         });
@@ -15,6 +15,7 @@
         <span class="story-type"></span>
         <span class="info">Not Saved</span>
     </p>
+
     <div class="story-opened" style="display: block;">
         <div class="tabs-min ui-tabs all-fields">
             <ul class="ui-tabs-nav">
@@ -23,7 +24,8 @@
                 <li><a href="#tabs-3">Video</a></li>
             </ul>
             <div class="tab-content" id="tabs-1">
-                <form action="/save/story/text/{{ page.vanity_url }}/" method="POST" accept-charset="utf-8" id="TextStorySaveForm">{% csrf_token %}
+                <form action="/save/story/text/{{ page.vanity_url }}/" method="POST" accept-charset="utf-8"
+                      id="TextStorySaveForm">{% csrf_token %}
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-date labels">Date</li>
@@ -57,7 +59,8 @@
                 <div class="cf" style="display: none;"></div>
             </div>
             <div class="tab-content" id="tabs-2">
-                <form action="/save/story/image/{{ page.vanity_url }}/" method="post" accept-charset="utf-8">{% csrf_token %}
+                <form action="/save/story/image/{{ page.vanity_url }}/" method="post"
+                      accept-charset="utf-8">{% csrf_token %}
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-date labels">Date</li>
@@ -72,7 +75,8 @@
                         <li class="story-date fields">
                             {{ form.date.errors }}
                             {{ form.date }}
-                            <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
+                            <span id="helper-story-date" class="helper-popups organization-border"
+                                  style="display: none;">When did this story take place?</span>
                         </li>
                         <li class="story-url fields">
                             {{ form.image.errors }}
@@ -88,7 +92,8 @@
                 <div class="cf" style="display: none;"></div>
             </div>
             <div class="tab-content" id="tabs-3">
-                <form action="/save/story/video/{{ page.vanity_url }}/" method="post" accept-charset="utf-8">{% csrf_token %}
+                <form action="/save/story/video/{{ page.vanity_url }}/" method="post"
+                      accept-charset="utf-8">{% csrf_token %}
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-title labels">Date</li>
@@ -103,7 +108,8 @@
                         <li class="story-date fields">
                             {{ form.date.errors }}
                             {{ form.date }}
-                            <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
+                            <span id="helper-story-date" class="helper-popups organization-border"
+                                  style="display: none;">When did this story take place?</span>
                         </li>
                         <li class="story-url fields">
                             {{ form.video.errors }}

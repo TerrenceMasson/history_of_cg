@@ -17,7 +17,8 @@
         <form action="/add/page/" method="POST" id="EntryAddForm">{% csrf_token %}
             <div id="main-stub" class="stub section-in-form">
                 <ul class="required-labels all-labels">
-                    <li class="label-entry-type labels" style="margin-top: 10px;">Type of Page <span class="required">*</span></li>
+                    <li class="label-entry-type labels" style="margin-top: 10px;">Type of Page <span
+                            class="required">*</span></li>
                     <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
                     <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
                 </ul>
@@ -39,11 +40,12 @@
             </div>
             <div class="basics section-in-form">
                 <ul class="basic-labels all-labels">
-                    <li class="label-entry-description labels" style="margin-top: 10px;">Description <span class="required"></span></li>
+                    <li class="label-entry-description labels" style="margin-top: 10px;">Description <span
+                            class="required"></span></li>
                     <li class="label-entry-date labels" style="margin-top: 140px;">Homepage</li>
                     <li class="label-entry-date labels">Date Established</li>
                     {% if page.type.name == 'person' %}
-                    <li class="label-entry-date labels">Date Deceased (if applicable)</li>
+                        <li class="label-entry-date labels">Date Deceased (if applicable)</li>
                     {% endif %}
                 </ul>
                 <ul class="basic-fields all-fields">
@@ -56,18 +58,21 @@
                         {{ form.homepage }}
                     </li>
                     <li class="entry-date fields">
-                        <input name="date_established" id="id_date_established" type="text" class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
-                        <span id="helper-story-date" class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
+                        <input name="date_established" id="id_date_established" type="text"
+                               class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
+                        <span id="helper-story-date"
+                              class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
                     </li>
                     {% if page.type.name == 'person' %}
                         <li class="entry-date-2 fields">
-                            <input name="date_deceased" id="id_date_deceased" type="text" class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
+                            <input name="date_deceased" id="id_date_deceased" type="text"
+                                   class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
                         </li>
                     {% endif %}
                 </ul>
                 <div class="cf"></div>
             </div>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Submit"/>
         </form>
     </div>
 {% endblock %}

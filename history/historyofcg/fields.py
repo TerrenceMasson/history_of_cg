@@ -1,6 +1,7 @@
 from django import forms
 from widgets import TokenWidget
 
+
 class TokenField(forms.ModelMultipleChoiceField):
     kwargs_for_widget = ("search_url",)
     widget = TokenWidget
@@ -10,7 +11,7 @@ class TokenField(forms.ModelMultipleChoiceField):
         return value.replace(" ", "-")
 
     def __init__(self, model, *args, **kwargs):
-        widget_attrs = { }
+        widget_attrs = {}
 
         for name in self.kwargs_for_widget:
             if name in kwargs:

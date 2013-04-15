@@ -4,6 +4,7 @@ from base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 from random import choice
 
+
 class UpcomingFeature(BaseModel):
     name = models.CharField(max_length=20)
     text = models.TextField()
@@ -20,6 +21,7 @@ class Category(BaseModel):
     def __unicode__(self):
         return self.name
 
+
 class Tag(BaseModel):
     name = models.CharField(max_length=20)
     approved = models.BooleanField()
@@ -32,6 +34,7 @@ class Tag(BaseModel):
     def search(cls, query):
         return cls.objects.filter(name__icontains=query)
 
+
 class Location(BaseModel):
     city = models.CharField(max_length=50, unique=True)
     state = models.CharField(max_length=50)
@@ -41,6 +44,7 @@ class Location(BaseModel):
 
     def __unicode__(self):
         return self.city
+
 
 class Page(BaseModel):
     type = models.ForeignKey(Category)
@@ -56,9 +60,11 @@ class Page(BaseModel):
     image = models.URLField(blank=True, null=True)
     old_id = models.PositiveIntegerField(blank=True, null=True)
     date_deceased = models.DateField(blank=True, null=True)
+    user_made = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name
+
 
 class Story(BaseModel):
     title = models.CharField(max_length=50)
@@ -72,11 +78,13 @@ class Story(BaseModel):
     def __unicode__(self):
         return self.title
 
+
 class Review(BaseModel):
-    type = models.CharField(choices=(("UP","up"),("DOWN", 'down')), max_length=4)
+    type = models.CharField(choices=(("UP", "up"), ("DOWN", 'down')), max_length=4)
     user = models.ForeignKey(User)
     story = models.ForeignKey(Story)
     page = models.ForeignKey(Page)
+
 
 class VideoStory(Story):
     video = models.CharField(max_length=200)
@@ -87,8 +95,10 @@ class VideoStory(Story):
 
         super(VideoStory, self).save(*args, **kwargs)
 
+
 class ImageStory(Story):
     image = models.URLField()
+
 
 class TextStory(Story):
     text = models.TextField()
