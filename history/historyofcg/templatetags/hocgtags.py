@@ -5,8 +5,9 @@ from django import template
 from django.core.files.images import ImageFile
 from django.template import resolve_variable, NodeList
 from django.contrib.auth.models import Group
-from historyofcg.models import Review, ImageStory
+from historyofcg.models import Review, Story, Page
 from random import choice, uniform
+
 
 register = template.Library()
 
@@ -29,9 +30,10 @@ def replace(value, args):
 
 @register.filter
 def get_random_image(value):
-    images = ImageStory.objects.filter(page__vanity_url=value.vanity_url, published=True)
+    images = Story.objects.filter(page__vanity_url=value.vanity_url, published=True, image__isnull=False)
+    page = Page.objects.get(vanity_url = value.vanity_url)
     if len(images) == 0:
-        return "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
+        return "/static/img/pLogo.png" if page.type.name != "person" else "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
     else:
         return choice(images).image
 

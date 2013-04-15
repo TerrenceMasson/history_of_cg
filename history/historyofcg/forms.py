@@ -43,40 +43,14 @@ class PageForm(ModelForm):
 
         self.fields['type'].widget.attrs = {'class': 'entry-type-select organization'}
 
-
-class TextStoryForm(ModelForm):
+class StoryForm(ModelForm):
     class Meta:
-        model = TextStory
+        model = Story
         widgets = {
             'text': Textarea(attrs={'style': 'width:340px;'})
         }
         exclude = ('user', 'published', 'page')
 
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields['date'].widget.format = '%m/%d/%Y'
-
-        # at the same time, set the input format on the date field like you want it:
-        self.fields['date'].input_formats = ['%m/%d/%Y', '%Y']
-
-
-class ImageStoryForm(ModelForm):
-    class Meta:
-        model = ImageStory
-        exclude = ('user', 'published', 'page')
-
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields['date'].widget.format = '%d/%m/%Y'
-
-        # at the same time, set the input format on the date field like you want it:
-        self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
-
-
-class VideoStoryForm(ModelForm):
-    class Meta:
-        model = VideoStory
-        exclude = ('user', 'published', 'page')
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)

@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.http import require_safe
 from base.decorators import render_to
-from forms import PageForm, TextStoryForm, ImageStoryForm, VideoStoryForm
+from forms import PageForm, StoryForm
 from models import *
 from django.views.decorators.http import require_POST
 import itertools
@@ -82,9 +82,6 @@ def view_source_entries(request, s):
     else:
         return render_to_response('errors/entry_does_not_exist.html', locals())
 
-    image_stories = ImageStory.objects.filter(page__vanity_url=s, published=True)
-    text_stories = TextStory.objects.filter(page__vanity_url=s, published=True)
-    video_stories = VideoStory.objects.filter(page__vanity_url=s, published=True)
     all_stories = Story.objects.filter(page__vanity_url=s, published=True)
 
     connections = page.connections
@@ -177,9 +174,10 @@ def edit_page(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
     user_stories = Story.objects.filter(page=page)
     connections = page.connections
-    user_text_stories = TextStory.objects.filter(page=page)
-    user_image_stories = ImageStory.objects.filter(page=page)
-    user_video_stories = VideoStory.objects.filter(page=page)
+    user_text_stories = Story.objects.filter(page=page, image__isnull=True, video__isnull=True)
+    user_image_stories = Story.objects.filter(page=page, text__isnull=True, video__isnull=True)
+    user_video_stories = Story.objects.filter(page=page, text__isnull=True, image__isnull=True)
+    print len(user_stories)
 
     if request.method == 'POST':
         form = PageForm(request.POST, instance=page)
@@ -249,15 +247,15 @@ def publish_page(request, vanity_url):
 def share_story(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
     if request.user.is_authenticated():
-        form = TextStoryForm()
+        form = StoryForm()
 
     return render_to_response('pages/add_story.html', locals(), context_instance=RequestContext(request))
 
 
 @require_POST
 def new_story(request, story_type, vanity_url):
+    form = StoryForm(request.POST)
     if story_type == 'text':
-        form = TextStoryForm(request.POST)
         print 'made form text'
         # MAKE STORY
         if form.is_valid():
@@ -270,7 +268,7 @@ def new_story(request, story_type, vanity_url):
                 if len(d) != 3: return HttpResponse('')
                 d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
                 story_date = d.strftime('%Y-%m-%d')
-                TextStory.objects.create(
+                Story.objects.create(
                     title=story_title,
                     date=story_date,
                     text=story_text,
@@ -278,7 +276,7 @@ def new_story(request, story_type, vanity_url):
                     page=story_page
                 ).save()
             else:
-                TextStory.objects.create(
+                Story.objects.create(
                     title=story_title,
                     text=story_text,
                     user=story_user,
@@ -286,7 +284,6 @@ def new_story(request, story_type, vanity_url):
                 ).save()
 
     if story_type == 'image':
-        form = ImageStoryForm(request.POST)
         print 'made form image'
         if form.is_valid():
             story_title = request.POST['title']
@@ -298,7 +295,7 @@ def new_story(request, story_type, vanity_url):
                 d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
                 story_date = d.strftime('%Y-%m-%d')
 
-                ImageStory.objects.create(
+                Story.objects.create(
                     title=story_title,
                     date=story_date,
                     image=story_image,
@@ -306,7 +303,7 @@ def new_story(request, story_type, vanity_url):
                     user=request.user,
                 ).save()
             else:
-                ImageStory.objects.create(
+                Story.objects.create(
                     title=story_title,
                     image=story_image,
                     page=story_page,
@@ -314,7 +311,6 @@ def new_story(request, story_type, vanity_url):
                 ).save()
 
     if story_type == 'video':
-        form = VideoStoryForm(request.POST)
         print 'made form image'
         if form.is_valid():
             story_title = request.POST['title']
@@ -327,7 +323,7 @@ def new_story(request, story_type, vanity_url):
                 d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
                 story_date = d.strftime('%Y-%m-%d')
 
-                VideoStory.objects.create(
+                Story.objects.create(
                     title=story_title,
                     date=story_date,
                     video=story_video,
@@ -335,7 +331,7 @@ def new_story(request, story_type, vanity_url):
                     user=request.user,
                 ).save()
             else:
-                VideoStory.objects.create(
+                Story.objects.create(
                     title=story_title,
                     video=story_video,
                     page=story_page,
@@ -347,48 +343,36 @@ def new_story(request, story_type, vanity_url):
 
 @require_POST
 def edit_story(request, type, id):
+    story = Story.objects.get(id=id)
+    form = StoryForm(request.POST, instance=story)
+    print request.POST
     if type == 'text':
-        story = TextStory.objects.get(id=id)
-        form = TextStoryForm(request.POST, instance=story)
         print 'text form'
         if form.is_valid():
             print 'valid form'
-            story.title = form.cleaned_data['title']
-            story.source = form.cleaned_data['source']
-            story.text = form.cleaned_data['text']
+            story.title = request.POST['title'].encode('ascii', 'replace')
+            story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
+            story.text = request.POST['text'].encode('ascii', 'replace')
             if request.POST['date']:
-                story.date = form.cleaned_data['date']
-                story.save()
-            else:
-                story.save()
+                story.date = request.POST['date'].encode('ascii', 'replace')
 
     if type == 'image':
-        story = ImageStory.objects.get(id=id)
-        form = ImageStoryForm(request.POST, instance=story)
         if form.is_valid():
             print 'valid form'
-            story.title = form.cleaned_data['title']
-            story.source = form.cleaned_data['source']
-            story.image = form.cleaned_data['image']
+            story.title = request.POST['title'].encode('ascii', 'replace')
+            story.image = request.POST['image'].encode('ascii', 'replace')
             if request.POST['date']:
-                story.date = form.cleaned_data['date']
-                story.save()
-            else:
-                story.save()
+                story.date = request.POST['date'].encode('ascii', 'replace')
 
     if type == 'video':
-        story = VideoStory.objects.get(id=id)
-        form = VideoStoryForm(request.POST, instance=story)
         if form.is_valid():
             print 'valid form'
-            story.title = form.cleaned_data['title']
-            story.source = form.cleaned_data['source']
-            story.video = form.cleaned_data['video']
+            story.title = request.POST['title'].encode('ascii', 'replace')
+            story.video = request.POST['video'].encode('ascii', 'replace')
             if request.POST['date']:
-                story.date = form.cleaned_data['date']
-                story.save()
-            else:
-                story.save()
+                story.date = request.POST['date'].encode('ascii', 'replace')
+
+    story.save()
 
     return redirect('/edit/page/{}'.format(story.page.vanity_url), locals())
 
@@ -441,16 +425,18 @@ def add_connection(request, connect_to, to_connect):
 
     else:
         page_connect_to = Page.objects.get(vanity_url=connect_to, published=True)
-        page_to_connect = Page.objects.create(
-            type=Category.objects.get(id=1),
-            name=to_connect,
-            vanity_url=to_connect,
-            description="",
-            user=request.user,
-            user_made=False
-        ).save()
+        page_to_connect = Page(
+            type = Category.objects.get(id=1),
+            name = to_connect,
+            vanity_url = to_connect,
+            description = "placeholder",
+            published = False,
+            user = request.user,
+            user_made = False,
+        )
+        page_to_connect.save()
 
-        page_connect_to.connections.add(page_to_connect)
+        page_connect_to.save()
 
     return HttpResponse('')
 

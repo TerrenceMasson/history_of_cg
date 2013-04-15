@@ -20,24 +20,20 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        {{ form.title.errors }}
-                        {{ form.title }}
+                        <input name="title" id="id_title" type="text" class="need-helper person" value="{{ story.title }}">
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        {{ form.date.errors }}
-                        {{ form.date }}
+                        <input type="text" name="date" id="id_date" class="need-helper person" value="{% if story.date %}{{ story.date }}{% endif %}">
                         <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                     </li>
                     <li class="story-source fields">
-                        {{ form.source.errors }}
-                        {{ form.source }}
+                        <input id="id_source" type="text" name="source" maxlength="200" class="need-helper person" value="{% if story.source %}{{ story.source }}{% endif %}">
                         <span id="helper-story-source" class="helper-popups need-helper organization-border"
                               style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
                     </li>
                     <li class="story-body fields">
-                        {{ form.text.errors }}
-                        {{ form.text }}
+                        <textarea id="id_text" style="width:340px;" rows="10" cols="40" name="text" class="need-helper person" value="{{ story.text }}"></textarea>
                         <span id="helper-story-story" class="helper-popups organization-border" style="display: none;">What happened? Who was involved? Remember, this is isn't an encyclopedia entry, give us the inside story!</span>
                     </li>
                     <li>
@@ -58,18 +54,15 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        {{ form.title.errors }}
-                        {{ form.title }}
+                        <input id="id_title" type="text" name="title" maxlength="50" class="need-helper person" value="{{ story.title }}">
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        {{ form.date.errors }}
-                        {{ form.date }}
+                        <input type="text" name="date" id="id_date" class="need-helper person" value="{% if story.date %}{{ story.date }}{% endif %}">
                         <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                     </li>
                     <li class="story-url fields">
-                        {{ form.image.errors }}
-                        {{ form.image }}
+                        <input id="id_image" type="text" name="image" maxlength="200" class="need-helper person" value="{{ story.image }}">
                     </li>
                     <li class="story-save save">
                         <button class="organization-hover">Save Story</button>
@@ -82,7 +75,7 @@
             </form>
         {% endif %}
         {% if story.video %}
-            <form action="/edit/story/video/{{ story.id }}/" method="post" accept-charset="utf-8">
+            <form action="/edit/story/video/{{ story.id }}/" method="post" accept-charset="utf-8">{% csrf_token %}
                 <input type="hidden" class="story-type" name="data[Story][story_type_id]" value="1">
                 <ul class="story-labels all-labels">
                     <li class="label-story-title labels">Title</li>
@@ -91,24 +84,21 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        {{ form.title.errors }}
-                        {{ form.title }}
+                        <input id="id_title" type="text" name="title" maxlength="50" class="need-helper person" value="{{ story.title }}">
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        {{ form.date.errors }}
-                        {{ form.date }}
+                        <input type="text" name="date" id="id_date" class="need-helper person" value="{% if story.date %}{{ story.date }}{% endif %}">
                         <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                     </li>
                     <li class="story-url fields">
-                        {{ form.video.errors }}
-                        {{ form.video }}
+                        <input id="id_video" type="text" name="video" maxlength="200" class="need-helper person" value="http://www.youtube.com/watch?v={{ story.video }}">
                         <span id="helper-story-date" class="helper-popups organization-border">Paste or type a YouTube URL here.</span>
                     </li>
                     <li class="story-save save">
                         <button class="organization-hover">Save Story</button>
-                        <button class="publish-button organization-hover">Publish Story</button>
-                        <input type="hidden" class="publish" name="data[Story][published]" value="1">
+                        <button class="story-publish-button" data-id="{{ story.id }}">{% if story.published %}
+                            Unpublish{% else %}Publish{% endif %}</button>
                     </li>
                 </ul>
                 <div class="cf" style="display: none;"></div>

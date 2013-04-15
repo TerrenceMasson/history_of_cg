@@ -112,13 +112,7 @@
                     </li>
                 </ul>
                 <div class="story-container hide"></div>
-                {% for story in user_text_stories %}
-                    {% include 'pages/edit_story.html' %}
-                {% endfor %}
-                {% for story in user_image_stories %}
-                    {% include 'pages/edit_story.html' %}
-                {% endfor %}
-                {% for story in user_video_stories %}
+                {% for story in user_stories %}
                     {% include 'pages/edit_story.html' %}
                 {% endfor %}
             </div>

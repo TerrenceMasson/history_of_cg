@@ -151,7 +151,8 @@ $(document).ready(function () {
     $('.connect-entries-button').click(function (e) {
         e.preventDefault();
         button = $(this);
-        url = "/add/connection/" + button[0].getAttribute('data-vanity-url') + "/" + $("#connectionSearchBox")[0].getAttribute('data-vanity-url') + "/";
+        console.log($("#connectionSearchBox")[0].value);
+        url = "/add/connection/" + button[0].getAttribute('data-vanity-url') + "/" + $("#connectionSearchBox")[0].value + "/";
         $.ajax({
             type: "POST",
             url: url,

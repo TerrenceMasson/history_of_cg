@@ -73,7 +73,7 @@ def initial_stories_fill():
                     if row_data['title']:
                         if row_data['story_type_id'] == '1':
                             print 'video story: ', row_data
-                            VideoStory.objects.create(
+                            Story.objects.create(
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
                                           int(row_data['date'][8:10])) if row_data['date'] else None,
@@ -90,7 +90,7 @@ def initial_stories_fill():
                             ).save()
                         if row_data['story_type_id'] == '2':
                             print 'image story: ', row_data
-                            ImageStory.objects.create(
+                            Story.objects.create(
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
                                           int(row_data['date'][8:10])) if row_data['date'] else None,
@@ -107,7 +107,7 @@ def initial_stories_fill():
                             ).save()
                         if row_data['story_type_id'] == '3':
                             print 'text story: ', row_data
-                            TextStory.objects.create(
+                            Story.objects.create(
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
                                           int(row_data['date'][8:10])) if row_data['date'] else None,

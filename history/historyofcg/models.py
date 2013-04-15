@@ -74,31 +74,22 @@ class Story(BaseModel):
     source = models.CharField(max_length=200, blank=True, null=True)
     published = models.BooleanField(default=False)
     old_id = models.PositiveIntegerField(blank=True, null=True)
+    video = models.CharField(max_length=200, blank=True, null=True)
+    image = models.URLField(blank=True, null=True)
+    text = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        if self.video:
+            if "?v=" in self.video:
+                self.video = self.video.split('?v=')[1]
+
+        super(Story, self).save(*args, **kwargs)
 
 class Review(BaseModel):
     type = models.CharField(choices=(("UP", "up"), ("DOWN", 'down')), max_length=4)
     user = models.ForeignKey(User)
     story = models.ForeignKey(Story)
     page = models.ForeignKey(Page)
-
-
-class VideoStory(Story):
-    video = models.CharField(max_length=200)
-
-    def save(self, *args, **kwargs):
-        if "?v=" in self.video:
-            self.video = self.video.split('?v=')[1]
-
-        super(VideoStory, self).save(*args, **kwargs)
-
-
-class ImageStory(Story):
-    image = models.URLField()
-
-
-class TextStory(Story):
-    text = models.TextField()
