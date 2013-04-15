@@ -1,7 +1,7 @@
 from datetime import date
 from xml.etree import ElementTree
 from django.contrib.auth.models import User
-from historyofcg.models import Page, Category, Story, VideoStory, ImageStory, TextStory, Tag
+from historyofcg.models import Page, Category, Story, Tag
 
 try:
     tree = ElementTree.parse('historyofcg/scripts/file.xml')
@@ -77,7 +77,7 @@ def initial_stories_fill():
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
                                           int(row_data['date'][8:10])) if row_data['date'] else None,
-                                user=User.objects.get(id=1),
+                                user=User.objects.get(username="Tman"),
                                 #this is just temporary, really sloppy but works T_T
                                 page=Page.objects.get(id=1),
                                 published=row_data['published'] == '1',
@@ -94,7 +94,7 @@ def initial_stories_fill():
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
                                           int(row_data['date'][8:10])) if row_data['date'] else None,
-                                user=User.objects.get(id=1),
+                                user=User.objects.get(username="Tman"),
                                 #this is just temporary, really sloppy but works T_T
                                 page=Page.objects.get(id=1),
                                 published=row_data['published'] == '1',
@@ -111,7 +111,7 @@ def initial_stories_fill():
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
                                           int(row_data['date'][8:10])) if row_data['date'] else None,
-                                user=User.objects.get(id=1),
+                                user=User.objects.get(username="Tman"),
                                 #this is just temporary, really sloppy but works T_T
                                 page=Page.objects.get(id=1),
                                 published=row_data['published'] == '1',
