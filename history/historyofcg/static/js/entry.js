@@ -184,6 +184,19 @@ $(document).ready(function(){
         })
     });
 
+    $('p.story-opened-heading span.delete').click(function(e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/delete/story/"+button[0].getAttribute('data-story-id')+"/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(action) {
+                window.location = "/edit/page/"+button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
+
     function cycle_vote_color(button) {
         console.log(button.hasClass("no-vote"));
         if (button.hasClass("no-vote")) {

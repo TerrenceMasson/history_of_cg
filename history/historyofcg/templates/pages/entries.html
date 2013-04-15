@@ -40,17 +40,17 @@
                     {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
                     {# and random chooses one item randomly out of this list #}
                     {% with rnd="12"|make_list|random %}
-                    <li class="tile story story-image opener {% if rnd == "1" %}double-size{% endif %}"
+                    <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}"
                     {% endwith %}
                         {% for t in is.tags.all %}{{ t.name }}{% endfor %}
                         {% if is|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
                         data-image="{{ is.image|safe }}"
                         data-title="{{ is.title|safe }}">
-                        <div class="container">
+                        <div class="container opener">
                             <img src="{{ is.image }}">
                         </div>
                         <div class="bottom-link">
-                            <span>{{ is.title|truncatechars:"14" }}</span>
+                            <span class="opener">{{ is.title|truncatechars:"14" }}</span>
                             <span class="story-type story-type-icon-image"></span>
                             {% if request.user.is_authenticated %}
                             <span class="story-type {{ is|user_vote_cast:request.user.id }}" data-story-id="{{ is.id }}"></span>
@@ -60,14 +60,14 @@
                     </li>
                 {% endfor %}
                 {% for vs in video_stories %}
-                    <li class="tile story story-video opener {% for t in vs.tags.all %} {{ t.name }}{% endfor %} isotope-item"
+                    <li class="tile story story-video {% for t in vs.tags.all %} {{ t.name }}{% endfor %} isotope-item"
                         data-video="{{ vs.video|safe }}"
                         data-title="{{ vs.title|safe }}">
-                        <div class="container">
+                        <div class="container opener">
                             <div class='lite' style='width:478px; height:359px' id="{{ vs.video }}"></div>
                         </div>
                         <div class="bottom-link">
-                            <span>{{ vs.title|truncatechars:"14" }}</span>
+                            <span class="opener">{{ vs.title|truncatechars:"14" }}</span>
                             <span class="story-type story-type-icon-video"></span>
                             {% if request.user.is_authenticated %}
                             <span class="story-type {{ vs|user_vote_cast:request.user.id }}" data-story-id="{{ vs.id }}"></span>
@@ -77,14 +77,14 @@
                     </li>
                 {% endfor %}
                 {% for ts in text_stories %}
-                    <li class="tile story story-text opener {% for t in ts.tags.all %} {{ t.name }}{% endfor %}{% if ts|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
+                    <li class="tile story story-text {% for t in ts.tags.all %} {{ t.name }}{% endfor %}{% if ts|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
                         data-full-text="{{ ts.text|safe }}"
                         data-title="{{ ts.title|safe }}">
-                        <div class="container">
+                        <div class="container opener">
                             <p>{{ ts.text|truncatewords:80|safe }}</p>
                         </div>
                         <div class="bottom-link">
-                            <span>{{ ts.title|truncatechars:"14" }}</span>
+                            <span class="opener">{{ ts.title|truncatechars:"14" }}</span>
                             <span class="story-type story-type-icon-text"></span>
                             {% if request.user.is_authenticated %}
                             <span class="story-type {{ ts|user_vote_cast:request.user.id }}" data-story-id="{{ ts.id }}"></span>
