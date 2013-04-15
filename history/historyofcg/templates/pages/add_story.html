@@ -72,9 +72,11 @@
                         <li class="story-date fields">
                             {{ form.date.errors }}
                             {{ form.date }}
+                            <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                         </li>
                         <li class="story-url fields">
-                            <input type="text" name="image" id="id_image" class="need-helper organization" value="">
+                            {{ form.image.errors }}
+                            {{ form.image }}
                         </li>
                         <li class="story-save save">
                             <button class="organization-hover">Save Story</button>
@@ -94,16 +96,19 @@
                     </ul>
                     <ul class="story-fields all-fields">
                         <li class="story-title fields">
-                            <input type="text" name="title" id="id_title" class="need-helper organization" value="">
+                            {{ form.title.errors }}
+                            {{ form.title }}
                             <span id="helper-story-story" class="helper-popups organization-border">What is this the story of?</span>
                         </li>
                         <li class="story-date fields">
                             {{ form.date.errors }}
                             {{ form.date }}
+                            <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                         </li>
                         <li class="story-url fields">
-                            <input type="text" name="video" id="id_video" class="need-helper organization" value="">
-                            <span id="helper-story-date" class="helper-popups organization-border">Paste or type a URL to the media in here.</span>
+                            {{ form.video.errors }}
+                            {{ form.video }}
+                            <span id="helper-story-date" class="helper-popups organization-border">Paste or type a YouTube URL here.</span>
                         </li>
                         <li class="story-preview">
                         </li>

@@ -17,19 +17,23 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        <input type="text" name="title" id="id_title" class="need-helper {{ page.type }}" value="{{ story.title|safe }}">
+                        {{ form.title.errors }}
+                        {{ form.title }}
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper {{ page.type }}" {% if story.date %}value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}"{% endif %}>
+                        {{ form.date.errors }}
+                        {{ form.date }}
                         <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                     </li>
                     <li class="story-source fields">
-                        <input type="text" name="source" id="id_source" class="need-helper {{ page.type }}" value="{{ story.source|safe }}">
+                        {{ form.source.errors }}
+                        {{ form.source }}
                         <span id="helper-story-source" class="helper-popups need-helper organization-border" style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
                     </li>
                     <li class="story-body fields">
-                        <textarea id="id_text" rows="10" cols="40" name="text" class="need-helper {{ page.type }}">{{ story.text }}</textarea>
+                        {{ form.text.errors }}
+                        {{ form.text }}
                         <span id="helper-story-story" class="helper-popups organization-border" style="display: none;">What happened? Who was involved? Remember, this is isn't an encyclopedia entry, give us the inside story!</span>
                     </li>
                     <li>
@@ -49,14 +53,18 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        <input type="text" name="title" id="id_title" class="need-helper organization" value="{{ story.title }}">
+                        {{ form.title.errors }}
+                        {{ form.title }}
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper organization" {% if story.date %}value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}"{% endif %}>
+                        {{ form.date.errors }}
+                        {{ form.date }}
+                        <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                     </li>
                     <li class="story-url fields">
-                        <input type="text" name="image" id="id_image" class="need-helper organization" value="{{ story.image }}">
+                        {{ form.image.errors }}
+                        {{ form.image }}
                     </li>
                     <li class="story-save save">
                         <button class="organization-hover">Save Story</button>
@@ -77,14 +85,19 @@
                 </ul>
                 <ul class="story-fields all-fields">
                     <li class="story-title fields">
-                        <input type="text" name="title" id="id_title" class="need-helper organization" value="{{ story.title }}">
+                        {{ form.title.errors }}
+                        {{ form.title }}
                         <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                     </li>
                     <li class="story-date fields">
-                        <input type="text" name="date" id="id_date" class="need-helper organization" {% if story.date %}value="{{ story.date.month }}/{{ story.date.day }}/{{ story.date.year }}"{% endif %}>
+                        {{ form.date.errors }}
+                        {{ form.date }}
+                        <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
                     </li>
                     <li class="story-url fields">
-                        <input type="text" name="image" id="id_video" class="need-helper organization" value="{{ story.image }}">
+                        {{ form.video.errors }}
+                        {{ form.video }}
+                        <span id="helper-story-date" class="helper-popups organization-border">Paste or type a YouTube URL here.</span>
                     </li>
                     <li class="story-save save">
                         <button class="organization-hover">Save Story</button>
