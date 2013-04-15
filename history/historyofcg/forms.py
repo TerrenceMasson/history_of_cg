@@ -30,10 +30,18 @@ class PageForm(ModelForm):
                                                          '%m/%d/%Y',              # '10/25/2006'
                                                          '%m/%d/%y',              # '10/25/06'
                                                          '%Y', '%y',)
+
+        self.fields['date_deceased'].initial = "MM/DD/YYYY or YYYY"
+        self.fields['date_deceased'].widget.format = '%m/%d/%Y'
+        # at the same time, set the input format on the date field like you want it:
+        self.fields['date_deceased'].input_formats = ('%Y-%m-%d',              # '2006-10-25'
+                                                         '%m/%d/%Y',              # '10/25/2006'
+                                                         '%m/%d/%y',              # '10/25/06'
+                                                         '%Y', '%y',)
         for f in self.fields:
             self.fields[f].widget.attrs = {'class': 'need-helper organization'}
 
-        self.fields['type'].widget.attrs = {'class' : 'entry-type-select organization'}
+        self.fields['type'].widget.attrs = {'class': 'entry-type-select organization'}
 
 class TextStoryForm(ModelForm):
 

@@ -55,6 +55,7 @@ class Page(BaseModel):
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     old_id = models.PositiveIntegerField(blank=True, null=True)
+    date_deceased = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
