@@ -89,6 +89,7 @@
         {% endfor %}
     </div>
     <div class="whats-next">
+    {% if upcoming_features %}
         <span><h1>UPCOMING FEATURES:</h1></span>
         {% for feature in upcoming_features %}
             <div class="new-feature">
@@ -97,8 +98,8 @@
                 <p>{{ feature.text }}</p>
                 <br>
             </div>
-
         {% endfor %}
+    {% endif %}
     </div>
 </section>
 </div>
