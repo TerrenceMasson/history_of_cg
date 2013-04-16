@@ -8,7 +8,8 @@ $(function () {
             title: '',
             maxHeight: 1000,
             maxWidth: 2000,
-            width: 600
+            width: 600,
+            resizable: false
         });
 
 

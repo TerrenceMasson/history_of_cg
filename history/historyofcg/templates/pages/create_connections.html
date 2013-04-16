@@ -20,7 +20,7 @@
         </div>
         {% for connection in connections.all %}
             <div class='connections {{ connection.type }}'>
-                <span class='name'>{{ connection.name }}</span>
+                <span class='name' data-vanity-url="{{ connection.vanity_url }}">{{ connection.name }}</span>
                 <span class='delete ui-icon ui-icon-close' data-vanity-url="{{ page.vanity_url }}"
                       data-name="{{ connection.vanity_url }}"></span>
 

@@ -429,7 +429,7 @@ def add_connection(request, connect_to, to_connect):
             type = Category.objects.get(id=1),
             name = to_connect,
             vanity_url = to_connect,
-            description = "placeholder",
+            description = "",
             published = False,
             user = request.user,
             user_made = False,

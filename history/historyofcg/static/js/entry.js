@@ -201,6 +201,11 @@ $(document).ready(function () {
         })
     });
 
+    $('div.connections span.name').click(function(e) {
+        e.preventDefault();
+        window.location = "/pages/" + $(this)[0].getAttribute('data-vanity-url');
+    });
+
     function cycle_vote_color(button) {
         console.log(button.hasClass("no-vote"));
         if (button.hasClass("no-vote")) {
