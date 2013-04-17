@@ -416,7 +416,7 @@ def get_pages(request):
 
 @require_POST
 def add_connection(request, connect_to, to_connect):
-    if Page.objects.filter(vanity_url=to_connect, user_made = True):
+    if Page.objects.filter(vanity_url=to_connect):
         page_connect_to = Page.objects.get(vanity_url=connect_to)
         page_to_connect = Page.objects.get(vanity_url=to_connect)
 
