@@ -42,6 +42,7 @@ def populate_page():
                                     description=row_data['description'] if row_data['description'] else " ",
                                     date_established=date(int(row_data['date_1'][:4]), int(row_data['date_1'][5:7]),
                                                           int(row_data['date_1'][8:10])),
+                                    user_made = True
                                 ).save()
                             else:
                                 Page.objects.create(
@@ -56,7 +57,8 @@ def populate_page():
                                     user=User.objects.get(username='Tman'),
                                     vanity_url=row_data['slug'][:100],
                                     homepage=row_data['homepage_url'],
-                                    description=row_data['description'] if row_data['description'] else " "
+                                    description=row_data['description'] if row_data['description'] else " ",
+                                    user_made = True
                                 ).save()
 
 
