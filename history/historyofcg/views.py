@@ -416,9 +416,11 @@ def get_pages(request):
 
 @require_POST
 def add_connection(request, connect_to, to_connect):
-    if Page.objects.filter(vanity_url=to_connect):
+    to_connect_vanity = to_connect.lower()
+    to_connect_name = to_connect.replace("-", " ")
+    if Page.objects.filter(vanity_url=to_connect_vanity):
         page_connect_to = Page.objects.get(vanity_url=connect_to)
-        page_to_connect = Page.objects.get(vanity_url=to_connect)
+        page_to_connect = Page.objects.get(vanity_url=to_connect_vanity)
 
         page_connect_to.connections.add(page_to_connect)
         page_connect_to.save()
@@ -427,8 +429,8 @@ def add_connection(request, connect_to, to_connect):
         page_connect_to = Page.objects.get(vanity_url=connect_to)
         page_to_connect = Page.objects.create(
             type = Category.objects.get(id=1),
-            name = to_connect.replace("-", " "),
-            vanity_url = to_connect,
+            name = to_connect_name,
+            vanity_url = to_connect_vanity,
             description = "",
             published = False,
             user = request.user,
