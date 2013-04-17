@@ -416,7 +416,7 @@ def get_pages(request):
 
 @require_POST
 def add_connection(request, connect_to, to_connect):
-    if Page.objects.filter(vanity_url=to_connect, published=True):
+    if Page.objects.filter(vanity_url=to_connect, user_made = True):
         page_connect_to = Page.objects.get(vanity_url=connect_to)
         page_to_connect = Page.objects.get(vanity_url=to_connect)
 
@@ -427,7 +427,7 @@ def add_connection(request, connect_to, to_connect):
         page_connect_to = Page.objects.get(vanity_url=connect_to)
         page_to_connect = Page.objects.create(
             type = Category.objects.get(id=1),
-            name = to_connect,
+            name = to_connect.replace("-", " "),
             vanity_url = to_connect,
             description = "",
             published = False,
@@ -449,6 +449,9 @@ def remove_connection(request, remove_to, to_remove):
 
     page_remove_to.connections.remove(page_to_remove)
     page_remove_to.save()
+
+    if page_to_remove.user_made == False:
+        page_to_remove.delete()
 
     return HttpResponse('')
 
