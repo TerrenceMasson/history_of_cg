@@ -206,6 +206,29 @@ $(document).ready(function () {
         window.location = "/pages/" + $(this)[0].getAttribute('data-vanity-url');
     });
 
+    if ($('#id_is_deceased').is(':checked')) {
+        $(".label-entry-date-3").show();
+        $(".entry-date-3").show();
+        hide_page=false;
+    }else
+    {
+        $(".label-entry-date-3").hide();
+        $(".entry-date-3").hide();
+        hide_page=true;
+    }
+    $("#id_is_deceased").click(function(){
+        hide_page=!hide_page;
+        if(hide_page)
+        {
+            $(".label-entry-date-3").hide();
+            $(".entry-date-3").hide();
+        }else
+        {
+            $(".label-entry-date-3").show();
+            $(".entry-date-3").show();
+        }
+    })
+
     function cycle_vote_color(button) {
         console.log(button.hasClass("no-vote"));
         if (button.hasClass("no-vote")) {
@@ -383,11 +406,17 @@ $(function () {
         $dateHelperText.html(dateInfo[t].helperText);
     }
 
+    function show_deceased_fields() {
+        $('.label-entry-date-2').show();
+        $('.entry-date-2').show();
+    }
+
     function change_date_fields_with(t) {
         if (t.indexOf('project') !== -1) {
             change_date_fields('project');
         }
         else if (t.indexOf('person') !== -1) {
+            show_deceased_fields();
             change_date_fields('person');
         }
         else if (t.indexOf('organization') !== -1) {

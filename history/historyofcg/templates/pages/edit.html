@@ -68,7 +68,8 @@
                         <li class="label-entry-source labels" style="margin-top: 140px;">Homepage</li>
                         <li class="label-entry-date labels">Date Established</li>
                         {% if page.type.name == 'person' %}
-                            <li class="label-entry-date-2 labels">Date Deceased (if applicable)</li>
+                            <li class="label-entry-date-2 labels">Is Deceased?</li>
+                            <li class="label-entry-date-3 labels" style="display: none;">Date Deceased</li>
                         {% endif %}
                     </ul>
                     <ul class="basic-fields all-fields">
@@ -90,8 +91,12 @@
                         </li>
                         {% if page.type.name == 'person' %}
                             <li class="entry-date-2 fields">
-                                <input name="date_deceased" id="id_date_deceased" type="text"
-                                       class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
+                                {{ form.is_deceased.errors }}
+                                {{ form.is_deceased }}
+                            </li>
+                            <li class="entry-date-3 fields" style="display:none;">
+                                {{ form.date_deceased.errors }}
+                                {{ form.date_deceased }}
                             </li>
                         {% endif %}
                     </ul>

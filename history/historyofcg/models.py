@@ -59,6 +59,7 @@ class Page(BaseModel):
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     old_id = models.PositiveIntegerField(blank=True, null=True)
+    is_deceased = models.BooleanField(default=False)
     date_deceased = models.DateField(blank=True, null=True)
     user_made = models.BooleanField(default=True)
 

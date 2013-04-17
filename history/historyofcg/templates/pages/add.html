@@ -44,9 +44,8 @@
                             class="required"></span></li>
                     <li class="label-entry-source labels" style="margin-top: 140px;">Homepage</li>
                     <li class="label-entry-date labels">Date Established</li>
-                    {% if page.type.name == 'person' %}
-                        <li class="label-entry-date-2 labels">Date Deceased (if applicable)</li>
-                    {% endif %}
+                    <li class="label-entry-date-2 labels" style="display: none;">Is Deceased?</li>
+                    <li class="label-entry-date-3 labels" style="display: none;">Date Deceased</li>
                 </ul>
                 <ul class="basic-fields all-fields">
                     <li class="entry-description fields">
@@ -63,12 +62,14 @@
                         <span id="helper-story-date"
                               class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
                     </li>
-                    {% if page.type == 'person' %}
-                        <li class="entry-date-2 fields">
-                            <input name="date_deceased" id="id_date_deceased" type="text"
-                                   class="need-helper {{ page.type }}" placeholder="MM/DD/YYYY or YYYY">
-                        </li>
-                    {% endif %}
+                    <li class="entry-date-2 fields" style="display: none;">
+                        {{ form.is_deceased.errors }}
+                        {{ form.is_deceased }}
+                    </li>
+                    <li class="entry-date-3 fields" style="display: none;">
+                        {{ form.date_deceased.errors }}
+                        {{ form.date_deceased }}
+                    </li>
                 </ul>
                 <div class="cf"></div>
             </div>

@@ -219,9 +219,19 @@ div.form-container form div.basics ul.basic-labels li.label-entry-date {
     top: 30px;
 }
 
-div.form-container form div.basics ul.basic-labels li.label-entry-date-2 span.label {
+div.form-container form div.basics ul.basic-labels li.label-entry-date-2 {
     position: relative;
-    top: 50px;
+    top: 30px;
+}
+
+div.form-container form div.basics ul.basic-labels li.label-entry-date-3 {
+    position: relative;
+    top: 20px;
+}
+
+div.form-container form div.basics ul.basic-fields li.entry-date-2 {
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
 div.form-container div.right-column {
