@@ -57,7 +57,10 @@ class StoryForm(ModelForm):
         self.fields['date'].widget.format = '%d/%m/%Y'
 
         # at the same time, set the input format on the date field like you want it:
-        self.fields['date'].input_formats = ['%d/%m/%Y', '%Y']
+        self.fields['date'].input_formats = ['%Y-%m-%d', # '2006-10-25'
+                                             '%m/%d/%Y', # '10/25/2006'
+                                             '%m/%d/%y', # '10/25/06'
+                                             '%Y', '%y',]
 
 
 __author__ = 'Kyle'
