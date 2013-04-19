@@ -551,6 +551,12 @@ div.form-container div.stories-col ul.story-labels li.label-story-source_url {
     margin-bottom: 33px;
 }
 
+div.form-container div.stories-col ul.story-labels li.label-story-url {
+    position: relative;
+    top: 15px;
+    margin-bottom: 33px;
+}
+
 div.form-container div.stories-col ul.story-fields li.story-helpertext {
     width: 440px;
 }
