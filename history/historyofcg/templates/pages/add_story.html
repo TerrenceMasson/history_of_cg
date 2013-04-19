@@ -70,6 +70,7 @@
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-date labels">Date</li>
+                        <li class="label-story-source labels">Source</li>
                         <li class="label-story-url labels">URL<span class="required"> *</span></li>
                     </ul>
                     <ul class="story-fields all-fields">
@@ -83,6 +84,10 @@
                             {{ form.date }}
                             <span id="helper-story-date" class="helper-popups organization-border"
                                   style="display: none;">When did this story take place?</span>
+                        </li>
+                        <li class="story-source fields {{ page.type }}">
+                            {{ form.source.errors }}
+                            {{ form.source }}
                         </li>
                         <li class="story-url fields">
                             {{ form.image.errors }}
@@ -103,6 +108,7 @@
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-title labels">Date</li>
+                        <li class="label-story-source labels">Source</li>
                         <li class="label-story-url labels">URL<span class="required"> *</span></li>
                     </ul>
                     <ul class="story-fields all-fields">
@@ -116,6 +122,10 @@
                             {{ form.date }}
                             <span id="helper-story-date" class="helper-popups organization-border"
                                   style="display: none;">When did this story take place?</span>
+                        </li>
+                        <li class="story-source fields {{ page.type }}">
+                            {{ form.source.errors }}
+                            {{ form.source }}
                         </li>
                         <li class="story-url fields">
                             {{ form.video.errors }}

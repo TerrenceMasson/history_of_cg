@@ -54,6 +54,7 @@
                 <ul class="story-labels all-labels">
                     <li class="label-story-title labels">Title</li>
                     <li class="label-story-date labels">Date</li>
+                    <li class="label-story-source labels">Source</li>
                     <li class="label-story-url labels">Image URL</li>
                 </ul>
                 <ul class="story-fields all-fields">
@@ -64,6 +65,11 @@
                     <li class="story-date fields">
                         <input type="text" name="date" id="id_date" class="need-helper person" value="{% if story.date %}{{ story.date }}{% endif %}">
                         <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
+                    </li>
+                    <li class="story-source fields">
+                        <input id="id_source" type="text" name="source" maxlength="200" class="need-helper person" value="{% if story.source %}{{ story.source }}{% endif %}">
+                        <span id="helper-story-source" class="helper-popups need-helper organization-border"
+                              style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
                     </li>
                     <li class="story-url fields">
                         <input id="id_image" type="text" name="image" maxlength="200" class="need-helper person" value="{{ story.image }}">
@@ -84,6 +90,7 @@
                 <ul class="story-labels all-labels">
                     <li class="label-story-title labels">Title</li>
                     <li class="label-story-date labels">Date</li>
+                    <li class="label-story-source labels">Source</li>
                     <li class="label-story-url labels">Video URL</li>
                 </ul>
                 <ul class="story-fields all-fields">
@@ -94,6 +101,11 @@
                     <li class="story-date fields">
                         <input type="text" name="date" id="id_date" class="need-helper person" value="{% if story.date %}{{ story.date }}{% endif %}">
                         <span id="helper-story-date" class="helper-popups organization-border" style="display: none;">When did this story take place?</span>
+                    </li>
+                    <li class="story-source fields">
+                        <input id="id_source" type="text" name="source" maxlength="200" class="need-helper person" value="{% if story.source %}{{ story.source }}{% endif %}">
+                        <span id="helper-story-source" class="helper-popups need-helper organization-border"
+                              style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
                     </li>
                     <li class="story-url fields">
                         <input id="id_video" type="text" name="video" maxlength="200" class="need-helper person" value="http://www.youtube.com/watch?v={{ story.video }}">

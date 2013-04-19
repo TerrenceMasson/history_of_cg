@@ -309,6 +309,7 @@ def new_story(request, story_type, vanity_url):
         if form.is_valid():
             story_title = request.POST['title']
             story_image = request.POST['image']
+            story_source = request.POST['source']
             story_user = request.user
             story_page = Page.objects.get(vanity_url=vanity_url)
             if request.POST['date']:
@@ -323,6 +324,7 @@ def new_story(request, story_type, vanity_url):
                         image=story_image,
                         page=story_page,
                         user=story_user,
+                        source=story_source
                     ).save()
 
                 elif len(d) == 1:
@@ -333,7 +335,8 @@ def new_story(request, story_type, vanity_url):
                         date=story_date,
                         image=story_image,
                         user=story_user,
-                        page=story_page
+                        page=story_page,
+                        source=story_source
                     ).save()
             else:
                 Story.objects.create(
@@ -341,6 +344,7 @@ def new_story(request, story_type, vanity_url):
                     image=story_image,
                     page=story_page,
                     user=story_user,
+                    source=story_source
                 ).save()
 
     if story_type == 'video':
@@ -348,6 +352,7 @@ def new_story(request, story_type, vanity_url):
         if form.is_valid():
             story_title = request.POST['title']
             story_video = request.POST['video']
+            story_source = request.POST['source']
             story_user = request.user
             story_page = Page.objects.get(vanity_url=vanity_url)
 
@@ -363,6 +368,7 @@ def new_story(request, story_type, vanity_url):
                         video=story_video,
                         page=story_page,
                         user=story_user,
+                        source=story_source
                     ).save()
                 elif len(d) == 1:
                     d = datetime.date(int(request.POST['date']), 1, 1)
@@ -372,7 +378,8 @@ def new_story(request, story_type, vanity_url):
                         date=story_date,
                         video=story_video,
                         user=story_user,
-                        page=story_page
+                        page=story_page,
+                        source=story_source
                     ).save()
             else:
                 Story.objects.create(
@@ -380,6 +387,7 @@ def new_story(request, story_type, vanity_url):
                     video=story_video,
                     page=story_page,
                     user=story_user,
+                    source=story_source
                 ).save()
 
     return redirect('/edit/page/{}'.format(vanity_url), locals())
@@ -413,6 +421,7 @@ def edit_story(request, type, id):
             print 'valid form'
             story.title = request.POST['title'].encode('ascii', 'replace')
             story.image = request.POST['image'].encode('ascii', 'replace')
+            story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
             if request.POST['date']:
                 d = request.POST['date'].split('/')
                 if len(d) == 3:
@@ -429,6 +438,7 @@ def edit_story(request, type, id):
             print 'valid form'
             story.title = request.POST['title'].encode('ascii', 'replace')
             story.video = request.POST['video'].encode('ascii', 'replace')
+            story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
             if request.POST['date']:
                 d = request.POST['date'].split('/')
                 if len(d) == 3:

@@ -42,7 +42,7 @@ def populate_page():
                                     description=row_data['description'] if row_data['description'] else " ",
                                     date_established=date(int(row_data['date_1'][:4]), int(row_data['date_1'][5:7]),
                                                           int(row_data['date_1'][8:10])),
-                                    user_made = True
+                                    user_made=True
                                 ).save()
                             else:
                                 Page.objects.create(
@@ -58,11 +58,12 @@ def populate_page():
                                     vanity_url=row_data['slug'][:100],
                                     homepage=row_data['homepage_url'],
                                     description=row_data['description'] if row_data['description'] else " ",
-                                    user_made = True
+                                    user_made=True
                                 ).save()
 
 
 def hackish_migration_for_source_fields():
+    stories_to_manual = []
     for child in root.iter():
         if child.tag == 'table_data' and child.attrib == {'name': 'stories'}:
             for child in child.iter():
@@ -72,10 +73,15 @@ def hackish_migration_for_source_fields():
                         if row.tag == 'field':
                             row_data[row.attrib['name']] = row.text
                     if row_data['title']:
-                        story = Story.objects.get(old_id = row_data['id'])
+                        if row_data['source_name'] or row_data['source_url']:
+                            stories_to_manual.append(row_data)
+                        story = Story.objects.get(old_id=row_data['id'])
+                        story.old_id = row_data['id']
                         story.source = row_data['source_name']
                         story.source_url = row_data['source_url']
                         story.save()
+    for s in stories_to_manual:
+        print s
 
 
 def initial_stories_fill():
