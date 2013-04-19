@@ -30,7 +30,7 @@ def replace(value, args):
 
 @register.filter
 def get_random_image(value):
-    images = Story.objects.filter(page__vanity_url=value.vanity_url, published=True, image__isnull=False)
+    images = Story.objects.filter(page__vanity_url=value.vanity_url, published=True, text__isnull=True, video__isnull=True)
     page = Page.objects.get(vanity_url = value.vanity_url)
     if len(images) == 0:
         return "/static/img/P_desatCentered02.png" if page.type.name != "person" else "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
