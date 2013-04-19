@@ -265,16 +265,26 @@ def new_story(request, story_type, vanity_url):
             story_page = Page.objects.get(vanity_url=vanity_url)
             if request.POST['date']:
                 d = request.POST['date'].split('/')
-                if len(d) != 3: return HttpResponse('')
-                d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                story_date = d.strftime('%Y-%m-%d')
-                Story.objects.create(
-                    title=story_title,
-                    date=story_date,
-                    text=story_text,
-                    user=story_user,
-                    page=story_page
-                ).save()
+                if len(d) == 3:
+                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+                    story_date = d.strftime('%Y-%m-%d')
+                    Story.objects.create(
+                        title=story_title,
+                        date=story_date,
+                        text=story_text,
+                        user=story_user,
+                        page=story_page
+                    ).save()
+                elif len(d) == 1:
+                    d = datetime.date(int(request.POST['date']), 1, 1)
+                    story_date = d.strftime('%Y-%m-%d')
+                    Story.objects.create(
+                        title=story_title,
+                        date=story_date,
+                        text=story_text,
+                        user=story_user,
+                        page=story_page
+                    ).save()
             else:
                 Story.objects.create(
                     title=story_title,
@@ -291,17 +301,28 @@ def new_story(request, story_type, vanity_url):
             story_page = Page.objects.get(vanity_url=vanity_url)
             if request.POST['date']:
                 d = request.POST['date'].split('/')
-                if len(d) != 3: return HttpResponse('')
-                d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                story_date = d.strftime('%Y-%m-%d')
+                if len(d) == 3:
+                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+                    story_date = d.strftime('%Y-%m-%d')
 
-                Story.objects.create(
-                    title=story_title,
-                    date=story_date,
-                    image=story_image,
-                    page=story_page,
-                    user=request.user,
-                ).save()
+                    Story.objects.create(
+                        title=story_title,
+                        date=story_date,
+                        image=story_image,
+                        page=story_page,
+                        user=request.user,
+                    ).save()
+
+                elif len(d) == 1:
+                    d = datetime.date(int(request.POST['date']), 1, 1)
+                    story_date = d.strftime('%Y-%m-%d')
+                    Story.objects.create(
+                        title=story_title,
+                        date=story_date,
+                        image=story_image,
+                        user=story_user,
+                        page=story_page
+                    ).save()
             else:
                 Story.objects.create(
                     title=story_title,
@@ -319,17 +340,27 @@ def new_story(request, story_type, vanity_url):
 
             if request.POST['date']:
                 d = request.POST['date'].split('/')
-                if len(d) != 3: return HttpResponse('')
-                d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                story_date = d.strftime('%Y-%m-%d')
+                if len(d) == 3:
+                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+                    story_date = d.strftime('%Y-%m-%d')
 
-                Story.objects.create(
-                    title=story_title,
-                    date=story_date,
-                    video=story_video,
-                    page=story_page,
-                    user=request.user,
-                ).save()
+                    Story.objects.create(
+                        title=story_title,
+                        date=story_date,
+                        video=story_video,
+                        page=story_page,
+                        user=request.user,
+                    ).save()
+                elif len(d) == 1:
+                    d = datetime.date(int(request.POST['date']), 1, 1)
+                    story_date = d.strftime('%Y-%m-%d')
+                    Story.objects.create(
+                        title=story_title,
+                        date=story_date,
+                        video=story_video,
+                        user=story_user,
+                        page=story_page
+                    ).save()
             else:
                 Story.objects.create(
                     title=story_title,
@@ -354,7 +385,15 @@ def edit_story(request, type, id):
             story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
             story.text = request.POST['text'].encode('ascii', 'replace')
             if request.POST['date']:
-                story.date = request.POST['date'].encode('ascii', 'replace')
+                d = request.POST['date'].split('/')
+                if len(d) == 3:
+                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+                    story_date = d.strftime('%Y-%m-%d')
+                    story.date = story_date
+                elif len(d) == 1:
+                    d = datetime.date(int(request.POST['date']), 1, 1)
+                    story_date = d.strftime('%Y-%m-%d')
+                    story.date = story_date
 
     if type == 'image':
         if form.is_valid():
@@ -362,7 +401,15 @@ def edit_story(request, type, id):
             story.title = request.POST['title'].encode('ascii', 'replace')
             story.image = request.POST['image'].encode('ascii', 'replace')
             if request.POST['date']:
-                story.date = request.POST['date'].encode('ascii', 'replace')
+                d = request.POST['date'].split('/')
+                if len(d) == 3:
+                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+                    story_date = d.strftime('%Y-%m-%d')
+                    story.date = story_date
+                elif len(d) == 1:
+                    d = datetime.date(int(request.POST['date']), 1, 1)
+                    story_date = d.strftime('%Y-%m-%d')
+                    story.date = story_date
 
     if type == 'video':
         if form.is_valid():
@@ -370,7 +417,15 @@ def edit_story(request, type, id):
             story.title = request.POST['title'].encode('ascii', 'replace')
             story.video = request.POST['video'].encode('ascii', 'replace')
             if request.POST['date']:
-                story.date = request.POST['date'].encode('ascii', 'replace')
+                d = request.POST['date'].split('/')
+                if len(d) == 3:
+                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+                    story_date = d.strftime('%Y-%m-%d')
+                    story.date = story_date
+                elif len(d) == 1:
+                    d = datetime.date(int(request.POST['date']), 1, 1)
+                    story_date = d.strftime('%Y-%m-%d')
+                    story.date = story_date
 
     story.save()
 

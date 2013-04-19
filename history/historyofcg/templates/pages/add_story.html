@@ -34,7 +34,8 @@
                     </ul>
                     <ul class="story-fields all-fields">
                         <li class="entry-date fields">
-                            <input name="title" id="id_title" type="text" class="need-helper {{ page.type }}">
+                            {{ form.title.errors }}
+                            {{ form.title }}
                         </li>
                         <li class="story-date fields {{ page.type }}">
                             {{ form.date.errors }}
