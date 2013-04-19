@@ -292,6 +292,7 @@ ul.mosaicContainer li.tile.story-image img, ul.mosaicContainer li.tile.connectio
 
 ul.mosaicContainer li.tile.connection .container img {
     width: 233px;
+    background: #FFFFFF;
 }
 
 ul.mosaicContainer li.tile.story-video {
