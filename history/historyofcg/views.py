@@ -61,6 +61,7 @@ def about(request):
 #@require_safe
 @render_to('pages/entries.html')
 def view_source_entries(request, s):
+    user_auth = False
     if request.user.is_authenticated():
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
             show_badge1 = True
@@ -76,6 +77,8 @@ def view_source_entries(request, s):
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
             show_badge5 = True
+
+        user_auth = True
 
     if Page.objects.filter(published=True, vanity_url=s):
         page = Page.objects.get(published=True, vanity_url=s)
@@ -171,30 +174,30 @@ def edit_page(request, vanity_url):
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
             show_badge5 = True
 
-    page = Page.objects.get(vanity_url=vanity_url)
-    user_stories = Story.objects.filter(page=page)
-    connections = page.connections
-    user_text_stories = Story.objects.filter(page=page, image__isnull=True, video__isnull=True)
-    user_image_stories = Story.objects.filter(page=page, text__isnull=True, video__isnull=True)
-    user_video_stories = Story.objects.filter(page=page, text__isnull=True, image__isnull=True)
-    print len(user_stories)
+        page = Page.objects.get(vanity_url=vanity_url)
+        user_stories = Story.objects.filter(page=page)
+        connections = page.connections
+        user_text_stories = Story.objects.filter(page=page, image__isnull=True, video__isnull=True)
+        user_image_stories = Story.objects.filter(page=page, text__isnull=True, video__isnull=True)
+        user_video_stories = Story.objects.filter(page=page, text__isnull=True, image__isnull=True)
+        print len(user_stories)
 
-    if request.method == 'POST':
-        form = PageForm(request.POST, instance=page)
-        if form.is_valid():
-            page.type = form.cleaned_data['type']
-            page.name = form.cleaned_data['name']
-            page.tags = form.cleaned_data['tags']
-            page.description = form.cleaned_data['description']
-            page.homepage = form.cleaned_data['homepage']
-            page.date_established = form.cleaned_data['date_established']
+        if request.method == 'POST':
+            form = PageForm(request.POST, instance=page)
+            if form.is_valid():
+                page.type = form.cleaned_data['type']
+                page.name = form.cleaned_data['name']
+                page.tags = form.cleaned_data['tags']
+                page.description = form.cleaned_data['description']
+                page.homepage = form.cleaned_data['homepage']
+                page.date_established = form.cleaned_data['date_established']
 
-            page.save()
-            print 'saved'
-            print page.date_established
-            return redirect('/pages/{}'.format(vanity_url))
-    else:
-        form = PageForm(instance=page)
+                page.save()
+                print 'saved'
+                print page.date_established
+                return redirect('/pages/{}'.format(vanity_url))
+        else:
+            form = PageForm(instance=page)
 
     return locals()
 

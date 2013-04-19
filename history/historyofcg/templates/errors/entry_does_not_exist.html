@@ -4,9 +4,17 @@
     <div class="content_nf">
         <h1>"{{ s|replace:"-/ " }}" has not been published yet</h1>
 
+        {% if user_auth %}
         <p>To view this entry, check it's contents on the 'Edit' page then click 'Publish'.</p>
         <br>
 
         <p><a class="button" href="/edit/page/{{ s }}">Edit this entry</a></p>
+        {% endif %}
+
+        {% if not user_auth %}
+        <h1>To edit this entry you must <a href="accounts/login">Login</a></h1>
+            <br>
+        <h1>Don't have an account? <a href="accounts/register">Sign up here!</a></h1>
+        {% endif %}
     </div>
 {% endblock %}
