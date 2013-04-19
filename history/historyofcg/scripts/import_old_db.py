@@ -62,6 +62,22 @@ def populate_page():
                                 ).save()
 
 
+def hackish_migration_for_source_fields():
+    for child in root.iter():
+        if child.tag == 'table_data' and child.attrib == {'name': 'stories'}:
+            for child in child.iter():
+                if child.tag == 'row':
+                    row_data = {}
+                    for row in child.iter():
+                        if row.tag == 'field':
+                            row_data[row.attrib['name']] = row.text
+                    if row_data['title']:
+                        story = Story.objects.get(old_id = row_data['id'])
+                        story.source = row_data['source_name']
+                        story.source_url = row_data['source_url']
+                        story.save()
+
+
 def initial_stories_fill():
     Story.objects.all().delete()
     for child in root.iter():

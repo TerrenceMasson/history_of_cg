@@ -16,6 +16,7 @@
                     <li class="label-story-title labels">Title</li>
                     <li class="label-story-date labels">Date</li>
                     <li class="label-story-source labels">Source</li>
+                    <li class="label-story-source_url labels">Source URL</li>
                     <li class="label-story-story labels">Story</li>
                 </ul>
                 <ul class="story-fields all-fields">
@@ -31,6 +32,9 @@
                         <input id="id_source" type="text" name="source" maxlength="200" class="need-helper person" value="{% if story.source %}{{ story.source }}{% endif %}">
                         <span id="helper-story-source" class="helper-popups need-helper organization-border"
                               style="display: none; width: 250px; color: #fff;">If this is a first hand account, give yourself credit! If not that's ok, tell us whose story it is.</span>
+                    </li>
+                    <li class="story-source_url fields">
+                        <input id="id_source_url" type="text" name="source_url" class="need-helper person" value="{% if story.source_url %}{{ story.source_url }}{% endif %}">
                     </li>
                     <li class="story-body fields">
                         <textarea id="id_text" style="width:340px;" rows="10" cols="40" name="text" class="need-helper person">{{ story.text }}</textarea>

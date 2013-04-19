@@ -73,6 +73,7 @@ class Story(BaseModel):
     page = models.ForeignKey(Page)
     user = models.ForeignKey(User)
     source = models.CharField(max_length=200, blank=True, null=True)
+    source_url = models.URLField(blank=True, null=True)
     published = models.BooleanField(default=False)
     old_id = models.PositiveIntegerField(blank=True, null=True)
     video = models.CharField(max_length=200, blank=True, null=True)

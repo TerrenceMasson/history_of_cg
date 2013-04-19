@@ -266,6 +266,8 @@ def new_story(request, story_type, vanity_url):
             story_text = request.POST['text']
             story_user = request.user
             story_page = Page.objects.get(vanity_url=vanity_url)
+            story_source = request.POST['source']
+            story_source_url = request.POST['source_url']
             if request.POST['date']:
                 d = request.POST['date'].split('/')
                 if len(d) == 3:
@@ -276,7 +278,9 @@ def new_story(request, story_type, vanity_url):
                         date=story_date,
                         text=story_text,
                         user=story_user,
-                        page=story_page
+                        page=story_page,
+                        source_url=story_source_url,
+                        source=story_source
                     ).save()
                 elif len(d) == 1:
                     d = datetime.date(int(request.POST['date']), 1, 1)
@@ -286,14 +290,18 @@ def new_story(request, story_type, vanity_url):
                         date=story_date,
                         text=story_text,
                         user=story_user,
-                        page=story_page
+                        page=story_page,
+                        source_url=story_source_url,
+                        source=story_source
                     ).save()
             else:
                 Story.objects.create(
                     title=story_title,
                     text=story_text,
                     user=story_user,
-                    page=story_page
+                    page=story_page,
+                    source_url=story_source_url,
+                    source=story_source
                 ).save()
 
     if story_type == 'image':
@@ -488,13 +496,13 @@ def add_connection(request, connect_to, to_connect):
     else:
         page_connect_to = Page.objects.get(vanity_url=connect_to)
         page_to_connect = Page.objects.create(
-            type = Category.objects.get(id=1),
-            name = to_connect_name,
-            vanity_url = to_connect_vanity,
-            description = "",
-            published = False,
-            user = request.user,
-            user_made = False,
+            type=Category.objects.get(id=1),
+            name=to_connect_name,
+            vanity_url=to_connect_vanity,
+            description="",
+            published=False,
+            user=request.user,
+            user_made=False,
         )
         page_to_connect.save()
 

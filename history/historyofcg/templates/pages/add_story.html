@@ -30,6 +30,7 @@
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-date labels">Date</li>
                         <li class="label-story-source labels">Source</li>
+                        <li class="label-story-source_url labels">Source URL</li>
                         <li class="label-story-story labels">Story<span class="required"> *</span></li>
                     </ul>
                     <ul class="story-fields all-fields">
@@ -45,6 +46,10 @@
                         <li class="story-source fields {{ page.type }}">
                             {{ form.source.errors }}
                             {{ form.source }}
+                        </li>
+                        <li class="story-source fields {{ page.type }}">
+                            {{ form.source_url.errors }}
+                            {{ form.source_url }}
                         </li>
                         <li class="story-body fields {{ page.type }}">
                             {{ form.text.errors }}

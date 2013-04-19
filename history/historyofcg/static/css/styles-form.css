@@ -540,7 +540,15 @@ div.form-container div.stories-col ul.story-labels li.label-story-header {
 }
 
 div.form-container div.stories-col ul.story-labels li.label-story-story {
+    position: relative;
     margin-bottom: 150px;
+    top: 20px;
+}
+
+div.form-container div.stories-col ul.story-labels li.label-story-source_url {
+    position: relative;
+    top: 10px;
+    margin-bottom: 33px;
 }
 
 div.form-container div.stories-col ul.story-fields li.story-helpertext {
