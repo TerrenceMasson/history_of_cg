@@ -67,7 +67,7 @@
                                 class="required"></span></li>
                         <li class="label-entry-source labels" style="margin-top: 140px;">Homepage</li>
                         <li class="label-entry-date labels">Date Established</li>
-                        {% if page.type.name == 'person' %}
+                        {% if page.type.name == 'person' or page.type.name == "organization"  %}
                             <li class="label-entry-date-2 labels">Is Deceased?</li>
                             <li class="label-entry-date-3 labels" style="display: none;">Date Deceased</li>
                         {% endif %}
@@ -89,7 +89,7 @@
                             {{ form.date_established }}
                             <span id="helper-story-date-established" class="helper-popups {{ page.type }}-border">MM/DD/YYYY or YYYY</span>
                         </li>
-                        {% if page.type.name == 'person' %}
+                        {% if page.type.name == 'person' or page.type.name == "organization" %}
                             <li class="entry-date-2 fields">
                                 {{ form.is_deceased.errors }}
                                 {{ form.is_deceased }}

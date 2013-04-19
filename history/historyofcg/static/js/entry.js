@@ -335,14 +335,14 @@ $(function () {
             'dateLabel': 'Birth date',
             'helperText': 'When was this person born?',
             'secondDateLabel': 'Deceased date',
-            'secondHelperText': 'When did this person DIE!?',
+            'secondHelperText': 'Death Date?',
             'secondDateCheckboxLabel': 'This person is deceased'
         },
         'organization': {
             'dateLabel': 'Established Date',
             'helperText': 'When was this organization founded?',
-            'secondDateLabel': 'Closing Date',
-            'secondHelperText': 'When did this organization close?',
+            'secondDateLabel': 'Is Closed?',
+            'secondHelperText': 'Closing Date?',
             'secondDateCheckboxLabel': 'This organization no longer exists'
         },
         'event': {
@@ -395,15 +395,18 @@ $(function () {
     function change_date_fields(t) {
         var $dateLabel = $('.basics .label-entry-date');
         var $dateHelperText = $('.basics .entry-date .helper-popups');
-        var $secondDateLabel = $('.basics .label-entry-date-2 span.label');
+        var $secondDateLabel = $('.basics .label-entry-date-2');
         var $secondDateHelperText = $('.basics .entry-date-2 .helper-popups');
         var $secondDateCheckboxLabel = $('.basics .entry-date-2-selected label');
         var $secondDate = $('.basics .entry-date-2');
         var $secondDateCheckbox = $('.basics #entry-date-selected');
-
+        var $tertiaryDateLabel = $('.basics .label-entry-date-3');
         // date 1 section
         $dateLabel.html(dateInfo[t].dateLabel);
         $dateHelperText.html(dateInfo[t].helperText);
+
+        $secondDateLabel.html(dateInfo[t].secondDateLabel);
+        $tertiaryDateLabel.html(dateInfo[t].secondHelperText);
     }
 
     function show_deceased_fields() {
@@ -411,8 +414,14 @@ $(function () {
         $('.entry-date-2').show();
     }
 
+    function hide_deceased_fields() {
+        $('.label-entry-date-2').hide();
+        $('.entry-date-2').hide();
+    }
+
     function change_date_fields_with(t) {
         if (t.indexOf('project') !== -1) {
+            hide_deceased_fields();
             change_date_fields('project');
         }
         else if (t.indexOf('person') !== -1) {
@@ -420,12 +429,15 @@ $(function () {
             change_date_fields('person');
         }
         else if (t.indexOf('organization') !== -1) {
+            show_deceased_fields();
             change_date_fields('organization');
         }
         else if (t.indexOf('event') !== -1) {
+            hide_deceased_fields();
             change_date_fields('event');
         }
         else {
+            hide_deceased_fields();
             change_date_fields('none');
         }
     }
