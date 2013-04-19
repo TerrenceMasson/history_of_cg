@@ -301,6 +301,7 @@ def new_story(request, story_type, vanity_url):
         if form.is_valid():
             story_title = request.POST['title']
             story_image = request.POST['image']
+            story_user = request.user
             story_page = Page.objects.get(vanity_url=vanity_url)
             if request.POST['date']:
                 d = request.POST['date'].split('/')
@@ -313,7 +314,7 @@ def new_story(request, story_type, vanity_url):
                         date=story_date,
                         image=story_image,
                         page=story_page,
-                        user=request.user,
+                        user=story_user,
                     ).save()
 
                 elif len(d) == 1:
@@ -331,7 +332,7 @@ def new_story(request, story_type, vanity_url):
                     title=story_title,
                     image=story_image,
                     page=story_page,
-                    user=request.user,
+                    user=story_user,
                 ).save()
 
     if story_type == 'video':
@@ -339,6 +340,7 @@ def new_story(request, story_type, vanity_url):
         if form.is_valid():
             story_title = request.POST['title']
             story_video = request.POST['video']
+            story_user = request.user
             story_page = Page.objects.get(vanity_url=vanity_url)
 
             if request.POST['date']:
@@ -352,7 +354,7 @@ def new_story(request, story_type, vanity_url):
                         date=story_date,
                         video=story_video,
                         page=story_page,
-                        user=request.user,
+                        user=story_user,
                     ).save()
                 elif len(d) == 1:
                     d = datetime.date(int(request.POST['date']), 1, 1)
@@ -369,7 +371,7 @@ def new_story(request, story_type, vanity_url):
                     title=story_title,
                     video=story_video,
                     page=story_page,
-                    user=request.user,
+                    user=story_user,
                 ).save()
 
     return redirect('/edit/page/{}'.format(vanity_url), locals())
