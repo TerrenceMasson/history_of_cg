@@ -23,7 +23,7 @@ class PageForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
 
-        self.fields['date_established'].initial = "MM/DD/YYYY or YYYY"
+        #self.fields['date_established'].initial = "MM/DD/YYYY or YYYY"
         self.fields['date_established'].widget.format = '%m/%d/%Y'
         # at the same time, set the input format on the date field like you want it:
         self.fields['date_established'].input_formats = ('%Y-%m-%d', # '2006-10-25'
@@ -31,7 +31,7 @@ class PageForm(ModelForm):
                                                          '%m/%d/%y', # '10/25/06'
                                                          '%Y', '%y',)
 
-        self.fields['date_deceased'].initial = "MM/DD/YYYY or YYYY"
+        #self.fields['date_deceased'].initial = "MM/DD/YYYY or YYYY"
         self.fields['date_deceased'].widget.format = '%m/%d/%Y'
         # at the same time, set the input format on the date field like you want it:
         self.fields['date_deceased'].input_formats = ('%Y-%m-%d', # '2006-10-25'
