@@ -127,7 +127,7 @@ def add_page(request):
             page_type = form.cleaned_data['type']
             page_name = form.cleaned_data['name']
             page_description = form.cleaned_data['description']
-            page_vanity_url = form.cleaned_data['name'].replace(' ', '-').replace('_', '-')
+            page_vanity_url = form.cleaned_data['name'].replace(' ', '-').replace('_', '-').replace('(', '').replace(')', '').replace('.', '')
             page_tags = form.cleaned_data['tags']
             page_homepage = form.cleaned_data['homepage']
             page_date = form.cleaned_data['date_established']
