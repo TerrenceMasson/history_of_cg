@@ -18,8 +18,10 @@ $(function () {
         var container = $(this).parent('.tile');
         var disable_lt = false;
         var disable_gt = false;
+        var stories = $('.tile.story');
+        var this_index = stories.index(container);
 
-        console.log(container);
+        console.log(this_index);
 
         function reset_buttons() {
             var buttons = [];
@@ -27,25 +29,28 @@ $(function () {
                 id: "button_lt",
                 text: "<",
                 click: function () {
-                    if (container[0].previousElementSibling && container[0].previousElementSibling.getAttribute('class').indexOf('dynamic') == -1) {
-                        console.log('previous button');
-                        container = container.prev();
-                        if (container.hasClass('story-image')) {
-                            $dialog.html('<img style="width:590px;" src=' + container[0].getAttribute('data-image') + '>');
-                        }
-                        if (container.hasClass('story-video')) {
-                            $dialog.html('<div class="container"><embed src="http://www.youtube.com/v/' + container[0].getAttribute('data-video') + '" type="application/x-shockwave-flash" width="590px" height="443" allowscriptaccess="always"></div>');
-                        }
-                        if (container.hasClass('story-text')) {
-                            $dialog.html('<div class="container"><span>' + container[0].getAttribute('data-full-text') + '</span></div>');
-                        }
-                        $dialog.dialog("option", "title", container.innerText);
-                        $dialog.dialog("option", "position", {my: "center", at: "center", of: window});
-                        $dialog.dialog('option', 'buttons', reset_buttons());
+                    console.log('previous button');
+                    if (this_index > 0) {
+                        container = $(stories[this_index-1]);
+                        this_index--;
                     } else {
-                        console.log("lt_disable");
-                        disable_lt = true;
+                        // if index is 0
+                        container = $(stories[stories.length - 1]);
+                        this_index = stories.length - 1;
                     }
+                    console.log(this_index);
+                    if (container.hasClass('story-image')) {
+                        $dialog.html('<img style="width:590px;" src=' + container[0].getAttribute('data-image') + '>');
+                    }
+                    if (container.hasClass('story-video')) {
+                        $dialog.html('<div class="container"><embed src="http://www.youtube.com/v/' + container[0].getAttribute('data-video') + '" type="application/x-shockwave-flash" width="590px" height="443" allowscriptaccess="always"></div>');
+                    }
+                    if (container.hasClass('story-text')) {
+                        $dialog.html('<div class="container"><span>' + container[0].getAttribute('data-full-text') + '</span></div>');
+                    }
+                    $dialog.dialog("option", "title", container.innerText);
+                    $dialog.dialog("option", "position", {my: "center", at: "center", of: window});
+                    $dialog.dialog('option', 'buttons', reset_buttons());
                 }
             };
             buttons[1] = {
@@ -59,25 +64,28 @@ $(function () {
                 id: "button_gt",
                 text: ">",
                 click: function () {
-                    if (container[0].nextElementSibling && container[0].nextElementSibling.getAttribute('class').indexOf('connection') == -1) {
-                        console.log('next button');
-                        container = container.next();
-                        if (container.hasClass('story-image')) {
-                            $dialog.html('<img style="width:590px;" src=' + container[0].getAttribute('data-image') + '>');
-                        }
-                        if (container.hasClass('story-video')) {
-                            $dialog.html('<div class="container"><embed src="http://www.youtube.com/v/' + container[0].getAttribute('data-video') + '" type="application/x-shockwave-flash" width="590px" height="443" allowscriptaccess="always"></div>');
-                        }
-                        if (container.hasClass('story-text')) {
-                            $dialog.html('<div class="container"><span>' + container[0].getAttribute('data-full-text') + '</span></div>');
-                        }
-                        $dialog.dialog("option", "title", 'Story story_id of story_total');
-                        $dialog.dialog("option", "position", {my: "center", at: "center", of: window});
-                        $dialog.dialog('option', 'buttons', reset_buttons());
+                    console.log('next button');
+                    if (this_index < stories.length - 1) {
+                        container = $(stories[this_index+1]);
+                        this_index++;
                     } else {
-                        console.log("gt_disable");
-                        disable_gt = true;
+                        // at the last member
+                        container = $(stories[0]);
+                        this_index = 0;
                     }
+                    console.log(this_index);
+                    if (container.hasClass('story-image')) {
+                        $dialog.html('<img style="width:590px;" src=' + container[0].getAttribute('data-image') + '>');
+                    }
+                    if (container.hasClass('story-video')) {
+                        $dialog.html('<div class="container"><embed src="http://www.youtube.com/v/' + container[0].getAttribute('data-video') + '" type="application/x-shockwave-flash" width="590px" height="443" allowscriptaccess="always"></div>');
+                    }
+                    if (container.hasClass('story-text')) {
+                        $dialog.html('<div class="container"><span>' + container[0].getAttribute('data-full-text') + '</span></div>');
+                    }
+                    $dialog.dialog("option", "title", 'Story story_id of story_total');
+                    $dialog.dialog("option", "position", {my: "center", at: "center", of: window});
+                    $dialog.dialog('option', 'buttons', reset_buttons());
                 }
             };
 
