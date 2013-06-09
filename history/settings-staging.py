@@ -7,12 +7,11 @@ PROJECT_CONTAINER_PATH = os.path.realpath(os.path.dirname(PROJECT_PATH))
 GENERATED_MEDIA_DIR   = os.path.join( PROJECT_PATH, 'static')
 
 ACCOUNT_ACTIVATION_DAYS = 7
-DEFAULT_FROM_EMAIL = 'noreply@historyofcg.com'
+DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
 AWS_SECRET_ACCESS_KEY = '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'
 LOGIN_REDIRECT_URL = '/'
-SERVER_EMAIL = 'gordon117@gmail.com'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

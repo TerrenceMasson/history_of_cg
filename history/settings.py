@@ -161,9 +161,8 @@ LOGGING = {
 }
 
 ACCOUNT_ACTIVATION_DAYS = 7
-DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
+SERVER_EMAIL = 'History of CG <noreply@historyofcg.com>'
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
 AWS_SECRET_ACCESS_KEY = '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'
 LOGIN_REDIRECT_URL = '/'
-SERVER_EMAIL = 'gordon117@gmail.com'
