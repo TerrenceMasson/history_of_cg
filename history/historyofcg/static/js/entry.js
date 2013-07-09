@@ -152,7 +152,7 @@ $(document).ready(function () {
         e.preventDefault();
         button = $(this);
         console.log($("#connectionSearchBox")[0].value);
-        url = "/add/connection/" + button[0].getAttribute('data-vanity-url') + "/" + $("#connectionSearchBox")[0].value.replace(/ /gi,"-").replace("(", "").replace(")", "").replace(".", "-").replace("-&-", "-") + "/";
+        url = "/add/connection/" + button[0].getAttribute('data-vanity-url') + "/" + $("#connectionSearchBox")[0].value.replace(/ /gi,"-").replace("(", "").replace(")", "").replace(".", "").replace("-&-", "-") + "/";
         $.ajax({
             type: "POST",
             url: url,
