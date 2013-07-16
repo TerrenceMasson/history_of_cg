@@ -1,5 +1,8 @@
 # Django settings for dj_history project.
 import os
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+
 
 PROJECT_PATH           = os.path.realpath(os.path.dirname(__file__))
 PROJECT_CONTAINER_PATH = os.path.realpath(os.path.dirname(PROJECT_PATH))
@@ -27,6 +30,14 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] =  dj_database_url.config()
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -41,7 +52,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
@@ -63,7 +74,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join( PROJECT_PATH, 'static')
+STATIC_ROOT = os.path.join( PROJECT_PATH, 'staticfiles')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -74,7 +85,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join( PROJECT_PATH, 'themes'),
+    os.path.join( PROJECT_PATH, 'static'),
 )
 
 # List of finder classes that know how to find static files in
