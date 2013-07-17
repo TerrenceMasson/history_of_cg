@@ -2,9 +2,9 @@ from django.conf import settings
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 
-from registration import signals
-from registration.forms import RegistrationForm
-from registration.models import RegistrationProfile
+from history.registration import signals
+from history.registration.forms import RegistrationForm
+from history.registration.models import RegistrationProfile
 
 
 class DefaultBackend(object):

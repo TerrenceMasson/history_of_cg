@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import forms
-from base.models import BaseModel
+from history.base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 from random import choice
 

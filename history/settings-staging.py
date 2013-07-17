@@ -112,10 +112,8 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'base.urls'
-
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'base.wsgi.application'
+WSGI_APPLICATION = 'history.wsgi.application'
 
 TEMPLATE_DIRS = ('{}/templates'.format(PROJECT_PATH),)
 
@@ -136,6 +134,8 @@ INSTALLED_APPS = (
     'registration',
     'south',
 )
+
+ROOT_URLCONF = 'historyofcg.urls'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

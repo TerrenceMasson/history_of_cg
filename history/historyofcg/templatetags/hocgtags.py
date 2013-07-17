@@ -5,7 +5,7 @@ from django import template
 from django.core.files.images import ImageFile
 from django.template import resolve_variable, NodeList
 from django.contrib.auth.models import Group
-from historyofcg.models import Review, Story, Page
+from history.historyofcg.models import Review, Story, Page
 from random import choice, uniform
 
 

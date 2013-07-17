@@ -8,9 +8,9 @@ from django.shortcuts import render_to_response, render, redirect, get_object_or
 from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.http import require_safe
-from base.decorators import render_to
-from forms import PageForm, StoryForm
-from models import *
+from history.base.decorators import render_to
+from history.historyofcg.forms import PageForm, StoryForm
+from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category
 from django.views.decorators.http import require_POST
 import itertools
 

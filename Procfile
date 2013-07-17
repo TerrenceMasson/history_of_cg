@@ -1,1 +1,1 @@
-web: gunicorn history.historyofcg.wsgi --settings 'history.historyofcg.settings'
+web: gunicorn history.historyofcg.wsgi
