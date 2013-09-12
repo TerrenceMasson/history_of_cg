@@ -1,9 +1,11 @@
 from django.forms import ModelForm, Select, Textarea, DateField, DateInput, CharField
+from django.forms.extras.widgets import SelectDateWidget
 from fields import TokenField
 from widgets import TokenWidget
 from models import *
-import datetime
+from datetime import date
 
+CURRENT_YEAR = date.today().year
 
 class PageForm(ModelForm):
     tags = TokenField(Tag, required=False, widget=TokenWidget(
@@ -23,25 +25,18 @@ class PageForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
 
-        #self.fields['date_established'].initial = "MM/DD/YYYY or YYYY"
-        self.fields['date_established'].widget.format = '%m/%d/%Y'
-        # at the same time, set the input format on the date field like you want it:
-        self.fields['date_established'].input_formats = ('%Y-%m-%d', # '2006-10-25'
-                                                         '%m/%d/%Y', # '10/25/2006'
-                                                         '%m/%d/%y', # '10/25/06'
-                                                         '%Y', '%y',)
+        # Setup Date Select fields
+        self.fields['date_established'].widget = SelectDateWidget(years=range(1960, CURRENT_YEAR + 1))
+        self.fields['date_deceased'].widget = SelectDateWidget(years=range(1960, CURRENT_YEAR + 1))
 
-        #self.fields['date_deceased'].initial = "MM/DD/YYYY or YYYY"
-        self.fields['date_deceased'].widget.format = '%m/%d/%Y'
-        # at the same time, set the input format on the date field like you want it:
-        self.fields['date_deceased'].input_formats = ('%Y-%m-%d', # '2006-10-25'
-                                                      '%m/%d/%Y', # '10/25/2006'
-                                                      '%m/%d/%y', # '10/25/06'
-                                                      '%Y', '%y',)
+        # Apply classes to fields
         for f in self.fields:
             self.fields[f].widget.attrs = {'class': 'need-helper organization'}
 
         self.fields['type'].widget.attrs = {'class': 'entry-type-select organization'}
+
+        self.fields['date_established'].widget.attrs = { 'class': 'chosen-select' }
+        self.fields['date_deceased'].widget.attrs = { 'class': 'chosen-select' }
 
 class StoryForm(ModelForm):
     class Meta:
@@ -51,16 +46,7 @@ class StoryForm(ModelForm):
         }
         exclude = ('user', 'published', 'page')
 
-
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields['date'].widget.format = '%d/%m/%Y'
-
-        # at the same time, set the input format on the date field like you want it:
-        self.fields['date'].input_formats = ['%Y-%m-%d', # '2006-10-25'
-                                             '%m/%d/%Y', # '10/25/2006'
-                                             '%m/%d/%y', # '10/25/06'
-                                             '%Y', '%y',]
-
-
-__author__ = 'Kyle'
+        self.fields['date'].widget = SelectDateWidget(years=range(1960, CURRENT_YEAR + 1))
+        self.fields['date'].widget.attrs = { 'class': 'chosen-select' }

@@ -1,8 +1,10 @@
-$(document).ready(function () {
+var initConnections = function() {
     // Get pagename
     var path = window.location.pathname;
     var pagename = path.substring(path.lastIndexOf("/") + 1)
     pagename = pagename.toLowerCase();
+
+    // Add Autocomplete to connections search box
     $('#connectionSearchBox').autocomplete({
         source: "/get/pages/",
         minLength: 1,
@@ -37,4 +39,10 @@ $(document).ready(function () {
             .append(innerContent)
             .appendTo(ul);
     };
+}
+
+$(document).ready(function () {
+    if ($('#connectionSearchBox').length != 0) {
+        initConnections();
+    }
 });

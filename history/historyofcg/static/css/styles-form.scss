@@ -19,6 +19,21 @@ ul {
   padding: 0;
 }
 
+// Chosen Overrides
+////////////////////
+
+#id_date_established_year_chosen, #id_date_deceased_year_chosen, #id_date_year_chosen {
+  width: 170px !important;
+  .chosen-search input {
+    width: 160px !important;
+  }
+}
+
+.chosen-container {
+  color: black;
+  margin-right: 10px;
+}
+
 /* =============== forms EDIT =============== */
 button, .button {
   @include form-button;
@@ -82,15 +97,20 @@ div.form-container {
           position: relative;
           top: -5px;
         }
+        li.entry-date, li.entry-date-2 {
+          margin-bottom: 35px;
+        }
       }
       ul.basic-labels {
+        li.label-entry-source {
+          margin-top: 170px;
+        }
         li.label-entry-homepage {
           position: relative;
           top: 170px;
         }
         li.label-entry-date {
-          position: relative;
-          top: 30px;
+
         }
         li.label-entry-date-2 {
           span.label {
@@ -294,6 +314,11 @@ div.form-container {
       }
     }
     ul.story-fields {
+
+      li.story-date {
+        margin-bottom: 12px;
+      }
+
       li.story-helpertext {
         width: 440px
       }
@@ -463,7 +488,6 @@ div.form-container {
     font-size: 14px;
     font-weight: 500;
     text-shadow: 1px 1px 1px #000;
-    width: 20%;
 
     li {
       margin-bottom: 33px;

@@ -1,3 +1,10 @@
+var Hist = Hist || {}
+
+Hist.initChosen = function() {
+    // Init Chosen Selects
+    $('.chosen-select').chosen({ width: "15%", disable_search_threshold: 32 });
+}
+
 $(document).ready(function () {
 
     // using jQuery
@@ -69,6 +76,8 @@ $(document).ready(function () {
         }).done(function (content, status, xhr) {
                 if (content) {
                     $('.story-container').html(content).removeClass('hide')
+                    // Style the date picker with Chosen
+                    Hist.initChosen();
                 }
             });
         story_toggler.removeClass('loading');
@@ -210,20 +219,19 @@ $(document).ready(function () {
         $(".label-entry-date-3").show();
         $(".entry-date-3").show();
         hide_page=false;
-    }else
-    {
+    } else {
         $(".label-entry-date-3").hide();
         $(".entry-date-3").hide();
         hide_page=true;
     }
+
     $("#id_is_deceased").click(function(){
-        hide_page=!hide_page;
-        if(hide_page)
-        {
+        hide_page =! hide_page;
+        if(hide_page) {
             $(".label-entry-date-3").hide();
             $(".entry-date-3").hide();
-        }else
-        {
+        } else {
+            $('.entry-date-3 .chosen-container').removeAttr('style')
             $(".label-entry-date-3").show();
             $(".entry-date-3").show();
         }
@@ -334,9 +342,9 @@ $(function () {
         'person': {
             'dateLabel': 'Birth date',
             'helperText': 'When was this person born?',
-            'secondDateLabel': 'Deceased date',
-            'secondHelperText': 'Death Date?',
-            'secondDateCheckboxLabel': 'This person is deceased'
+            'secondDateLabel': 'Deceased?',
+            'secondHelperText': 'Deceased Date',
+            'secondDateCheckboxLabel': 'Is this person deceased?'
         },
         'organization': {
             'dateLabel': 'Established Date',
@@ -357,7 +365,6 @@ $(function () {
             'helperText': 'Select an entry type to learn more about this date'
         }
     };
-
 
     function change_colors(color) {
         var allFields = $('.fields:not(.connection-fields) input[type=text], .fields:not(.connection-fields) select, .fields:not(.connection-fields) textarea, ul.token-input-list-hcg, li.source-title input, li.source-url input, .stories-col .stories p.story-collapsed-heading span.title');
@@ -452,10 +459,11 @@ $(function () {
         // category change event should change all colors to current type
         $('#main-stub .entry-type-select').change(function () {
             var t = $(this).children('option:selected').text().toLowerCase();
-
             change_colors_with(t);
             change_date_fields_with(t);
         });
+
+        Hist.initChosen()
 
         // ----------------- DATEPICKER -----------------
         $("#entry-date-box-1").datepicker({

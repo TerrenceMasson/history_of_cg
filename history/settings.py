@@ -1,7 +1,11 @@
 # Django settings for dj_history project.
 import os
+import sys
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../historyofcg')
 
 
 PROJECT_PATH           = os.path.realpath(os.path.dirname(__file__))
@@ -13,8 +17,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
     ('hocg', 'thekylemontag@gmail.com'),
+    ('gowie', 'gowie.matt@gmail.com')
 )
 
 MANAGERS = ADMINS
@@ -138,7 +142,7 @@ INSTALLED_APPS = (
 ROOT_URLCONF = 'history.historyofcg.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'history.wsgi.application'
+WSGI_APPLICATION = 'historyofcg.wsgi.application'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

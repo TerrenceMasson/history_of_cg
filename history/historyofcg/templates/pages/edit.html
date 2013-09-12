@@ -4,11 +4,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles-form.css' %}" once="1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/token-input.css' %}" once="1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/token-input-hcg.css' %}" once="1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chosen.css' %}" once="1">
 
     <script type="text/javascript" src="{% static 'js/libs/jquery-tokeninput-1.6.0-min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/djtokeninput.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/jquery.form.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/entry-extras.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/chosen.jquery.js' %}"></script>
 
     <script type="text/javascript">
         $('.tabs-min').tabs();
@@ -65,7 +67,7 @@
                     <ul class="basic-labels all-labels">
                         <li class="label-entry-description labels" style="margin-top: 10px;">Description <span
                                 class="required"></span></li>
-                        <li class="label-entry-source labels" style="margin-top: 140px;">Homepage</li>
+                        <li class="label-entry-source labels">Homepage</li>
                         <li class="label-entry-date labels">Date Established</li>
                         {% if page.type.name == 'person' or page.type.name == "organization"  %}
                             <li class="label-entry-date-2 labels">Is Deceased?</li>
