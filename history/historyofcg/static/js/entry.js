@@ -2,7 +2,10 @@ var Hist = Hist || {}
 
 Hist.initChosen = function() {
     // Init Chosen Selects
-    $('.chosen-select').chosen({ width: "15%", disable_search_threshold: 32 });
+    if (jQuery().chosen) {
+        console.log("Chosen found.")
+        $('.chosen-select').chosen({ width: "15%", disable_search_threshold: 32 });
+    }
 }
 
 $(document).ready(function () {
@@ -463,7 +466,7 @@ $(function () {
             change_date_fields_with(t);
         });
 
-        Hist.initChosen()
+        Hist.initChosen();
 
         // ----------------- DATEPICKER -----------------
         $("#entry-date-box-1").datepicker({
