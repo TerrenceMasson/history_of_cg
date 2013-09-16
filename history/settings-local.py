@@ -20,19 +20,17 @@ ADMINS = (
     ('hocg', 'thekylemontag@gmail.com'),
     ('gowie', 'gowie.matt@gmail.com')
 )
-
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd9ed7eiaff0eij',                      # Or path to database file if using sqlite3.
-        'USER': 'olwqqhvokshkbc',                      # Not used with sqlite3.
-        'PASSWORD': '3HX2T9zzb0dwP3S36Do_mQIFFl',                  # Not used with sqlite3.
-        'HOST': 'ec2-54-235-134-222.compute-1.amazonaws.com',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(default='postgres://localhost/hocg')
+
+ACCOUNT_ACTIVATION_DAYS = 7
+DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
+AWS_SECRET_ACCESS_KEY = '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'
+LOGIN_REDIRECT_URL = '/'
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -152,30 +150,38 @@ WSGI_APPLICATION = 'historyofcg.wsgi.application'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join( PROJECT_PATH, 'log/debug_log.txt'),
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+        '': {
+             'handlers': ['console'],
+             'level': 'DEBUG',
+             'propagate': True,
+        },
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
 }
 
-ACCOUNT_ACTIVATION_DAYS = 7
-DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
-AWS_SECRET_ACCESS_KEY = '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'
-LOGIN_REDIRECT_URL = '/'
