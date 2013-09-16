@@ -75,6 +75,9 @@ ul {
   #id_date_established_year_chosen .chosen-search input, #id_date_deceased_year_chosen .chosen-search input, #id_date_year_chosen .chosen-search input {
     width: 160px !important; }
 
+.tab-content #id_date_month_chosen {
+  width: 25% !important; }
+
 .chosen-container {
   color: black;
   margin-right: 10px; }
