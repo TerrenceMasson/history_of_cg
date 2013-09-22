@@ -8,13 +8,10 @@
 </script>
 
 <div class="cf"></div>
-<div class="stories new" style="">
-    <p class="story-opened-heading">
-        <span class="title {{ page.type }}">New Story</span>
-        <span class="delete ui-icon ui-icon-close"></span>
-        <span class="story-type"></span>
-        <span class="info">Not Saved</span>
-    </p>
+<div class="stories new" >
+    <div class="story-opened-heading">
+        <p class="title {{ page.type }}"> New Story </p>
+    </div>
 
     <div class="story-opened" style="display: block;">
         <div class="tabs-min ui-tabs all-fields">
@@ -24,8 +21,8 @@
                 <li><a href="#tabs-3">Video</a></li>
             </ul>
             <div class="tab-content" id="tabs-1">
-                <form action="/save/story/text/{{ page.vanity_url }}/" method="POST" accept-charset="utf-8"
-                      id="TextStorySaveForm">{% csrf_token %}
+                <form action="/save/story/text/{{ page.vanity_url }}/" method="POST" accept-charset="utf-8" id="new-text-story">
+                      {% csrf_token %}
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-date labels">Date</li>
@@ -35,29 +32,29 @@
                     </ul>
                     <ul class="story-fields all-fields">
                         <li class="entry-date fields">
-                            {{ form.title.errors }}
-                            {{ form.title }}
+                            {{ story_form.title.errors }}
+                            {{ story_form.title }}
                         </li>
                         <li class="story-date fields {{ page.type }}">
-                            {{ form.date.errors }}
-                            {{ form.date }}
+                            {{ story_form.date.errors }}
+                            {{ story_form.date }}
                             <span id="helper-story-date" class="helper-popups organization-border">When did this story take place?</span>
                         </li>
                         <li class="story-source fields {{ page.type }}">
-                            {{ form.source.errors }}
-                            {{ form.source }}
+                            {{ story_form.source.errors }}
+                            {{ story_form.source }}
                         </li>
                         <li class="story-source fields {{ page.type }}">
-                            {{ form.source_url.errors }}
-                            {{ form.source_url }}
+                            {{ story_form.source_url.errors }}
+                            {{ story_form.source_url }}
                         </li>
                         <li class="story-body fields {{ page.type }}">
-                            {{ form.text.errors }}
-                            {{ form.text }}
+                            {{ story_form.text.errors }}
+                            {{ story_form.text }}
                             <span id="helper-story-story" class="helper-popups organization-border">What happened? Who was involved? Remember, this is isn't an encyclopedia entry, give us the inside story!</span>
                         </li>
                         <li>
-                            <button class="story-save-button">Save Story</button>
+                            <button class="story-save-button organization-hover">Save Story</button>
                         </li>
                     </ul>
                     <div class="cf" style="display: none;"></div>
@@ -65,8 +62,8 @@
                 <div class="cf" style="display: none;"></div>
             </div>
             <div class="tab-content" id="tabs-2">
-                <form action="/save/story/image/{{ page.vanity_url }}/" method="post"
-                      accept-charset="utf-8">{% csrf_token %}
+                <form action="/save/story/image/{{ page.vanity_url }}/" method="post" accept-charset="utf-8" id="new-image-story">
+                    {% csrf_token %}
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-date labels">Date</li>
@@ -75,26 +72,26 @@
                     </ul>
                     <ul class="story-fields all-fields">
                         <li class="story-title fields">
-                            {{ form.title.errors }}
-                            {{ form.title }}
+                            {{ story_form.title.errors }}
+                            {{ story_form.title }}
                             <span id="helper-story-title" class="helper-popups organization-border">What is this the story of?</span>
                         </li>
                         <li class="story-date fields">
-                            {{ form.date.errors }}
-                            {{ form.date }}
+                            {{ story_form.date.errors }}
+                            {{ story_form.date }}
                             <span id="helper-story-date" class="helper-popups organization-border"
                                   style="display: none;">When did this story take place?</span>
                         </li>
                         <li class="story-source fields {{ page.type }}">
-                            {{ form.source.errors }}
-                            {{ form.source }}
+                            {{ story_form.source.errors }}
+                            {{ story_form.source }}
                         </li>
                         <li class="story-url fields">
-                            {{ form.image.errors }}
-                            {{ form.image }}
+                            {{ story_form.image.errors }}
+                            {{ story_form.image }}
                         </li>
-                        <li class="story-save save">
-                            <button class="organization-hover">Save Story</button>
+                        <li>
+                            <button class="story-save-button organization-hover">Save Story</button>
                         </li>
                     </ul>
                     <div class="cf" style="display: none;"></div>
@@ -103,8 +100,8 @@
                 <div class="cf" style="display: none;"></div>
             </div>
             <div class="tab-content" id="tabs-3">
-                <form action="/save/story/video/{{ page.vanity_url }}/" method="post"
-                      accept-charset="utf-8">{% csrf_token %}
+                <form action="/save/story/video/{{ page.vanity_url }}/" method="post" accept-charset="utf-8" id="new-video-story">
+                    {% csrf_token %}
                     <ul class="story-labels all-labels">
                         <li class="label-story-title labels">Title<span class="required"> *</span></li>
                         <li class="label-story-title labels">Date</li>
@@ -113,23 +110,23 @@
                     </ul>
                     <ul class="story-fields all-fields">
                         <li class="story-title fields">
-                            {{ form.title.errors }}
-                            {{ form.title }}
+                            {{ story_form.title.errors }}
+                            {{ story_form.title }}
                             <span id="helper-story-story" class="helper-popups organization-border">What is this the story of?</span>
                         </li>
                         <li class="story-date fields">
-                            {{ form.date.errors }}
-                            {{ form.date }}
+                            {{ story_form.date.errors }}
+                            {{ story_form.date }}
                             <span id="helper-story-date" class="helper-popups organization-border"
                                   style="display: none;">When did this story take place?</span>
                         </li>
                         <li class="story-source fields {{ page.type }}">
-                            {{ form.source.errors }}
-                            {{ form.source }}
+                            {{ story_form.source.errors }}
+                            {{ story_form.source }}
                         </li>
                         <li class="story-url fields">
-                            {{ form.video.errors }}
-                            {{ form.video }}
+                            {{ story_form.video.errors }}
+                            {{ story_form.video }}
                             <span id="helper-story-date" class="helper-popups organization-border">Paste or type a YouTube URL here.</span>
                         </li>
                         <li class="story-preview">

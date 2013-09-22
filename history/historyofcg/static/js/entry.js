@@ -8,6 +8,33 @@ Hist.initChosen = function() {
     }
 }
 
+Hist.StoryForm = function() {
+    return {
+        submit: function(form) {
+            debugger
+            var $form = $(form);
+            $.ajax({
+                data: $form.serialize(),
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                success: function (data, textStatus, jqXHR) {
+                    console.log("success saving story form - data: ", data);
+                    debugger
+                    return false;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("error saving story form - textStatus: ", textStatus);
+                    debugger
+                }
+            });
+
+        },
+        init: function() {
+
+        }
+    }
+}();
+
 $(document).ready(function () {
 
     // using jQuery
@@ -68,49 +95,22 @@ $(document).ready(function () {
         }
     });
 
-    story_toggler = $('.btn-story');
 
-    function showStoryForm(e) {
-        story_toggler.addClass('loading');
-        $.ajax({
-            url: story_toggler[0].getAttribute('data-href'),
-            dataType: 'html',
-            async: true
-        }).done(function (content, status, xhr) {
-                if (content) {
-                    $('.story-container').html(content).removeClass('hide')
-                    // Style the date picker with Chosen
-                    Hist.initChosen();
-                }
-            });
-        story_toggler.removeClass('loading');
-    }
-
-    function handleStoryClick(e) {
-        e.preventDefault();
-        if (story_toggler.hasClass('disabled') === false) {
-            story_toggler.addClass('disabled');
-            showStoryForm();
-        }
-    }
-
-    if (story_toggler.length) {
-        story_toggler.on('click', handleStoryClick);
-    }
+    // Story Functions
+    ///////////////////
 
     $('.ui-icon-close').click(function () {
         $('.story-container').css('display:hide')
     });
 
-    $('#TextStorySaveForm').submit(function (e) {
-        $.ajax({
-            data: $(this).serialize(), // get the form data
-            type: $(this).attr('method'), // GET or POST
-            url: $(this).attr('action'), // the file to call
-            success: function (action) {
-                $('.story-save-button').html('SAVED');
-            }
-        });
+    $('.new-story-button').on('click', function(e) {
+        $('.new-story-container').show();
+    })
+
+    $('.story-save-button').on('click', function (e) {
+        debugger
+        e.preventDefault();
+        Hist.StoryForm.submit(this);
         return false;
     });
 
@@ -159,6 +159,9 @@ $(document).ready(function () {
             })
         }
     });
+
+    // Connection Functions
+    ////////////////////////
 
     $('.connect-entries-button').click(function (e) {
         e.preventDefault();

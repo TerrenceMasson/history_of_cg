@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.template import RequestContext
+from django.template.response import TemplateResponse
 from django.utils import simplejson
 from django.views.decorators.http import require_safe
 from history.base.decorators import render_to
@@ -13,6 +14,8 @@ from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category
 from django.views.decorators.http import require_POST
 import itertools
+from view_helpers import save_story, JsonResponse
+
 
 # Create your views here.
 #@require_safe
@@ -200,6 +203,7 @@ def edit_page(request, vanity_url):
                 return redirect('/pages/{}'.format(vanity_url))
         else:
             form = PageForm(instance=page)
+            story_form = StoryForm()
 
     return locals()
 
@@ -260,6 +264,17 @@ def share_story(request, vanity_url):
 @require_POST
 def new_story(request, story_type, vanity_url):
     form = StoryForm(request.POST)
+    story_user = request.user
+    story_page = Page.objects.get(vanity_url=vanity_url)
+    story = Story.objects.create(page=story_page, user=story_user)
+    if form.is_valid():
+        story = save_story(form, story)
+        story.save()
+        return JsonResponse("FUCKING WORK")
+        return TemplateResponse(request, 'pages/edit_story.html', { 'story': story })
+    else:
+        return JsonResponse(form.errors, status=400)
+
     if story_type == 'text':
         print 'made form text'
         # MAKE STORY

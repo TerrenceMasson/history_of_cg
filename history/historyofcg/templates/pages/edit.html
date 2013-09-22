@@ -113,12 +113,14 @@
                         project? Did you have a chance to work with someone brimming with amazing talent? Here is a
                         chance to share them!</p></li>
                     <li class="share">
-                        <button class="btn-story organization-hover" data-href="/share/story/{{ page.vanity_url }}/">
+                        <button class="new-story-button organization-hover" data-href="/share/story/{{ page.vanity_url }}/">
                             Share Stories or Add Media
                         </button>
                     </li>
                 </ul>
-                <div class="story-container hide"></div>
+                <div class="new-story-container">
+                    {% include 'pages/add_story.html' %}
+                </div>
                 {% for story in user_stories %}
                     {% include 'pages/edit_story.html' %}
                 {% endfor %}
