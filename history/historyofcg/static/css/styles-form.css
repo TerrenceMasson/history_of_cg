@@ -70,6 +70,10 @@ ul {
   margin: 0;
   padding: 0; }
 
+.errors {
+  color: red;
+  margin: 5px; }
+
 #id_date_established_year_chosen, #id_date_deceased_year_chosen, #id_date_year_chosen {
   width: 170px !important; }
   #id_date_established_year_chosen .chosen-search input, #id_date_deceased_year_chosen .chosen-search input, #id_date_year_chosen .chosen-search input {
@@ -357,13 +361,13 @@ div.form-container {
       div.form-container div.buttons ul.story-or-connection a p {
         margin-top: 45px;
         text-align: center; }
-      div.form-container div.buttons ul.story-or-connection a.btn-story {
+      div.form-container div.buttons ul.story-or-connection a.stories-form-button {
         background-image: url("../img/story_icon.png");
         background-position: 15px 0px;
         border-right: 1px #bababa solid;
         padding-right: 20px;
         width: 100px; }
-        div.form-container div.buttons ul.story-or-connection a.btn-story:hover {
+        div.form-container div.buttons ul.story-or-connection a.stories-form-button:hover {
           background-image: url("../img/story_icon_yellow.png"); }
       div.form-container div.buttons ul.story-or-connection a.btn-connect {
         background-image: url("../img/connection_icon.png");

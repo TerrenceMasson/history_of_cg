@@ -19,6 +19,13 @@ ul {
   padding: 0;
 }
 
+// Form Globals
+////////////////
+.errors {
+  color: red;
+  margin: 5px;
+}
+
 // Chosen Overrides
 ////////////////////
 
@@ -368,7 +375,7 @@ div.form-container {
           margin-top: 45px;
           text-align: center;
         }
-        &.btn-story {
+        &.stories-form-button {
           background-image: url('../img/story_icon.png');
           background-position: 15px 0px;
           border-right: 1px $light-gray solid;
