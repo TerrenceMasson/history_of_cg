@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../historyofcg')
 PROJECT_PATH           = os.path.realpath(os.path.dirname(__file__))
 PROJECT_CONTAINER_PATH = os.path.realpath(os.path.dirname(PROJECT_PATH))
 
-GENERATED_MEDIA_DIR   = os.path.join( PROJECT_PATH, 'static')
+GENERATED_MEDIA_DIR   = os.path.join( PROJECT_CONTAINER_PATH, 'static')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
