@@ -224,18 +224,14 @@ var StoryForm = function() {
     }
 
     // Open/Collapse a Story via it's Header
-    var openStory = function(storyHeader) {
-        var $storyHeader = $(storyHeader);
-        $storyHeader.next().slideDown();
-        $storyHeader.removeClass('story-collapsed-heading');
-        $storyHeader.addClass('story-opened-heading');
-    }
-
-    var collapseStory = function(storyHeader) {
-        var $storyHeader = $(storyHeader);
-        $storyHeader.next().slideUp();
-        $storyHeader.removeClass('story-opened-heading');
-        $storyHeader.addClass('story-collapsed-heading');
+    var toggleStoryHeader = function(header) {
+        var $header = $(header);
+        if ($header.attr('class') === 'story-collapsed-heading') {
+            $header.next().slideDown();
+        } else {
+            $header.next().slideUp();
+        }
+        $header.toggleClass("story-collapsed-heading story-opened-heading");
     }
 
     return {
@@ -276,11 +272,8 @@ var StoryForm = function() {
                 $('.new-story-container').show();
             })
             // Open/Collapse Story
-            $('.story-collapsed-heading').on('click', function(e) {
-                openStory(this);
-            });
-            $('.story-opened-heading').on('click', function(e) {
-                collapseStory(this);
+            $('.story-collapsed-heading, .story-opened-heading').on('click', function(e) {
+                toggleStoryHeader(this);
             });
         }
     }
@@ -316,6 +309,7 @@ $(document).ready(function () {
         } else if ($button.text() === "UNPUBLISH") {
             Hist.unpublishForType(PAGE_TYPE, identifier);
         }
+        return false;
     });
     $('.story-publish-button').on('click', function (e) {
         var $button = $(this),
@@ -325,6 +319,7 @@ $(document).ready(function () {
         } else if ($button.text() === "UNPUBLISH") {
             Hist.unpublishForType(STORY_TYPE, identifier, $button);
         }
+        return false;
     });
 
     // Connection Functions
