@@ -2,6 +2,38 @@ var Hist = Hist || {}
 
 // Loose Methods
 /////////////////
+function changeColors(color) {
+    var allFields = $('.fields:not(.connection-fields) input[type=text], .fields:not(.connection-fields) select, .fields:not(.connection-fields) textarea, ul.token-input-list-hcg, li.source-title input, li.source-url input, .stories-col .stories p.story-collapsed-heading span.title');
+    var allBorderFields = $('.fields .helper-popups');
+    var allHoverFields = $('button, .button');
+
+    allFields.removeClass('project person organization event none');
+    allFields.addClass(color);
+
+    allBorderFields.removeClass('project-border person-border organization-border event-border none-border');
+    allBorderFields.addClass(color + '-border');
+
+    allHoverFields.removeClass('project-hover person-hover organization-hover event-hover none-hover');
+    allHoverFields.addClass(color + '-hover');
+}
+
+function changeColorsForType(t) {
+    if (t.indexOf('project') !== -1) {
+        changeColors('project');
+    } else if (t.indexOf('person') !== -1) {
+        changeColors('person');
+    } else if (t.indexOf('organization') !== -1) {
+        changeColors('organization');
+    } else if (t.indexOf('event') !== -1) {
+        changeColors('event');
+    } else {
+        changeColors('none');
+    }
+}
+
+// Date field handling
+///////////////////////
+
 var dateInfo = {
     'project': {
         'dateLabel': 'Date',
@@ -34,33 +66,13 @@ var dateInfo = {
     }
 };
 
-function changeColors(color) {
-    var allFields = $('.fields:not(.connection-fields) input[type=text], .fields:not(.connection-fields) select, .fields:not(.connection-fields) textarea, ul.token-input-list-hcg, li.source-title input, li.source-url input, .stories-col .stories p.story-collapsed-heading span.title');
-    var allBorderFields = $('.fields .helper-popups');
-    var allHoverFields = $('button, .button');
-
-    allFields.removeClass('project person organization event none');
-    allFields.addClass(color);
-
-    allBorderFields.removeClass('project-border person-border organization-border event-border none-border');
-    allBorderFields.addClass(color + '-border');
-
-    allHoverFields.removeClass('project-hover person-hover organization-hover event-hover none-hover');
-    allHoverFields.addClass(color + '-hover');
+function showDeceased() {
+    $('.label-entry-date-2').show();
+    $('.entry-date-2').show();
 }
-
-function changeColorsForType(t) {
-    if (t.indexOf('project') !== -1) {
-        changeColors('project');
-    } else if (t.indexOf('person') !== -1) {
-        changeColors('person');
-    } else if (t.indexOf('organization') !== -1) {
-        changeColors('organization');
-    } else if (t.indexOf('event') !== -1) {
-        changeColors('event');
-    } else {
-        changeColors('none');
-    }
+function hideDeceased() {
+    $('.label-entry-date-2').hide();
+    $('.entry-date-2').hide();
 }
 
 function changeDateFields(t) {
@@ -78,16 +90,6 @@ function changeDateFields(t) {
 
     $secondDateLabel.html(dateInfo[t].secondDateLabel);
     $tertiaryDateLabel.html(dateInfo[t].secondHelperText);
-}
-
-function showDeceased() {
-    $('.label-entry-date-2').show();
-    $('.entry-date-2').show();
-}
-
-function hideDeceased() {
-    $('.label-entry-date-2').hide();
-    $('.entry-date-2').hide();
 }
 
 function changeDateFieldsForType(t) {
@@ -150,64 +152,22 @@ Hist.csrfSafeMethod = function(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-
-Hist.cycleVoteColor = function(button) {
-    console.log(button.hasClass("no-vote"));
-    if (button.hasClass("no-vote")) {
-        button.removeClass("no-vote");
-        button.addClass("up-vote");
-        button.unbind('click');
-        button.click(function (e) {
-            e.preventDefault();
-            button = $(this);
-            url = "/vote/down/" + button[0].getAttribute('data-story-id') + "/";
-            $.ajax({
-                type: "POST",
-                url: url,
-                success: function (action) {
-                    cycleVoteColor(button);
-                }
-            })
-        });
+var StoryForm = function() {
+    var deleteStory = function(deleteButton) {
+        $.ajax({
+            type: "POST",
+            url: "/delete/story/" + $(deleteButton).data('story-id') + "/",
+            success: function (data, textStatus, jqXHR) {
+                // TODO: Show some success message.
+                console.log("Story successfully deleted");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // TODO: Show some error message.
+                console.log("Story failed to delete.");
+            }
+        })
     }
-    else if (button.hasClass("up-vote")) {
-        button.removeClass("up-vote");
-        button.addClass("down-vote");
-        button.unbind('click');
-        button.click(function (e) {
-            e.preventDefault();
-            button = $(this);
-            url = "/vote/none/" + button[0].getAttribute('data-story-id') + "/";
-            $.ajax({
-                type: "POST",
-                url: url,
-                success: function (action) {
-                    cycleVoteColor(button);
-                }
-            })
-        });
-    }
-    else if (button.hasClass("down-vote")) {
-        button.removeClass("down-vote");
-        button.addClass("no-vote");
-        button.unbind('click');
-        button.click(function (e) {
-            e.preventDefault();
-            button = $(this);
-            url = "/vote/up/" + button[0].getAttribute('data-story-id') + "/";
-            $.ajax({
-                type: "POST",
-                url: url,
-                success: function (action) {
-                    cycleVoteColor(button);
-                }
-            })
-        });
-    }
-}
 
-
-Hist.StoryForm = function() {
     return {
         submit: function(form) {
             var $form = $(form);
@@ -226,14 +186,22 @@ Hist.StoryForm = function() {
 
         },
         init: function() {
+            var self = this;
+
+            // StoryForm DOM Events
+            ////////////////////////
+            $('.delete').on('click', function(e) {
+                deleteStory(this);
+            });
 
             $('.story-save-button').on('click', function (e) {
-                Hist.StoryForm.submit(this);
+                self.submit(this);
                 return false;
             });
         }
     }
 }();
+Hist.StoryForm = StoryForm;
 
 $(document).ready(function () {
 
@@ -337,18 +305,7 @@ $(document).ready(function () {
         }
     });
 
-    $('p.story-collapsed-heading span.delete').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/delete/story/" + button[0].getAttribute('data-story-id') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
-            }
-        })
-    });
+
 
     $('p.story-opened-heading span.delete').click(function (e) {
         e.preventDefault();
@@ -419,48 +376,6 @@ $(document).ready(function () {
             $(".entry-date-3").show();
         }
     })
-
-    // Voting????
-    //////////////
-
-    $('.no-vote').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/vote/up/" + button[0].getAttribute('data-story-id') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                cycleVoteColor(button);
-            }
-        })
-    });
-
-    $('.up-vote').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/vote/down/" + button[0].getAttribute('data-story-id') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                cycleVoteColor(button);
-            }
-        })
-    });
-
-    $('.down-vote').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/vote/none/" + button[0].getAttribute('data-story-id') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                cycleVoteColor(button);
-            }
-        })
-    });
 
     // category change event should change all colors to current type
     $('#main-stub .entry-type-select').change(function () {

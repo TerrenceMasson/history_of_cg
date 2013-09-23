@@ -2,13 +2,12 @@
 <div class="stories edit" style="">
     <p class="story-collapsed-heading">
         <span class="title {{ story.type }}">{{ story.title|truncatechars:"35" }}</span>
-        <span class="delete ui-icon ui-icon-close" data-story-id="{{ story.id }}"
-              data-vanity-url="{{ page.vanity_url }}"></span>
+        <span class="delete ui-icon ui-icon-close" data-story-id="{{ story.id }}" data-vanity-url="{{ page.vanity_url }}"></span>
         <span class="story-type"></span>
         <span class="info" id="{{ story.id }}">{% if story.published %}Published{% else %}Saved{% endif %}</span>
     </p>
 
-    <div class="story-collapsed" style="display: none;">
+    <div class="story-collapsed">
         {% if story.text %}
             <form action="/edit/story/text/{{ story.id }}/" method="POST" accept-charset="utf-8"
                   id="TextStoryEditForm">{% csrf_token %}
