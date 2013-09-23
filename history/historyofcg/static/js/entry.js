@@ -130,7 +130,9 @@ Hist.initTabs = function() {
     $('.tabs-min').tabs();
 }
 
-// using jQuery
+// CSRF Workaround
+// Ref: https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+///////////////////
 Hist.getCookie = function(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -152,6 +154,20 @@ Hist.csrfSafeMethod = function(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+Hist.initCSRF = function() {
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function (xhr, settings) {
+            if (!Hist.csrfSafeMethod(settings.type)) {
+                var csrftoken = Hist.getCookie('csrftoken');
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+}
+
+// StoryForm
+/////////////
 var StoryForm = function() {
     var deleteStory = function(deleteButton) {
         var $button = $(deleteButton);
@@ -168,6 +184,21 @@ var StoryForm = function() {
                 console.log("Story failed to delete.");
             }
         })
+    }
+
+    // Open/Collapse a Story via it's Header
+    var openStory = function(storyHeader) {
+        var $storyHeader = $(storyHeader);
+        $storyHeader.next().slideDown();
+        $storyHeader.removeClass('story-collapsed-heading');
+        $storyHeader.addClass('story-opened-heading');
+    }
+
+    var collapseStory = function(storyHeader) {
+        var $storyHeader = $(storyHeader);
+        $storyHeader.next().slideUp();
+        $storyHeader.removeClass('story-opened-heading');
+        $storyHeader.addClass('story-collapsed-heading');
     }
 
     return {
@@ -194,18 +225,26 @@ var StoryForm = function() {
 
             // StoryForm DOM Events
             ////////////////////////
-            $('.delete').on('click', function(e) {
+            $('.delete-story').on('click', function(e) {
                 deleteStory(this);
+                return false;
             });
-
+            // New Story Submit event
             $('.story-save-button').on('click', function (e) {
                 self.submit($(this).closest('form'));
                 return false;
             });
-
+            // Show New Story
             $('.new-story-button').on('click', function(e) {
                 $('.new-story-container').show();
             })
+            // Open/Collapse Story
+            $('.story-collapsed-heading').on('click', function(e) {
+                openStory(this);
+            });
+            $('.story-opened-heading').on('click', function(e) {
+                collapseStory(this);
+            });
         }
     }
 }();
@@ -215,20 +254,12 @@ $(document).ready(function () {
 
     // Init All The Things!
     ///////////////////////
+    Hist.initCSRF();
     Hist.initColorsAndDate();
     Hist.initChosen();
     Hist.initTabs();
     Hist.StoryForm.init();
 
-    $.ajaxSetup({
-        crossDomain: false, // obviates need for sameOrigin test
-        beforeSend: function (xhr, settings) {
-            if (!Hist.csrfSafeMethod(settings.type)) {
-                var csrftoken = Hist.getCookie('csrftoken');
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
 
     // DOM Events
     //////////////
@@ -261,25 +292,6 @@ $(document).ready(function () {
 
     // Story DOM Events
     ////////////////////
-
-    $('.ui-icon-close').click(function () {
-        $('.story-container').css('display:hide')
-    });
-
-    $('body').on('click', '.story-collapsed-heading', function (e) {
-        e.preventDefault();
-        console.log($(this).parent().next());
-        $(this).next().slideDown();
-        $(this).removeClass('story-collapsed-heading');
-        $(this).addClass('story-opened-heading');
-    });
-
-    $('body').on('click', '.story-opened-heading', function (e) {
-        e.preventDefault();
-        $(this).next().slideUp();
-        $(this).removeClass('story-opened-heading');
-        $(this).addClass('story-collapsed-heading');
-    });
 
     $('.story-publish-button').click(function (e) {
         e.preventDefault();

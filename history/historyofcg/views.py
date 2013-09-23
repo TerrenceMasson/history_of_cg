@@ -166,6 +166,7 @@ def add_page(request):
 @render_to('pages/edit.html')
 def edit_page(request, vanity_url):
     if request.user.is_authenticated():
+        # TODO: Need to pull this shit out to a method
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
             show_badge1 = True
 
@@ -182,12 +183,7 @@ def edit_page(request, vanity_url):
             show_badge5 = True
 
         page = Page.objects.get(vanity_url=vanity_url)
-        user_stories = Story.objects.filter(page=page)
         connections = page.connections
-        user_text_stories = Story.objects.filter(page=page, image__isnull=True, video__isnull=True)
-        user_image_stories = Story.objects.filter(page=page, text__isnull=True, video__isnull=True)
-        user_video_stories = Story.objects.filter(page=page, text__isnull=True, image__isnull=True)
-        print len(user_stories)
 
         if request.method == 'POST':
             form = PageForm(request.POST, instance=page)
@@ -207,6 +203,11 @@ def edit_page(request, vanity_url):
             form = PageForm(instance=page)
             story_form = StoryForm()
             story_types = Story.types()
+            # Grab all of the existing stories and create a hash of 'title' => Form for editing.
+            stories = Story.objects.filter(page=page)
+            story_forms = []
+            for story in stories:
+                story_forms.append(StoryForm(instance=story))
 
     return locals()
 
@@ -281,7 +282,8 @@ def new_story(request, story_type, vanity_url):
     if form.is_valid():
         story = save_story(form, story)
         story.save()
-        return render_to_response('pages/edit_story.html', { 'story': story }, context_instance=RequestContext(request))
+        story_form = StoryForm(instance=story)
+        return render_to_response('pages/edit_story.html', { 'story_form': story_form, 'page': story_page }, context_instance=RequestContext(request))
     else:
         return JsonResponse(form.errors, status=400)
 

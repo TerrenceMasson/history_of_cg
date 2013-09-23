@@ -20,14 +20,14 @@
                             <li class="label-story-date labels">Date</li>
                             <li class="label-story-source labels">Source</li>
                         {% if type == "text" %}
-                            <li class="label-story-source_url labels">Source URL</li>
-                            <li class="label-story-story labels">Story<span class="required"> *</span></li>
+                            <li class="label-story-source-url labels">Source URL</li>
+                            <li class="label-story-story labels">Story<span class="required">*</span></li>
                         {% elif type == "video" or type == "image" %}
                             <li class="label-story-url labels">URL<span class="required"> *</span></li>
                         {% endif %}
                     </ul>
-                    <ul class="story-fields all-fields">
-                        <li class="entry-date fields">
+                    <ul class="story-fields all-fields {{ page.type }}">
+                        <li class="story-title fields">
                             {{ story_form.title.errors }}
                             {{ story_form.title }}
                         </li>
