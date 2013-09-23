@@ -13,7 +13,7 @@
             </ul>
             {% for type in story_types %}
                 <div class="tab-content" id="tabs-{{forloop.counter}}">
-                    <form action="/save/story/{{ type }}/{{ page.vanity_url }}/" method="POST" accept-charset="utf-8">
+                    <form action="/save/story/{{ type }}/{{ page.vanity_url }}/" method="POST" accept-charset="utf-8" data-type="{{ type }}">
                     {% csrf_token %}
                         <ul class="story-labels all-labels">
                             <li class="label-story-title labels">Title<span class="required">*</span></li>

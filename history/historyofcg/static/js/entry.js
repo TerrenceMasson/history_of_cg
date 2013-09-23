@@ -215,6 +215,48 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
 // StoryForm
 /////////////
 var StoryForm = function() {
+
+    // Validation
+    //////////////
+    var validateStory = function($form) {
+        var errors = [],
+            type = $form.data('type');
+        // Always check for a title, since it's always required
+        if ($form.find('.story-title input').val().isEmpty()) {
+            errors.push("The story title is required.");
+        }
+        console.log("story type: ", type)
+        // Check for the individual story types required fields
+        if (type === "text") {
+            var $storyField = $form.find('.story-body textarea');
+            if ($storyField.text().isEmpty()) {
+                errors.push("The story body is required.");
+            }
+        } else if (type === "image" || type === "video") {
+            var $urlField = $form.find('.story-url input');
+            if ($urlField.text().isEmpty()) {
+                errors.push("The URL for the story is required.")
+            }
+        }
+        return errors;
+    }
+
+    // Error Handling
+    //////////////////
+
+    // Open/Collapse a Story via it's Header
+    var toggleStoryHeader = function(header) {
+        var $header = $(header);
+        if ($header.attr('class') === 'story-collapsed-heading') {
+            $header.next().slideDown();
+        } else {
+            $header.next().slideUp();
+        }
+        $header.toggleClass("story-collapsed-heading story-opened-heading");
+    }
+
+    // AJAX
+    ////////
     var deleteStory = function(deleteButton) {
         var $button = $(deleteButton);
         $.ajax({
@@ -232,19 +274,14 @@ var StoryForm = function() {
         })
     }
 
-    // Open/Collapse a Story via it's Header
-    var toggleStoryHeader = function(header) {
-        var $header = $(header);
-        if ($header.attr('class') === 'story-collapsed-heading') {
-            $header.next().slideDown();
-        } else {
-            $header.next().slideUp();
-        }
-        $header.toggleClass("story-collapsed-heading story-opened-heading");
-    }
-
     var submitForm = function(form, isNewStory) {
-        var $form = $(form);
+        var $form = $(form),
+            errors = validateStory($form);
+        if (errors.length != 0) {
+            // Show errors and return
+            console.log("validateStory returned errors - errors: ", errors);
+            return false;
+        }
         $.ajax({
             data: $form.serialize(),
             type: "POST",

@@ -8,6 +8,10 @@ String.prototype.contains = function(substring, ignoreCase) {
     }
 }
 
+String.prototype.isEmpty = function() {
+    return this.trim() === "";
+}
+
 $(function () {
     var $dialog = $('<div></div>')
         .html('')
