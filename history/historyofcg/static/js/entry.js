@@ -229,12 +229,12 @@ var StoryForm = function() {
         // Check for the individual story types required fields
         if (type === "text") {
             var $storyField = $form.find('.story-body textarea');
-            if ($storyField.text().isEmpty()) {
+            if ($storyField.val().isEmpty()) {
                 errors.push("The story body is required.");
             }
         } else if (type === "image" || type === "video") {
             var $urlField = $form.find('.story-url input');
-            if ($urlField.text().isEmpty()) {
+            if ($urlField.val().isEmpty()) {
                 errors.push("The URL for the story is required.")
             }
         }
@@ -243,6 +243,17 @@ var StoryForm = function() {
 
     // Error Handling
     //////////////////
+
+    var showErrors = function($form, errors) {
+        var $errors = $form.find('.errors');
+        $.each(errors, function(index, error) {
+            $errors.append("<li> " + error + " </li>");
+        });
+    }
+
+    var clearErrors = function($form) {
+        $form.find('.errors').html('');
+    }
 
     // Open/Collapse a Story via it's Header
     var toggleStoryHeader = function(header) {
@@ -277,9 +288,10 @@ var StoryForm = function() {
     var submitForm = function(form, isNewStory) {
         var $form = $(form),
             errors = validateStory($form);
+        clearErrors($form);
         if (errors.length != 0) {
             // Show errors and return
-            console.log("validateStory returned errors - errors: ", errors);
+            showErrors($form, errors);
             return false;
         }
         $.ajax({
@@ -297,8 +309,15 @@ var StoryForm = function() {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                // TODO: Show error message
-                console.log("error saving story form - textStatus: ", textStatus);
+                var response = JSON.parse(jqXHR.responseText),
+                    errors = [],
+                    value;
+                for (var key in response) {
+                    value = response[key].join(' ');
+                    errors.push(value);
+                }
+                console.log("errors: ", errors)
+                showErrors($form, errors);
             }
         });
     }
