@@ -259,14 +259,6 @@ def publish_page(request, vanity_url):
 ## STORY VIEWS
 ###############
 
-@require_safe
-def share_story(request, vanity_url):
-    page = Page.objects.get(vanity_url=vanity_url)
-    if request.user.is_authenticated():
-        form = StoryForm()
-
-    return render_to_response('pages/add_story.html', locals(), context_instance=RequestContext(request))
-
 @require_POST
 def delete_story(request, id):
     story = Story.objects.get(id=id)
