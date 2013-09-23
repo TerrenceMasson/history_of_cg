@@ -117,9 +117,11 @@
                 <div class="new-story-container">
                     {% include 'pages/add_story.html' %}
                 </div>
-                {% for story in user_stories %}
-                    {% include 'pages/edit_story.html' %}
-                {% endfor %}
+                <div class="edit-story-container">
+                    {% for story in user_stories %}
+                        {% include 'pages/edit_story.html' %}
+                    {% endfor %}
+                </div>
             </div>
             {% include 'pages/create_connections.html' %}
         </div>

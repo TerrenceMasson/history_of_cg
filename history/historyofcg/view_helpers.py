@@ -26,6 +26,9 @@ class JsonResponse(HttpResponse):
 def save_story(form, story):
     logger.log("save_story called")
     data = form.cleaned_data
-    logger.log("save_story - data: ", data)
     story.title = data['title']
+    story.date = data['date']
+    story.source = data['source']
+    story.text = data['text']
+    # TODO: Need to finish this to work for Images/Video
     return story

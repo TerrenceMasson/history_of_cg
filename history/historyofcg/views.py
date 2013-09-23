@@ -13,8 +13,10 @@ from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category
 from django.views.decorators.http import require_POST
-import itertools
 from view_helpers import save_story, JsonResponse
+import itertools
+import logger
+
 
 
 # Create your views here.
@@ -253,6 +255,9 @@ def publish_page(request, vanity_url):
     return HttpResponse('')
 
 
+## STORY VIEWS
+###############
+
 @require_safe
 def share_story(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
@@ -261,6 +266,11 @@ def share_story(request, vanity_url):
 
     return render_to_response('pages/add_story.html', locals(), context_instance=RequestContext(request))
 
+@require_POST
+def delete_story(request, id):
+    story = Story.objects.get(id=id)
+    story.delete()
+    return JsonResponse({ 'message': 'Story deleted successfully' }, 200)
 
 @require_POST
 def new_story(request, story_type, vanity_url):
@@ -271,144 +281,9 @@ def new_story(request, story_type, vanity_url):
     if form.is_valid():
         story = save_story(form, story)
         story.save()
-        return JsonResponse("FUCKING WORK")
-        return TemplateResponse(request, 'pages/edit_story.html', { 'story': story })
+        return render_to_response('pages/edit_story.html', { 'story': story }, context_instance=RequestContext(request))
     else:
         return JsonResponse(form.errors, status=400)
-
-    if story_type == 'text':
-        print 'made form text'
-        # MAKE STORY
-        if form.is_valid():
-            story_title = request.POST['title']
-            story_text = request.POST['text']
-            story_user = request.user
-            story_page = Page.objects.get(vanity_url=vanity_url)
-            story_source = request.POST['source']
-            story_source_url = request.POST['source_url']
-            if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) == 3:
-                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                    story_date = d.strftime('%Y-%m-%d')
-                    Story.objects.create(
-                        title=story_title,
-                        date=story_date,
-                        text=story_text,
-                        user=story_user,
-                        page=story_page,
-                        source_url=story_source_url,
-                        source=story_source
-                    ).save()
-                elif len(d) == 1:
-                    d = datetime.date(int(request.POST['date']), 1, 1)
-                    story_date = d.strftime('%Y-%m-%d')
-                    Story.objects.create(
-                        title=story_title,
-                        date=story_date,
-                        text=story_text,
-                        user=story_user,
-                        page=story_page,
-                        source_url=story_source_url,
-                        source=story_source
-                    ).save()
-            else:
-                Story.objects.create(
-                    title=story_title,
-                    text=story_text,
-                    user=story_user,
-                    page=story_page,
-                    source_url=story_source_url,
-                    source=story_source
-                ).save()
-
-    if story_type == 'image':
-        print 'made form image'
-        if form.is_valid():
-            story_title = request.POST['title']
-            story_image = request.POST['image']
-            story_source = request.POST['source']
-            story_user = request.user
-            story_page = Page.objects.get(vanity_url=vanity_url)
-            if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) == 3:
-                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                    story_date = d.strftime('%Y-%m-%d')
-
-                    Story.objects.create(
-                        title=story_title,
-                        date=story_date,
-                        image=story_image,
-                        page=story_page,
-                        user=story_user,
-                        source=story_source
-                    ).save()
-
-                elif len(d) == 1:
-                    d = datetime.date(int(request.POST['date']), 1, 1)
-                    story_date = d.strftime('%Y-%m-%d')
-                    Story.objects.create(
-                        title=story_title,
-                        date=story_date,
-                        image=story_image,
-                        user=story_user,
-                        page=story_page,
-                        source=story_source
-                    ).save()
-            else:
-                Story.objects.create(
-                    title=story_title,
-                    image=story_image,
-                    page=story_page,
-                    user=story_user,
-                    source=story_source
-                ).save()
-
-    if story_type == 'video':
-        print 'made form image'
-        if form.is_valid():
-            story_title = request.POST['title']
-            story_video = request.POST['video']
-            story_source = request.POST['source']
-            story_user = request.user
-            story_page = Page.objects.get(vanity_url=vanity_url)
-
-            if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) == 3:
-                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                    story_date = d.strftime('%Y-%m-%d')
-
-                    Story.objects.create(
-                        title=story_title,
-                        date=story_date,
-                        video=story_video,
-                        page=story_page,
-                        user=story_user,
-                        source=story_source
-                    ).save()
-                elif len(d) == 1:
-                    d = datetime.date(int(request.POST['date']), 1, 1)
-                    story_date = d.strftime('%Y-%m-%d')
-                    Story.objects.create(
-                        title=story_title,
-                        date=story_date,
-                        video=story_video,
-                        user=story_user,
-                        page=story_page,
-                        source=story_source
-                    ).save()
-            else:
-                Story.objects.create(
-                    title=story_title,
-                    video=story_video,
-                    page=story_page,
-                    user=story_user,
-                    source=story_source
-                ).save()
-
-    return redirect('/edit/page/{}'.format(vanity_url), locals())
 
 
 @require_POST
@@ -636,11 +511,3 @@ def user_page(request, i):
     else:
         return HttpResponseNotFound()
 
-
-@require_POST
-def delete_story(request, id):
-    story = Story.objects.get(id=id)
-
-    story.delete()
-
-    return HttpResponse('')

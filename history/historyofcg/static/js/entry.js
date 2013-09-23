@@ -154,11 +154,13 @@ Hist.csrfSafeMethod = function(method) {
 
 var StoryForm = function() {
     var deleteStory = function(deleteButton) {
+        var $button = $(deleteButton);
         $.ajax({
             type: "POST",
-            url: "/delete/story/" + $(deleteButton).data('story-id') + "/",
+            url: "/delete/story/" + $button.data('story-id') + "/",
             success: function (data, textStatus, jqXHR) {
                 // TODO: Show some success message.
+                $button.closest('.edit').remove();
                 console.log("Story successfully deleted");
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -176,10 +178,12 @@ var StoryForm = function() {
                 type: $form.attr('method'),
                 url: $form.attr('action'),
                 success: function (data, textStatus, jqXHR) {
-                    console.log("success saving story form - data: ", data);
-                    return false;
+                    // Add the newly saved story to the DOM
+                    $('.edit-story-container').append(data);
+                    $form[0].reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    debugger
                     console.log("error saving story form - textStatus: ", textStatus);
                 }
             });
@@ -195,9 +199,13 @@ var StoryForm = function() {
             });
 
             $('.story-save-button').on('click', function (e) {
-                self.submit(this);
+                self.submit($(this).closest('form'));
                 return false;
             });
+
+            $('.new-story-button').on('click', function(e) {
+                $('.new-story-container').show();
+            })
         }
     }
 }();
@@ -211,8 +219,6 @@ $(document).ready(function () {
     Hist.initChosen();
     Hist.initTabs();
     Hist.StoryForm.init();
-
-
 
     $.ajaxSetup({
         crossDomain: false, // obviates need for sameOrigin test
@@ -253,16 +259,12 @@ $(document).ready(function () {
     });
 
 
-    // Story Functions
-    ///////////////////
+    // Story DOM Events
+    ////////////////////
 
     $('.ui-icon-close').click(function () {
         $('.story-container').css('display:hide')
     });
-
-    $('.new-story-button').on('click', function(e) {
-        $('.new-story-container').show();
-    })
 
     $('body').on('click', '.story-collapsed-heading', function (e) {
         e.preventDefault();
@@ -303,21 +305,6 @@ $(document).ready(function () {
                 }
             })
         }
-    });
-
-
-
-    $('p.story-opened-heading span.delete').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/delete/story/" + button[0].getAttribute('data-story-id') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
-            }
-        })
     });
 
     // Connection Functions
