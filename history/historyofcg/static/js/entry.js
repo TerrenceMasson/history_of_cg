@@ -1,5 +1,121 @@
 var Hist = Hist || {}
 
+// Loose Methods
+/////////////////
+var dateInfo = {
+    'project': {
+        'dateLabel': 'Date',
+        'helperText': 'When did this project take place?'
+    },
+    'person': {
+        'dateLabel': 'Birth date',
+        'helperText': 'When was this person born?',
+        'secondDateLabel': 'Deceased?',
+        'secondHelperText': 'Deceased Date',
+        'secondDateCheckboxLabel': 'Is this person deceased?'
+    },
+    'organization': {
+        'dateLabel': 'Established Date',
+        'helperText': 'When was this organization founded?',
+        'secondDateLabel': 'Is Closed?',
+        'secondHelperText': 'Closing Date?',
+        'secondDateCheckboxLabel': 'This organization no longer exists'
+    },
+    'event': {
+        'dateLabel': 'Date',
+        'helperText': 'When did this event take place?',
+        'secondDateLabel': 'End Date',
+        'secondHelperText': 'When did this event end?',
+        'secondDateCheckboxLabel': 'This is a multi-day event'
+    },
+    'none': {
+        'dateLabel': 'Date',
+        'helperText': 'Select an entry type to learn more about this date'
+    }
+};
+
+function changeColors(color) {
+    var allFields = $('.fields:not(.connection-fields) input[type=text], .fields:not(.connection-fields) select, .fields:not(.connection-fields) textarea, ul.token-input-list-hcg, li.source-title input, li.source-url input, .stories-col .stories p.story-collapsed-heading span.title');
+    var allBorderFields = $('.fields .helper-popups');
+    var allHoverFields = $('button, .button');
+
+    allFields.removeClass('project person organization event none');
+    allFields.addClass(color);
+
+    allBorderFields.removeClass('project-border person-border organization-border event-border none-border');
+    allBorderFields.addClass(color + '-border');
+
+    allHoverFields.removeClass('project-hover person-hover organization-hover event-hover none-hover');
+    allHoverFields.addClass(color + '-hover');
+}
+
+function changeColorsForType(t) {
+    if (t.indexOf('project') !== -1) {
+        changeColors('project');
+    } else if (t.indexOf('person') !== -1) {
+        changeColors('person');
+    } else if (t.indexOf('organization') !== -1) {
+        changeColors('organization');
+    } else if (t.indexOf('event') !== -1) {
+        changeColors('event');
+    } else {
+        changeColors('none');
+    }
+}
+
+function changeDateFields(t) {
+    var $dateLabel = $('.basics .label-entry-date');
+    var $dateHelperText = $('.basics .entry-date .helper-popups');
+    var $secondDateLabel = $('.basics .label-entry-date-2');
+    var $secondDateHelperText = $('.basics .entry-date-2 .helper-popups');
+    var $secondDateCheckboxLabel = $('.basics .entry-date-2-selected label');
+    var $secondDate = $('.basics .entry-date-2');
+    var $secondDateCheckbox = $('.basics #entry-date-selected');
+    var $tertiaryDateLabel = $('.basics .label-entry-date-3');
+    // date 1 section
+    $dateLabel.html(dateInfo[t].dateLabel);
+    $dateHelperText.html(dateInfo[t].helperText);
+
+    $secondDateLabel.html(dateInfo[t].secondDateLabel);
+    $tertiaryDateLabel.html(dateInfo[t].secondHelperText);
+}
+
+function showDeceased() {
+    $('.label-entry-date-2').show();
+    $('.entry-date-2').show();
+}
+
+function hideDeceased() {
+    $('.label-entry-date-2').hide();
+    $('.entry-date-2').hide();
+}
+
+function changeDateFieldsForType(t) {
+    if (t.indexOf('project') !== -1) {
+        hideDeceased();
+        changeDateFields('project');
+    } else if (t.indexOf('person') !== -1) {
+        showDeceased();
+        changeDateFields('person');
+    } else if (t.indexOf('organization') !== -1) {
+        showDeceased();
+        changeDateFields('organization');
+    } else if (t.indexOf('event') !== -1) {
+        hideDeceased();
+        changeDateFields('event');
+    } else {
+        hideDeceased();
+        changeDateFields('none');
+    }
+}
+
+Hist.initColorsAndDate = function() {
+    // Initialize color change
+    var initialEntryType = $('#main-stub .entry-type-select').children('option:selected').text().toLowerCase();
+    changeColorsForType(initialEntryType);
+    changeDateFieldsForType(initialEntryType);
+}
+
 Hist.initChosen = function() {
     // Init Chosen Selects
     if (jQuery().chosen) {
@@ -8,10 +124,92 @@ Hist.initChosen = function() {
     }
 }
 
+Hist.initTabs = function() {
+    $('.tabs-min').tabs();
+}
+
+// using jQuery
+Hist.getCookie = function(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+Hist.csrfSafeMethod = function(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+Hist.cycleVoteColor = function(button) {
+    console.log(button.hasClass("no-vote"));
+    if (button.hasClass("no-vote")) {
+        button.removeClass("no-vote");
+        button.addClass("up-vote");
+        button.unbind('click');
+        button.click(function (e) {
+            e.preventDefault();
+            button = $(this);
+            url = "/vote/down/" + button[0].getAttribute('data-story-id') + "/";
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (action) {
+                    cycleVoteColor(button);
+                }
+            })
+        });
+    }
+    else if (button.hasClass("up-vote")) {
+        button.removeClass("up-vote");
+        button.addClass("down-vote");
+        button.unbind('click');
+        button.click(function (e) {
+            e.preventDefault();
+            button = $(this);
+            url = "/vote/none/" + button[0].getAttribute('data-story-id') + "/";
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (action) {
+                    cycleVoteColor(button);
+                }
+            })
+        });
+    }
+    else if (button.hasClass("down-vote")) {
+        button.removeClass("down-vote");
+        button.addClass("no-vote");
+        button.unbind('click');
+        button.click(function (e) {
+            e.preventDefault();
+            button = $(this);
+            url = "/vote/up/" + button[0].getAttribute('data-story-id') + "/";
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (action) {
+                    cycleVoteColor(button);
+                }
+            })
+        });
+    }
+}
+
+
 Hist.StoryForm = function() {
     return {
         submit: function(form) {
-            debugger
             var $form = $(form);
             $.ajax({
                 data: $form.serialize(),
@@ -19,56 +217,47 @@ Hist.StoryForm = function() {
                 url: $form.attr('action'),
                 success: function (data, textStatus, jqXHR) {
                     console.log("success saving story form - data: ", data);
-                    debugger
                     return false;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("error saving story form - textStatus: ", textStatus);
-                    debugger
                 }
             });
 
         },
         init: function() {
 
+            $('.story-save-button').on('click', function (e) {
+                Hist.StoryForm.submit(this);
+                return false;
+            });
         }
     }
 }();
 
 $(document).ready(function () {
 
-    // using jQuery
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+    // Init All The Things!
+    ///////////////////////
+    Hist.initColorsAndDate();
+    Hist.initChosen();
+    Hist.initTabs();
+    Hist.StoryForm.init();
 
-    var csrftoken = getCookie('csrftoken');
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
 
     $.ajaxSetup({
         crossDomain: false, // obviates need for sameOrigin test
         beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type)) {
+            if (!Hist.csrfSafeMethod(settings.type)) {
+                var csrftoken = Hist.getCookie('csrftoken');
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         }
     });
+
+    // DOM Events
+    //////////////
 
     $('.publish-page').click(function () {
         console.log($(this));
@@ -106,18 +295,6 @@ $(document).ready(function () {
     $('.new-story-button').on('click', function(e) {
         $('.new-story-container').show();
     })
-
-    $('.story-save-button').on('click', function (e) {
-        debugger
-        e.preventDefault();
-        Hist.StoryForm.submit(this);
-        return false;
-    });
-
-    $('body').on('ready', '.tabs-min', function () {
-        print('loaded');
-        $(this).tabs('enable');
-    });
 
     $('body').on('click', '.story-collapsed-heading', function (e) {
         e.preventDefault();
@@ -160,6 +337,32 @@ $(document).ready(function () {
         }
     });
 
+    $('p.story-collapsed-heading span.delete').click(function (e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/delete/story/" + button[0].getAttribute('data-story-id') + "/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (action) {
+                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
+
+    $('p.story-opened-heading span.delete').click(function (e) {
+        e.preventDefault();
+        button = $(this);
+        url = "/delete/story/" + button[0].getAttribute('data-story-id') + "/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (action) {
+                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
+            }
+        })
+    });
+
     // Connection Functions
     ////////////////////////
 
@@ -181,32 +384,6 @@ $(document).ready(function () {
         e.preventDefault();
         button = $(this);
         url = "/remove/connection/" + button[0].getAttribute('data-vanity-url') + "/" + button[0].getAttribute('data-name') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
-            }
-        })
-    });
-
-    $('p.story-collapsed-heading span.delete').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/delete/story/" + button[0].getAttribute('data-story-id') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
-            }
-        })
-    });
-
-    $('p.story-opened-heading span.delete').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/delete/story/" + button[0].getAttribute('data-story-id') + "/";
         $.ajax({
             type: "POST",
             url: url,
@@ -243,60 +420,8 @@ $(document).ready(function () {
         }
     })
 
-    function cycle_vote_color(button) {
-        console.log(button.hasClass("no-vote"));
-        if (button.hasClass("no-vote")) {
-            button.removeClass("no-vote");
-            button.addClass("up-vote");
-            button.unbind('click');
-            button.click(function (e) {
-                e.preventDefault();
-                button = $(this);
-                url = "/vote/down/" + button[0].getAttribute('data-story-id') + "/";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    success: function (action) {
-                        cycle_vote_color(button);
-                    }
-                })
-            });
-        }
-        else if (button.hasClass("up-vote")) {
-            button.removeClass("up-vote");
-            button.addClass("down-vote");
-            button.unbind('click');
-            button.click(function (e) {
-                e.preventDefault();
-                button = $(this);
-                url = "/vote/none/" + button[0].getAttribute('data-story-id') + "/";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    success: function (action) {
-                        cycle_vote_color(button);
-                    }
-                })
-            });
-        }
-        else if (button.hasClass("down-vote")) {
-            button.removeClass("down-vote");
-            button.addClass("no-vote");
-            button.unbind('click');
-            button.click(function (e) {
-                e.preventDefault();
-                button = $(this);
-                url = "/vote/up/" + button[0].getAttribute('data-story-id') + "/";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    success: function (action) {
-                        cycle_vote_color(button);
-                    }
-                })
-            });
-        }
-    }
+    // Voting????
+    //////////////
 
     $('.no-vote').click(function (e) {
         e.preventDefault();
@@ -306,7 +431,7 @@ $(document).ready(function () {
             type: "POST",
             url: url,
             success: function (action) {
-                cycle_vote_color(button);
+                cycleVoteColor(button);
             }
         })
     });
@@ -319,7 +444,7 @@ $(document).ready(function () {
             type: "POST",
             url: url,
             success: function (action) {
-                cycle_vote_color(button);
+                cycleVoteColor(button);
             }
         })
     });
@@ -332,196 +457,24 @@ $(document).ready(function () {
             type: "POST",
             url: url,
             success: function (action) {
-                cycle_vote_color(button);
+                cycleVoteColor(button);
             }
         })
     });
+
+    // category change event should change all colors to current type
+    $('#main-stub .entry-type-select').change(function () {
+        var t = $(this).children('option:selected').text().toLowerCase();
+        changeColorsForType(t);
+        changeDateFieldsForType(t);
+    });
+
+    // Helper Text Show/Unshow
+    ///////////////////////////
+    $('.need-helper').focus(function () {
+        $(this).siblings('.helper-popups').fadeIn();
+    }).focusout(function () {
+        $(this).siblings('.helper-popups').fadeOut();
+    });
 });
 
-$(function () {
-    // stupid
-    var dateInfo = {
-        'project': {
-            'dateLabel': 'Date',
-            'helperText': 'When did this project take place?'
-        },
-        'person': {
-            'dateLabel': 'Birth date',
-            'helperText': 'When was this person born?',
-            'secondDateLabel': 'Deceased?',
-            'secondHelperText': 'Deceased Date',
-            'secondDateCheckboxLabel': 'Is this person deceased?'
-        },
-        'organization': {
-            'dateLabel': 'Established Date',
-            'helperText': 'When was this organization founded?',
-            'secondDateLabel': 'Is Closed?',
-            'secondHelperText': 'Closing Date?',
-            'secondDateCheckboxLabel': 'This organization no longer exists'
-        },
-        'event': {
-            'dateLabel': 'Date',
-            'helperText': 'When did this event take place?',
-            'secondDateLabel': 'End Date',
-            'secondHelperText': 'When did this event end?',
-            'secondDateCheckboxLabel': 'This is a multi-day event'
-        },
-        'none': {
-            'dateLabel': 'Date',
-            'helperText': 'Select an entry type to learn more about this date'
-        }
-    };
-
-    function change_colors(color) {
-        var allFields = $('.fields:not(.connection-fields) input[type=text], .fields:not(.connection-fields) select, .fields:not(.connection-fields) textarea, ul.token-input-list-hcg, li.source-title input, li.source-url input, .stories-col .stories p.story-collapsed-heading span.title');
-        var allBorderFields = $('.fields .helper-popups');
-        var allHoverFields = $('button, .button');
-
-        allFields.removeClass('project person organization event none');
-        allFields.addClass(color);
-
-        allBorderFields.removeClass('project-border person-border organization-border event-border none-border');
-        allBorderFields.addClass(color + '-border');
-
-        allHoverFields.removeClass('project-hover person-hover organization-hover event-hover none-hover');
-        allHoverFields.addClass(color + '-hover');
-    }
-
-    function change_colors_with(t) {
-        if (t.indexOf('project') !== -1) {
-            change_colors('project');
-        }
-        else if (t.indexOf('person') !== -1) {
-            change_colors('person');
-        }
-        else if (t.indexOf('organization') !== -1) {
-            change_colors('organization');
-        }
-        else if (t.indexOf('event') !== -1) {
-            change_colors('event');
-        }
-        else {
-            change_colors('none');
-        }
-    }
-
-    function change_date_fields(t) {
-        var $dateLabel = $('.basics .label-entry-date');
-        var $dateHelperText = $('.basics .entry-date .helper-popups');
-        var $secondDateLabel = $('.basics .label-entry-date-2');
-        var $secondDateHelperText = $('.basics .entry-date-2 .helper-popups');
-        var $secondDateCheckboxLabel = $('.basics .entry-date-2-selected label');
-        var $secondDate = $('.basics .entry-date-2');
-        var $secondDateCheckbox = $('.basics #entry-date-selected');
-        var $tertiaryDateLabel = $('.basics .label-entry-date-3');
-        // date 1 section
-        $dateLabel.html(dateInfo[t].dateLabel);
-        $dateHelperText.html(dateInfo[t].helperText);
-
-        $secondDateLabel.html(dateInfo[t].secondDateLabel);
-        $tertiaryDateLabel.html(dateInfo[t].secondHelperText);
-    }
-
-    function show_deceased_fields() {
-        $('.label-entry-date-2').show();
-        $('.entry-date-2').show();
-    }
-
-    function hide_deceased_fields() {
-        $('.label-entry-date-2').hide();
-        $('.entry-date-2').hide();
-    }
-
-    function change_date_fields_with(t) {
-        if (t.indexOf('project') !== -1) {
-            hide_deceased_fields();
-            change_date_fields('project');
-        }
-        else if (t.indexOf('person') !== -1) {
-            show_deceased_fields();
-            change_date_fields('person');
-        }
-        else if (t.indexOf('organization') !== -1) {
-            show_deceased_fields();
-            change_date_fields('organization');
-        }
-        else if (t.indexOf('event') !== -1) {
-            hide_deceased_fields();
-            change_date_fields('event');
-        }
-        else {
-            hide_deceased_fields();
-            change_date_fields('none');
-        }
-    }
-
-    function init() {
-        // Initialize color change
-        var initialEntryType = $('#main-stub .entry-type-select').children('option:selected').text().toLowerCase();
-
-        change_colors_with(initialEntryType);
-        change_date_fields_with(initialEntryType);
-
-        // category change event should change all colors to current type
-        $('#main-stub .entry-type-select').change(function () {
-            var t = $(this).children('option:selected').text().toLowerCase();
-            change_colors_with(t);
-            change_date_fields_with(t);
-        });
-
-        Hist.initChosen();
-
-        // ----------------- DATEPICKER -----------------
-        $("#entry-date-box-1").datepicker({
-            altField: '#entry-date-box-1-helper',
-            altFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            minDate: new Date(1940, 1 - 1, 1),
-            yearRange: '1940:c',
-            onSelect: function (selectedDate) {
-                var option = "minDate",
-                    instance = $(this).data("datepicker"),
-                    date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings);
-                $('#entry-date-box-2').datepicker("option", option, date);
-
-                // select the second date automatically if shown.
-                if ($('.basics #entry-date-selected').is(':checked')) {
-                    $('#entry-date-box-2').val(selectedDate);
-                }
-            },
-            minDate: new Date(1940, 1 - 1, 1)
-        });
-        $("#entry-date-box-2").datepicker({
-            altField: '#entry-date-box-2-helper',
-            altFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            minDate: new Date(1940, 1 - 1, 1),
-            yearRange: '1940:c',
-            onSelect: function (selectedDate) {
-                var option = "maxDate",
-                    instance = $(this).data("datepicker"),
-                    date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings);
-                $('#entry-date-box-1').datepicker("option", option, date);
-            }
-        });
-
-        // ----------------- HELPER TEXTS - basics
-        $('.need-helper')
-            .focus(function () {
-                $(this).siblings('.helper-popups').fadeIn();
-            })
-            .focusout(function () {
-                $(this).siblings('.helper-popups').fadeOut();
-            });
-    }
-
-    init();
-});

@@ -3,6 +3,7 @@ from django.forms import forms
 from history.base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 from random import choice
+import logger
 
 
 class UpcomingFeature(BaseModel):
@@ -89,6 +90,10 @@ class Story(BaseModel):
                 self.video = self.video.split('?v=')[1]
 
         super(Story, self).save(*args, **kwargs)
+
+    @classmethod
+    def types(cls):
+        return ["text", "image", "video"]
 
 class Review(BaseModel):
     type = models.CharField(choices=(("UP", "up"), ("DOWN", 'down')), max_length=4)

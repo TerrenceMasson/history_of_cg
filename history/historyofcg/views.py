@@ -204,6 +204,7 @@ def edit_page(request, vanity_url):
         else:
             form = PageForm(instance=page)
             story_form = StoryForm()
+            story_types = Story.types()
 
     return locals()
 
