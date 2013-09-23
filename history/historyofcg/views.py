@@ -25,6 +25,7 @@ def home(request):
     updated_entries = Page.objects.filter(published=True).order_by('-date_modified')[:4]
 
     if request.user.is_authenticated():
+        # TODO: This NEEDS to be pulled out to a helper.
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
             show_badge1 = True
 
@@ -104,6 +105,9 @@ def view_source_entries(request, s):
     print tag_dict
 
     return locals()
+
+## Page Views
+##############
 
 #@require_safe
 #@require_POST
@@ -211,6 +215,22 @@ def edit_page(request, vanity_url):
 
     return locals()
 
+# Publishing/Upublishing Pages
+@require_POST
+def unpublish_page(request, vanity_url):
+    page = Page.objects.get(vanity_url=vanity_url)
+    page.published = False
+    page.save()
+    return JsonResponse({ 'message': "Page was unpublished successfully" });
+
+
+@require_POST
+def publish_page(request, vanity_url):
+    page = Page.objects.get(vanity_url=vanity_url)
+    page.published = True
+    page.save()
+    return JsonResponse({ 'message': "Page was published successfully" });
+
 
 def _tokens(query_set, keys=("id", "name")):
     return map(
@@ -238,24 +258,6 @@ def search(req, app_label, model):
         raise http.Http404
 
 
-@require_POST
-def unpublish_page(request, vanity_url):
-    page = Page.objects.get(vanity_url=vanity_url)
-    page.published = False
-    page.save()
-
-    return HttpResponse('')
-
-
-@require_POST
-def publish_page(request, vanity_url):
-    page = Page.objects.get(vanity_url=vanity_url)
-    page.published = True
-    page.save()
-
-    return HttpResponse('')
-
-
 ## STORY VIEWS
 ###############
 
@@ -275,6 +277,8 @@ def new_story(request, story_type, vanity_url):
         story = update_story(form, story)
         story.save()
         story_form = StoryForm(instance=story)
+        # Return the edit_story template back to the AJAX call
+        # so we can insert it into the DOM
         return render_to_response('pages/edit_story.html', { 'story_form': story_form, 'page': story_page }, context_instance=RequestContext(request))
     else:
         return JsonResponse(form.errors, status=400)

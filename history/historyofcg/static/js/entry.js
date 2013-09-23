@@ -332,12 +332,9 @@ $(document).ready(function () {
     $('.story-publish-button').on('click', function (e) {
         var $button = $(this),
             identifier = $button.data('id');
-        console.log("button text: ", $button.text());
         if ($button.text().contains("unpublish", true)) {
-            console.log("Calling uppub for story");
             Hist.unpublishForType(STORY_TYPE, identifier, $button);
         } else if ($button.text().contains("publish", true)) {
-            console.log("Calling pub for story");
             Hist.publishForType(STORY_TYPE, identifier, $button);
         }
         return false;
