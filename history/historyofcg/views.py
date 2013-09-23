@@ -13,7 +13,7 @@ from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category
 from django.views.decorators.http import require_POST
-from view_helpers import save_story, JsonResponse
+from view_helpers import update_story, JsonResponse
 import itertools
 import logger
 
@@ -272,7 +272,7 @@ def new_story(request, story_type, vanity_url):
     story_page = Page.objects.get(vanity_url=vanity_url)
     story = Story.objects.create(page=story_page, user=story_user)
     if form.is_valid():
-        story = save_story(form, story)
+        story = update_story(form, story)
         story.save()
         story_form = StoryForm(instance=story)
         return render_to_response('pages/edit_story.html', { 'story_form': story_form, 'page': story_page }, context_instance=RequestContext(request))
@@ -284,71 +284,21 @@ def new_story(request, story_type, vanity_url):
 def edit_story(request, type, id):
     story = Story.objects.get(id=id)
     form = StoryForm(request.POST, instance=story)
-    print request.POST
-    if type == 'text':
-        print 'text form'
-        if form.is_valid():
-            print 'valid form'
-            story.title = request.POST['title'].encode('ascii', 'replace')
-            story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
-            story.text = request.POST['text'].encode('ascii', 'replace')
-            if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) == 3:
-                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                    story_date = d.strftime('%Y-%m-%d')
-                    story.date = story_date
-                elif len(d) == 1:
-                    d = datetime.date(int(request.POST['date']), 1, 1)
-                    story_date = d.strftime('%Y-%m-%d')
-                    story.date = story_date
-
-    if type == 'image':
-        if form.is_valid():
-            print 'valid form'
-            story.title = request.POST['title'].encode('ascii', 'replace')
-            story.image = request.POST['image'].encode('ascii', 'replace')
-            story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
-            if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) == 3:
-                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                    story_date = d.strftime('%Y-%m-%d')
-                    story.date = story_date
-                elif len(d) == 1:
-                    d = datetime.date(int(request.POST['date']), 1, 1)
-                    story_date = d.strftime('%Y-%m-%d')
-                    story.date = story_date
-
-    if type == 'video':
-        if form.is_valid():
-            print 'valid form'
-            story.title = request.POST['title'].encode('ascii', 'replace')
-            story.video = request.POST['video'].encode('ascii', 'replace')
-            story.source = request.POST['source'].encode('ascii', 'replace') if request.POST['source'] else None
-            if request.POST['date']:
-                d = request.POST['date'].split('/')
-                if len(d) == 3:
-                    d = datetime.date(int(d[2]), int(d[0]), int(d[1]))
-                    story_date = d.strftime('%Y-%m-%d')
-                    story.date = story_date
-                elif len(d) == 1:
-                    d = datetime.date(int(request.POST['date']), 1, 1)
-                    story_date = d.strftime('%Y-%m-%d')
-                    story.date = story_date
-
-    story.save()
-
-    return redirect('/edit/page/{}'.format(story.page.vanity_url), locals())
+    if form.is_valid():
+        story = update_story(form, story)
+        story.save()
+        return JsonResponse({ 'message': "Story was saved successfully" }, 200)
+    else:
+        return JsonResponse(form.errors, status=400)
 
 
+# TODO: Publishing/Unpublishing should be authenticated
 @require_POST
 def unpublish_story(request, id):
     story = Story.objects.get(id=id)
     story.published = False
     story.save()
-
-    return HttpResponse('')
+    return JsonResponse({ 'message': "Story was unpublished successfully" });
 
 
 @require_POST
@@ -356,8 +306,7 @@ def publish_story(request, id):
     story = Story.objects.get(id=id)
     story.published = True
     story.save()
-
-    return HttpResponse('')
+    return JsonResponse({ 'message': "Story was published successfully" });
 
 
 def get_pages(request):

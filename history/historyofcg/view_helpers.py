@@ -23,7 +23,7 @@ class JsonResponse(HttpResponse):
         )
 
 
-def save_story(form, story):
+def update_story(form, story):
     logger.log("save_story called")
     data = form.cleaned_data
     story.title = data['title']

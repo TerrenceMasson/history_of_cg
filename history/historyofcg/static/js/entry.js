@@ -2,6 +2,7 @@ var Hist = Hist || {}
 
 // Loose Methods
 /////////////////
+
 function changeColors(color) {
     var allFields = $('.fields:not(.connection-fields) input[type=text], .fields:not(.connection-fields) select, .fields:not(.connection-fields) textarea, ul.token-input-list-hcg, li.source-title input, li.source-url input, .stories-col .stories p.story-collapsed-heading span.title');
     var allBorderFields = $('.fields .helper-popups');
@@ -176,6 +177,7 @@ Hist.publishForType = function(type, identifier, $storyButton) {
         type: "POST",
         url: "/publish/" + type + "/" + identifier + "/",
         success: function (action) {
+            console.log("Successfully published " + type);
             if (type === STORY_TYPE) {
                 $storyButton.html('UNPUBLISH');
                 $('#' + $storyButton.data('id') + "-story").html('PUBLISHED');
@@ -183,6 +185,9 @@ Hist.publishForType = function(type, identifier, $storyButton) {
                 $('.publish-page').html('UNPUBLISH');
                 $('.publish-status').html('PUBLISHED');
             }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("Error publishing " + type + " with identifier: " + identifier);
         }
     });
 }
@@ -191,7 +196,8 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
     $.ajax({
         type: "POST",
         url: "/unpublish/" + type + "/" + identifier + "/",
-        success: function (action) {
+        success: function(data, textStatus, jqXHR) {
+            console.log("Successfully unpublished " + type);
             if (type === STORY_TYPE) {
                 $storyButton.text('PUBLISH');
                 $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED')
@@ -199,6 +205,9 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
                 $('.publish-page').html('PUBLISH');
                 $('.publish-status').html('UNPUBLISHED');
             }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("Error unpublishing " + type + " with identifier: " + identifier);
         }
     })
 }
@@ -211,7 +220,7 @@ var StoryForm = function() {
         $.ajax({
             type: "POST",
             url: "/delete/story/" + $button.data('story-id') + "/",
-            success: function (data, textStatus, jqXHR) {
+            success: function(data, textStatus, jqXHR) {
                 // TODO: Show some success message.
                 $button.closest('.edit').remove();
                 console.log("Story successfully deleted");
@@ -234,25 +243,30 @@ var StoryForm = function() {
         $header.toggleClass("story-collapsed-heading story-opened-heading");
     }
 
-    return {
-        submit: function(form) {
-            var $form = $(form);
-            $.ajax({
-                data: $form.serialize(),
-                type: $form.attr('method'),
-                url: $form.attr('action'),
-                success: function (data, textStatus, jqXHR) {
+    var submitForm = function(form, isNewStory) {
+        var $form = $(form);
+        $.ajax({
+            data: $form.serialize(),
+            type: "POST",
+            url:  $form.attr('action'),
+            success: function (data, textStatus, jqXHR) {
+                if (isNewStory) {
                     // Add the newly saved story to the DOM
                     $('.edit-story-container').append(data);
                     $form[0].reset();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    debugger
-                    console.log("error saving story form - textStatus: ", textStatus);
+                } else {
+                    // TODO: Doing nothing, but we should show a success message
+                    console.log("Story was successfully edited");
                 }
-            });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // TODO: Show error message
+                console.log("error saving story form - textStatus: ", textStatus);
+            }
+        });
+    }
 
-        },
+    return {
         init: function() {
             var self = this;
 
@@ -263,14 +277,18 @@ var StoryForm = function() {
                 return false;
             });
             // New Story Submit event
-            $('.story-save-button').on('click', function (e) {
-                self.submit($(this).closest('form'));
+            $('.story-save-button').on('click', function(e) {
+                submitForm($(this).closest('form'), true);
+                return false;
+            });
+            $('.story-edit-button').on('click', function(e) {
+                submitForm($(this).closest('form'), false);
                 return false;
             });
             // Show New Story
             $('.new-story-button').on('click', function(e) {
                 $('.new-story-container').show();
-            })
+            });
             // Open/Collapse Story
             $('.story-collapsed-heading, .story-opened-heading').on('click', function(e) {
                 toggleStoryHeader(this);
@@ -301,30 +319,33 @@ $(document).ready(function () {
     });
 
     // Publish/Unpublish Page/Story
-    $('.publish-page').on('click', function () {
+    $('.publish-page').on('click', function (e) {
         var $button = $(this),
             identifier = $button.data('vanity-url');
-        if ($button.text() === "PUBLISH") {
-            Hist.publishForType(PAGE_TYPE, identifier);
-        } else if ($button.text() === "UNPUBLISH") {
+        if ($button.text().contains("unpublish", true)) {
             Hist.unpublishForType(PAGE_TYPE, identifier);
+        } else if ($button.text().contains("publish", true)) {
+            Hist.publishForType(PAGE_TYPE, identifier);
         }
         return false;
     });
     $('.story-publish-button').on('click', function (e) {
         var $button = $(this),
-            identifier = $button.data('data-id');
-        if ($button.text() === "PUBLISH") {
-            Hist.publishForType(STORY_TYPE, identifier, $button);
-        } else if ($button.text() === "UNPUBLISH") {
+            identifier = $button.data('id');
+        console.log("button text: ", $button.text());
+        if ($button.text().contains("unpublish", true)) {
+            console.log("Calling uppub for story");
             Hist.unpublishForType(STORY_TYPE, identifier, $button);
+        } else if ($button.text().contains("publish", true)) {
+            console.log("Calling pub for story");
+            Hist.publishForType(STORY_TYPE, identifier, $button);
         }
         return false;
     });
 
     // Connection Functions
+    // TODO: Refactor
     ////////////////////////
-
     $('.connect-entries-button').click(function (e) {
         e.preventDefault();
         button = $(this);
