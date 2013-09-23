@@ -166,6 +166,43 @@ Hist.initCSRF = function() {
     });
 }
 
+// Publishing/Unpublishing Page/Story
+//////////////////////////////////////
+
+var STORY_TYPE = "story",
+    PAGE_TYPE  = "page";
+Hist.publishForType = function(type, identifier, $storyButton) {
+    $.ajax({
+        type: "POST",
+        url: "/publish/" + type + "/" + identifier + "/",
+        success: function (action) {
+            if (type === STORY_TYPE) {
+                $storyButton.html('UNPUBLISH');
+                $('#' + $storyButton.data('id') + "-story").html('PUBLISHED');
+            } else {
+                $('.publish-page').html('UNPUBLISH');
+                $('.publish-status').html('PUBLISHED');
+            }
+        }
+    });
+}
+
+Hist.unpublishForType = function(type, identifier, $storyButton) {
+    $.ajax({
+        type: "POST",
+        url: "/unpublish/" + type + "/" + identifier + "/",
+        success: function (action) {
+            if (type === STORY_TYPE) {
+                $storyButton.text('PUBLISH');
+                $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED')
+            } else {
+                $('.publish-page').html('PUBLISH');
+                $('.publish-status').html('UNPUBLISHED');
+            }
+        }
+    })
+}
+
 // StoryForm
 /////////////
 var StoryForm = function() {
@@ -260,62 +297,33 @@ $(document).ready(function () {
     Hist.initTabs();
     Hist.StoryForm.init();
 
-
     // DOM Events
     //////////////
 
-    $('.publish-page').click(function () {
-        console.log($(this));
-        if ($(this)[0].innerText == 'PUBLISH') {
-            ___url = "/publish/page/" + $(this)[0].getAttribute('data-vanity-url') + "/"
-            $.ajax({
-                type: "POST",
-                url: ___url,
-                success: function (action) {
-                    $('.publish-page').html('UNPUBLISH');
-                    $('.publish-status').html('PUBLISHED');
-                }
-            })
-        } else {
-            ___url = "/unpublish/page/" + $(this)[0].getAttribute('data-vanity-url') + "/"
-            $.ajax({
-                type: "POST",
-                url: ___url,
-                success: function (action) {
-                    $('.publish-page').html('PUBLISH');
-                    $('.publish-status').html('UNPUBLISHED');
-                }
-            })
-        }
+    // Change Color for page on select change
+    $('#main-stub .entry-type-select').change(function () {
+        var type = $(this).children('option:selected').text().toLowerCase();
+        changeColorsForType(type);
+        changeDateFieldsForType(type);
     });
 
-
-    // Story DOM Events
-    ////////////////////
-
-    $('.story-publish-button').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        if (button[0].innerText == 'PUBLISH') {
-            ___url = "/publish/story/" + button[0].getAttribute('data-id') + "/"
-            $.ajax({
-                type: "POST",
-                url: ___url,
-                success: function (action) {
-                    button.html('UNPUBLISH');
-                    $('#' + button[0].getAttribute('data-id')).html('Published');
-                }
-            })
-        } else {
-            ___url = "/unpublish/story/" + $(this)[0].getAttribute('data-id') + "/"
-            $.ajax({
-                type: "POST",
-                url: ___url,
-                success: function (action) {
-                    button.html('PUBLISH');
-                    $('#' + button[0].getAttribute('data-id')).html('Saved');
-                }
-            })
+    // Publish/Unpublish Page/Story
+    $('.publish-page').on('click', function () {
+        var $button = $(this),
+            identifier = $button.data('vanity-url');
+        if ($button.text() === "PUBLISH") {
+            Hist.publishForType(PAGE_TYPE, identifier);
+        } else if ($button.text() === "UNPUBLISH") {
+            Hist.unpublishForType(PAGE_TYPE, identifier);
+        }
+    });
+    $('.story-publish-button').on('click', function (e) {
+        var $button = $(this),
+            identifier = $button.data('data-id');
+        if ($button.text() === "PUBLISH") {
+            Hist.publishForType(STORY_TYPE, identifier, $button);
+        } else if ($button.text() === "UNPUBLISH") {
+            Hist.unpublishForType(STORY_TYPE, identifier, $button);
         }
     });
 
@@ -354,6 +362,10 @@ $(document).ready(function () {
         window.location = "/pages/" + $(this)[0].getAttribute('data-vanity-url');
     });
 
+
+    // Deceased Date Fields
+    // TODO: Refactor
+    ////////////////////////
     if ($('#id_is_deceased').is(':checked')) {
         $(".label-entry-date-3").show();
         $(".entry-date-3").show();
@@ -376,13 +388,6 @@ $(document).ready(function () {
         }
     })
 
-    // category change event should change all colors to current type
-    $('#main-stub .entry-type-select').change(function () {
-        var t = $(this).children('option:selected').text().toLowerCase();
-        changeColorsForType(t);
-        changeDateFieldsForType(t);
-    });
-
     // Helper Text Show/Unshow
     ///////////////////////////
     $('.need-helper').focus(function () {
@@ -391,4 +396,3 @@ $(document).ready(function () {
         $(this).siblings('.helper-popups').fadeOut();
     });
 });
-

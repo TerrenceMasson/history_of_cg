@@ -3,7 +3,7 @@
     <p class="story-collapsed-heading">
         <span class="title {{ page.type|lower }}">{{ story_form.instance.title|truncatechars:"35" }}</span>
         <span class="story-type"></span>
-        <span class="info" id="{{ story_form.instance.id }}">
+        <span class="info" id="{{ story_form.instance.id }}-story">
             {% if story_form.instance.published %}
                 Published
             {% else %}
