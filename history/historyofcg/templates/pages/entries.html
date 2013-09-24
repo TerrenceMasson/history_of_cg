@@ -50,8 +50,10 @@
                         <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}
                         {% endwith %}
                         {% for t in s.tags.all %}{{ t.name }}{% endfor %} isotope-item"
+                        href="{{ s.image|safe }}"
                         data-image="{{ s.image|safe }}"
-                        data-title="{{ s.title|safe }}">
+                        data-title="{{ s.title|safe }}"
+                        data-lightbox-gallery="gallery1">
                             <div class="container opener story-image" data-image="{{ s.image|safe }}"
                                  data-title="{{ s.title|safe }}">
                                 <img src="{{ s.image }}">

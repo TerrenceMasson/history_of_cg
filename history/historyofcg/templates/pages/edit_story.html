@@ -13,6 +13,7 @@
     </p>
 
     <div class="story-collapsed">
+        {# TODO: Need to add data-type to form elements for validation when editing #}
         {% if story_form.instance.text != "" %}
             <form action="/edit/story/text/{{ story_form.instance.id }}/" method="POST" accept-charset="utf-8">
         {% elif story_form.instance.video != "" %}
