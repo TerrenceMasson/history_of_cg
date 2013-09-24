@@ -14,7 +14,7 @@ String.prototype.isEmpty = function() {
 }
 
 $(document).ready(function(){
-    $('.tile.story-image').nivoLightbox();
+    $('.tile.nivo-lightbox-item').nivoLightbox();
 });
 
 $(function () {

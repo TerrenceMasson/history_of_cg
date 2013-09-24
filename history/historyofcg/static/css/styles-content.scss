@@ -157,6 +157,15 @@ ul.catBar {
 }
 
 /* ----- mosaic content ----- */
+
+.inline-story-text {
+  color: black;
+
+  .story-title {
+    margin-bottom: 10px;
+  }
+}
+
 .mosaicBody {
   background-image: url("../img/shadesBg.png");
   background-repeat: repeat-x;

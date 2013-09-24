@@ -7,10 +7,35 @@ from django.template import resolve_variable, NodeList
 from django.contrib.auth.models import Group
 from history.historyofcg.models import Review, Story, Page
 from random import choice, uniform
+import logger
 
 
 register = template.Library()
 
+@register.simple_tag
+def random_double_size():
+    if choice([True, False]):
+        return "double-size"
+    else:
+        return ""
+
+@register.filter
+def get_story_type(story):
+    if story.text != "":
+        return "story-text"
+    elif story.image != "":
+        return "story-image"
+    elif story.video != "":
+        return "story-video"
+
+@register.filter
+def get_story_icon(story):
+    if story.text != "":
+        return "story-type-icon-text"
+    elif story.image != "":
+        return "story-type-icon-image"
+    elif story.video != "":
+        return "story-type-icon-video"
 
 @register.filter
 def replace(value, args):

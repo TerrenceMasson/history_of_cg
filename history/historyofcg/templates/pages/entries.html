@@ -38,24 +38,59 @@
         </section>
         <section class="mosaicBody">
             <ul class="mosaicContainer cf isotope"
+               {# TODO: This inline style shit needs to go #}
                 style="opacity: 1; position: relative; overflow: hidden; height: 1979px;">
                 <li class="dynamic {{ page.type }}">
                     <p>{{ page.description|truncatewords:120|safe }}</p>
                 </li>
-                {% for s in all_stories %}
-                    {% if s.image %}
+                {% for story in all_stories %}
+                    <li class="tile story isotope-item nivo-lightbox-item
+                        {{ story|get_story_type }} {% random_double_size %}
+                        {# TODO: Why include tags in the class? #}
+                        {% for tag in story.tags.all %}{{ tag.name }}{% endfor %}"
+                        {% if story.text != "" %}
+                            href="#story-{{story.id}}"
+                        {% elif story.image != "" %}
+                            href="{{ story.image|safe }}"
+                        {% elif story.video != "" %}
+                            href="{{ story.video|safe }}"
+                        {% endif %}
+                        title="{{ story.title|safe }}"
+                        data-lightbox-gallery="gallery1">
+                    <div class="container opener {{ story|get_story_type }}">
+                        {% if story.text != "" %}
+                            <p>{{ story.text|truncatewords:80|safe }}</p>
+                        {% elif story.image != "" %}
+                            <img src="{{ story.image }}">
+                        {% elif story.video != "" %}
+                            <div class='lite' style='width:478px; height:359px' id="{{ story.video }}"></div>
+                        {% endif %}
+                    </div>
+                    <div class="bottom-link">
+                        <span>{{ story.title|truncatechars:"14" }} </span>
+                        <span class="story-type {{ story|get_story_icon }}"></span>
+                        <div class="cf"></div>
+                    </div>
+                </li>
+                {% if story.text != "" %}
+                    <div id="story-{{story.id}}" class="inline-story-text hide">
+                        <h1 class="story-title"> {{ story.title|safe }} </h2>
+                        <p> {{ story.text|safe }} </p>
+                    </div>
+                {% endif %}
+                {% comment %}
+                {% if s.image %}
                         {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
                         {# and random chooses one item randomly out of this list #}
                         {% with rnd="12"|make_list|random %}
                         <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}
                         {% endwith %}
-                        {% for t in s.tags.all %}{{ t.name }}{% endfor %} isotope-item"
+                         isotope-item"
                         href="{{ s.image|safe }}"
                         data-image="{{ s.image|safe }}"
                         data-title="{{ s.title|safe }}"
                         data-lightbox-gallery="gallery1">
-                            <div class="container opener story-image" data-image="{{ s.image|safe }}"
-                                 data-title="{{ s.title|safe }}">
+                            <div class="container opener story-image" data-image="{{ s.image|safe }}" data-title="{{ story.title|safe }}">
                                 <img src="{{ s.image }}">
                             </div>
                             <div class="bottom-link">
@@ -74,7 +109,7 @@
                         <li class="tile story story-video {% for t in s.tags.all %} {{ t.name }}{% endfor %} isotope-item"
                             data-video="{{ s.video|safe }}"
                             data-title="{{ s.title|safe }}">
-                            <div class="container opener story-video" data-video="{{ s.video|safe }}"
+                            <div class="container opener story-video"
                                  data-title="{{ s.title|safe }}">
                                 <div class='lite' style='width:478px; height:359px' id="{{ s.video }}"></div>
                             </div>
@@ -111,6 +146,7 @@
                             </div>
                         </li>
                     {% endif %}
+                {% endcomment %}
                 {% endfor %}
                 {% for connection in connections.all %}
                     <li class="tile connection {{ connection.type.name }}
