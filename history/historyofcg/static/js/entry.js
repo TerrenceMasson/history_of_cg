@@ -384,7 +384,7 @@ $(document).ready(function () {
     });
 
     // Publish/Unpublish Page/Story
-    $('.stories-col').on('click', '.publish-page', function (e) {
+    $('.form-container').on('click', '.publish-page', function (e) {
         var $button = $(this),
             identifier = $button.data('vanity-url');
         if ($button.text().contains("unpublish", true)) {
@@ -411,7 +411,6 @@ $(document).ready(function () {
     $('.connect-entries-button').click(function (e) {
         e.preventDefault();
         button = $(this);
-        console.log($("#connectionSearchBox")[0].value);
         url = "/add/connection/" + button[0].getAttribute('data-vanity-url') + "/" + $("#connectionSearchBox")[0].value.replace(/ /gi,"-").replace("(", "").replace(")", "").replace(".", "").replace("-&-", "-") + "/";
         $.ajax({
             type: "POST",
