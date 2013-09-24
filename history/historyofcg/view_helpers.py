@@ -30,5 +30,6 @@ def update_story(form, story):
     story.date = data['date']
     story.source = data['source']
     story.text = data['text']
-    # TODO: Need to finish this to work for Images/Video
+    story.image = data['image']
+    story.video = data['video']
     return story

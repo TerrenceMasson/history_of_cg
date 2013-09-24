@@ -266,6 +266,15 @@ var StoryForm = function() {
         $header.toggleClass("story-collapsed-heading story-opened-heading");
     }
 
+    var resetForm = function($form) {
+        var $chosenSelects = $form.find('.chosen-select');
+        $.each($chosenSelects, function(index, select) {
+            var $select = $(select);
+            $select.val('').trigger('chosen:updated');
+        });
+        $form[0].reset();
+    }
+
     // AJAX
     ////////
     var deleteStory = function(deleteButton) {
@@ -282,7 +291,7 @@ var StoryForm = function() {
                 // TODO: Show some error message.
                 console.log("Story failed to delete.");
             }
-        })
+        });
     }
 
     var submitForm = function(form, isNewStory) {
@@ -302,7 +311,8 @@ var StoryForm = function() {
                 if (isNewStory) {
                     // Add the newly saved story to the DOM
                     $('.edit-story-container').append(data);
-                    $form[0].reset();
+                    resetForm($form);
+                    Hist.initChosen();
                 } else {
                     // TODO: Doing nothing, but we should show a success message
                     console.log("Story was successfully edited");
@@ -316,7 +326,6 @@ var StoryForm = function() {
                     value = response[key].join(' ');
                     errors.push(value);
                 }
-                console.log("errors: ", errors)
                 showErrors($form, errors);
             }
         });
@@ -333,11 +342,11 @@ var StoryForm = function() {
                 return false;
             });
             // New Story Submit event
-            $('.story-save-button').on('click', function(e) {
+            $('.stories-col').on('click', '.story-save-button', function(e) {
                 submitForm($(this).closest('form'), true);
                 return false;
             });
-            $('.story-edit-button').on('click', function(e) {
+            $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);
                 return false;
             });
@@ -346,7 +355,7 @@ var StoryForm = function() {
                 $('.new-story-container').show();
             });
             // Open/Collapse Story
-            $('.story-collapsed-heading, .story-opened-heading').on('click', function(e) {
+            $('.stories-col').on('click', '.story-collapsed-heading, .story-opened-heading', function(e) {
                 toggleStoryHeader(this);
             });
         }
@@ -375,7 +384,7 @@ $(document).ready(function () {
     });
 
     // Publish/Unpublish Page/Story
-    $('.publish-page').on('click', function (e) {
+    $('.stories-col').on('click', '.publish-page', function (e) {
         var $button = $(this),
             identifier = $button.data('vanity-url');
         if ($button.text().contains("unpublish", true)) {
@@ -385,7 +394,7 @@ $(document).ready(function () {
         }
         return false;
     });
-    $('.story-publish-button').on('click', function (e) {
+    $('.stories-col').on('click', '.story-publish-button', function(e) {
         var $button = $(this),
             identifier = $button.data('id');
         if ($button.text().contains("unpublish", true)) {

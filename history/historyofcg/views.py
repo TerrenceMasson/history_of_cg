@@ -272,8 +272,8 @@ def new_story(request, story_type, vanity_url):
     form = StoryForm(request.POST)
     story_user = request.user
     story_page = Page.objects.get(vanity_url=vanity_url)
-    story = Story.objects.create(page=story_page, user=story_user)
     if form.is_valid():
+        story = Story.objects.create(page=story_page, user=story_user)
         story = update_story(form, story)
         story.save()
         story_form = StoryForm(instance=story)
