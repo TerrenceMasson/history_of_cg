@@ -4,6 +4,9 @@
 import os
 from default import *
 
+import sys
+print >> sys.stderr, "*** RUNNING STAGING SETTINGS ***"
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

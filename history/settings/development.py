@@ -5,6 +5,9 @@ import os
 import dj_database_url # Parse database configuration from $DATABASE_URL
 from default import *
 
+import sys
+print >> sys.stderr, "*** RUNNING DEVELOPMENT SETTINGS ***"
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
