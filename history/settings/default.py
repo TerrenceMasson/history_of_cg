@@ -1,35 +1,34 @@
-# Django settings for dj_history project.
+#######################
+## DEFAULT SETTINGS ##
+######################
 import os
 import sys
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
 
 PROJECT_PATH           = os.path.realpath(os.path.dirname(__file__) + '/..')
 PROJECT_CONTAINER_PATH = os.path.realpath(os.path.dirname(PROJECT_PATH))
-GENERATED_MEDIA_DIR = os.path.join( PROJECT_PATH, 'historyofcg/static/')
-
+# Not sure if I should be doing this or not, but it makes things work...
 sys.path.append(PROJECT_CONTAINER_PATH)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('hocg', 'thekylemontag@gmail.com'),
     ('gowie', 'gowie.matt@gmail.com')
 )
-
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd9ed7eiaff0eij',                      # Or path to database file if using sqlite3.
-        'USER': 'olwqqhvokshkbc',                      # Not used with sqlite3.
-        'PASSWORD': '3HX2T9zzb0dwP3S36Do_mQIFFl',                  # Not used with sqlite3.
-        'HOST': 'ec2-54-235-134-222.compute-1.amazonaws.com',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+ACCOUNT_ACTIVATION_DAYS = 7
+DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+LOGIN_REDIRECT_URL = '/'
+
+## TODO: Move these to environment variables on Heroku
+AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
+AWS_SECRET_ACCESS_KEY = '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'
+
+# Empty DATABASES hash to be overridden by environment settings
+DATABASES = {}
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -139,7 +138,7 @@ INSTALLED_APPS = (
 ROOT_URLCONF = 'history.historyofcg.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'historyofcg.wsgi.application'
+WSGI_APPLICATION = 'history.wsgi.application'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -169,10 +168,3 @@ LOGGING = {
         },
     }
 }
-
-ACCOUNT_ACTIVATION_DAYS = 7
-DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
-AWS_SECRET_ACCESS_KEY = '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'
-LOGIN_REDIRECT_URL = '/'
