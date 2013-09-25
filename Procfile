@@ -1,1 +1,1 @@
-web: gunicorn history.historyofcg.wsgi
+web: gunicorn history.wsgi
