@@ -15,7 +15,7 @@ from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Cat
 from django.views.decorators.http import require_POST
 from view_helpers import update_story, JsonResponse
 import itertools
-import logger
+import history.logger
 
 
 

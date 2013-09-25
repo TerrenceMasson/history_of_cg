@@ -7,7 +7,7 @@ from django.template import resolve_variable, NodeList
 from django.contrib.auth.models import Group
 from history.historyofcg.models import Review, Story, Page
 from random import choice, uniform
-import logger
+import history.logger
 
 
 register = template.Library()

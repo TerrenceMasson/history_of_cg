@@ -1,9 +1,8 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.core import serializers
-from base.models import BaseModel
-
-import logger
+from history.base.models import BaseModel
+import history.logger
 
 class JsonResponse(HttpResponse):
     """ JSON response """
