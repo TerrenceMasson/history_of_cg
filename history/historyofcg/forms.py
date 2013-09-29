@@ -6,6 +6,7 @@ from models import *
 from datetime import date
 
 CURRENT_YEAR = date.today().year
+YEARS_RANGE = range(1930, CURRENT_YEAR + 1)
 
 class PageForm(ModelForm):
     tags = TokenField(Tag, required=False, widget=TokenWidget(
@@ -26,8 +27,8 @@ class PageForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
 
         # Setup Date Select fields
-        self.fields['date_established'].widget = SelectDateWidget(years=range(1960, CURRENT_YEAR + 1))
-        self.fields['date_deceased'].widget = SelectDateWidget(years=range(1960, CURRENT_YEAR + 1))
+        self.fields['date_established'].widget = SelectDateWidget(years=YEARS_RANGE)
+        self.fields['date_deceased'].widget = SelectDateWidget(years=YEARS_RANGE)
 
         # Apply classes to fields
         for f in self.fields:
@@ -48,5 +49,5 @@ class StoryForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields['date'].widget = SelectDateWidget(years=range(1960, CURRENT_YEAR + 1))
+        self.fields['date'].widget = SelectDateWidget(years=YEARS_RANGE)
         self.fields['date'].widget.attrs = { 'class': 'chosen-select' }
