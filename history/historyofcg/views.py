@@ -15,6 +15,7 @@ from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Cat
 from django.views.decorators.http import require_POST
 from view_helpers import update_story, JsonResponse
 import itertools
+import re
 from history import logger
 
 
@@ -136,9 +137,8 @@ def add_page(request):
             page_type = form.cleaned_data['type']
             page_name = form.cleaned_data['name']
             page_description = form.cleaned_data['description']
-            ## TODO: This is where the comma error (#20) came from.
-            ## Refactor this to use some fancy regex shit.
-            page_vanity_url = form.cleaned_data['name'].replace(' ', '-').replace('_', '-').replace('(', '').replace(')', '').replace('.', '')
+            ## Replace whitespace, _'s, ,'s,('s, )'s, and .'s with - for vanity url
+            page_vanity_url = re.sub(r"[\s|_|,|\(|\)|\.]+", '-', form.cleaned_data['name'])
             if page_vanity_url[len(page_vanity_url) - 1] == "-":
                 page_vanity_url = page_vanity_url[:len(page_vanity_url) - 1]
             page_tags = form.cleaned_data['tags']
