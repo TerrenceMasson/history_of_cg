@@ -55,9 +55,10 @@
                         {% elif story.video != "" %}
                             href="{{ story.video|safe }}"
                         {% endif %}
+                        data-index={{ forloop.counter }}
                         title="{{ story.title|safe }}"
                         data-lightbox-gallery="gallery1">
-                    <div class="container opener {{ story|get_story_type }}">
+                    <div class="container {{ story|get_story_type }}">
                         {% if story.text != "" %}
                             <p>{{ story.text|truncatewords:80|safe }}</p>
                         {% elif story.image != "" %}

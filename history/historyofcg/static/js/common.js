@@ -1,3 +1,5 @@
+var Hist = Hist || {};
+
 // String Additions
 ////////////////////
 String.prototype.contains = function(substring, ignoreCase) {
@@ -13,8 +15,43 @@ String.prototype.isEmpty = function() {
     return this.trim() === "";
 }
 
+// Nivo LightBox Config
+////////////////////////
+
+Hist.Lightbox = function() {
+    var currentIndex, itemCount;
+    var setItemDetails = function(lightbox) {
+        if ($('.lightbox-item-details').length === 0) {
+            $('.nivo-lightbox-overlay').append("<div class='lightbox-item-details'> Story " + currentIndex + " of " + itemCount + "</div>");
+        } else {
+            $('.lightbox-item-details').html("Story " + currentIndex + " of " + itemCount);
+        }
+    }
+    var setCurrentIndex = function(item) {
+        var $currentItem = $(item.target).closest('.nivo-lightbox-item');
+        currentIndex = $currentItem.data('index')
+    }
+    var updateItemDetails = function(item) {
+        currentIndex = $(item[0]).data('index');
+        setItemDetails();
+    }
+    return {
+        init: function() {
+            itemCount = $('.nivo-lightbox-item').length;
+
+            $('.tile.nivo-lightbox-item').nivoLightbox({
+                afterShowLightbox: setItemDetails,
+                onPrev: updateItemDetails,
+                onNext: updateItemDetails
+            });
+
+            $('.tile.nivo-lightbox-item').on('click', setCurrentIndex);
+        }
+    }
+}();
+
 $(document).ready(function(){
-    $('.tile.nivo-lightbox-item').nivoLightbox();
+    Hist.Lightbox.init();
 });
 
 $(function () {
@@ -32,7 +69,6 @@ $(function () {
                 .children('a').html(buttonText.signupOrLogin.login);
         }
     }
-
 
     if ($('#login_button')) {
         $('#login_box .form-container').load('/templates/login.html');

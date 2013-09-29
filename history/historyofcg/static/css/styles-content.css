@@ -71,6 +71,12 @@
   .entryMast .catBarContainer {
     background: black; }
 
+.nivo-lightbox-overlay .lightbox-item-details {
+  float: right;
+  position: relative;
+  right: 70px;
+  top: 20px; }
+
 ul.catBar {
   background-color: #0f0f0f;
   font-family: Gotham, Helvetica, sans-serif;
