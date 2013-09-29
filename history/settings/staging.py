@@ -12,8 +12,12 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '{}/db.db'.format(PROJECT_PATH),  # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd35h42qdt5qleh',
+        'USER': 'aujjmjyfaootpi',
+        'PASSWORD': 'XFmOBtt7djazOBDp2P0tSQrfvA',
+        'HOST': 'ec2-23-21-196-147.compute-1.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
