@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>People Behind the Pixels</title>
+
     <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/baseline.reset.css' %}">
     <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/jquery-ui.css' %}">
     <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles.css' %}">
@@ -10,10 +11,8 @@
 
     <script type="text/javascript" src="{% static 'js/libs/jquery-1.8.3.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/jquery-ui.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/libs/URI.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/jquery.isotope.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/messages.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/home.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
 </head>
@@ -21,6 +20,7 @@
 <div class="message" style="display:none;"></div>
 <div class="spacer"></div>
 <div id="page">
+    {# TODO: Why isn't this using the base.html template. Should be moved over. #}
     <header id="masthead">
         <div class="topRight unitx2">
             <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
