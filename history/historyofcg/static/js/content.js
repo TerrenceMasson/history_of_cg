@@ -63,7 +63,7 @@ $(function () {
             $mosaic.isotope('reLayout');
         }
 
-        $('.entryMast .entryTitle').click(function () {
+        $('.entryMast .entry_title').click(function () {
             if ($('.entryMast .catBar .category.selected').size() !== 0) {
                 close_tag_lists();
             }
