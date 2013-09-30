@@ -1,5 +1,13 @@
 {% extends 'default/base.html' %}
-{% load staticfiles %}{% load hocgtags %}
+{% load staticfiles %}
+{% load hocgtags %}
+{% block extra_head %}
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/nivo-lightbox.css' %}">
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/nivo-theme/default.css' %}">
+    <script type="text/javascript" src="{% static 'js/libs/nivo-lightbox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entry_show.js' %}"></script>
+
+{% endblock %}
 {% block content %}
     <div id="content">
         <div class="message" style="display: none;"></div>
@@ -10,7 +18,15 @@
         </div>
         <!-- start of page content -->
         <section class="entryMast">
-            <h1 class="entry_title {{ page.type }}">{{ page.name }}</h1>
+            <h1 class="entry_title {{ page.type }}" data-type="{{ page.type }}">{{ page.name }}</h1>
+            <div class="entry_dates">
+                {% if page.date_established %}
+                    <p><span id="date_established"> Established Date: </span> {{ page.date_established }} </p>
+                {% endif %}
+                {% if page.date_deceased %}
+                    <p><span id="date_deceased"> Deceased Date: </span> {{ page.date_deceased }} </p>
+                {% endif %}
+            </div>
             <div class="catBarContainer">
                 <ul class="catBar">
                     <li class="category project"><a href="#" data-filter=".project">Projects</a></li>
@@ -28,8 +44,8 @@
                 <ul>
                     <li class="all" style=""><input type="checkbox" data-filter="*" checked="checked">All</li>
                     {% for k,v in tag_dict %}
-                        <li class="{{ k }}" style="display: inline-block"><input type="checkbox"
-                                                                                 data-filter=".{{ v.split|join:"-" }}">{{ v }}
+                        <li class="{{ k }}" style="display: inline-block">
+                            <input type="checkbox" data-filter=".{{ v.split|join:"-" }}">{{ v }}
                         </li>
                     {% endfor %}
                 </ul>

@@ -1,6 +1,8 @@
 /* -------- Imports --------- */
 @import "colors";
 
+$content_width: 990px;
+
 .contentWrapper {
   color: #fff;
   font-family: Helvetica, sans-serif;
@@ -20,6 +22,14 @@
   .catBarContainer {
     background: black;
   }
+
+  .entry_dates {
+    font-size: 16px;
+    width: $content_width;
+    margin: 0 auto;
+    margin-bottom: 5px;
+  }
+
 }
 
 

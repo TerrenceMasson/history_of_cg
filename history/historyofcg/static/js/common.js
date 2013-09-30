@@ -15,44 +15,98 @@ String.prototype.isEmpty = function() {
     return this.trim() === "";
 }
 
-// Nivo LightBox Config
-////////////////////////
+// Date field handling
+///////////////////////
 
-Hist.Lightbox = function() {
-    var currentIndex, itemCount;
-    var setItemDetails = function(lightbox) {
-        if ($('.lightbox-item-details').length === 0) {
-            $('.nivo-lightbox-overlay').append("<div class='lightbox-item-details'> Story " + currentIndex + " of " + itemCount + "</div>");
-        } else {
-            $('.lightbox-item-details').html("Story " + currentIndex + " of " + itemCount);
+Hist.DateHelper = function() {
+    // TODO: This DateInfo object is off for some of the categories (orgs at least)
+    // Needs to be refactored
+    var dateInfo = {
+        'project': {
+            'dateLabel': 'Date',
+            'helperText': 'When did this project take place?'
+        },
+        'person': {
+            'dateLabel': 'Birth date',
+            'helperText': 'When was this person born?',
+            'secondDateLabel': 'Deceased?',
+            'secondHelperText': 'Deceased Date',
+            'secondDateCheckboxLabel': 'Is this person deceased?'
+        },
+        'organization': {
+            'dateLabel': 'Established Date',
+            'helperText': 'When was this organization founded?',
+            'secondDateLabel': 'Is Closed?',
+            'secondHelperText': 'Closing Date',
+            'secondDateCheckboxLabel': 'This organization no longer exists'
+        },
+        'event': {
+            'dateLabel': 'Date',
+            'helperText': 'When did this event take place?',
+            'secondDateLabel': 'End Date',
+            'secondHelperText': 'When did this event end?',
+            'secondDateCheckboxLabel': 'This is a multi-day event'
+        },
+        'none': {
+            'dateLabel': 'Date',
+            'helperText': 'Select an entry type to learn more about this date'
         }
+    };
+
+    var showDeceased = function() {
+        $('.label-entry-date-2').show();
+        $('.entry-date-2').show();
     }
-    var setCurrentIndex = function(item) {
-        var $currentItem = $(item.target).closest('.nivo-lightbox-item');
-        currentIndex = $currentItem.data('index')
+    var hideDeceased = function() {
+        $('.label-entry-date-2').hide();
+        $('.entry-date-2').hide();
     }
-    var updateItemDetails = function(item) {
-        currentIndex = $(item[0]).data('index');
-        setItemDetails();
+
+    var changeDateFields = function(type) {
+        var $dateLabel = $('.basics .label-entry-date');
+        var $dateHelperText = $('.basics .entry-date .helper-popups');
+        var $secondDateLabel = $('.basics .label-entry-date-2');
+        var $secondDateHelperText = $('.basics .entry-date-2 .helper-popups');
+        var $secondDateCheckboxLabel = $('.basics .entry-date-2-selected label');
+        var $secondDate = $('.basics .entry-date-2');
+        var $secondDateCheckbox = $('.basics #entry-date-selected');
+        var $tertiaryDateLabel = $('.basics .label-entry-date-3');
+        $dateLabel.html(dateInfo[type].dateLabel);
+        $dateHelperText.html(dateInfo[type].helperText);
+        $secondDateLabel.html(dateInfo[type].secondDateLabel);
+        $tertiaryDateLabel.html(dateInfo[type].secondHelperText);
     }
+
     return {
-        init: function() {
-            itemCount = $('.nivo-lightbox-item').length;
-
-            $('.tile.nivo-lightbox-item').nivoLightbox({
-                afterShowLightbox: setItemDetails,
-                onPrev: updateItemDetails,
-                onNext: updateItemDetails
-            });
-
-            $('.tile.nivo-lightbox-item').on('click', setCurrentIndex);
+        changeShowPageLabels: function() {
+            var type = $('.entry_title').data('type').toLowerCase(),
+                $establishedLabel = $('#date_established'),
+                $deceasedLabel    = $('#date_deceased'),
+                // Hack til the DateInfo object is fixed up
+                deceasedText      = dateInfo[type]['secondDateLabel'].replace(/\?/,'');
+                $establishedLabel.html(dateInfo[type]['dateLabel'] + ':');
+            $deceasedLabel.html(deceasedText + ':');
+        },
+        changeDateFieldsForType: function(type) {
+            if (type.indexOf('project') !== -1) {
+                hideDeceased();
+                changeDateFields('project');
+            } else if (type.indexOf('person') !== -1) {
+                showDeceased();
+                changeDateFields('person');
+            } else if (type.indexOf('organization') !== -1) {
+                showDeceased();
+                changeDateFields('organization');
+            } else if (type.indexOf('event') !== -1) {
+                hideDeceased();
+                changeDateFields('event');
+            } else {
+                hideDeceased();
+                changeDateFields('none');
+            }
         }
     }
 }();
-
-$(document).ready(function(){
-    Hist.Lightbox.init();
-});
 
 $(function () {
 

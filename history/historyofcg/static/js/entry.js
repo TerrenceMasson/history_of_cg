@@ -32,91 +32,11 @@ function changeColorsForType(t) {
     }
 }
 
-// Date field handling
-///////////////////////
-
-var dateInfo = {
-    'project': {
-        'dateLabel': 'Date',
-        'helperText': 'When did this project take place?'
-    },
-    'person': {
-        'dateLabel': 'Birth date',
-        'helperText': 'When was this person born?',
-        'secondDateLabel': 'Deceased?',
-        'secondHelperText': 'Deceased Date',
-        'secondDateCheckboxLabel': 'Is this person deceased?'
-    },
-    'organization': {
-        'dateLabel': 'Established Date',
-        'helperText': 'When was this organization founded?',
-        'secondDateLabel': 'Is Closed?',
-        'secondHelperText': 'Closing Date?',
-        'secondDateCheckboxLabel': 'This organization no longer exists'
-    },
-    'event': {
-        'dateLabel': 'Date',
-        'helperText': 'When did this event take place?',
-        'secondDateLabel': 'End Date',
-        'secondHelperText': 'When did this event end?',
-        'secondDateCheckboxLabel': 'This is a multi-day event'
-    },
-    'none': {
-        'dateLabel': 'Date',
-        'helperText': 'Select an entry type to learn more about this date'
-    }
-};
-
-function showDeceased() {
-    $('.label-entry-date-2').show();
-    $('.entry-date-2').show();
-}
-function hideDeceased() {
-    $('.label-entry-date-2').hide();
-    $('.entry-date-2').hide();
-}
-
-function changeDateFields(t) {
-    var $dateLabel = $('.basics .label-entry-date');
-    var $dateHelperText = $('.basics .entry-date .helper-popups');
-    var $secondDateLabel = $('.basics .label-entry-date-2');
-    var $secondDateHelperText = $('.basics .entry-date-2 .helper-popups');
-    var $secondDateCheckboxLabel = $('.basics .entry-date-2-selected label');
-    var $secondDate = $('.basics .entry-date-2');
-    var $secondDateCheckbox = $('.basics #entry-date-selected');
-    var $tertiaryDateLabel = $('.basics .label-entry-date-3');
-    // date 1 section
-    $dateLabel.html(dateInfo[t].dateLabel);
-    $dateHelperText.html(dateInfo[t].helperText);
-
-    $secondDateLabel.html(dateInfo[t].secondDateLabel);
-    $tertiaryDateLabel.html(dateInfo[t].secondHelperText);
-}
-
-function changeDateFieldsForType(t) {
-    if (t.indexOf('project') !== -1) {
-        hideDeceased();
-        changeDateFields('project');
-    } else if (t.indexOf('person') !== -1) {
-        showDeceased();
-        changeDateFields('person');
-    } else if (t.indexOf('organization') !== -1) {
-        showDeceased();
-        changeDateFields('organization');
-    } else if (t.indexOf('event') !== -1) {
-        hideDeceased();
-        changeDateFields('event');
-    } else {
-        hideDeceased();
-        changeDateFields('none');
-    }
-}
-
 Hist.initColorsAndDate = function() {
     // Initialize color change
     var initialEntryType = $('#main-stub .entry-type-select').children('option:selected').text().toLowerCase();
     changeColorsForType(initialEntryType);
-    changeDateFieldsForType(initialEntryType);
+    Hist.DateHelper.changeDateFieldsForType(initialEntryType);
 }
 
 Hist.initChosen = function() {
@@ -380,7 +300,7 @@ $(document).ready(function () {
     $('#main-stub .entry-type-select').change(function () {
         var type = $(this).children('option:selected').text().toLowerCase();
         changeColorsForType(type);
-        changeDateFieldsForType(type);
+        Hist.DateHelper.changeDateFieldsForType(type);
     });
 
     // Publish/Unpublish Page/Story

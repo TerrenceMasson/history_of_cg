@@ -70,6 +70,11 @@
     cursor: pointer; }
   .entryMast .catBarContainer {
     background: black; }
+  .entryMast .entry_dates {
+    font-size: 16px;
+    width: 990px;
+    margin: 0 auto;
+    margin-bottom: 5px; }
 
 .nivo-lightbox-overlay .lightbox-item-details {
   float: right;
