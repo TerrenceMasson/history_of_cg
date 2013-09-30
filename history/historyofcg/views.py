@@ -13,9 +13,8 @@ from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category
 from django.views.decorators.http import require_POST
-from view_helpers import update_story, JsonResponse
+from view_helpers import create_page, update_story, JsonResponse
 import itertools
-import re
 from history import logger
 
 
@@ -110,59 +109,19 @@ def view_source_entries(request, s):
 ## Page Views
 ##############
 
-#@require_safe
-#@require_POST
 @render_to('pages/add.html')
 def add_page(request):
-    if request.user.is_authenticated():
-        if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
-
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login/')
     if request.method == 'POST':
-        form = PageForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
+        form = PageForm(request.POST)
+        if form.is_valid():
             # Create the Page
-            page_type = form.cleaned_data['type']
-            page_name = form.cleaned_data['name']
-            page_description = form.cleaned_data['description']
-            ## Replace whitespace, _'s, ,'s,('s, )'s, and .'s with - for vanity url
-            page_vanity_url = re.sub(r"[\s|_|,|\(|\)|\.]+", '-', form.cleaned_data['name'])
-            if page_vanity_url[len(page_vanity_url) - 1] == "-":
-                page_vanity_url = page_vanity_url[:len(page_vanity_url) - 1]
-            page_tags = form.cleaned_data['tags']
-            page_homepage = form.cleaned_data['homepage']
-            page_date = form.cleaned_data['date_established']
-
-            page = Page.objects.create(
-                type=page_type,
-                name=page_name,
-                description=page_description,
-                vanity_url=page_vanity_url,
-                homepage=page_homepage,
-                date_established=page_date,
-                user=request.user
-            )
+            page = create_page(form, request)
             page.save()
-
-            page.tags = page_tags
-            page.save()
-
-            print 'page saved'
-            return redirect('/edit/page/{}'.format(page_vanity_url)) # Redirect after POST
+            return redirect('/edit/page/{}'.format(page.vanity_url))
         else:
-            print 'invalid form'
+            logger.log("Form Errors: ", form.errors)
     else:
         form = PageForm()
 

@@ -87,16 +87,20 @@ div.form-container {
   }
   form {
     div.section-in-form {
-      padding: 20px 0;
       &:last-child {
         border: 0;
       }
     }
     div.stub {
       ul.required-fields {
-        select.entry-type-select {
+
+        .entry-type-select {
           margin-bottom: 10px;
           width: 360px;
+        }
+
+        .entry-tags {
+          margin-bottom: 10px;
         }
       }
     }
@@ -114,7 +118,7 @@ div.form-container {
       }
       ul.basic-labels {
         li.label-entry-source {
-          margin-top: 170px;
+          margin-top: 10px;
         }
         li.label-entry-homepage {
           position: relative;
@@ -132,6 +136,12 @@ div.form-container {
       }
     }
   }
+  form#entry_edit_form {
+    .label-entry-source {
+      margin-top: 170px;
+    }
+  }
+
   div.right-column {
     float: right;
     margin-top: 20px;
@@ -203,12 +213,8 @@ div.form-container {
       }
     }
   }
-  div.section-in-form {
-    padding: 20px 0;
-    &:last-child {
-      border: 0;
-    }
-  }
+
+
   div.stories-col {
     float: left;
     width: 530px;
