@@ -1,1 +1,1 @@
-web: gunicorn history.wsgi
+web: gunicorn history.wsgi --pid /tmp/gunicorn.pid
