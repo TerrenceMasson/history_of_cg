@@ -175,8 +175,6 @@ div.form-container {
   div.form-container form div.basics ul.basic-labels li.label-entry-date-2 span.label {
     position: relative;
     top: 50px; }
-  div.form-container form#entry_edit_form .label-entry-source {
-    margin-top: 170px; }
   div.form-container div.right-column {
     float: right;
     margin-top: 20px;

@@ -9,7 +9,7 @@ CURRENT_YEAR = date.today().year
 YEARS_RANGE = range(1930, CURRENT_YEAR + 1)
 
 class PageForm(ModelForm):
-    tags = TokenField(Tag, required=False, widget=TokenWidget(
+    tags = TokenField(Tag, required=True, widget=TokenWidget(
         theme='hcg',
         allowCustomEntry=True,
         preventDuplicates=True,

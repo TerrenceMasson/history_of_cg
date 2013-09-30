@@ -41,6 +41,10 @@
                             <li class="label-entry-type labels">Type of Page <span class="required">*</span></li>
                             <li class="label-entry-name labels">Entry name <span class="required">*</span></li>
                             <li class="label-entry-tags labels">Tags <span class="required">*</span></li>
+                            <li class="label-entry-description labels" style="margin-top: 10px;">
+                                Description
+                                <span class="required">*</span>
+                            </li>
                         </ul>
                     </ul>
                     <ul class="required-fields all-fields">
@@ -56,13 +60,18 @@
                             {{ form.tags.errors }}
                             {{ form.tags }}
                         </li>
+                        <li class="entry-description fields">
+                            {{ form.description.errors }}
+                            {{ form.description }}
+                            <span id="helper-description" class="helper-popups {{ page.type }}-border">
+                            Tell us some details about this entry. Don't worry about too much technical data, just give us an idea of what this entry is about. This description will be displayed on the entries page.
+                            </span>
+                        </li>
                     </ul>
                     <div class="cf"></div>
                 </div>
                 <div class="basics section-in-form">
                     <ul class="basic-labels all-labels">
-                        <li class="label-entry-description labels" style="margin-top: 10px;">Description <span
-                                class="required"></span></li>
                         <li class="label-entry-source labels">Homepage</li>
                         <li class="label-entry-date labels">Date Established</li>
                         {% if page.type.name == 'person' or page.type.name == "organization"  %}
@@ -71,13 +80,6 @@
                         {% endif %}
                     </ul>
                     <ul class="basic-fields all-fields">
-                        <li class="entry-description fields">
-                            {{ form.description.errors }}
-                            {{ form.description }}
-                            <span id="helper-description" class="helper-popups {{ page.type }}-border">
-                            Tell us some details about this entry. Don't worry about too much technical data, just give us an idea of what this entry is about. This description will be displayed on the entries page.
-                            </span>
-                        </li>
                         <li class="entry-homepage fields">
                             {{ form.homepage.errors }}
                             {{ form.homepage }}
