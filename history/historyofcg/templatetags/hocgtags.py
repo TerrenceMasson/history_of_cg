@@ -29,6 +29,18 @@ def get_story_type(story):
         return "story-video"
 
 @register.filter
+def get_youtube_img(story):
+    if story.video != "":
+        video_id = story.video.split('?v=')[1]
+        return "http://img.youtube.com/vi/%s/sddefault.jpg" % video_id
+    else:
+        logger.log("story.video equals empty string. Can't grab image for this story: ", story)
+
+@register.filter
+def is_youtube_video(story):
+    return True if "youtube" in story.video else False
+
+@register.filter
 def get_story_icon(story):
     if story.text != "":
         return "story-type-icon-text"

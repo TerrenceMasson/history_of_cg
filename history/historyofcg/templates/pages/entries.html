@@ -34,7 +34,8 @@
                     <li class="category organization"><a href="#" data-filter=".organization">Organizations</a></li>
                     <li class="category event"><a href="#" data-filter=".event">Events</a></li>
                     {% if user.is_authenticated %}
-                        <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>{% endif %}
+                        <li class="editEntry"><a href="/edit/page/{{ page.vanity_url }}">Edit Page</a></li>
+                    {% endif %}
                     <div class="cf"></div>
                 </ul>
             </div>
@@ -60,9 +61,7 @@
                 </li>
                 {% for story in all_stories %}
                     <li class="tile story isotope-item nivo-lightbox-item
-                        {{ story|get_story_type }} {% random_double_size %}
-                        {# TODO: Why include tags in the class? #}
-                        {% for tag in story.tags.all %}{{ tag.name }}{% endfor %}"
+                        {{ story|get_story_type }} {% random_double_size %}"
                         {% if story.text != "" %}
                             href="#story-{{story.id}}"
                         {% elif story.image != "" %}
@@ -79,7 +78,11 @@
                         {% elif story.image != "" %}
                             <img src="{{ story.image }}">
                         {% elif story.video != "" %}
-                            <div class='lite' style='width:478px; height:359px' id="{{ story.video }}"></div>
+                            {% if story|is_youtube_video %}
+                                <img src="{{ story|get_youtube_img }}" style='width:478px; height:359px'>
+                            {% else %}
+                                <div class="vimeo_video hide" data-url="{{story.video}}">
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="bottom-link">

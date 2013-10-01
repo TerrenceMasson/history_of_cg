@@ -83,13 +83,6 @@ class Story(BaseModel):
     def __unicode__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        if self.video:
-            if "?v=" in self.video:
-                self.video = self.video.split('?v=')[1]
-
-        super(Story, self).save(*args, **kwargs)
-
     @classmethod
     def types(cls):
         return ["text", "image", "video"]
