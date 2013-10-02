@@ -82,9 +82,10 @@ Hist.DateHandler = function() {
             var type = $('.entry_title').data('type').toLowerCase(),
                 $establishedLabel = $('#date_established'),
                 $deceasedLabel    = $('#date_deceased'),
-                // Hack til the DateInfo object is fixed up
-                deceasedText      = dateInfo[type]['secondDateLabel'].replace(/\?/,'');
-                $establishedLabel.html(dateInfo[type]['dateLabel'] + ':');
+                deceasedText      = dateInfo[type]['secondDateLabel'];
+            // Remove ?'s --- Hack til the DateInfo object is fixed up.
+            if (deceasedText) { deceasedText = deceasedText.replace(/\?/,''); }
+            $establishedLabel.html(dateInfo[type]['dateLabel'] + ':');
             $deceasedLabel.html(deceasedText + ':');
         },
         changeDateFieldsForType: function(type) {
