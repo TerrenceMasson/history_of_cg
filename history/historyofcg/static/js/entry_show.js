@@ -2,7 +2,7 @@ Hist = Hist || {};
 
 $(document).ready(function() {
     Hist.Lightbox.init();
-    Hist.DateHelper.changeShowPageLabels();
+    Hist.DateHandler.changeShowPageLabels();
 });
 
 // Nivo LightBox Config

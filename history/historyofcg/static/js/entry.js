@@ -1,3 +1,4 @@
+
 var Hist = Hist || {}
 
 // Loose Methods
@@ -36,7 +37,7 @@ Hist.initColorsAndDate = function() {
     // Initialize color change
     var initialEntryType = $('#main-stub .entry-type-select').children('option:selected').text().toLowerCase();
     changeColorsForType(initialEntryType);
-    Hist.DateHelper.changeDateFieldsForType(initialEntryType);
+    Hist.DateHandler.changeDateFieldsForType(initialEntryType);
 }
 
 Hist.initChosen = function() {
@@ -300,7 +301,7 @@ $(document).ready(function () {
     $('#main-stub .entry-type-select').change(function () {
         var type = $(this).children('option:selected').text().toLowerCase();
         changeColorsForType(type);
-        Hist.DateHelper.changeDateFieldsForType(type);
+        Hist.DateHandler.changeDateFieldsForType(type);
     });
 
     // Publish/Unpublish Page/Story

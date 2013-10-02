@@ -18,7 +18,7 @@ String.prototype.isEmpty = function() {
 // Date field handling
 ///////////////////////
 
-Hist.DateHelper = function() {
+Hist.DateHandler = function() {
     // TODO: This DateInfo object is off for some of the categories (orgs at least)
     // Needs to be refactored
     var dateInfo = {
