@@ -118,6 +118,7 @@ MIDDLEWARE_CLASSES = (
 TEMPLATE_DIRS = ('history/historyofcg/templates',)
 
 INSTALLED_APPS = (
+    # Django Apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -125,12 +126,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.webdesign',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+
+    # Our Apps
     'history.historyofcg',
     'history.base',
+
+    # Helper Apps
     'history.registration',
     'south',
 )

@@ -179,7 +179,16 @@ ul.catBar {
   margin-right: 5px;
 }
 
-/* ----- mosaic content ----- */
+// TILES
+/////////
+
+.tile.story {
+
+  .story_video_image {
+    width: 478px;
+    height: 359px;
+  }
+}
 
 .inline-story-text {
   color: black;

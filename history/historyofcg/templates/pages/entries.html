@@ -79,7 +79,7 @@
                             <img src="{{ story.image }}">
                         {% elif story.video != "" %}
                             {% if story|is_youtube_video %}
-                                <img src="{{ story|get_youtube_img }}" style='width:478px; height:359px'>
+                                <img src="{{ story|get_youtube_img }}" class='story_video_image'>
                             {% else %}
                                 <div class="vimeo_video hide" data-url="{{story.video}}">
                             {% endif %}
