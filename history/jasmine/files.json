@@ -1,0 +1,10 @@
+{
+    "name": "History of CG Jasmine Test Suite",
+    "js_files": [
+      "/static/js/libs/jquery-1.8.3.min.js",
+      "/static/js/proto-extensions.js",
+      "/static/js/common.js",
+      ""
+    ],
+    "media_files": []
+}

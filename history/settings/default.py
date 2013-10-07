@@ -135,7 +135,12 @@ INSTALLED_APPS = (
     # Helper Apps
     'history.registration',
     'south',
+
+    # Testing Apps
+    'django_jasmine'
 )
+
+JASMINE_TEST_DIRECTORY = os.path.join(PROJECT_PATH, 'jasmine')
 
 ROOT_URLCONF = 'history.historyofcg.urls'
 

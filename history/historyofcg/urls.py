@@ -2,10 +2,14 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django_jasmine import urls
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
+
+    # Jasmine Test Suite URL
+    url(r'^jasmine/', include('django_jasmine.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
