@@ -15,6 +15,6 @@ Setting up your machine:
   * Install the dependencies - `pip install -r requirements.txt`
   * Setup a .env file so foreman knows where to find Django's settings. You can do this by running the following from this projects top level directory (where Procfile lives):
     * `touch .env && echo "DJANGO_SETTINGS_MODULE=history.settings.development" >> .env`
-  * Create the hocg database for your local Postgres install. Use the Postgres.app icon to open psql and then run `CREATE DATABASE mydb` at the prompt
+  * Create the hocg database for your local Postgres install. Use the Postgres.app icon to open psql and then run `CREATE DATABASE hocg` at the prompt
   * Use `foreman start` to start Gunicorn. localhost:5000 should be up and running. 
 
