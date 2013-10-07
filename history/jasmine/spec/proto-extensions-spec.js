@@ -13,5 +13,13 @@ describe('prototype extensions', function() {
       });
       it('should find the word shred', function() { expect(testingString.contains("SHRED")).toBe(true); });
     });
+    describe('isEmpty', function() {
+      it('should return true on an empty string', function() {
+        expect(''.isEmpty()).toBe(true);
+      });
+      it('should return false on a non empty string', function() {
+        expect('SHRED'.isEmpty()).toBe(false);
+      })
+    });
   });
 });
