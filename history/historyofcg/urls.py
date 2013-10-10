@@ -8,9 +8,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 
-    # Jasmine Test Suite URL
-    url(r'^jasmine/', include('django_jasmine.urls')),
-
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -45,3 +42,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+# Add the Jasmine Test Suite URL if we're in DEBUG mode 
+if settings.DEBUG == True:
+    urlpatterns += patterns('',  url(r'^jasmine/', include('django_jasmine.urls')))
