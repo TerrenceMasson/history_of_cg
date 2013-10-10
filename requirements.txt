@@ -13,3 +13,4 @@ simplejson==3.3.0
 static==0.4
 virtualenv==1.9.1
 wsgiref==0.1.2
+django-discover-runner==1.0
