@@ -137,7 +137,9 @@ INSTALLED_APPS = (
     'south',
 
     # Testing Apps
-    'django_jasmine'
+    'django_jasmine',
+    'discover_runner'
+
 )
 
 JASMINE_TEST_DIRECTORY = os.path.join(PROJECT_PATH, 'jasmine')
