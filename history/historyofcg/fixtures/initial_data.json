@@ -1,0 +1,38 @@
+[
+  {
+    "model": "historyofcg.category",
+    "pk": 1,
+    "fields": {
+      "name": "person",
+      "date_created": "1991-03-28 06:47",
+      "date_modified": "1991-03-28 06:47"
+    }
+  },
+  {
+    "model": "historyofcg.category",
+    "pk": 2,
+    "fields": {
+      "name": "project",
+      "date_created": "1991-03-28 06:47",
+      "date_modified": "1991-03-28 06:47"
+    }
+  },
+  {
+    "model": "historyofcg.category",
+    "pk": 3,
+    "fields": {
+      "name": "organization",
+      "date_created": "1991-03-28 06:47",
+      "date_modified": "1991-03-28 06:47"
+    }
+  },
+  {
+    "model": "historyofcg.category",
+    "pk": 4,
+    "fields": {
+      "name": "event",
+      "date_created": "1991-03-28 06:47",
+      "date_modified": "1991-03-28 06:47"
+    }
+  }
+]

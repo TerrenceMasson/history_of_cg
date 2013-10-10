@@ -14,5 +14,3 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
-
-__author__ = 'Kyle'

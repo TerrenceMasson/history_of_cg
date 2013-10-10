@@ -10,7 +10,9 @@ class UpcomingFeature(BaseModel):
     text = models.TextField()
     display = models.BooleanField()
 
-# Create your models here.
+# TODO: If it's possible it be amazing to get rid of this waste of a model
+#  Don't know who designed this schema, but they fucked up. 
+#  Also, note that there is fixture data for these in fixtures/initial_data.json
 class Category(BaseModel):
     # 1 -> person
     # 2 -> project
@@ -64,7 +66,7 @@ class Page(BaseModel):
     user_made = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.name
+        return "---> name: %s published: %s" % (self.name, self.published)
 
 
 class Story(BaseModel):
