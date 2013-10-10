@@ -11,7 +11,7 @@ urlpatterns = patterns('history.historyofcg.views',
     # Top Level URLs
     url(r'^$', 'home', name="home"),
     url(r'^about/$', 'about'),
-    url(r'^user/(?P<i>\d+)/$', 'user_page')
+    url(r'^user/(?P<i>\d+)/$', 'user_page'),
 
     # Page URLs
     url(r'^pages/(?P<s>[-\w]+)/$', 'view_source_entries'),
@@ -41,7 +41,7 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^remove/connection/(?P<remove_to>[-\w]+)/(?P<to_remove>[-\w]+)/$', 'remove_connection', name='remove_connection'),
 )
 
-urlpatters += patterns('', 
+urlpatterns += patterns('', 
     # Admin URLs
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
