@@ -9,8 +9,10 @@ PROJECT_CONTAINER_PATH = os.path.realpath(os.path.dirname(PROJECT_PATH))
 # Not sure if I should be doing this or not, but it makes things work...
 sys.path.append(PROJECT_CONTAINER_PATH)
 
+TESTING = False
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+
 
 ADMINS = (
     ('hocg', 'thekylemontag@gmail.com'),
