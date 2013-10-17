@@ -11,7 +11,7 @@ from django.utils import simplejson
 from django.views.decorators.http import require_safe
 from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
-from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category
+from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category, Tag
 from django.views.decorators.http import require_POST
 from view_helpers import create_page, update_story, JsonResponse
 import itertools
@@ -198,6 +198,14 @@ def _tokens(query_set, keys=("id", "name")):
         lambda v: dict(zip(keys, v)),
         query_set.values_list(*keys))
 
+## TAGS
+########
+
+@require_POST
+def add_tag(request):
+    new_tag, created = Tag.objects.get_or_create(name=request.POST.get('tag_name'))
+    return JsonResponse(new_tag)
+    
 
 def search(req, app_label, model):
     content_type = get_object_or_404(ContentType, app_label=app_label, model=model)

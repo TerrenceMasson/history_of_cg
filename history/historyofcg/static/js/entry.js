@@ -52,6 +52,45 @@ Hist.initTabs = function() {
     $('.tabs-min').tabs();
 }
 
+Hist.TokenInput = function() {
+    var inputValue = "";
+
+    var postNewTag = function(e) {
+        // If the input value isn't blank then post the new Tag name to the server
+        // and then add it to the dom via $.tokenInput#add
+        if (inputValue != "") {
+            $.post("/add/tag/", { "tag_name": inputValue }, function(data, other, other1) {
+                $('input.tokeninput').tokenInput("add", { id: data[0].pk, name: data[0].fields.name });
+            });
+        }
+        return false;
+    }
+    var addCreateButton = function() {
+        var createButton = $('<button>')
+                        .addClass('add-tag-button')
+                        .text('Create')
+                        .on('click', postNewTag);
+        $('.entry-tags').append(createButton);
+    }
+
+    return {
+        init: function() {
+            $("input.tokeninput").each(function () {
+                var $field = $(this), 
+                    options = $field.data("settings");
+                options.onReady = addCreateButton;
+                $field.tokenInput($field.data("search-url"), options);
+            });
+
+            // Grab the input value before InputToken wipes it out. 
+            // Uses jQuery preBind addition from common.js
+            $('.token-input-input-token-hcg input').preBind('blur', function(e) {
+                inputValue = $(this).val();
+            });
+        },
+    };
+}();
+
 // CSRF Workaround
 // Ref: https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
 ///////////////////
@@ -292,6 +331,7 @@ $(document).ready(function () {
     Hist.initColorsAndDate();
     Hist.initChosen();
     Hist.initTabs();
+    Hist.TokenInput.init();
     Hist.StoryForm.init();
 
     // DOM Events

@@ -32,8 +32,9 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^vote/down/(?P<story_id>\d+)/$', 'down_vote_story'),
     url(r'^vote/none/(?P<story_id>\d+)/$', 'no_vote_story'),
 
-    # TODO: Unknown.. Not sure what these are doing. 
+    url(r'^add/tag/$', "add_tag", name="add_tag"),
     url(r'^tags/(?P<app_label>[-\w]+)/(?P<model>[-\w]+)$', "search", name="djtokeninput_search"),
+
     url(r'^get/pages/$', 'get_pages', name='get_pages'),
 
     # Connections

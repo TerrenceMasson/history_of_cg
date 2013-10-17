@@ -100,7 +100,14 @@ div.form-container {
         }
 
         .entry-tags {
+          height: 50px;
           margin-bottom: 10px;
+
+          .add-tag-button {
+            position: relative;
+            left: 5px;
+            top: 5px;
+          }
         }
       }
     }
@@ -530,6 +537,7 @@ div.form-container {
 /* =============== token =============== */
 ul.token-input-list-hcg {
   @include field;
+  float: left;
   background-color: darken($bg, 3%) !important;
   border: 1px lighten($bg, 5%) solid !important;
   font-family: Helvetica, Arial, sans-serif !important;
@@ -542,7 +550,7 @@ ul.token-input-list-hcg {
       background-color: $bg !important;
       margin-bottom: 0 !important;
       padding: 5px !important;
-      width: 40px !important;
+      width: 55px !important;
     }
   }
   li.token-input-token-hcg {

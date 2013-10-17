@@ -1,5 +1,23 @@
 var Hist = Hist || {};
 
+// jQuery Additions
+////////////////////
+
+// Prebind - Bind before other events. 
+// Snagged from http://stackoverflow.com/questions/6029251/jquery-bind-event-listener-before-another
+$.fn.preBind = function (type, data, fn) {
+    this.each(function () {
+        var $this = $(this);
+        $this.bind(type, data, fn);
+
+        var currentBindings = $._data(this, "events")[type];
+        if ($.isArray(currentBindings)) {
+            currentBindings.unshift(currentBindings.pop());
+        }
+    });
+    return this;
+};
+
 // Date field handling
 ///////////////////////
 
