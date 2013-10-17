@@ -306,6 +306,7 @@ def add_connection(request, connect_to, to_connect):
     else: 
         ## TODO: We should notify user of error finding the connection
         logger.log_simple("Failed to find one of the pages with the given vanity urls")
+        raise Http404
         
 
 

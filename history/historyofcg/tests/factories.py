@@ -7,11 +7,11 @@ from history import logger
 class UserFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = User
 
-    username = "gowie"
-    password = "apassword"
-    email = "gowie.matt@gmail.com"
-    first_name = "Matt"
-    last_name = "Gowie"
+    username = factory.Sequence(lambda n : "gowie{}".format(n))
+    password = factory.Sequence(lambda n : "password{}".format(n))
+    email = factory.Sequence(lambda n : "gowie.matt{}@gmail.com".format(n))
+    first_name = factory.Sequence(lambda n : "Matt{}".format(n))
+    last_name = factory.Sequence(lambda n : "Gowie{}".format(n))
 
 class CategoryPersonFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = Category
