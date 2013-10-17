@@ -13,7 +13,6 @@ class TokenWidget(forms.TextInput):
 
         js = (
             "js/libs/jquery-tokeninput-1.6.0-min.js",
-            "js/libs/djtokeninput.js"
         )
 
     def __init__(self, attrs=None, **kwargs):
