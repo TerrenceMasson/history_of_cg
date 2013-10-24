@@ -1,5 +1,5 @@
 // initialize Isotope
-$(function () {
+$(document).ready(function() {
     var $container = $('#updated-entries-container')
     $container.isotope({
         itemSelector: ".tile",
@@ -12,13 +12,12 @@ $(function () {
         resizable: false
     });
     $container.isotope("shuffle");
-});
 
-
-// update columnWidth on window resize
-$(window).smartresize(function () {
-    $container.isotope({
-        // update columnWidth to a percentage of container width
-        masonry: { columnWidth: $container.width() / 5 }
+    // update columnWidth on window resize
+    $(window).smartresize(function () {
+        $container.isotope({
+            // update columnWidth to a percentage of container width
+            masonry: { columnWidth: $container.width() / 5 }
+        });
     });
 });

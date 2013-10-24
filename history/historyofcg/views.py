@@ -23,7 +23,7 @@ from history import logger
 #@require_safe
 def home(request):
     updated_entries = Page.objects.filter(published=True).order_by('-date_modified')[:4]
-
+    rendering_home = True # Not a great idea, but better than not extending from base
     if request.user.is_authenticated():
         # TODO: This NEEDS to be pulled out to a helper.
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:

@@ -68,6 +68,26 @@ html, body {
 .hide {
   display: none; }
 
+#page {
+  margin: 0 auto;
+  min-height: 100%;
+  /* equal to footer height */
+  margin-bottom: -50px; }
+  #page:after {
+    content: "";
+    display: block; }
+
+.site_footer, #page:after {
+  /* #content must be the same height as footer */
+  height: 50px;
+  width: 990px;
+  margin: 10px auto; }
+  .site_footer .footer_links, #page:after .footer_links {
+    margin: 0 auto;
+    text-align: center; }
+    .site_footer .footer_links a, #page:after .footer_links a {
+      padding: 10px; }
+
 .tabs-min {
   background: transparent;
   border: none; }
@@ -95,9 +115,6 @@ html, body {
 /* ~~~~ Containers ~~~~ */
 .wrapper {
   font-size: 75%; }
-
-#page {
-  margin: 0 auto; }
 
 .spacer {
   display: none;

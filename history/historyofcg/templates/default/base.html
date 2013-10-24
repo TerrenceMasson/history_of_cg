@@ -46,55 +46,69 @@
     {% endblock %}
 </head>
 <body class="wrapper">
-<div id="page">
-    <header id="masthead">
-        <div class="branding unitx2">
-            <a href="/"><img src="{% static 'img/logoSm.png' %}" alt="People Behind the Pixels"></a>
-        </div>
-        <div class="topRight internal">
-            <a href="mailto:feedback@visualfx.com?Subject=Feedback%20for%20History%20of%20CG">Feedback?</a>
-            <a href="/about">About</a>
-            {% if not request.user.is_authenticated %}
-                <a href="/accounts/login">Login</a>
+    <div id="page">
+        <header id="masthead">
+            {% if not rendering_home %}
+            <div class="branding unitx2">
+                <a href="/"><img src="{% static 'img/logoSm.png' %}" alt="People Behind the Pixels"></a>
+            </div>
             {% endif %}
-            {% if request.user.is_authenticated %}
+            <div class="topRight internal">
+                <a href="mailto:feedback@visualfx.com?Subject=Feedback%20for%20History%20of%20CG">Feedback?</a>
+                <a href="/about">About</a>
+                {% if not request.user.is_authenticated %}
+                <a href="/accounts/login">Login</a>
+                {% endif %}
+                {% if request.user.is_authenticated %}
                 <a href="/accounts/logout">Logout</a>
                 <a href="/add/page">Add an Entry</a>
                 <a href="/user/{{ request.user.id }}/">Your Pages</a>
+                {% endif %}
+                {% comment %}
+            <!-- Note: Below is for the gamification stuff which is just sitting around...
+                 I would like to rip all of that out, but terrence would like it kept around.
+                 If this ever ends up being a feature, I'd suggest starting over. -->
+                 {% if show_badge1 %}
+                 <span class="user-badge user-badge-one"></span>
+                 {% endif %}
+                 {% if show_badge2 %}
+                 <span class="user-badge user-badge-two"></span>
+                 {% endif %}
+                 {% if show_badge3 %}
+                 <span class="user-badge user-badge-three"></span>
+                 {% endif %}
+                 {% if show_badge4 %}
+                 <span class="user-badge user-badge-four"></span>
+                 {% endif %}
+                 {% if show_badge5 %}
+                 <span class="user-badge user-badge-five"></span>
+                 {% endif %}
+                 {% endcomment %}
+             </div>
+             {% if not rendering_home %}
+             <div class="topSearch">
+                <form id="searchForm" class="search unitx2 cf">
+                    <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off"
+                    role="textbox" aria-autocomplete="list" aria-haspopup="true" id="searchBox">
+                    <button class="searchBtn" title="Search">Search</button>
+                </form>
+            </div>
             {% endif %}
-            {% if show_badge1 %}
-                <span class="user-badge user-badge-one"></span>
-            {% endif %}
-            {% if show_badge2 %}
-                <span class="user-badge user-badge-two"></span>
-            {% endif %}
-            {% if show_badge3 %}
-                <span class="user-badge user-badge-three"></span>
-            {% endif %}
-            {% if show_badge4 %}
-                <span class="user-badge user-badge-four"></span>
-            {% endif %}
-            {% if show_badge5 %}
-                <span class="user-badge user-badge-five"></span>
-            {% endif %}
+            <div class="cf"></div>
+            {% block body_header %} {% endblock %}
+        </header>
+        <div id="content">
+            {% block content %} {% endblock %}
         </div>
-        <div class="topSearch">
-            <form id="searchForm" class="search unitx2 cf">
-                <input type="text" class="searchBox ui-autocomplete-input" placeholder="Search" autocomplete="off"
-                       role="textbox" aria-autocomplete="list" aria-haspopup="true" id="searchBox"">
-                <button class="searchBtn" title="Search">Search</button>
-            </form>
+    </div>  {# End of Page #}
+    <div class="cf"></div>
+    <footer class="site_footer">
+        <hr>
+        <div class="footer_links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="mailto:feedback@visualfx.com?Subject=Feedback%20for%20History%20of%20CG">Feedback</a>
         </div>
-        <div class="cf"></div>
-        {% block body_header %} {% endblock %}
-    </header>
-    <div id="content">
-        <div class="message" style="display: none;"></div>
-        {% block content %} {% endblock %}
-    </div>
-    {% block body_footer %} {% endblock %}
-</div>
-<ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox"
-    aria-activedescendant="ui-active-menuitem" style="z-index: 1; top: 0px; left: 0px; display: none;"></ul>
+    </footer>
 </body>
 </html>

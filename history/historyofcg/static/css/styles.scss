@@ -19,6 +19,32 @@ html, body {
   display: none;
 }
 
+#page {
+  margin: 0 auto;
+  min-height: 100%;
+  /* equal to footer height */
+  margin-bottom: -50px; 
+  &:after {
+    content: "";
+    display: block;
+  }
+}
+
+.site_footer, #page:after {
+  /* #content must be the same height as footer */
+  height: 50px; 
+  width: 990px;
+  margin: 10px auto;
+
+  .footer_links {
+    margin: 0 auto;
+    text-align: center;
+    a {
+      padding: 10px;
+    }
+  }
+}
+
 // jQuery UI Tabs
 //////////////////
 
@@ -54,10 +80,6 @@ html, body {
 /* ~~~~ Containers ~~~~ */
 .wrapper {
   font-size: 75%;
-}
-
-#page {
-  margin: 0 auto;
 }
 
 .spacer {
