@@ -41,7 +41,7 @@ def create_page(form, request):
     page_type = form.cleaned_data['type']
     page_description = form.cleaned_data['description']
     ## Replace whitespace, _'s, ,'s,('s, )'s, and .'s with - for vanity url
-    page_vanity_url = re.sub(r"[\s|_|,|\(|\)|\.]+", '-', form.cleaned_data['name'])
+    page_vanity_url = re.sub(r"[^A-Za-z0-9]+", '-', form.cleaned_data['name']).lower()
     if page_vanity_url[len(page_vanity_url) - 1] == "-":
         page_vanity_url = page_vanity_url[:len(page_vanity_url) - 1]
     page = Page.objects.create(name=page_name, type=page_type, vanity_url=page_vanity_url, description=page_description, user=request.user)
