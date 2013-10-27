@@ -54,11 +54,8 @@ def replace(value, args):
     # fancy syntax -> args are split by a /
     # first arg is the value to replace in the string
     # second is what to replace it with
-    print args
     to_replace = args.split('/')[0]
-    print to_replace
     replace_with = args.split('/')[1]
-    print len(replace_with)
 
     split = value.replace(to_replace, replace_with)
 
@@ -66,10 +63,11 @@ def replace(value, args):
 
 
 @register.filter
-def get_random_image(value):
-    images = Story.objects.filter(page__vanity_url=value.vanity_url, published=True, text__isnull=True, video__isnull=True)
-    page = Page.objects.get(vanity_url = value.vanity_url)
+def get_random_image(page):
+    images = Story.objects.filter(page__pk=page.id, published=True)
+    images = filter(lambda x: x.type() == "image", images)
     if len(images) == 0:
+        ## TODO: We're hot linking our random person image from clker.com
         return "/static/img/P_desatCentered02.png" if page.type.name != "person" else "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
     else:
         return choice(images).image

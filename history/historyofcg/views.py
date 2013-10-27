@@ -127,7 +127,6 @@ def add_page(request):
 
     return locals()
 
-#@require_safe
 @render_to('pages/edit.html')
 def edit_page(request, vanity_url):
     if request.user.is_authenticated():
@@ -302,6 +301,9 @@ def get_pages(request):
     return HttpResponse(data, mimetype=mimetype)
 
 
+## Add/Remove Connections
+##########################
+
 ## TODO: This should return an AJAX response. 
 ## I'm getting tired of this send ajax and then return the full page bullshit. 
 @require_POST
@@ -316,8 +318,6 @@ def add_connection(request, connect_to, to_connect):
         ## TODO: We should notify user of error finding the connection
         logger.log_simple("Failed to find one of the pages with the given vanity urls")
         raise Http404
-        
-
 
 @require_POST
 def remove_connection(request, remove_to, to_remove):
@@ -329,6 +329,11 @@ def remove_connection(request, remove_to, to_remove):
 
     return HttpResponse('')
 
+
+## Voting
+##########
+
+## Note: None of the following views are used on the frontend.
 
 @require_POST
 def up_vote_story(request, story_id):

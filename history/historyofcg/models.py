@@ -3,6 +3,7 @@ from django.forms import forms
 from history.base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 from random import choice
+from history import logger
 
 
 class UpcomingFeature(BaseModel):
@@ -83,7 +84,17 @@ class Story(BaseModel):
     text = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
-        return self.title
+        return "STORY -> title: " + self.title + " video: " + self.video + " image: " + self.image + " text: " + self.text[:10]
+
+    def type(self):
+        if self.text is not None and self.text != "":
+            return "text"
+        elif self.video is not None and self.video != "":
+            return "video"
+        elif self.image is not None and self.image != "":
+            return "image"
+        else:
+            logger.log_simple("NO TYPE FOR STORY: " + self.id)
 
     @classmethod
     def types(cls):

@@ -22,7 +22,7 @@ class JsonResponse(HttpResponse):
             status=status,
             content_type=content_type,
         )
-
+    
 
 def update_story(form, story):
     logger.log("save_story called")
@@ -30,9 +30,9 @@ def update_story(form, story):
     story.title = data['title']
     story.date = data['date']
     story.source = data['source']
-    story.text = data['text']
-    story.image = data['image']
-    story.video = data['video']
+    story.text = data['text'] if data['text'] != u'' else None
+    story.image = data['image'] if data['image'] != u'' else None
+    story.video = data['video'] if data['video'] != u'' else None
     return story
 
 def create_page(form, request):
