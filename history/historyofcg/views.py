@@ -1,5 +1,7 @@
 import json
 import datetime
+import itertools
+
 from django import http
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
@@ -9,12 +11,16 @@ from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils import simplejson
 from django.views.decorators.http import require_safe
+from django.views.decorators.http import require_POST
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import password_change as django_password_change
+from django.contrib.auth.views import password_change_done as django_password_change_done
+
+
 from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category, Tag
-from django.views.decorators.http import require_POST
 from view_helpers import create_page, update_story, JsonResponse
-import itertools
 from history import logger
 
 
@@ -328,6 +334,23 @@ def remove_connection(request, remove_to, to_remove):
     page_remove_to.save()
 
     return HttpResponse('')
+
+## Registration Overrides
+##########################
+def password_change(request,
+                    template_name='registration/password_change_form.html',
+                    post_change_redirect=None,
+                    password_change_form=PasswordChangeForm,
+                    current_app=None, extra_context=None):
+    extra_context = { "request": request }
+    return django_password_change(request, extra_context=extra_context)
+
+def password_change_done(request,
+                         template_name='registration/password_change_done.html',
+                         current_app=None, extra_context=None):
+    extra_context = { "request": request }
+    return django_password_change_done(request, extra_context=extra_context)
+
 
 
 ## Voting

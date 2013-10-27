@@ -128,7 +128,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.webdesign',
-    'django.contrib.admin',
 
     # Our Apps
     'history.historyofcg',
@@ -140,7 +139,10 @@ INSTALLED_APPS = (
 
     # Testing Apps
     'django_jasmine',
-    'discover_runner'
+    'discover_runner',
+
+    # Admin
+    'django.contrib.admin',
 
 )
 
