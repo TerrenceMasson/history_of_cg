@@ -36,17 +36,19 @@ def update_story(form, story):
     return story
 
 def create_page(form, request):
-    ## Required
+    ## Required fields: Name, type, description, vanity_url
     page_name = form.cleaned_data['name']
     page_type = form.cleaned_data['type']
     page_description = form.cleaned_data['description']
-    ## Replace whitespace, _'s, ,'s,('s, )'s, and .'s with - for vanity url
+    ## Replace anything but A-Z, a-z, 0-9 with hyphens for vanity url
     page_vanity_url = re.sub(r"[^A-Za-z0-9]+", '-', form.cleaned_data['name']).lower()
+    ## If the last character is a hyphen then remove it
     if page_vanity_url[len(page_vanity_url) - 1] == "-":
         page_vanity_url = page_vanity_url[:len(page_vanity_url) - 1]
+
     page = Page.objects.create(name=page_name, type=page_type, vanity_url=page_vanity_url, description=page_description, user=request.user)
 
-    ## Non Required
+    ## Non Required: tags, homepage, established date, deceased date
     page.tags = form.cleaned_data['tags']
     page.homepage = form.cleaned_data['homepage']
     page.date_established = form.cleaned_data['date_established']

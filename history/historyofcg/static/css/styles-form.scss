@@ -161,6 +161,8 @@ div.form-container {
       button {
         margin: 10px 0 !important;
       }
+
+      // Single Connection
       div.connections {
         background: #171717;
         border-radius: 3px;
@@ -169,18 +171,20 @@ div.form-container {
         font-weight: 600;
         margin-bottom: 5px;
         padding: 5px;
-        &:hover {
+
+        // Connection Link
+        .name:hover {
           cursor: pointer;
         }
-        span.delete {
+
+        // Delete Button
+        .delete {
           float: right;
           &:hover {
-            background-color: lighten(#171717, 13%);
+            background-color: white;
             border-radius: 3px;
+            cursor: pointer;
           }
-        }
-        span.name {
-          float: left;
         }
       }
       form {

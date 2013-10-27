@@ -8,7 +8,6 @@
 
     <script type="text/javascript" src="{% static 'js/libs/jquery.form.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/jquery.tokeninput.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/entry-extras.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/chosen.jquery.js' %}"></script>
 
 {% endblock %}
@@ -33,7 +32,12 @@
                 </div>
                 <div class="cf"></div>
             </div>
-            <form action="/edit/page/{{ page.vanity_url }}/" method="POST" id="entry_edit_form">{% csrf_token %}
+            <form action="/edit/page/{{ page.vanity_url }}/"
+                  data-id="{{ page.id }}" 
+                  data-vanity-url="{{ page.vanity_url }}"
+                  method="POST" 
+                  id="entry_edit_form">
+                {% csrf_token %}
                 <div id="main-stub" class="stub section-in-form">
                     <ul class="required-labels all-labels">
                         <ul class="required-labels all-labels">

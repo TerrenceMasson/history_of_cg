@@ -323,6 +323,89 @@ var StoryForm = function() {
 }();
 Hist.StoryForm = StoryForm;
 
+Hist.ConnectEntries = function() {
+    var currentPageId,
+        currentPageVanity;
+
+    var modifyConnectionWithEntry = function(connecteeId, isAddConnection) {
+        var type = isAddConnection ? "add" : "remove",
+            url = "/" + type + "/connection/" + currentPageId + "/" + connecteeId + "/";
+        console.log("modifyConnectionWithEntry - type: ", type, " url: ", url);
+        debugger
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (action) {
+                window.location = "/edit/page/" + currentPageVanity;
+            }
+        });
+    }
+
+    var initAutoComplete = function() {
+        // Get pagename
+        var path = window.location.pathname;
+        var pagename = path.substring(path.lastIndexOf("/") + 1)
+        pagename = pagename.toLowerCase();
+
+        $('#connectionSearchBox').autocomplete({
+            source: "/get/pages/",
+            minLength: 1,
+            focus: function (event, ui) {
+                $("#connectionSearchBox").val(ui.item['name']);
+                $("#connectionSearchBox").data('id', ui.item['id']);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#connectionSearchBox").val(ui.item['name']);
+                $("#connectionSearchBox").data('id', ui.item['id']);
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            var re = new RegExp(this.term, "i");
+            var match = item.name.match(re);
+            var t = item['name'].replace(re, "<span class='autocomplete-name-term-highlight'>" + match + "</span>");
+            var innerContent = "<a><span class='autocomplete-name'>" + t + "</span><span class='autocomplete-category-box " + item['type'] + "'></span>";
+
+            if (pagename === "") {
+                innerContent += "<span class='autocomplete-category " + item['type'] + "'>" + item['type'].toUpperCase() + "</span>";
+            }
+
+            innerContent += "</a>";
+
+            return $("<li></li>").data("item.autocomplete", item)
+            .append(innerContent)
+            .appendTo(ul);
+        };
+    }
+
+    return {
+        init: function() {
+            // Init the jQuery autocomplete plugin on the connection entries search box
+            initAutoComplete();
+
+            // Setup Connect Entries State
+            currentPageId = $('#entry_edit_form').data('id');
+            currentPageVanity = $('#entry_edit_form').data('vanity-url');
+
+            // Register Dom events
+            $('.connect-entries-button').click(function (e) {
+                e.preventDefault();
+                modifyConnectionWithEntry($('#connectionSearchBox').data('id'), true);
+            });
+
+            $('.connections .delete').click(function (e) {
+                modifyConnectionWithEntry($(this).data('id'), false);
+            });
+
+            // TODO: I don't feel like dealing with stlying issues right now, but
+            // somebody reinvented the a tag here and yeah.. should change that.
+            // $('.connections .name').click(function(e) {
+            //     window.location = "/pages/" + $(this).data('vanity-url');
+            // });
+        }
+    }
+}();
+
 $(document).ready(function () {
 
     // Init All The Things!
@@ -333,6 +416,11 @@ $(document).ready(function () {
     Hist.initTabs();
     Hist.TokenInput.init();
     Hist.StoryForm.init();
+
+    // If this screen isn't the edit screen then no need to init this.
+    if ($('#connectionSearchBox').length !== 0) {
+        Hist.ConnectEntries.init();
+    }
 
     // DOM Events
     //////////////
@@ -365,41 +453,6 @@ $(document).ready(function () {
         }
         return false;
     });
-
-    // Connection Functions
-    // TODO: Refactor
-    ////////////////////////
-    $('.connect-entries-button').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/add/connection/" + button[0].getAttribute('data-vanity-url') + "/" + $("#connectionSearchBox")[0].value.replace(/ /gi,"-").replace("(", "").replace(")", "").replace(".", "").replace("-&-", "-") + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
-            }
-        })
-    });
-
-    $('div.connections span.delete').click(function (e) {
-        e.preventDefault();
-        button = $(this);
-        url = "/remove/connection/" + button[0].getAttribute('data-vanity-url') + "/" + button[0].getAttribute('data-name') + "/";
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function (action) {
-                window.location = "/edit/page/" + button[0].getAttribute('data-vanity-url');
-            }
-        })
-    });
-
-    $('div.connections span.name').click(function(e) {
-        e.preventDefault();
-        window.location = "/pages/" + $(this)[0].getAttribute('data-vanity-url');
-    });
-
 
     // Deceased Date Fields
     // TODO: Refactor

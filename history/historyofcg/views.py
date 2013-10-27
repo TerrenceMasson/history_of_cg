@@ -289,6 +289,7 @@ def get_pages(request):
         results = []
         for page in pages:
             page_json = {
+                "id": str(page.id),
                 "name": str(page.name),
                 "type": str(page.type.name),
                 "vanity": str(page.vanity_url)
@@ -305,9 +306,9 @@ def get_pages(request):
 ## I'm getting tired of this send ajax and then return the full page bullshit. 
 @require_POST
 def add_connection(request, connect_to, to_connect):
-    if Page.objects.filter(vanity_url=to_connect).exists() and Page.objects.filter(vanity_url=connect_to).exists():
-        page_connect_to = Page.objects.get(vanity_url=connect_to)
-        page_to_connect = Page.objects.get(vanity_url=to_connect)
+    if Page.objects.filter(pk=to_connect).exists() and Page.objects.filter(pk=connect_to).exists():
+        page_connect_to = Page.objects.get(pk=connect_to)
+        page_to_connect = Page.objects.get(pk=to_connect)
         page_connect_to.connections.add(page_to_connect)
         page_connect_to.save()
         return HttpResponse('')
@@ -320,14 +321,11 @@ def add_connection(request, connect_to, to_connect):
 
 @require_POST
 def remove_connection(request, remove_to, to_remove):
-    page_remove_to = Page.objects.get(vanity_url=remove_to)
-    page_to_remove = Page.objects.get(vanity_url=to_remove)
+    page_remove_to = Page.objects.get(pk=remove_to)
+    page_to_remove = Page.objects.get(pk=to_remove)
 
     page_remove_to.connections.remove(page_to_remove)
     page_remove_to.save()
-
-    if page_to_remove.user_made == False:
-        page_to_remove.delete()
 
     return HttpResponse('')
 

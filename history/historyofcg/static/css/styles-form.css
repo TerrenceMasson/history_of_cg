@@ -211,15 +211,14 @@ div.form-container {
         font-weight: 600;
         margin-bottom: 5px;
         padding: 5px; }
-        div.form-container div.right-column div.connections-col div.connections:hover {
+        div.form-container div.right-column div.connections-col div.connections .name:hover {
           cursor: pointer; }
-        div.form-container div.right-column div.connections-col div.connections span.delete {
+        div.form-container div.right-column div.connections-col div.connections .delete {
           float: right; }
-          div.form-container div.right-column div.connections-col div.connections span.delete:hover {
-            background-color: #383838;
-            border-radius: 3px; }
-        div.form-container div.right-column div.connections-col div.connections span.name {
-          float: left; }
+          div.form-container div.right-column div.connections-col div.connections .delete:hover {
+            background-color: white;
+            border-radius: 3px;
+            cursor: pointer; }
       div.form-container div.right-column div.connections-col form {
         border-bottom: 1px #424b53 solid;
         margin-bottom: 10px; }
