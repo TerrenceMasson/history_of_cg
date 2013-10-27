@@ -53,7 +53,6 @@ Hist.VideoHandler = function() {
         },
         init: function() {
             var $vimeos = $('.vimeo_video');
-            console.log("vimeos: ", $vimeos);
             if ($vimeos.length > 0) {
                 this.updateVimeos($vimeos);
             }

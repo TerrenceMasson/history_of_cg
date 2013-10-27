@@ -88,11 +88,11 @@ class Story(BaseModel):
         return self.title
 
     def type(self):
-        if self.text is not None and self.text != "":
+        if self.text != None and self.text != "":
             return "text"
-        elif self.video is not None and self.video != "":
+        elif self.video != None and self.video != "":
             return "video"
-        elif self.image is not None and self.image != "":
+        elif self.image != None and self.image != "":
             return "image"
         else:
             logger.log_simple("NO TYPE FOR STORY: " + self.title)

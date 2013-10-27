@@ -30,9 +30,12 @@ def update_story(form, story):
     story.title = data['title']
     story.date = data['date']
     story.source = data['source']
-    story.text = data['text'] if data['text'] != u'' else None
-    story.image = data['image'] if data['image'] != u'' else None
-    story.video = data['video'] if data['video'] != u'' else None
+    if data['text'] != u'':
+        story.text = data['text']
+    elif data['image'] != u'':        
+        story.image = data['image'] 
+    elif data['video'] != u'':        
+        story.video = data['video']
     return story
 
 def create_page(form, request):
