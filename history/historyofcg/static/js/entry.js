@@ -185,7 +185,7 @@ var StoryForm = function() {
         if ($form.find('.story-title input').val().isEmpty()) {
             errors.push("The story title is required.");
         }
-        console.log("story type: ", type)
+        
         // Check for the individual story types required fields
         if (type === "text") {
             var $storyField = $form.find('.story-body textarea');

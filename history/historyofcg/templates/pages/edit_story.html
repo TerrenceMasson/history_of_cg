@@ -13,24 +13,20 @@
     </p>
 
     <div class="story-collapsed">
-        {# TODO: Need to add data-type to form elements for validation when editing #}
-        {% if story_form.instance.text != "" %}
-            <form action="/edit/story/text/{{ story_form.instance.id }}/" method="POST" accept-charset="utf-8">
-        {% elif story_form.instance.video != "" %}
-            <form action="/edit/story/video/{{ story_form.instance.id }}/" method="POST" accept-charset="utf-8">
-        {% elif story_form.instance.image != "" %}
-            <form action="/edit/story/image/{{ story_form.instance.id }}/" method="POST" accept-charset="utf-8">
-        {% endif %}
+        <form action="/edit/story/{{ story_form.instance.type }}/{{ story_form.instance.id }}/" 
+            method="POST"
+            accept-charset="utf-8"
+            data-type="{{ story_form.instance.type }}">
         {% csrf_token %}
             <ul class="story-labels all-labels">
                 <li class="label-story-title labels">Title<span class="required"> *</span></li>
                 <li class="label-story-date labels">Date</li>
                 <li class="label-story-source labels">Source</li>
-                {% if story_form.instance.text != "" %}
+                {% if story_form.instance.type == "text" %}
                     <li class="label-story-source_url labels">Source URL</li>
                     <li class="label-story-story labels">Story<span class="required"> *</span></li>
-                {% elif story_form.instance.video != "" or story_form.instance.image != "" %}
-                    <li class="label-story-url labels">URL<span class="required"> *</span></li>
+                {% elif story_form.instance.type == "video" or story_form.instance.type == "image" %}
+                    <li class="label-story-url labels">URL<span class="required">*</span></li>
                 {% endif %}
             </ul>
             <ul class="story-fields all-fields">
@@ -49,7 +45,7 @@
                 </li>
                 {# Text #}
                 {#########}
-                {% if story_form.instance.text != "" %}
+                {% if story_form.instance.type == "text" %}
                     <li class="story-source fields {{ page.type }}">
                         {{ story_form.source_url.errors }}
                         {{ story_form.source_url }}
@@ -61,14 +57,14 @@
                     </li>
                 {# Image #}
                 {#########}
-                {% elif story_form.instance.image != "" %}
+                {% elif story_form.instance.type == "image" %}
                     <li class="story-url fields">
                         {{ story_form.image.errors }}
                         {{ story_form.image }}
                     </li>
                 {# Video #}
                 {#########}
-                {% elif story_form.instance.video != "" %}
+                {% elif story_form.instance.type == "video" %}
                     <li class="story-url fields">
                         {{ story_form.video.errors }}
                         {{ story_form.video }}
