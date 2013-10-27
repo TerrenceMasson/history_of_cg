@@ -95,7 +95,7 @@ class Story(BaseModel):
         elif self.image is not None and self.image != "":
             return "image"
         else:
-            logger.log_simple("NO TYPE FOR STORY: " + self.id)
+            logger.log_simple("NO TYPE FOR STORY: " + self.title)
 
     @classmethod
     def types(cls):
