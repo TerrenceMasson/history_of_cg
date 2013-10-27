@@ -82,9 +82,10 @@ class Story(BaseModel):
     video = models.CharField(max_length=200, blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
+    deleted = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "STORY -> title: " + self.title + " video: " + self.video + " image: " + self.image + " text: " + self.text[:10]
+        return self.title
 
     def type(self):
         if self.text is not None and self.text != "":

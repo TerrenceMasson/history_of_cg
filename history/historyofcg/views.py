@@ -51,53 +51,18 @@ def home(request):
 
     return render_to_response('default/home.html', locals())
 
-#@require_safe
 def about(request):
-    if request.user.is_authenticated():
-        if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
     return render_to_response('default/about.html', locals())
 
-#@require_safe
 @render_to('pages/entries.html')
 def view_source_entries(request, s):
-    user_auth = False
-    if request.user.is_authenticated():
-        if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
-
-        user_auth = True
-
+    user_auth = request.user.is_authenticated()
     if Page.objects.filter(published=True, vanity_url=s):
         page = Page.objects.get(published=True, vanity_url=s)
     else:
         return render_to_response('errors/entry_does_not_exist.html', locals())
 
-    all_stories = Story.objects.filter(page__vanity_url=s, published=True)
+    all_stories = Story.objects.filter(page__vanity_url=s, published=True, deleted=False)
 
     connections = page.connections
 
@@ -174,7 +139,7 @@ def edit_page(request, vanity_url):
             story_form = StoryForm()
             story_types = Story.types()
             # Grab all of the existing stories and create a hash of 'title' => Form for editing.
-            stories = Story.objects.filter(page=page)
+            stories = Story.objects.filter(page=page, deleted=False)
             story_forms = []
             for story in stories:
                 story_forms.append(StoryForm(instance=story))
@@ -238,7 +203,8 @@ def search(req, app_label, model):
 @require_POST
 def delete_story(request, id):
     story = Story.objects.get(id=id)
-    story.delete()
+    story.deleted = True
+    story.save()
     return JsonResponse({ 'message': 'Story deleted successfully' }, 200)
 
 @require_POST
