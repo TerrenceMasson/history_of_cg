@@ -73,11 +73,11 @@
                         title="{{ story.title|safe }}"
                         data-lightbox-gallery="gallery1">
                     <div class="container {{ story|get_story_type }}">
-                        {% if story.text != "" %}
+                        {% if story|get_story_type == "story-text" %}
                             <p>{{ story.text|truncatewords:80|safe }}</p>
-                        {% elif story.image != "" %}
+                        {% elif story|get_story_type == "story-image" %}
                             <img src="{{ story.image }}">
-                        {% elif story.video != "" %}
+                        {% elif story|get_story_type == "story-video" %}
                             {% if story|is_youtube_video %}
                                 <img src="{{ story|get_youtube_img }}" class='story_video_image'>
                             {% else %}
@@ -91,81 +91,12 @@
                         <div class="cf"></div>
                     </div>
                 </li>
-                {% if story.text != "" %}
+                {% if story|get_story_type == "story-text" %}
                     <div id="story-{{story.id}}" class="inline-story-text hide">
                         <h1 class="story-title"> {{ story.title|safe }} </h2>
                         <p> {{ story.text|safe }} </p>
                     </div>
                 {% endif %}
-                {% comment %}
-                {% if s.image %}
-                        {# set either "1" or "2" to rnd, "12"|make_list outputs the list [u"1", u"2"] #}
-                        {# and random chooses one item randomly out of this list #}
-                        {% with rnd="12"|make_list|random %}
-                        <li class="tile story story-image {% if rnd == "1" %}double-size{% endif %}
-                        {% endwith %}
-                         isotope-item"
-                        href="{{ s.image|safe }}"
-                        data-image="{{ s.image|safe }}"
-                        data-title="{{ s.title|safe }}"
-                        data-lightbox-gallery="gallery1">
-                            <div class="container opener story-image" data-image="{{ s.image|safe }}" data-title="{{ story.title|safe }}">
-                                <img src="{{ s.image }}">
-                            </div>
-                            <div class="bottom-link">
-                                <span class="opener story-image" data-image="{{ s.image|safe }}"
-                                      data-title="{{ s.title|safe }}">{{ s.title|truncatechars:"14" }}</span>
-                                <span class="story-type story-type-icon-image"></span>
-                                {% if request.user.is_authenticated %}
-                                    <span class="story-type {{ s|user_vote_cast:request.user.id }}"
-                                          data-story-></span>
-                                {% endif %}
-                                <div class="cf"></div>
-                            </div>
-                        </li>
-                    {% endif %}
-                    {% if s.video %}
-                        <li class="tile story story-video {% for t in s.tags.all %} {{ t.name }}{% endfor %} isotope-item"
-                            data-video="{{ s.video|safe }}"
-                            data-title="{{ s.title|safe }}">
-                            <div class="container opener story-video"
-                                 data-title="{{ s.title|safe }}">
-                                <div class='lite' style='width:478px; height:359px' id="{{ s.video }}"></div>
-                            </div>
-                            <div class="bottom-link">
-                                <span class="opener story-video" data-video="{{ s.video|safe }}"
-                                      data-title="{{ s.title|safe }}">{{ s.title|truncatechars:"14" }}</span>
-                                <span class="story-type story-type-icon-video"></span>
-                                {% if request.user.is_authenticated %}
-                                    <span class="story-type {{ s|user_vote_cast:request.user.id }}"
-                                          data-story-></span>
-                                {% endif %}
-                                <div class="cf"></div>
-                            </div>
-                        </li>
-                    {% endif %}
-                    {% if s.text %}
-                        <li class="tile story story-text {% for t in s.tags.all %} {{ t.name }}{% endfor %}{% if ts|object_user_is:'pioneer' %} pioneer {% endif %} isotope-item"
-                            data-full-text="{{ s.text|safe }}"
-                            data-title="{{ s.title|safe }}"
-                            >
-                            <div class="container opener story-text" data-full-text="{{ s.text|safe }}"
-                                 data-title="{{ s.title|safe }}">
-                                <p>{{ s.text|truncatewords:80|safe }}</p>
-                            </div>
-                            <div class="bottom-link">
-                                <span class="opener story-text" data-full-text="{{ s.text|safe }}"
-                                      data-title="{{ s.title|safe }}">{{ s.title|truncatechars:"14" }}</span>
-                                <span class="story-type story-type-icon-text"></span>
-                                {% if request.user.is_authenticated %}
-                                    <span class="story-type {{ s|user_vote_cast:request.user.id }}"
-                                          data-story-></span>
-                                {% endif %}
-                                <div class="cf"></div>
-                            </div>
-                        </li>
-                    {% endif %}
-                {% endcomment %}
                 {% endfor %}
                 {% for connection in connections.all %}
                     <li class="tile connection {{ connection.type.name }}
@@ -182,7 +113,7 @@
                             <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span
                                     class="triangle"></span></a>
 
-                            <div class="cf"></div>
+                                    <div class="cf"></div>
                         </div>
                     </li>
                 {% endfor %}

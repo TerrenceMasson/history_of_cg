@@ -21,11 +21,11 @@ def random_double_size():
 
 @register.filter
 def get_story_type(story):
-    if story.text != "":
+    if story.text != None and story.text != "":
         return "story-text"
-    elif story.image != "":
+    elif story.image != None and story.image != "":
         return "story-image"
-    elif story.video != "":
+    elif story.video != None and story.video != "":
         return "story-video"
 
 @register.filter
