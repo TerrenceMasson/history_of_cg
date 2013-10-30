@@ -95,6 +95,11 @@ div.timeline {
     background-color: #222228;
     position: relative;
     overflow: hidden;
+
+    .container img {
+        margin-bottom: -5px;
+        width: 233px;
+    }
 }
 
 .tile .container {
@@ -222,10 +227,6 @@ div.timeline {
     padding: 0;
     width: 0;
     height: 0;
-}
-
-.tile.connection .container img {
-    width: 233px;
 }
 
 .tile .bottom-link span {
