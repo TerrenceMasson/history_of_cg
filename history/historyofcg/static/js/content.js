@@ -25,11 +25,11 @@ $.Isotope.prototype._masonryReset = function () {
 };
 
 
-$(function () {
-
+$(document).ready(function() {
     var $mosaic = $(".mosaicBody .mosaicContainer");
 
     function initMosaic() {
+
         $mosaic.isotope({
             itemSelector: ".tile",
             animationEngine: "best-available",
@@ -162,5 +162,6 @@ $(function () {
             $mosaic.removeClass('loading');
         });
         initMosaic();
+        $(window).resize();
     });
 });
