@@ -213,7 +213,7 @@ def new_story(request, story_type, vanity_url):
     story_user = request.user
     story_page = Page.objects.get(vanity_url=vanity_url)
     if form.is_valid():
-        story = Story.objects.create(page=story_page, user=story_user)
+        story = Story.objects.create(page=story_page, user=story_user, published=True)
         story = update_story(form, story)
         story.save()
         story_form = StoryForm(instance=story)
