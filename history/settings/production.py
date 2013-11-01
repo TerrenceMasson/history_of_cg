@@ -5,6 +5,8 @@ from default import *
 
 import sys
 print >> sys.stderr, "*** RUNNING PRODUCTION SETTINGS ***"
+print >> sys.stderr, "*** STATICFILES DIRS: ***",  STATICFILES_DIRS
+print >> sys.stderr, "*** STATIC ROOT: ***", STATIC_ROOT
 
 DATABASES = {
     'default': {
