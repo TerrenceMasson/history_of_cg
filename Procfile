@@ -1,1 +1,1 @@
-web: gunicorn history.wsgi --pid /tmp/gunicorn.pid
+web:  python history/manage.py collectstatic --noinput; gunicorn history.wsgi --pid /tmp/gunicorn.pid
