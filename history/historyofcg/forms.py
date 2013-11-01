@@ -6,7 +6,7 @@ from models import *
 from datetime import date
 
 CURRENT_YEAR = date.today().year
-YEARS_RANGE = range(1930, CURRENT_YEAR + 1)
+YEARS_RANGE = range(1900, CURRENT_YEAR + 8)
 
 class PageForm(ModelForm):
     tags = TokenField(Tag, required=True, widget=TokenWidget(
