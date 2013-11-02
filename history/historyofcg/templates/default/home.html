@@ -36,7 +36,7 @@
                 {% if not entry.image %}<img src="{{ entry|get_random_image }}">{% endif %}
             </div>
             <div class="bottom-link">
-                <span>{{ entry.name|truncatechars:"14" }}</span>
+                <span>{{ entry.name }}</span>
                 <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
 
                 <div class="cf"></div>

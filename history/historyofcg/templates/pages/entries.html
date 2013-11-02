@@ -86,7 +86,7 @@
                         {% endif %}
                     </div>
                     <div class="bottom-link">
-                        <span>{{ story.title|truncatechars:"14" }} </span>
+                        <span class="bottom-link-title">{{ story.title }} </span>
                         <span class="story-type {{ story|get_story_icon }}"></span>
                         <div class="cf"></div>
                     </div>
@@ -109,7 +109,7 @@
                             {% if connection|object_user_is:'pioneer' %}
                                 <a href="/about/pioneers/" class="connection-user-pioneer"></a>
                             {% endif %}
-                            <span>{{ connection.name|truncatechars:"19" }}</span>
+                            <span class="bottom-link-title">{{ connection.name }}</span>
                             <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span
                                     class="triangle"></span></a>
 

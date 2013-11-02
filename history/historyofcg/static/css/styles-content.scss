@@ -305,7 +305,25 @@ ul.mosaicContainer li.tile .bottom-link {
   span {
     line-height: 19px;
     padding: 7px 0 2px 0;
+  // }
+
+  // span {
+    margin-left: 8px;
+    word-wrap: break-word;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: Gotham, Helvetica, sans-serif;
+    float: left;
+    font-size: 14px;
+    width: 80%;
   }
+
+  span.bottom-link-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   span.story-type {
     float: right;
     margin-top: 5px;
@@ -353,17 +371,6 @@ ul.mosaicContainer li.tile.connection .bottom-link a.link-button span.triangle {
   padding: 0;
   width: 0;
   height: 0;
-}
-
-ul.mosaicContainer li.tile .bottom-link span {
-  margin-left: 8px;
-  word-wrap: break-word;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: Gotham, Helvetica, sans-serif;
-  float: left;
-  font-size: 14px;
-  width: 80%;
 }
 
 ul.mosaicContainer .person {

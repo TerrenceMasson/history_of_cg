@@ -1,74 +1,91 @@
 #page {
-  width: 990px; }
+  width: 990px;
+}
 
 #homeBranding {
   margin: 0 auto;
   clear: both;
-  text-align: center; }
+  text-align: center;
+}
 
 #homeSearch {
   margin: 40px auto 0 auto;
-  width: 375px; }
+  width: 375px;
+}
 
 #homeSearch .search input.searchBox {
   height: 25px;
-  width: 325px; }
+  width: 325px;
+}
 
 #homeSearch .search button.searchBtn {
   background-image: url("../img/homeSearchBtn.png") !important;
   height: 35px !important;
-  width: 35px !important; }
+  width: 35px !important;
+}
 
 #homeSearch .search button.searchBtn:active {
-  background-position: 0 -32px !important; }
+  background-position: 0 -32px !important;
+}
 
 .ui-autocomplete.ui-menu {
   margin-left: 3px;
-  width: 370px !important; }
+  width: 370px !important;
+}
 
 div.timeline {
-  margin-top: 75px; }
+  margin-top: 75px;
+}
 
 .recent-story {
-  text-align: center; }
+  text-align: center;
+}
 
 .whats-next {
   width: 990px;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 .user-badge {
-  background-image: url("../img/pkmn_badges.gif"); }
+  background-image: url("../img/pkmn_badges.gif");
+}
 
 .user-badge.user-badge-one {
   height: 14px;
-  padding: 5px 14px; }
+  padding: 5px 14px;
+}
 
 .user-badge.user-badge-two {
   background-position-x: 30px;
   height: 14px;
-  padding: 5px 14px; }
+  padding: 5px 14px;
+}
 
 .user-badge.user-badge-three {
   background-position-x: 55px;
   height: 14px;
-  padding: 5px 14px; }
+  padding: 5px 14px;
+}
 
 .user-badge.user-badge-four {
   background-position-x: 80px;
   height: 14px;
-  padding: 5px 14px; }
+  padding: 5px 14px;
+}
 
 .user-badge.user-badge-five {
   background-position-x: 125px;
   height: 14px;
-  padding: 5px 14px; }
+  padding: 5px 14px;
+}
 
 /* FOR THE MOSAIC */
 #updated-entries-container {
   margin: 0 auto 20px auto;
   padding: 10px 0;
   width: 990px;
-  min-height: 450px; }
+  min-height: 450px;
+}
 
 .tile {
   margin: 0px 5px 10px 5px;
@@ -77,22 +94,26 @@ div.timeline {
   font-size: 20px;
   background-color: #222228;
   position: relative;
-  overflow: hidden; }
-  .tile .container img {
-    margin-bottom: -5px;
-    width: 233px; }
+  overflow: hidden;
+}
+.tile .container img {
+  margin-bottom: -5px;
+  width: 233px;
+}
 
 .tile .container {
   width: 100%;
   min-height: 100px;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
 .tile .container p {
   margin: 10px;
   font-size: 13px;
   line-height: 17px;
-  color: #7c8993; }
+  color: #7c8993;
+}
 
 .tile .bottom-link {
   display: block;
@@ -100,7 +121,8 @@ div.timeline {
   background-color: #333;
   text-decoration: none;
   color: #fff;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .tile.story.pioneer .bottom-link {
   display: block;
@@ -108,69 +130,84 @@ div.timeline {
   background-color: #b8860b;
   text-decoration: none;
   color: #2f4f4f;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .tile .bottom-link span {
   line-height: 19px;
-  padding: 7px 0 2px 0; }
+  padding: 7px 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .tile .bottom-link a {
   line-height: 19px;
-  padding: 7px 0 2px 0; }
+  padding: 7px 0 2px 0;
+}
 
 .tile .bottom-link span.story-type {
   float: right;
   margin-top: 5px;
   margin-right: 3px;
-  height: 9px; }
+  height: 9px;
+}
 
 .tile .bottom-link a.story-type {
   float: right;
   margin-top: 5px;
   margin-right: 3px;
-  height: 9px; }
+  height: 9px;
+}
 
 .tile .bottom-link span.story-type.story-type-icon-text {
   background: url("../img/richMedia_icons.png");
   background-position: 1px 0;
   background-repeat: no-repeat;
-  width: 25px; }
+  width: 25px;
+}
 
 .tile .bottom-link a.story-type.story-type-icon-text {
   background: url("../img/richMedia_icons.png");
   background-position: 1px 0;
   background-repeat: no-repeat;
-  width: 25px; }
+  width: 25px;
+}
 
 .tile .bottom-link span.story-type.story-type-icon-image {
   background: url("../img/richMedia_icons.png");
   background-position: -23px 0;
   background-repeat: no-repeat;
-  width: 25px; }
+  width: 25px;
+}
 
 .tile .bottom-link span.story-type.story-type-icon-video {
   background: url("../img/richMedia_icons.png");
   background-position: -46px 0;
   background-repeat: no-repeat;
-  width: 25px; }
+  width: 25px;
+}
 
 .tile .bottom-link span.story-type.story-up-arrow {
   background: url("../img/up_arrow.gif");
   background-position: 1px 0;
   background-repeat: no-repeat;
-  width: 25px; }
+  width: 25px;
+}
 
 .tile .bottom-link span.story-type.story-down-arrow {
   background: url("../img/down_arrow.gif");
   background-position: 1px 0;
   background-repeat: no-repeat;
-  width: 25px; }
+  width: 25px;
+}
 
 .tile.connection .bottom-link a.link-button {
   width: 30px;
   float: right;
   opacity: 0.5;
-  position: relative; }
+  position: relative;
+}
 
 .tile.connection a.connection-user-pioneer {
   width: 30px;
@@ -179,7 +216,8 @@ div.timeline {
   background: url("http://interactive.usc.edu/membersmedia/sfisher/Siggraph08%20logo.jpg");
   background-position: 250px 200px;
   opacity: 0.5;
-  position: relative; }
+  position: relative;
+}
 
 .tile.connection .bottom-link a.link-button span.triangle {
   position: absolute;
@@ -190,7 +228,8 @@ div.timeline {
   border-bottom: 6px solid transparent;
   padding: 0;
   width: 0;
-  height: 0; }
+  height: 0;
+}
 
 .tile .bottom-link span {
   margin-left: 8px;
@@ -200,28 +239,37 @@ div.timeline {
   font-family: Gotham, Helvetica, sans-serif;
   float: left;
   font-size: 14px;
-  width: 80%; }
+  width: 80%;
+}
 
 .person {
-  border: 1px solid #00b9db !important; }
+  border: 1px solid #00b9db !important;
+}
 
 .person .bottom-link {
-  background-color: #00b9db !important; }
+  background-color: #00b9db !important;
+}
 
 .project {
-  border: 1px solid #ff6600 !important; }
+  border: 1px solid #ff6600 !important;
+}
 
 .project .bottom-link {
-  background-color: #ff6600 !important; }
+  background-color: #ff6600 !important;
+}
 
 .organization {
-  border: 1px solid #7bd900 !important; }
+  border: 1px solid #7bd900 !important;
+}
 
 .organization .bottom-link {
-  background-color: #7bd900 !important; }
+  background-color: #7bd900 !important;
+}
 
 .event {
-  border: 1px solid #d200ff !important; }
+  border: 1px solid #d200ff !important;
+}
 
 .event .bottom-link {
-  background-color: #d200ff !important; }
+  background-color: #d200ff !important;
+}

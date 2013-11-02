@@ -330,8 +330,6 @@ Hist.ConnectEntries = function() {
     var modifyConnectionWithEntry = function(connecteeId, isAddConnection) {
         var type = isAddConnection ? "add" : "remove",
             url = "/" + type + "/connection/" + currentPageId + "/" + connecteeId + "/";
-        console.log("modifyConnectionWithEntry - type: ", type, " url: ", url);
-        debugger
         $.ajax({
             type: "POST",
             url: url,

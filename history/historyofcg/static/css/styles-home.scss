@@ -137,6 +137,9 @@ div.timeline {
 .tile .bottom-link span {
     line-height: 19px;
     padding: 7px 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tile .bottom-link a {
