@@ -170,6 +170,18 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
         }
     })
 }
+// PageForm
+/////////////
+
+Hist.PageForm = (function() {
+    return {
+        init: function() {
+            $('.submit-page').on('click', function() {
+                $('#entry_edit_form').submit();
+            });
+        }
+    }
+})();
 
 // StoryForm
 /////////////
@@ -410,6 +422,7 @@ $(document).ready(function () {
     Hist.initTabs();
     Hist.TokenInput.init();
     Hist.StoryForm.init();
+    Hist.PageForm.init();
 
     // If this screen isn't the edit screen then no need to init this.
     if ($('#connectionSearchBox').length !== 0) {

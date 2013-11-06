@@ -129,20 +129,18 @@ def edit_page(request, vanity_url):
                 page.description = form.cleaned_data['description']
                 page.homepage = form.cleaned_data['homepage']
                 page.date_established = form.cleaned_data['date_established']
-
                 page.save()
-                print 'saved'
-                print page.date_established
-                return redirect('/pages/{}'.format(vanity_url))
         else:
             form = PageForm(instance=page)
-            story_form = StoryForm()
-            story_types = Story.types()
-            # Grab all of the existing stories and create a hash of 'title' => Form for editing.
-            stories = Story.objects.filter(page=page, deleted=False)
-            story_forms = []
-            for story in stories:
-                story_forms.append(StoryForm(instance=story))
+
+        # Setup for the stories
+        story_form = StoryForm()
+        story_types = Story.types()
+        # Grab all of the existing stories and create a hash of 'title' => Form for editing.
+        stories = Story.objects.filter(page=page, deleted=False)
+        story_forms = []
+        for story in stories:
+            story_forms.append(StoryForm(instance=story))
 
     return locals()
 

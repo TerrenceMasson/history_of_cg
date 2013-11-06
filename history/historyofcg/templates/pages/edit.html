@@ -16,20 +16,28 @@
         <div class="form-container">
             <div id="toolbar">
                 <div class="title"><h1>Edit Entry</h1></div>
-                <div class="publish-status">{% if page.published %}Published{% else %}Not Published{% endif %}
+                <div class="publish-status">
+                    {% if page.published %}Published{% else %}Not Published{% endif %}
                 </div>
-                <div class="view"><a class="button organization-hover" href="/pages/{{ page.vanity_url }}">View
-                    Entry</a></div>
-                <div class="save">
+                <div class="actions">
+                    <button class="submit-page">
+                        {% if page.published %} Save {% else %} Save Draft {% endif %}
+                    </button>
+                    <a class="button organization-hover" href="/pages/{{ page.vanity_url }}">
+                        View Entry
+                    </a>
                     {% if page.published %}
+                         <button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">
+                            Unpublish
+                        </button>
+                    {% else %}
                         <button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">
-                        Unpublish</button>
-                        {% else %}
-                        <button class="publish-page organization-hover" data-vanity-url="{{ page.vanity_url }}">Publish
+                            Publish
                         </button>
                     {% endif %}
                 </div>
                 <div class="cf"></div>
+                <hr>
             </div>
             <form action="/edit/page/{{ page.vanity_url }}/"
                   data-id="{{ page.id }}" 
@@ -104,7 +112,6 @@
                     </ul>
                     <div class="cf"></div>
                 </div>
-                <input type="submit" value="{% if page.published %}Save{% else %}Save Draft{% endif %}"/>
             </form>
             <div class="stories-col section-in-form">
                 <ul class="story-explanation">

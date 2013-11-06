@@ -58,6 +58,12 @@ div.form-container {
 
   #toolbar {
     margin-top: 20px;
+    margin-bottom: 15px;
+
+    .title {
+      float: left;
+    }
+
     .publish-status {
       color: lighten($bg, 17%);
       font-family: Gotham, Helvetica, Arial, sans-serif;
@@ -68,10 +74,8 @@ div.form-container {
       text-transform: uppercase;
       float: right;
     }
-    .title {
-      float: left;
-    }
-    .view {
+
+    .actions {
       float: right;
 
       a {
@@ -80,9 +84,6 @@ div.form-container {
         margin-left: 5px;
         margin-top: 2px;
       }
-    }
-    .save {
-      float: right;
     }
   }
   form {
