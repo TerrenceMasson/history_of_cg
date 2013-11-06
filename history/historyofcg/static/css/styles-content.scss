@@ -9,7 +9,6 @@ $content_width: 990px;
   font-size: 75%;
 }
 
-/* --- categories bah --- */
 .entryMast {
   background-position: 0 48px;
   background-repeat: repeat-x;
@@ -30,6 +29,48 @@ $content_width: 990px;
     margin-bottom: 5px;
   }
 
+}
+
+// Custom Notifications
+////////////////////////
+
+.notification-container {
+  position: absolute;
+  top: 10px;
+  left: 80%;
+
+  .notification {
+    background: darken($bg, 2%);
+    border: 1px darken($current-type, 20%) solid;
+    border-radius: 5px;
+    display: none;
+    font-size: 12px;
+    margin-left: 10px;
+    padding: 10px;
+    position: absolute;
+    text-shadow: 1px 1px 1px #000;
+    width: 200px;
+
+    h3 { 
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .close {
+      font-size: 16px;
+      position: absolute;
+      top: 5px;
+      left: 92%;
+      cursor: pointer;
+    }
+
+    &.success {
+      border: 1px $org solid !important;
+    }
+    &.error {
+      border: 1px #CD2626 solid !important;
+    }
+  }
 }
 
 

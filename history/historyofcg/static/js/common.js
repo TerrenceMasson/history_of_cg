@@ -1,5 +1,9 @@
 var Hist = Hist || {};
 
+$(document).ready(function() {
+    Hist.Notifications.init();
+});
+
 // jQuery Additions
 ////////////////////
 
@@ -17,6 +21,44 @@ $.fn.preBind = function (type, data, fn) {
     });
     return this;
 };
+
+// Notifications
+/////////////////
+
+Hist.Notifications = (function() {
+
+    var showNotification = function(selector, message) {
+        closeNotificatons();
+        $notification = $(selector);
+        $notification.children('.content').html(message);
+        $notification.fadeIn();
+        setTimeout(function() {
+            $notification.fadeOut();
+        }, 3000);
+    }
+
+    var closeNotificatons = function() {
+        $('.notification').fadeOut();
+    }
+
+    return {
+        error: function(message) {
+            showNotification('.notification.error', message);
+        },
+        success: function(message) {
+            showNotification('.notification.success', message);
+        },
+        init: function() {
+            $(window).scroll(function(){
+                $(".notification").stop()
+                .animate({ "marginTop": ($(window).scrollTop()) + "px",
+                           "marginLeft":($(window).scrollLeft()) + "px"},
+                           "fast");
+            });
+            $('.notification .close').on('click', closeNotificatons);
+        }
+    }
+})();
 
 // Date field handling
 ///////////////////////

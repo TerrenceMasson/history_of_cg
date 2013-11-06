@@ -97,6 +97,18 @@
             <div class="cf"></div>
             {% block body_header %} {% endblock %}
         </header>
+        <div class="notification-container">
+            <div class="notification error">
+                <h3>Error</h3>
+                <span class="close">x</span>
+                <p class="content"></p>
+            </div>
+            <div class="notification success">
+                <h3>Success</h3>
+                <span class="close">x</span>
+                <p class="content"></p>
+            </div>
+        </div>
         <div id="content">
             {% block content %} {% endblock %}
         </div>
