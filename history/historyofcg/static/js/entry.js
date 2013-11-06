@@ -43,7 +43,6 @@ Hist.initColorsAndDate = function() {
 Hist.initChosen = function() {
     // Init Chosen Selects
     if (jQuery().chosen) {
-        console.log("Chosen found.")
         $('.chosen-select').chosen({ width: "15%", disable_search_threshold: 32 });
     }
 }
@@ -137,7 +136,7 @@ Hist.publishForType = function(type, identifier, $storyButton) {
         type: "POST",
         url: "/publish/" + type + "/" + identifier + "/",
         success: function (action) {
-            console.log("Successfully published " + type);
+            Hist.Notifications.success("Successfully published " + type);
             if (type === STORY_TYPE) {
                 $storyButton.html('UNPUBLISH');
                 $('#' + $storyButton.data('id') + "-story").html('PUBLISHED');
@@ -147,7 +146,7 @@ Hist.publishForType = function(type, identifier, $storyButton) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log("Error publishing " + type + " with identifier: " + identifier);
+            Hist.Notifications.error("Failed to publish " + type + ". Please try again later");
         }
     });
 }
@@ -157,7 +156,7 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
         type: "POST",
         url: "/unpublish/" + type + "/" + identifier + "/",
         success: function(data, textStatus, jqXHR) {
-            console.log("Successfully unpublished " + type);
+            Hist.Notifications.success("Successfully unpublished " + type);
             if (type === STORY_TYPE) {
                 $storyButton.text('PUBLISH');
                 $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED')
@@ -167,7 +166,7 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log("Error unpublishing " + type + " with identifier: " + identifier);
+            Hist.Notifications.error("Failed to unpublish " + type + ". Please try again later");
         }
     })
 }
@@ -243,13 +242,11 @@ var StoryForm = function() {
             type: "POST",
             url: "/delete/story/" + $button.data('story-id') + "/",
             success: function(data, textStatus, jqXHR) {
-                // TODO: Show some success message.
                 $button.closest('.edit').remove();
-                console.log("Story successfully deleted");
+                Hist.Notifications.success("Successfully deleted story.");
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                // TODO: Show some error message.
-                console.log("Story failed to delete.");
+                Hist.Notifications.error("Failed to delete story. Please try again later.");
             }
         });
     }
@@ -259,7 +256,7 @@ var StoryForm = function() {
             errors = validateStory($form);
         clearErrors($form);
         if (errors.length != 0) {
-            // Show errors and return
+            Hist.Notifications.error("Failed to submit the story. Please check the form, fix any issues, and try again.");
             showErrors($form, errors);
             return false;
         }
@@ -273,10 +270,8 @@ var StoryForm = function() {
                     $('.edit-story-container').append(data);
                     resetForm($form);
                     Hist.initChosen();
-                } else {
-                    // TODO: Doing nothing, but we should show a success message
-                    console.log("Story was successfully edited");
                 }
+                Hist.Notifications.success("Successfully saved the story.");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 var response = JSON.parse(jqXHR.responseText),
@@ -286,6 +281,7 @@ var StoryForm = function() {
                     value = response[key].join(' ');
                     errors.push(value);
                 }
+                Hist.Notifications.error("Failed to save the story. Please check the form, fix any issues, and try again.");
                 showErrors($form, errors);
             }
         });

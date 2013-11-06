@@ -34,7 +34,7 @@ Hist.Notifications = (function() {
         $notification.fadeIn();
         setTimeout(function() {
             $notification.fadeOut();
-        }, 3000);
+        }, 5500);
     }
 
     var closeNotificatons = function() {
