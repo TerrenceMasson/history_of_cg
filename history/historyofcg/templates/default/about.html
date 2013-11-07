@@ -1,9 +1,10 @@
 {% extends 'default/base.html' %}
 {% load staticfiles %}
+{% block extra_head %} 
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-about.css' %}">
+{% endblock %}
 {% block content %}
     <div id="content">
-        <div class="message" style="display: none;"></div>
-        <link type="text/css" rel="stylesheet" media="screen" href="css/styles-about.css">
 
         <h1 class="entry_title">About</h1>
         <section class="about-section">
@@ -69,7 +70,7 @@
                             <div class="bio-name"><p> Connie <br> Chan </p></div>
                             <div class="bio-role"><p> Designer &amp;<br> Front-end </p></div>
                         </div>
-                        <div class="bio-info"><p>Connie is a designer, front-end developer, and a senior finishing up
+                        <div class="bio-description"><p>Connie is a designer, front-end developer, and a senior finishing up
                             her time at Northeastern University. Currently working as the design lead in a growing
                             Boston startup, she's also been part of the teams at The Boston Globe, Bionic Hippo, and
                             various other ventures. Her portfolio can be found at <a href="http://www.connie.cc"
@@ -85,7 +86,7 @@
                             <div class="bio-name"><p> Michelle <br> Gayowski </p></div>
                             <div class="bio-role"><p> Designer &amp; <br> Front-end </p></div>
                         </div>
-                        <div class="bio-info"><p>Michelle is a graphic designer who proudly hails from the small farm
+                        <div class="bio-description"><p>Michelle is a graphic designer who proudly hails from the small farm
                             town of Boxborough, Massachusetts. Apart from design, she likes photography, traveling, and
                             reading Boston Metro horoscopes. She has worked in the fast-paced NYC fashion industry, in a
                             hands-on local sign shop, and with a small group at a cozy design firm in Boston.
@@ -104,7 +105,7 @@
                             <div class="bio-name"><p> Stefano <br> D'Amico </p></div>
                             <div class="bio-role"><p> Developer </p></div>
                         </div>
-                        <div class="bio-info"><p>Stefano D'Amico is a software engineer with a love for the web and
+                        <div class="bio-description"><p>Stefano D'Amico is a software engineer with a love for the web and
                             coffee. He is currently a senior and dual major of Computer Science and Interactive Media at
                             Northeastern University. After school, his entrepreneurial spirit will bring him to San
                             Francisco to join one of many startups in the area and to pursue his dream of opening a
@@ -119,7 +120,7 @@
                             <div class="bio-name"><p> Amy <br> Schaffer </p></div>
                             <div class="bio-role"><p> Developer </p></div>
                         </div>
-                        <div class="bio-info"><p>Amy Schaffer is a senior at Northeastern University studying Computer
+                        <div class="bio-description"><p>Amy Schaffer is a senior at Northeastern University studying Computer
                             Science and Interactive Media. When she's not coding, she loves to relax with yoga or a good
                             television show. One day she hopes to use her knowledge of the programming and digital art
                             worlds to help her become an amazing project manager for game or animation development.</p>
@@ -133,7 +134,7 @@
                             <div class="bio-name"><p> James <br> Staub </p></div>
                             <div class="bio-role"><p> Project Manager </p></div>
                         </div>
-                        <div class="bio-info"><p>James Staub is a Boston based musician and a senior in Northeastern
+                        <div class="bio-description"><p>James Staub is a Boston based musician and a senior in Northeastern
                             University's Interactive Media program. James composes and performs music in many styles,
                             with a particular interest in electroacoustic and interactive music technologies. He is
                             currently working as a media coordinator for the <a href="http://berkleepulse.net/"
@@ -149,7 +150,7 @@
                             <div class="bio-name"><p> Terrence <br> Masson </p></div>
                             <div class="bio-role"><p>Mastermind &amp;<br>Professor</p></div>
                         </div>
-                        <div class="bio-info"><p>With 20 years of production experience Terrence’s work includes
+                        <div class="bio-description"><p>With 20 years of production experience Terrence’s work includes
                             feature film (Star Wars), interactive (SimCity4) and award-winning
                             short animated films (Bunkie &amp; Booboo). He also single-handedly
                             developed the CG pipeline for SouthPark. Terrence consults with major
@@ -167,7 +168,7 @@
                             <div class="bio-name"><p>Brian<br>Sullivan</p></div>
                             <div class="bio-role"><p>Professor</p></div>
                         </div>
-                        <div class="bio-info"><p>Brian Sullivan is a computer game designer and entrepreneur known for
+                        <div class="bio-description"><p>Brian Sullivan is a computer game designer and entrepreneur known for
                             developing Titan Quest and the Age of Empires series of games. He is also the co-founder of
                             Iron Lore Entertainment and Ensemble Studios. Brian won the 1998 Computer Game Developers
                             Association (GDC) Spotlight Award for Achievement in Game Design for his work on Age of
@@ -182,7 +183,8 @@
             <div id="HOCGnewcrew"><h3 class="section-title">The New Crew</h3></div>
             <div class="newCrew">
                 <div class="newGroupPhoto"></div>
-                <a class="teamdetails" id="kyle">Test Kyle</a>
+                <a class="teamdetails" id="kyle"></a>
+                <a class="teamdetails" id="gowie"></a>
 
                 <div class="left-info">
                     <div class="moreInfo" id="left-info" style="display: block;">
@@ -191,19 +193,37 @@
                             <p>Click on our pixely counterparts to learn more<br> about each team member!</p>
                         </div>
                     </div>
+                     <div class="moreInfo" id="gowie-info">
+                        <div class="bio-top">
+                            <div class="bio-picture">
+                                <img src="{% static 'img/gowie-8bit-close.png' %}" alt="Matt Gowie">
+                            </div>
+                            <div class="bio-info">
+                                <div class="bio-name"><p>Matt Gowie</p></div>
+                                <div class="bio-role"><p>Fall 2013 Developer</p></div>
+                            </div>
+                        </div>
+                        <div class="bio-description">
+                            <p>
+                                Matt is a Software Engineer and Computer Science && Interactive Media major at Northeastern University. He is passionate about Frontend, Backend, and Mobile development, and loves building things with cool tools like Emberjs and Rails. Matt currently works at <a href="http://useartisan.com">Artisan Mobile</a> where he helps build an awesome platform for Mobile Apps. Outside of software engineering Matt is into Hardcore music, rock climbing, and biking. 
+                            </br>
+                            </br>
+                                You can find out more about Matt @ <a href="http://gowie.me">Gowie.me</a>.
+                            </p>
+                        </div>
+                    </div>
                     <div class="moreInfo" id="kyle-info">
                         <div class="bio-top">
-                            <div class="bio-picture"><img src="{% static 'img/picture_kyle.png' %}" alt="Kyle Montag">
+                            <div class="bio-picture"><img src="{% static 'img/kyle-8bit-close.png' %}" alt="Kyle Montag">
                             </div>
-                            <div class="bio-name"><p>Kyle<br>Montag</p></div>
-                            <div class="bio-role"><p>The One Developer</p></div>
+                            <div class="bio-info">
+                                <div class="bio-name"><p>Kyle<br>Montag</p></div>
+                                <div class="bio-role"><p>Spring 2013 Developer</p></div>
+                            </div>
                         </div>
-                        <div class="bio-info"><p>Kyle is a graduating senior Computer Science and Interactive Media major. His
-                            favorite hobbies are programming, playing video games, and massaging his sideburns. When not
-                            in front of a computer, Kyle enjoys reading graphic novels and playing bass. After working
-                            at <a href="http://www.sonicbids.com">Sonicbids</a> on the
-                            <a href="http://www.sonichub.com">Sonichub</a> project Kyle became addicted to Django.
-                            Kyle has been adding features and fixing bugs in the new Django-based version of History of CG.
+                        <div class="bio-description">
+                            <p>
+                                Kyle is a graduating senior Computer Science and Interactive Media major. His favorite hobbies are programming, playing video games, and massaging his sideburns. When not in front of a computer, Kyle enjoys reading graphic novels and playing bass. After working at <a href="http://www.sonicbids.com">Sonicbids</a> on the <a href="http://www.sonichub.com">Sonichub</a> project Kyle became addicted to Django. Kyle has been adding features and fixing bugs in the new Django-based version of History of CG.
                             </p>
                         </div>
                     </div>
@@ -213,34 +233,13 @@
         <script>
             $('.moreInfo#general-info').show();
             $('.teamdetails').click(function () {
-                var who = this.id;
-                $('.moreInfo').slideUp(200);
-                $('#' + who + '-info').slideDown(200);
-                //well taht was ez!
+                var who = this.id,
+                    selector = '#' + who + '-info';
+                if ($(selector).data('visible') != true) {
+                    $('.moreInfo').slideUp(200).data('visible', false);
+                    $('#' + who + '-info').slideDown(200).data('visible', true);
+                }
             });
         </script>
     </div>
-{% endblock %}
-</div>
-
-
-<ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox"
-    aria-activedescendant="ui-active-menuitem" style="z-index: 1; top: 0px; left: 0px; display: none;"></ul>
-<div style="display: none; z-index: 1000; outline: 0px; position: absolute;"
-     class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable" tabindex="-1" role="dialog"
-     aria-labelledby="ui-dialog-title-1">
-    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title"
-                                                                                            id="ui-dialog-title-1">&nbsp;</span><a
-            href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span
-            class="ui-icon ui-icon-closethick">close</span></a></div>
-    <div style="" class="ui-dialog-content ui-widget-content"></div>
-    <div class="ui-resizable-handle ui-resizable-n" style=""></div>
-    <div class="ui-resizable-handle ui-resizable-e" style=""></div>
-    <div class="ui-resizable-handle ui-resizable-s" style=""></div>
-    <div class="ui-resizable-handle ui-resizable-w" style=""></div>
-    <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se"
-         style="z-index: 1001;"></div>
-    <div class="ui-resizable-handle ui-resizable-sw" style="z-index: 1002;"></div>
-    <div class="ui-resizable-handle ui-resizable-ne" style="z-index: 1003;"></div>
-    <div class="ui-resizable-handle ui-resizable-nw" style="z-index: 1004;"></div>
-</div></body>
+    {% endblock %}

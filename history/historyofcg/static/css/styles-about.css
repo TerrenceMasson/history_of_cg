@@ -102,7 +102,7 @@
 }
 
 .newGroupPhoto {
-    background: url('../img/kyleNewCrew.gif');
+    background: url('../img/group-photo-new-team2.png');
     width: 600px;
     height: 400px;
     position: relative;
@@ -112,7 +112,6 @@
 }
 
 .groupPhotoArrow {
-    background: url('../img/groupPhotoArrow.png');
     width: 20px;
     height: 40px;
     position: relative;
@@ -180,8 +179,29 @@
     text-indent: 9999px;
     width: 80px;
     z-index: 506;
-    left: 635px;
-    top: 82px;
+    left: 870px;
+    top: 80px;
+}
+
+#gowie {
+    display: block;
+    font-size: 0;
+    height: 320px;
+    position: absolute;
+    text-indent: 9999px;
+    width: 80px;
+    z-index: 506;
+    left: 535px;
+    top: 70px;
+}
+
+#gowie-info .bio-top, #kyle-info .bio-top {
+    height: 150px;
+}
+
+.bio-info {
+    position: relative;
+    top: 8px;
 }
 
 /*-------------------- about the CREATORS section BIOS BOX ------------*/
@@ -214,7 +234,6 @@
 .bio-picture {
     width: 104px;
     height: 104px;
-    background: url('../img/picture_MAG.png');
     float: left;
     margin: 0 20px 0 10px;
     z-index: 601;
@@ -235,7 +254,7 @@
     margin-top: 2px;
 }
 
-.bio-info {
+.bio-description {
     color: #DBDBDB;
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
