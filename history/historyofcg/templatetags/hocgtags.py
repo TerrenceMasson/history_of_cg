@@ -64,7 +64,7 @@ def replace(value, args):
 
 @register.filter
 def get_random_image(page):
-    images = Story.objects.filter(page__pk=page.id, published=True)
+    images = Story.objects.filter(page__pk=page.id, published=True, deleted=False)
     images = filter(lambda x: x.type() == "image", images)
     if len(images) == 0:
         ## TODO: We're hot linking our random person image from clker.com
