@@ -101,28 +101,13 @@ def add_page(request):
 @render_to('pages/edit.html')
 def edit_page(request, vanity_url):
     if request.user.is_authenticated():
-        # TODO: Need to pull this shit out to a method
-        if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
-
-        elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
-
         page = Page.objects.get(vanity_url=vanity_url)
         connections = page.connections
 
         if request.method == 'POST':
             form = PageForm(request.POST, instance=page)
             if form.is_valid():
+                page.location = form.cleaned_data['location']
                 page.type = form.cleaned_data['type']
                 page.name = form.cleaned_data['name']
                 page.tags = form.cleaned_data['tags']

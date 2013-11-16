@@ -174,11 +174,26 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
 /////////////
 
 Hist.PageForm = (function() {
+    var showEventFields = function() {
+        $('.label-entry-location').show();
+        $('.entry-location').show();
+    }
+    var hideEventFields = function() {
+        $('.label-entry-location').hide();
+        $('.entry-location').hide();
+    }
+
     return {
         init: function() {
+            var type = $('.entry-type-select').children('option:selected').text().toLowerCase();
+            if (type === 'event') { showEventFields(); }
             $('.submit-page').on('click', function() {
                 $('#entry_edit_form').submit();
             });
+        },
+        pageTypeChanged: function(newType) {
+            hideEventFields();
+            if (newType === 'event') { showEventFields(); }
         }
     }
 })();
@@ -437,6 +452,7 @@ $(document).ready(function () {
         var type = $(this).children('option:selected').text().toLowerCase();
         changeColorsForType(type);
         Hist.DateHandler.changeDateFieldsForType(type);
+        Hist.PageForm.pageTypeChanged(type);
     });
 
     // Publish/Unpublish Page/Story

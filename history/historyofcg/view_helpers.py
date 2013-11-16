@@ -51,7 +51,8 @@ def create_page(form, request):
 
     page = Page.objects.create(name=page_name, type=page_type, vanity_url=page_vanity_url, description=page_description, user=request.user)
 
-    ## Non Required: tags, homepage, established date, deceased date
+    ## Non Required: tags, homepage, established date, deceased date, location
+    page.location = form.cleaned_data['location']
     page.tags = form.cleaned_data['tags']
     page.homepage = form.cleaned_data['homepage']
     page.date_established = form.cleaned_data['date_established']

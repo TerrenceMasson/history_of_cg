@@ -82,6 +82,7 @@
                 </div>
                 <div class="basics section-in-form">
                     <ul class="basic-labels all-labels">
+                        <li class="label-entry-location labels hide">Location</li>
                         <li class="label-entry-source labels">Homepage</li>
                         <li class="label-entry-date labels">Date Established</li>
                         {% if page.type.name == 'person' or page.type.name == "organization"  %}
@@ -90,6 +91,10 @@
                         {% endif %}
                     </ul>
                     <ul class="basic-fields all-fields">
+                        <li class="entry-location fields hide">
+                            {{ form.location.errors }}
+                            {{ form.location }}
+                        </li>
                         <li class="entry-homepage fields">
                             {{ form.homepage.errors }}
                             {{ form.homepage }}
