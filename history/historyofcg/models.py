@@ -51,6 +51,7 @@ class Location(BaseModel):
 
 class Page(BaseModel):
     type = models.ForeignKey(Category)
+    location = models.CharField(max_length=20, null=True)
     name = models.CharField(max_length=100, unique=True)
     vanity_url = models.CharField(max_length=100, unique=True)
     tags = models.ManyToManyField(Tag)
