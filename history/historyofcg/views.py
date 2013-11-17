@@ -3,6 +3,7 @@ import datetime
 import itertools
 
 from django import http
+from django.core import serializers
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
@@ -10,8 +11,7 @@ from django.shortcuts import render_to_response, render, redirect, get_object_or
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils import simplejson
-from django.views.decorators.http import require_safe
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_safe, require_POST
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import password_change as django_password_change
 from django.contrib.auth.views import password_change_done as django_password_change_done
@@ -53,6 +53,12 @@ def home(request):
 
 def about(request):
     return render_to_response('default/about.html', locals())
+
+@render_to('pages/timeline.html')
+def timeline(request):
+    pages = Page.objects.filter(published=True)
+    pages_json = serializers.serialize("json", pages)
+    return locals()
 
 @render_to('pages/entries.html')
 def view_source_entries(request, s):

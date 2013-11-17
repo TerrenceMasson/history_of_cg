@@ -2,6 +2,7 @@ var Hist = Hist || {};
 
 $(document).ready(function() {
     Hist.Notifications.init();
+    Hist.Timeline.init();
 });
 
 // jQuery Additions

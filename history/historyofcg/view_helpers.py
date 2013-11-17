@@ -10,7 +10,6 @@ class JsonResponse(HttpResponse):
     """ JSON response """
     def __init__(self, content, mimetype='application/json', status=None, content_type=None):
         if isinstance(content, BaseModel):
-            logger.log("content is of type BaseModel")
             content = serializers.serialize("json", [content])
         elif isinstance(content, dict):
             content = simplejson.dumps(content),

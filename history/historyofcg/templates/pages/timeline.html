@@ -1,0 +1,13 @@
+{% extends 'default/base.html' %}
+{% load staticfiles %}
+{% block extra_head %}
+  <script type="text/javascript" src="{% static 'js/libs/d3.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/timeline.js' %}"></script>
+{% endblock %}
+{% block content %} 
+  <svg class="timeline-container"></svg>
+  <script type="text/javascript">
+    var Hist = Hist || {};
+    Hist.rawPages = {{ pages_json|safe }};
+  </script>
+{% endblock %}

@@ -63,3 +63,5 @@ urlpatterns += staticfiles_urlpatterns()
 # Add the Jasmine Test Suite URL if we're in DEBUG mode 
 if settings.DEBUG == True:
     urlpatterns += patterns('',  url(r'^jasmine/', include('django_jasmine.urls')))
+    urlpatterns += patterns('',  url(r'^timeline_testing/', 'history.historyofcg.views.timeline'))
+
