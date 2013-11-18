@@ -1,6 +1,6 @@
-<!DOCTYPE html>
 {% load staticfiles %}{% load hocgtags %}
-{% spaceless %}
+<!DOCTYPE html>
+{% comment %}
     <!--[if IE 8]>
 <html class="ie8"
       xmlns="http://www.w3.org/1999/xhtml"
@@ -9,15 +9,15 @@
       xml:lang="{% firstof LANGUAGE_CODE 'en' %}"
       lang="{% firstof LANGUAGE_CODE 'en' %}">
 <![endif]-->
-    <!--[if gt IE 8]><!-->
+    <!--[if gt IE 8]>
     <html class="ie8"
           xmlns="http://www.w3.org/1999/xhtml"
           xmlns:fb="https://www.facebook.com/2008/fbml"
           dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}"
           xml:lang="{% firstof LANGUAGE_CODE 'en' %}"
           lang="{% firstof LANGUAGE_CODE 'en' %}">
-    <!--<![endif]-->
-{% endspaceless %}
+    <![endif]-->
+{% endcomment %}
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />

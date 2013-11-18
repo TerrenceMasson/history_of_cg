@@ -110,6 +110,19 @@
   right: 70px;
   top: 20px; }
 
+.timeline-container {
+  width: 960px;
+  margin: 0 auto; }
+
+text {
+  fill: #FFF;
+  stoke: none; }
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #FFF;
+  shape-rendering: crispEdges; }
+
 ul.catBar {
   background-color: #0f0f0f;
   font-family: Gotham, Helvetica, sans-serif;

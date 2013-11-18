@@ -2,10 +2,13 @@
 {% load staticfiles %}
 {% block extra_head %}
   <script type="text/javascript" src="{% static 'js/libs/d3.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/libs/moment.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/timeline.js' %}"></script>
 {% endblock %}
 {% block content %} 
-  <svg class="timeline-container"></svg>
+  <div class="timeline-container">
+    <svg class="timeline"></svg>
+  </div>
   <script type="text/javascript">
     var Hist = Hist || {};
     Hist.rawPages = {{ pages_json|safe }};
