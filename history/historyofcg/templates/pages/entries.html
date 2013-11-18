@@ -99,23 +99,19 @@
                 {% endif %}
                 {% endfor %}
                 {% for connection in connections.all %}
-                    <li class="tile connection {{ connection.type.name }}
-                            {% for tag in connection.tags.all %}{{ tag.name.split|join:"-" }} {% endfor %}isotope-item">
-                        <div class="container">
-                            {% if connection.image %}<img src="{{ connection.image }}">{% endif %}
-                            {% if not connection.image %}<img src="{{ connection|get_random_image }}">{% endif %}
-                        </div>
-                        <div class="bottom-link">
-                            {% if connection|object_user_is:'pioneer' %}
-                                <a href="/about/pioneers/" class="connection-user-pioneer"></a>
-                            {% endif %}
-                            <span class="bottom-link-title">{{ connection.name }}</span>
-                            <a class="link-button" href="/pages/{{ connection.vanity_url }}"><span
-                                    class="triangle"></span></a>
-
-                                    <div class="cf"></div>
-                        </div>
-                    </li>
+                    <a href="/pages/{{ connection.vanity_url }}">
+                        <li class="tile connection {{ connection.type.name }} isotope-item">
+                            <div class="container">
+                                {% if connection.image %}<img src="{{ connection.image }}">{% endif %}
+                                {% if not connection.image %}<img src="{{ connection|get_random_image }}">{% endif %}
+                            </div>
+                            <div class="bottom-link">
+                                <span class="bottom-link-title">{{ connection.name }}</span>
+                                <span class="triangle"></span>
+                                <div class="cf"></div>
+                            </div>
+                        </li>
+                    </a>
                 {% endfor %}
             </ul>
         </section>
