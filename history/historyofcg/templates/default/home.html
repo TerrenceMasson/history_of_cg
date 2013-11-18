@@ -30,18 +30,17 @@
     </div>
     <div id="updated-entries-container" class="isotope cf">
         {% for entry in updated_entries %}
-        <div class="tile connection {{ entry.type.name }} isotope-item">
+        <a class="tile connection {{ entry.type.name }} isotope-item" href="/pages/{{ entry.vanity_url }}">
             <div class="container">
                 {% if entry.image %}<img src="{{ entry.image }}">{% endif %}
                 {% if not entry.image %}<img src="{{ entry|get_random_image }}">{% endif %}
             </div>
             <div class="bottom-link">
                 <span>{{ entry.name }}</span>
-                <a class="link-button" href="/pages/{{ entry.vanity_url }}"><span class="triangle"></span></a>
-
+                <span class="triangle"></span>
                 <div class="cf"></div>
             </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
 </section>
