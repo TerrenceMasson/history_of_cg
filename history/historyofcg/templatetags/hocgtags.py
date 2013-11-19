@@ -68,7 +68,7 @@ def get_random_image(page):
     images = filter(lambda x: x.type() == "image", images)
     if len(images) == 0:
         ## TODO: We're hot linking our random person image from clker.com
-        return "/static/img/P_desatCentered02.png" if page.type.name != "person" else "http://www.clker.com/cliparts/q/T/l/N/J/S/blank-profile-md.png"
+        return "/static/img/P_desatCentered02.png" if page.type.name != "person" else "/static/img/missing-image.jpg"
     else:
         return choice(images).image
 
