@@ -1,10 +1,14 @@
+import re
+from unidecode import unidecode
+
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.core import serializers
+
 from history.base.models import BaseModel
 from models import Page
 from history import logger
-import re
+
 
 class JsonResponse(HttpResponse):
     """ JSON response """
@@ -43,7 +47,8 @@ def create_page(form, request):
     page_type = form.cleaned_data['type']
     page_description = form.cleaned_data['description']
     ## Replace anything but A-Z, a-z, 0-9 with hyphens for vanity url
-    page_vanity_url = re.sub(r"[^A-Za-z0-9]+", '-', form.cleaned_data['name']).lower()
+    decoded_name = unidecode(form.cleaned_data['name'])
+    page_vanity_url = re.sub(r"[^A-Za-z0-9]+", '-', decoded_name).lower()
     ## If the last character is a hyphen then remove it
     if page_vanity_url[len(page_vanity_url) - 1] == "-":
         page_vanity_url = page_vanity_url[:len(page_vanity_url) - 1]
