@@ -250,7 +250,7 @@ def get_pages(request):
         for page in pages:
             page_json = {
                 "id": str(page.id),
-                "name": str(page.name),
+                "name": page.name.encode('utf-8'),
                 "type": str(page.type.name),
                 "vanity": str(page.vanity_url)
             }
