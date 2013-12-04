@@ -3,55 +3,64 @@ var Hist = Hist || {};
 Hist.Timeline = (function() {
   var momentDates = [],
       xAxisValues = [],
+      margin = {top: 40, right: 40, bottom: 40, left:40},
       width = 900,
       height = 300,
       chart;
 
-  var roundYear = function(year, mod) {
-    var remainder = year % mod;
-    return year - remainder;
-  }
-
-  // If only JavaScript had ranges..
-  var constructXValues = function(dates) {
-    var years = momentDates.map(function(m) { return m.year(); }),
-        min = roundYear(d3.min(years), 10),
-        max = roundYear(d3.max(years), 10),
-        steps = (max - min) / 10,
-        result = [min];
-    for (var i = 0; i < steps - 1; i++) {
-      result.push(result[i] + 10);
-    };
-    result.push(max);
-    return result;
-  }
-
   var initD3Chart = function() {
     chart = d3.select('.timeline')
-              .attr('width', width)
-              .attr('height', height)
+              .attr('width', width + margin.left + margin.right)
+              .attr('height', height + margin.top + margin.bottom)
             .append("g")
-              .attr("transform", "translate(30,0)");;
-    
-    // X Ordinal Scale
-    xAxisValues = constructXValues(momentDates);
-    var x = d3.scale.ordinal()
-              .rangeRoundBands([0, width], .1)
-              .domain(xAxisValues);
-    // X axis
+              .attr("transform", "translate(30,0)");
+
+    var jsDates   = momentDates.map(function(m) { return m.toDate(); }),
+        beginning = roundToDecade(d3.min(jsDates), true),
+        ending    = roundToDecade(d3.max(jsDates));
+
+    var scaleFactor = (1/ (ending - beginning)) * ( width - margin.left - margin.right );
+    console.log("ending: ", ending, " beginning: ", beginning, " Scale Factor: ", scaleFactor);
+
+    var xScale = d3.time.scale()
+              .nice(d3.time.year, 100)
+              .domain([beginning, ending])
+              .range([0, width - margin.right - margin.left])
+              
     var xAxis = d3.svg.axis()
-                      .scale(x)
+                      .scale(xScale)
                       .orient("bottom");
 
     chart.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + (height - 20) + ")")
+      .attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
       .call(xAxis);
+
+    chart.selectAll(".event")
+      .data(jsDates)
+    .enter().append("circle")
+      .attr("class", "shred")
+      .attr("x", xScale)
+      .attr("y", 10)
+      .attr("cx", xScale)
+      .attr("cy", 10)
+      .attr("r", 10)
+      .attr("height", 10)
+      .attr("width", 10)
+      .style("fill", d3.scale.category20(10))
+      .text(function(m) {return m.getYear(); });
+  }
+
+  var roundToDecade = function(date, shouldFloor) {
+    var year = date.getFullYear(),
+        remainder = year % 10,
+        roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10;
+    date.setFullYear(roundedYear);
+    return date;
   }
 
   return {
     init: function() {
-      console.log("Raw Pages: ", Hist.rawPages);
       Hist.rawPages.map(function(page) {
         if (page['fields']['date_established']) {
           var mDate = moment(page['fields']['date_established']);
@@ -59,7 +68,6 @@ Hist.Timeline = (function() {
         }
       });
       momentDates.sort();
-      console.log("momentDates: ", momentDates);
       initD3Chart();
     }
   }
