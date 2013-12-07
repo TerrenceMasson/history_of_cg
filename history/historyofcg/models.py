@@ -50,6 +50,11 @@ class Location(BaseModel):
 
 
 class Page(BaseModel):
+    ## TODO: This is a really bad data desgin and IT WILL CAUSE ISSUES IN THE FUTURE
+    #  The type/Category field is simply a string representing if the page is a 
+    #  person, event, organization, or project, but someone created a many-to-one relationship
+    #  for some reason (I'm guessing easier querying? but that seems absurd). This should be
+    #  changed to just have a CharField type and the category model can be done away with.
     type = models.ForeignKey(Category)
     location = models.CharField(max_length=20, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
