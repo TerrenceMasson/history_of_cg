@@ -121,22 +121,26 @@ Hist.Timeline = (function() {
     }
   }
 
+  var buildTimelinePoints = function(pages) {
+    var result = [];
+    pages.forEach(function(page) {
+      var mDate = moment(page['fields']['date_established']),
+          pointImage = buildImageUrl(page['fields']['type']);
+      if (pointImage && page['fields']['date_established']) {
+        result.push({
+          'date': mDate,
+          'id': page['pk'],
+          'pointImage': pointImage,
+          'counted': false
+        });
+      }
+    });
+    return result;
+  }
+
   return {
     init: function() {
-      Hist.rawPages.map(function(page) {
-        if (page['fields']['date_established']) {
-          var mDate = moment(page['fields']['date_established']),
-              pointImage = buildImageUrl(page['fields']['type']);
-          if (pointImage && mDate) {
-            timelinePoints.push({
-              'date': mDate,
-              'id': page['pk'],
-              'pointImage': pointImage,
-              'counted': false
-            });
-          }
-        }
-      });
+      timelinePoints = buildTimelinePoints(Hist.rawPages);
       timelinePoints.map(function(p, idx) {
         console.log("Point: ", p, " year: ", p.date.year());
       });
