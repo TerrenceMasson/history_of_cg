@@ -75,10 +75,11 @@
     display: none; }
     #timeline-container #popup-container #popup {
       background: #252a2d;
-      border: 1px #878787 solid;
       border-radius: 5px;
       width: 200px;
       padding: 10px; }
+      #timeline-container #popup-container #popup p {
+        color: white; }
     #timeline-container #popup-container .person {
       border: 1px #006375 solid; }
     #timeline-container #popup-container .organization {

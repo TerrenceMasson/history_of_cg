@@ -33,10 +33,13 @@
 
     #popup {
       background: darken($bg, 2%);
-      border: 1px darken($current-type, 20%) solid;
       border-radius: 5px;
       width: 200px;
       padding: 10px;
+
+      p {
+        color: white;
+      }
     }
 
     .person { border: 1px darken($person, 20%) solid; }

@@ -87,12 +87,14 @@ Hist.Timeline = (function() {
     popupHeight = $('#popup-container').height();
 
     leftOffset = (pointImageSize / 2);
-    topOffset  = (pointImageSize / 2) + popupHeight + 11; // 11 px is for padding I think..
+    topOffset  = (pointImageSize / 2) + popupHeight + 11; // +11 px is for padding I think..
 
     // Now that we have the offset we can find the absolute position of the popup
     popupLeft = leftPos + pointImageSize + leftOffset + 'px';
     popupTop  = topPos + pointImageSize - topOffset + 'px';
 
+    $('#popup').removeClass()
+               .addClass(point.type);
     $('#popup-container').css({ left: popupLeft, top: popupTop })
                          .show();
   }
@@ -149,7 +151,7 @@ Hist.Timeline = (function() {
       case 2:
         return 'project';
       case 3:
-        return 'organizaiton';
+        return 'organization';
       case 4:
         return 'event';
       default:
