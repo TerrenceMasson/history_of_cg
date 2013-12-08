@@ -1,0 +1,89 @@
+/* =============== standards =============== */
+.project {
+  color: #ff6600 !important; }
+  .project:focus {
+    border: 1px #ff6600 solid !important; }
+
+.person {
+  color: #00b9db !important; }
+  .person:focus {
+    border: 1px #00b9db solid !important; }
+
+.organization {
+  color: #7bd900 !important; }
+  .organization:focus {
+    border: 1px #7bd900 solid !important; }
+
+.event {
+  color: #d200ff !important; }
+  .event:focus {
+    border: 1px #d200ff solid !important; }
+
+.none {
+  color: #BABABA !important; }
+  .none:focus {
+    border: 1px #BABABA solid !important; }
+
+.project-border {
+  border: 1px #ff6600 solid !important; }
+
+.person-border {
+  border: 1px #00b9db solid !important; }
+
+.organization-border {
+  border: 1px #7bd900 solid !important; }
+
+.event-border {
+  border: 1px #d200ff solid !important; }
+
+.none-border {
+  border: 1px #BABABA solid !important; }
+
+.project-hover:hover {
+  color: #e65c00 !important; }
+
+.person-hover:hover {
+  color: #00a3c2 !important; }
+
+.organization-hover:hover {
+  color: #6dc000 !important; }
+
+.event-hover:hover {
+  color: #bd00e6 !important; }
+
+.none-hover:hover {
+  color: #adadad !important; }
+
+#timeline-container {
+  position: relative;
+  width: 960px;
+  margin: 0 auto; }
+  #timeline-container #timeline {
+    width: 100%; }
+    #timeline-container #timeline .axis path, #timeline-container #timeline .axis line {
+      fill: none;
+      stroke: white;
+      shape-rendering: crispEdges; }
+    #timeline-container #timeline .axis text {
+      font-family: sans-serif;
+      font-size: 14px; }
+    #timeline-container #timeline .timeline-label {
+      font-family: sans-serif;
+      font-size: 16px; }
+  #timeline-container #popup-container {
+    position: absolute;
+    display: none; }
+    #timeline-container #popup-container #popup {
+      background: #252a2d;
+      border: 1px #878787 solid;
+      border-radius: 5px;
+      width: 200px;
+      padding: 10px; }
+    #timeline-container #popup-container .person {
+      border: 1px #006375 solid; }
+    #timeline-container #popup-container .organization {
+      border: 1px #417300 solid; }
+    #timeline-container #popup-container .event {
+      border: 1px #7e0099 solid; }
+    #timeline-container #popup-container .project {
+      border: 1px #993d00 solid; }

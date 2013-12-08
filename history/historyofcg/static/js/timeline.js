@@ -21,7 +21,7 @@ Hist.Timeline = (function() {
     yPositions  = buildYPositions();
     highestYPosition = d3.max(d3.values(yPositions));
 
-    chart = d3.select('.timeline')
+    chart = d3.select('#timeline')
               .attr('width', width + margin.left + margin.right)
               .attr('height', height + margin.top + margin.bottom)
             .append("g")
@@ -41,21 +41,20 @@ Hist.Timeline = (function() {
       .attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
       .call(xAxis);
 
-    chart.selectAll(".timeline-item")
+    chart.selectAll(".timeline-point")
       .data(timelinePoints)
     .enter().append("image")
-      .attr("class", "timeline-item")
+      .attr("class", "timeline-point")
       .attr("x", getXPosition)
       .attr("y", getYPosition)
       .attr("cx", getXPosition)
       .attr("cy", getYPosition)
-      .attr("r", 10)
       .attr("height", pointImageSize)
       .attr("width", pointImageSize)
       .attr("xlink:href", function(p) { return p.pointImage })
       .style("fill", d3.scale.category20c())
-      .on("mouseover", showHoverImage)
-      .on("mouseout", showNormalImage)
+      .on("mouseover", showActiveState)
+      .on("mouseout", hideActiveState)
       .text(function(p) { return p.date.year(); });
   }
 
@@ -67,13 +66,54 @@ Hist.Timeline = (function() {
     return margin.top + pointMargin * yPositions[point.id];
   }
 
-  var showHoverImage = function(point) {
+  // Active State - Mousing over or clicked
+  var showActiveImage = function(element, point) {
     var hoverImageUrl = point.pointImage.replace(/(.*)\.png/, "$1-hover.png");
-    d3.select(this).attr("xlink:href", hoverImageUrl);
+    d3.select(element).attr("xlink:href", hoverImageUrl);
   }
 
-  var showNormalImage = function(point) {
-    d3.select(this).attr("xlink:href", point.pointImage);
+  var showPopup = function(element, point) {
+    var d3Element = d3.select(element),
+        leftPos   = parseInt(d3Element.attr('x')),
+        topPos    = parseInt(d3Element.attr('y')),
+        leftOffset,
+        topOffset,
+        popupLeft;
+
+    // Setup the content now so we can grab the height and use it to calculate the topOffset
+    $('#popup h3').text(point.name);
+    $('#popup p').text(point.description);
+    $('#popup a').attr('href', "/pages/" + point.vanityUrl);
+    popupHeight = $('#popup-container').height();
+
+    leftOffset = (pointImageSize / 2);
+    topOffset  = (pointImageSize / 2) + popupHeight + 11; // 11 px is for padding I think..
+
+    // Now that we have the offset we can find the absolute position of the popup
+    popupLeft = leftPos + pointImageSize + leftOffset + 'px';
+    popupTop  = topPos + pointImageSize - topOffset + 'px';
+
+    $('#popup-container').css({ left: popupLeft, top: popupTop })
+                         .show();
+  }
+
+  var showActiveState = function(point) {
+    showActiveImage(this, point);
+    showPopup(this, point);
+  }
+
+  // Inactive State
+  var hideActiveImage = function(element, point) {
+    d3.select(element).attr("xlink:href", point.pointImage);
+  }
+
+  var hidePopup = function() {
+    $('#popup-container').hide();
+  }
+
+  var hideActiveState = function(point) {
+    hideActiveImage(this, point);
+    hidePopup();
   }
 
   // Loop through the timelinePoints and count those which have the same year.
@@ -128,8 +168,11 @@ Hist.Timeline = (function() {
           pointImage = buildImageUrl(page['fields']['type']);
       if (pointImage && page['fields']['date_established']) {
         result.push({
-          'date': mDate,
           'id': page['pk'],
+          'name': page['fields']['name'],
+          'vanityUrl': page['fields']['vanity_url'],
+          'description': page['fields']['description'],
+          'date': mDate,
           'pointImage': pointImage,
           'counted': false
         });
@@ -141,9 +184,6 @@ Hist.Timeline = (function() {
   return {
     init: function() {
       timelinePoints = buildTimelinePoints(Hist.rawPages);
-      timelinePoints.map(function(p, idx) {
-        console.log("Point: ", p, " year: ", p.date.year());
-      });
       initD3Chart();
     }
   }
