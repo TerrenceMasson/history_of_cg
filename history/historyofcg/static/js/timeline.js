@@ -142,20 +142,16 @@ Hist.Timeline = (function() {
 
   // This is the kind of code you have to write when people use a table to 
   // represent a simple string type. Seriously though, da fuq!
-  var buildImageUrl = function(type) {
-    switch (type) {
+  var findTypeFromStupidFuckingCategoryId = function(stupidFuckingCategoryId) {
+    switch (stupidFuckingCategoryId) {
       case 1:
-        // Person
-        return "/static/img/timeline/person-button.png"
+        return 'person';
       case 2:
-        // Project
-        return "/static/img/timeline/project-button.png"
+        return 'project';
       case 3:
-        // Organizaiton
-        return "/static/img/timeline/organization-button.png"
+        return 'organizaiton';
       case 4:
-        // Event
-        return "/static/img/timeline/event-button.png"
+        return 'event';
       default:
         return null;
     }
@@ -165,15 +161,16 @@ Hist.Timeline = (function() {
     var result = [];
     pages.forEach(function(page) {
       var mDate = moment(page['fields']['date_established']),
-          pointImage = buildImageUrl(page['fields']['type']);
-      if (pointImage && page['fields']['date_established']) {
+          type  = findTypeFromStupidFuckingCategoryId(page['fields']['type']);
+      if (type && page['fields']['date_established']) {
         result.push({
           'id': page['pk'],
           'name': page['fields']['name'],
           'vanityUrl': page['fields']['vanity_url'],
           'description': page['fields']['description'],
           'date': mDate,
-          'pointImage': pointImage,
+          'type': type,
+          'pointImage': "/static/img/timeline/" + type + "-button.png",
           'counted': false
         });
       }
