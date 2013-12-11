@@ -2,12 +2,12 @@ var Hist = Hist || {};
 
 Hist.Timeline = (function() {
   var timelinePoints = [],
-      margin = {top: 90, right: 40, bottom: 40, left: 40},
-      width = 900,
-      height = 300,
+      margin = {top: 90, right: 30, bottom: 40, left: 30},
+      width = 960,
+      height = 200,
       yPositions = {},
-      pointImageSize = 25,
-      pointMargin = 23,
+      pointSize = 25,
+      yPosMargin = 30,
       pointClicked = false,
       xScale,
       beginning,
@@ -17,16 +17,17 @@ Hist.Timeline = (function() {
 
   var initD3Chart = function() {
     var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); });
+
     beginning   = roundToDecade(d3.min(jsDates), true);
     ending      = roundToDecade(d3.max(jsDates));
     yPositions  = buildYPositions();
     highestYPosition = d3.max(d3.values(yPositions));
 
     chart = d3.select('#timeline')
-              .attr('width', width + margin.left + margin.right)
-              .attr('height', height + margin.top + margin.bottom)
+              .attr('width', width)
+              .attr('height', height)
             .append("g")
-              .attr("transform", "translate(30,0)");
+              .attr("transform", "translate(" + margin.left + ",0)");
 
     xScale = d3.time.scale()
                     .nice(d3.time.year, 100)
@@ -39,7 +40,7 @@ Hist.Timeline = (function() {
 
     chart.append("g")
       .attr("class", "x axis")
-      .attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
+      .attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
       .call(xAxis);
 
     chart.selectAll(".timeline-point")
@@ -51,8 +52,8 @@ Hist.Timeline = (function() {
       .attr("y", getYPosition)
       .attr("cx", getXPosition)
       .attr("cy", getYPosition)
-      .attr("height", pointImageSize)
-      .attr("width", pointImageSize)
+      .attr("height", pointSize)
+      .attr("width", pointSize)
       .attr("xlink:href", function(p) { return p.pointImage; })
       .on("mouseover", showActiveState)
       .on("mouseout", hideActiveState)
@@ -63,11 +64,14 @@ Hist.Timeline = (function() {
   ///////////////////////
 
   var getXPosition = function(point) {
-    return xScale(point.date.toDate()) - (pointImageSize / 2);
+    return xScale(point.date.toDate()) - (pointSize / 2);
   }
 
   var getYPosition = function(point) {
-    return margin.top + pointMargin * yPositions[point.id];
+    // height - bottom => xAxis line
+    // xAxis line - yPosMargin => Starting yPos for a 0 count point
+    // starting yPos - (yPos[id] * pointSize) => final yPosition
+    return height - margin.bottom - yPosMargin - (pointSize * yPositions[point.id]);
   }
 
   // Loop through the timelinePoints and count those which have the same year.
@@ -101,7 +105,7 @@ Hist.Timeline = (function() {
     pointClicked = true;
 
     // Stop the event from bubbling up to body where we have a click handler to 
-    // deactivate the current point
+    // deactivate the current point. d3.event is the current event for this click
     d3.event.stopPropagation();
   }
 
@@ -129,12 +133,12 @@ Hist.Timeline = (function() {
     $('#popup a').attr('href', "/pages/" + point.vanityUrl);
     popupHeight = $('#popup-container').height();
 
-    leftOffset = (pointImageSize / 2);
-    topOffset  = (pointImageSize / 2) + popupHeight + 11; // +11 px is for padding I think..
+    leftOffset = (pointSize / 2);
+    topOffset  = (pointSize / 2) + popupHeight + 11; // +11 px is for padding I think..
 
     // Now that we have the offset we can find the absolute position of the popup
-    popupLeft = leftPos + pointImageSize + leftOffset + 'px';
-    popupTop  = topPos + pointImageSize - topOffset + 'px';
+    popupLeft = leftPos + pointSize + leftOffset + 'px';
+    popupTop  = topPos + pointSize - topOffset + 'px';
 
     // Add the points type so we have colored borders and name text
     $('#popup').removeClass()
