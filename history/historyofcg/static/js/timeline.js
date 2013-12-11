@@ -8,6 +8,7 @@ Hist.Timeline = (function() {
       yPositions = {},
       pointImageSize = 25,
       pointMargin = 23,
+      pointClicked = false,
       xScale,
       beginning,
       ending,
@@ -45,18 +46,21 @@ Hist.Timeline = (function() {
       .data(timelinePoints)
     .enter().append("image")
       .attr("class", "timeline-point")
+      .attr("id", function(p) { return 'point-' + p.id; })
       .attr("x", getXPosition)
       .attr("y", getYPosition)
       .attr("cx", getXPosition)
       .attr("cy", getYPosition)
       .attr("height", pointImageSize)
       .attr("width", pointImageSize)
-      .attr("xlink:href", function(p) { return p.pointImage })
-      .style("fill", d3.scale.category20c())
+      .attr("xlink:href", function(p) { return p.pointImage; })
       .on("mouseover", showActiveState)
       .on("mouseout", hideActiveState)
-      .text(function(p) { return p.date.year(); });
+      .on("click", setClicked)
   }
+
+  // D3 Plotting Helpers
+  ///////////////////////
 
   var getXPosition = function(point) {
     return xScale(point.date.toDate()) - (pointImageSize / 2);
@@ -64,6 +68,45 @@ Hist.Timeline = (function() {
 
   var getYPosition = function(point) {
     return margin.top + pointMargin * yPositions[point.id];
+  }
+
+  // Loop through the timelinePoints and count those which have the same year.
+  // We use this later to determine if we should stack a point.
+  var buildYPositions = function() {
+    timelinePoints.forEach(function(point, idx) {
+      var count = 0;
+      timelinePoints.forEach(function(p, idx) {
+        if (point.date.year() === p.date.year() && point.id !== p.id && !p.counted) {
+          count += 1;
+        }
+      });
+      yPositions[point.id] = count;
+      point.counted = true;
+    });
+    return yPositions;
+  }
+
+  var roundToDecade = function(date, shouldFloor) {
+    var year = date.getFullYear(),
+        remainder = year % 10,
+        roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10,
+        roundedDate = new Date(date.getTime()).setFullYear(roundedYear);
+    return roundedDate;
+  }
+
+  // Timeline Interaction Helpers
+  ////////////////////////////////
+
+  var setClicked = function(point) {
+    pointClicked = true;
+
+    // Stop the event from bubbling up to body where we have a click handler to 
+    // deactivate the current point
+    d3.event.stopPropagation();
+  }
+
+  var setUnclicked = function() {
+    pointClicked = false;
   }
 
   // Active State - Mousing over or clicked
@@ -93,6 +136,7 @@ Hist.Timeline = (function() {
     popupLeft = leftPos + pointImageSize + leftOffset + 'px';
     popupTop  = topPos + pointImageSize - topOffset + 'px';
 
+    // Add the points type so we have colored borders and name text
     $('#popup').removeClass()
                .addClass(point.type);
     $('#popup-container').css({ left: popupLeft, top: popupTop })
@@ -100,13 +144,27 @@ Hist.Timeline = (function() {
   }
 
   var showActiveState = function(point) {
+    // We just moused into a point, clear the last clicked point (if any)
+    setUnclicked();
+    if ($('#timeline').data('active-point')) {
+      // Passing null here as hideActiveImage will find the element from the given point.id
+      hideActiveImage(null, $('#timeline').data('active-point'));
+    }
+
+    // Set the hover point image and configure/show the popup
     showActiveImage(this, point);
     showPopup(this, point);
+
+    // Store the currently active point so we can deactive it later
+    $('#timeline').data('active-point', point);
   }
 
-  // Inactive State
+  // Deactive State
+  //////////////////
   var hideActiveImage = function(element, point) {
-    d3.select(element).attr("xlink:href", point.pointImage);
+    // If we weren't passed the element then find it by the given point.id, otherwise select it
+    d3El = element === null ? d3.select('#point-' + point.id) : d3.select(element);
+    d3El.attr("xlink:href", point.pointImage);
   }
 
   var hidePopup = function() {
@@ -114,33 +172,18 @@ Hist.Timeline = (function() {
   }
 
   var hideActiveState = function(point) {
-    hideActiveImage(this, point);
-    hidePopup();
+    // If we are currently focusing on a point (have clicked it) then we don't 
+    // want to hide the active state.
+    if (!pointClicked) {
+      hideActiveImage(this, point);
+      hidePopup();
+    }
   }
 
-  // Loop through the timelinePoints and count those which have the same year.
-  // We use this later to determine if we should stack a point.
-  var buildYPositions = function() {
-    timelinePoints.forEach(function(point, idx) {
-      var count = 0;
-      timelinePoints.forEach(function(p, idx) {
-        if (point.date.year() === p.date.year() && point.id !== p.id && !p.counted) {
-          count += 1;
-        }
-      });
-      yPositions[point.id] = count;
-      point.counted = true;
-    });
-    return yPositions;
-  }
+  // Data Initialization Helpers
+  ///////////////////////////////
 
-  var roundToDecade = function(date, shouldFloor) {
-    var year = date.getFullYear(),
-        remainder = year % 10,
-        roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10,
-        roundedDate = new Date(date.getTime()).setFullYear(roundedYear);
-    return roundedDate;
-  }
+  // TODO: Create TimelinePoint object/constructor to clean this shit up.s
 
   // This is the kind of code you have to write when people use a table to 
   // represent a simple string type. Seriously though, da fuq!
@@ -180,10 +223,25 @@ Hist.Timeline = (function() {
     return result;
   }
 
+
+  // Public Interface
+  ////////////////////
+
   return {
     init: function() {
       timelinePoints = buildTimelinePoints(Hist.rawPages);
       initD3Chart();
+
+      // Clicked away from a point handler, sets the state to inactive
+      $("body").live("click", function(){
+        var activePoint = $('#timeline').data('active-point'),
+            activeEl;
+        if (activePoint && pointClicked) {
+          setUnclicked();
+          activeEl = $('#point-' + activePoint.id)[0];
+          hideActiveState.call(activeEl, activePoint);
+        }
+      });
     }
   }
 })();
