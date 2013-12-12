@@ -90,6 +90,13 @@ Hist.Timeline = (function() {
     return yPositions;
   }
 
+  var pubFindRange = function(year, mod) {
+    var remainder = year % mod,
+        rangeBegin = remainder <= 5 ? year - remainder : year - remainder + 5
+        rangeEnd = rangeBegin + 5;
+    return [rangeBegin, rangeEnd];
+  }
+
   var roundToDecade = function(date, shouldFloor) {
     var year = date.getFullYear(),
         remainder = year % 10,
@@ -187,7 +194,7 @@ Hist.Timeline = (function() {
   // Data Initialization Helpers
   ///////////////////////////////
 
-  // TODO: Create TimelinePoint object/constructor to clean this shit up.s
+  // TODO: Create TimelinePoint object/constructor to clean this shit up.
 
   // This is the kind of code you have to write when people use a table to 
   // represent a simple string type. Seriously though, da fuq!
@@ -232,9 +239,13 @@ Hist.Timeline = (function() {
   ////////////////////
 
   return {
+    findRange: pubFindRange,
+
     init: function() {
-      timelinePoints = buildTimelinePoints(Hist.rawPages);
-      initD3Chart();
+      if (Hist.rawPages != null) {
+        timelinePoints = buildTimelinePoints(Hist.rawPages);
+        initD3Chart();
+      }
 
       // Clicked away from a point handler, sets the state to inactive
       $("body").live("click", function(){
