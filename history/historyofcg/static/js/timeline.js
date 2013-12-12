@@ -44,10 +44,11 @@ Hist.Timeline = (function() {
       margin = {top: 90, right: 30, bottom: 40, left: 30},
       width = 960,
       height = 200,
-      pointPositions = {},
+      maxOfStacked = 4,
       pointSize = 25,
       yPosMargin = 30,
       pointClicked = false,
+      pointPositions = {},
       xScale,
       beginning,
       ending,
@@ -63,7 +64,10 @@ Hist.Timeline = (function() {
     ending      = roundToDecade(d3.max(jsDates));
 
     // Create out pointPositions object
-    findPointPositions();
+    pointPositions = buildPointPositions();
+    removeTallPositions();
+
+
 
     chart = d3.select('#timeline')
               .attr('width', width)
@@ -120,12 +124,14 @@ Hist.Timeline = (function() {
 
   // Iterates through the timeline points to find their x and y positions
   // and stores them in pointPositions for later use.
-  var findPointPositions = function() {
+  // Returns { point.id => { x: xPos, y: yPos }, ... }
+  var buildPointPositions = function() {
     var pointsDup = timelinePoints.clone(),
         count,
         xPos,
         range,
-        pointYear;
+        pointYear
+        result = {};
 
     timelinePoints.forEach(function(point, outerIndex) {
       count = 0;
@@ -149,13 +155,39 @@ Hist.Timeline = (function() {
       });
 
       // Remove the current point from pointsDup
-      pointsDup = pointsDup.filter(function(p) {
-        return point.id !== p.id;
-      });
+      pointsDup = removePointWithId(pointsDup, point.id);
 
       // Set the x and y position of the current point
-      pointPositions[point.id] = { 'x': xPos, 'y': count }
+      result[point.id] = { 'x': xPos, 'y': count }
     });
+
+    return result;
+  }
+
+  var removePointWithId = function(points, pId) {
+    var pointId = parseInt(pId);
+    return points.filter(function(p) {
+      return pointId !== p.id;
+    });
+  }
+
+  var removeTallPositions = function() {
+    var yearsToAddMorePoint = [],
+        positionKeys = Object.keys(pointPositions),
+        xPos,
+        yPos;
+
+    positionKeys.forEach(function(pId, idx) {
+      xPos = pointPositions[pId]['x'];
+      yPos = pointPositions[pId]['y'];
+
+      if (yPos >= maxOfStacked) {
+        yearsToAddMorePoint.push(xPos);
+        timelinePoints = removePointWithId(timelinePoints, pId);
+      }
+    });
+
+    return yearsToAddMorePoint;
   }
 
   // Timeline Interaction Helpers
