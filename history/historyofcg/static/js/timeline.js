@@ -1,5 +1,44 @@
 var Hist = Hist || {};
 
+Hist.TimelineUtils = (function() {
+  
+  // Note: The following method uses memoization so it doesn't need to recalculate
+  // the range for a year that it has already seen. This is definitely overkill, but
+  // I felt like doing this. :)
+  var rangeMemo = {};
+  var pubFindRange = function(year, mod) {
+    var result = rangeMemo[year],
+        remainder,
+        rangeBegin,
+        rangeEnd;
+    // If we haven't seen the given year yet then continue and find the range.
+    if (!result) {
+      remainder = year % mod;
+      // Find the rangeBegin by using the remainder to determine if we need to start at xxx5 or xxx0
+      rangeBegin = remainder <= 5 ? year - remainder : year - remainder + 5;
+      rangeEnd = rangeBegin + 5;
+
+      result = [rangeBegin, rangeEnd];
+      rangeMemo[year] = result; // Memoize the result so we don't have to do this again.
+    }
+
+    return result;
+  }
+
+  var pubRoundToDecade = function(date, shouldFloor) {
+    var year = date.getFullYear(),
+        remainder = year % 10,
+        roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10,
+        roundedDate = new Date(date.getTime()).setFullYear(roundedYear);
+    return roundedDate;
+  }
+
+  return {
+    findRange: pubFindRange,
+    roundToDecade: pubRoundToDecade,
+  }
+})();
+
 Hist.Timeline = (function() {
   var timelinePoints = [],
       margin = {top: 90, right: 30, bottom: 40, left: 30},
@@ -13,7 +52,10 @@ Hist.Timeline = (function() {
       beginning,
       ending,
       highestYPosition,
-      chart;
+      chart,
+      // Alias TimelineUtils
+      findRange = Hist.TimelineUtils.findRange,
+      roundToDecade = Hist.TimelineUtils.roundToDecade;
 
   var initD3Chart = function() {
     var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); });
@@ -74,35 +116,28 @@ Hist.Timeline = (function() {
     return height - margin.bottom - yPosMargin - (pointSize * yPositions[point.id]);
   }
 
-  // Loop through the timelinePoints and count those which have the same year.
-  // We use this later to determine if we should stack a point.
+  // Loop through the timelinePoints and count the points which are within a 
+  // similar time range. Used later to determine if we should stack a point.
   var buildYPositions = function() {
+    var count,
+        range,
+        pointYear;
     timelinePoints.forEach(function(point, idx) {
-      var count = 0;
+      count = 0;
       timelinePoints.forEach(function(p, idx) {
-        if (point.date.year() === p.date.year() && point.id !== p.id && !p.counted) {
-          count += 1;
+        range = findRange(p.date.year(), 10);
+        pointYear = point.date.year();
+        // Check if point's date is within the range created by p
+        if (pointYear >= range[0] && pointYear <= range[1]) {
+          if (point.id !== p.id && !p.counted) {
+            count += 1;
+          }
         }
       });
       yPositions[point.id] = count;
       point.counted = true;
     });
     return yPositions;
-  }
-
-  var pubFindRange = function(year, mod) {
-    var remainder = year % mod,
-        rangeBegin = remainder <= 5 ? year - remainder : year - remainder + 5
-        rangeEnd = rangeBegin + 5;
-    return [rangeBegin, rangeEnd];
-  }
-
-  var roundToDecade = function(date, shouldFloor) {
-    var year = date.getFullYear(),
-        remainder = year % 10,
-        roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10,
-        roundedDate = new Date(date.getTime()).setFullYear(roundedYear);
-    return roundedDate;
   }
 
   // Timeline Interaction Helpers
@@ -239,7 +274,6 @@ Hist.Timeline = (function() {
   ////////////////////
 
   return {
-    findRange: pubFindRange,
 
     init: function() {
       if (Hist.rawPages != null) {
