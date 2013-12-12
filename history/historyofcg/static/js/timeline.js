@@ -44,16 +44,15 @@ Hist.Timeline = (function() {
       margin = {top: 90, right: 30, bottom: 40, left: 30},
       width = 960,
       height = 200,
-      yPositions = {},
+      pointPositions = {},
       pointSize = 25,
       yPosMargin = 30,
       pointClicked = false,
       xScale,
       beginning,
       ending,
-      highestYPosition,
       chart,
-      // Alias TimelineUtils
+      // Alias our TimelineUtils methods
       findRange = Hist.TimelineUtils.findRange,
       roundToDecade = Hist.TimelineUtils.roundToDecade;
 
@@ -62,8 +61,9 @@ Hist.Timeline = (function() {
 
     beginning   = roundToDecade(d3.min(jsDates), true);
     ending      = roundToDecade(d3.max(jsDates));
-    yPositions  = buildYPositions();
-    highestYPosition = d3.max(d3.values(yPositions));
+
+    // Create out pointPositions object
+    findPointPositions();
 
     chart = d3.select('#timeline')
               .attr('width', width)
@@ -106,38 +106,56 @@ Hist.Timeline = (function() {
   ///////////////////////
 
   var getXPosition = function(point) {
-    return xScale(point.date.toDate()) - (pointSize / 2);
+    var approxYear = pointPositions[point.id]['x'],
+        approxDate = new Date(approxYear, 5);
+    return xScale(approxDate) - (pointSize / 2);
   }
 
   var getYPosition = function(point) {
     // height - bottom => xAxis line
     // xAxis line - yPosMargin => Starting yPos for a 0 count point
     // starting yPos - (yPos[id] * pointSize) => final yPosition
-    return height - margin.bottom - yPosMargin - (pointSize * yPositions[point.id]);
+    return height - margin.bottom - yPosMargin - (pointSize * pointPositions[point.id]['y']);
   }
 
-  // Loop through the timelinePoints and count the points which are within a 
-  // similar time range. Used later to determine if we should stack a point.
-  var buildYPositions = function() {
-    var count,
+  // Iterates through the timeline points to find their x and y positions
+  // and stores them in pointPositions for later use.
+  var findPointPositions = function() {
+    var pointsDup = timelinePoints.clone(),
+        count,
+        xPos,
         range,
         pointYear;
-    timelinePoints.forEach(function(point, idx) {
+
+    timelinePoints.forEach(function(point, outerIndex) {
       count = 0;
-      timelinePoints.forEach(function(p, idx) {
+      xPos = null;
+
+      // Iterate through the dups to find the range that this point belongs in
+      // and how many other points are in that same range. This determined xPos
+      // which is the approximate year for the point and the count which is how
+      // high we should stack the point.
+      pointsDup.forEach(function(p, innerIndex) {
         range = findRange(p.date.year(), 10);
         pointYear = point.date.year();
+
         // Check if point's date is within the range created by p
         if (pointYear >= range[0] && pointYear <= range[1]) {
-          if (point.id !== p.id && !p.counted) {
+          xPos = range[0] + 2;
+          if (point.id !== p.id) {
             count += 1;
           }
         }
       });
-      yPositions[point.id] = count;
-      point.counted = true;
+
+      // Remove the current point from pointsDup
+      pointsDup = pointsDup.filter(function(p) {
+        return point.id !== p.id;
+      });
+
+      // Set the x and y position of the current point
+      pointPositions[point.id] = { 'x': xPos, 'y': count }
     });
-    return yPositions;
   }
 
   // Timeline Interaction Helpers
