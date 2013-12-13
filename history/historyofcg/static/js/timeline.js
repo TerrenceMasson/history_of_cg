@@ -58,14 +58,17 @@ Hist.Timeline = (function() {
       roundToDecade = Hist.TimelineUtils.roundToDecade;
 
   var initD3Chart = function() {
-    var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); });
+    var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); }),
+        yearsToAddMultiPoint;
 
     beginning   = roundToDecade(d3.min(jsDates), true);
     ending      = roundToDecade(d3.max(jsDates));
 
     // Create out pointPositions object
     pointPositions = buildPointPositions();
-    removeTallPositions();
+
+    yearsToAddMultiPoint = removeTallPositions();
+    addMultiPoints(yearsToAddMultiPoint);
 
 
 
@@ -123,7 +126,7 @@ Hist.Timeline = (function() {
   }
 
   // Iterates through the timeline points to find their x and y positions
-  // and stores them in pointPositions for later use.
+  // and stores them in pointPositions for later use. 
   // Returns { point.id => { x: xPos, y: yPos }, ... }
   var buildPointPositions = function() {
     var pointsDup = timelinePoints.clone(),
@@ -172,7 +175,7 @@ Hist.Timeline = (function() {
   }
 
   var removeTallPositions = function() {
-    var yearsToAddMorePoint = [],
+    var yearsToAddMultiPoint = [],
         positionKeys = Object.keys(pointPositions),
         xPos,
         yPos;
@@ -182,12 +185,22 @@ Hist.Timeline = (function() {
       yPos = pointPositions[pId]['y'];
 
       if (yPos >= maxOfStacked) {
-        yearsToAddMorePoint.push(xPos);
+        yearsToAddMultiPoint.push(xPos);
         timelinePoints = removePointWithId(timelinePoints, pId);
       }
     });
 
-    return yearsToAddMorePoint;
+    return yearsToAddMultiPoint;
+  }
+
+  var addMultiPoints = function(yearsToAdd) {
+    var mPoint;
+    yearsToAdd = yearsToAdd.unique();
+    yearsToAdd.forEach(function(year, idx) {
+      mPoint = multiPoint(year);
+      timelinePoints.push(mPoint);
+      pointPositions[mPoint.id] = { x: year, y: maxOfStacked }
+    });
   }
 
   // Timeline Interaction Helpers
@@ -277,7 +290,7 @@ Hist.Timeline = (function() {
   }
 
   // Our Point object
-  var TimelinePoint = function(page) {
+  var timelinePoint = function(page) {
     var point = {};
 
     // This is the kind of code you have to write when people use a table to 
@@ -298,21 +311,40 @@ Hist.Timeline = (function() {
     }
 
     point.id = page['pk'];
-    point.name = page['fields']['name'];
-    point.vanityUrl = page['fields']['vanity_url'];
-    point.description = page['fields']['description'];
-    point.date = moment(page['fields']['date_established']);
-    point.type = findType(page['fields']['type']);
+    point.name = page['fields']['name'] || page['name'];
+    point.vanityUrl = page['fields']['vanity_url'] || page['vanityUrl'];
+    point.description = page['fields']['description'] || page['description'];
+    point.date = moment(page['fields']['date_established']) || moment();
+    point.type = findType(page['fields']['type']) || page['type'];
     point.pointImage = "/static/img/timeline/" + point.type + "-button.png";
 
-    point.toString = function() {
+    var toString = function() {
       // console.log("point.toString - point: ", point, " this: ", this);
       return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
     }
 
-    point.isValid = function() {
-      return point.type != null && !!page['fields']['date_established'];
+    var isValid = function() {
+      return this.type != null && !!page['fields']['date_established'];
     }
+
+    point.toString = toString;
+    point.isValid  = isValid;
+
+    return point;
+  }
+
+  var multiPoint = function(year) {
+    var pointDefaults = { name: "Multiple Available", vanityUrl: null, description: "Multiple Available", type: 'multi', fields: {} },
+        point = timelinePoint(pointDefaults);
+
+    var generateRandomId = function() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+                 .toString(16)
+                 .substring(1);
+    }
+
+    point.id = generateRandomId();
+    point.date = new Date(year, 5);
 
     return point;
   }
@@ -326,7 +358,7 @@ Hist.Timeline = (function() {
       if (Hist.rawPages != null) {
         var point;
         Hist.rawPages.forEach(function(page, idx) {
-          point = new TimelinePoint(page);
+          point = timelinePoint(page);
           if (point.isValid()) {
             timelinePoints.push(point);
           }
