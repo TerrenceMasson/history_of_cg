@@ -21,3 +21,9 @@ String.prototype.isEmpty = function() {
 Array.prototype.clone = function() {
   return this.slice(0);
 }
+
+Array.prototype.unique = function() {
+  return this.filter(function(item, idx, array) {
+    return array.indexOf(item) === idx;
+  });
+}
