@@ -276,49 +276,46 @@ Hist.Timeline = (function() {
     }
   }
 
-  // Data Initialization Helpers
-  ///////////////////////////////
+  // Our Point object
+  var TimelinePoint = function(page) {
+    var point = {};
 
-  // TODO: Create TimelinePoint object/constructor to clean this shit up.
-
-  // This is the kind of code you have to write when people use a table to 
-  // represent a simple string type. Seriously though, da fuq!
-  var findTypeFromStupidFuckingCategoryId = function(stupidFuckingCategoryId) {
-    switch (stupidFuckingCategoryId) {
-      case 1:
-        return 'person';
-      case 2:
-        return 'project';
-      case 3:
-        return 'organization';
-      case 4:
-        return 'event';
-      default:
-        return null;
-    }
-  }
-
-  var buildTimelinePoints = function(pages) {
-    var result = [];
-    pages.forEach(function(page) {
-      var mDate = moment(page['fields']['date_established']),
-          type  = findTypeFromStupidFuckingCategoryId(page['fields']['type']);
-      if (type && page['fields']['date_established']) {
-        result.push({
-          'id': page['pk'],
-          'name': page['fields']['name'],
-          'vanityUrl': page['fields']['vanity_url'],
-          'description': page['fields']['description'],
-          'date': mDate,
-          'type': type,
-          'pointImage': "/static/img/timeline/" + type + "-button.png",
-          'counted': false
-        });
+    // This is the kind of code you have to write when people use a table to 
+    // represent a simple string. Seriously though, da fuq!
+    var findType = function(categoryId) {
+      switch (categoryId) {
+        case 1:
+          return 'person';
+        case 2:
+          return 'project';
+        case 3:
+          return 'organization';
+        case 4:
+          return 'event';
+        default:
+          return null;
       }
-    });
-    return result;
-  }
+    }
 
+    point.id = page['pk'];
+    point.name = page['fields']['name'];
+    point.vanityUrl = page['fields']['vanity_url'];
+    point.description = page['fields']['description'];
+    point.date = moment(page['fields']['date_established']);
+    point.type = findType(page['fields']['type']);
+    point.pointImage = "/static/img/timeline/" + point.type + "-button.png";
+
+    point.toString = function() {
+      // console.log("point.toString - point: ", point, " this: ", this);
+      return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
+    }
+
+    point.isValid = function() {
+      return point.type != null && !!page['fields']['date_established'];
+    }
+
+    return point;
+  }
 
   // Public Interface
   ////////////////////
@@ -327,7 +324,13 @@ Hist.Timeline = (function() {
 
     init: function() {
       if (Hist.rawPages != null) {
-        timelinePoints = buildTimelinePoints(Hist.rawPages);
+        var point;
+        Hist.rawPages.forEach(function(page, idx) {
+          point = new TimelinePoint(page);
+          if (point.isValid()) {
+            timelinePoints.push(point);
+          }
+        });
         initD3Chart();
       }
 
