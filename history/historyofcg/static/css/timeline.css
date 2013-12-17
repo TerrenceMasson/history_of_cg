@@ -70,6 +70,19 @@
     #timeline-container #timeline .timeline-label {
       font-family: sans-serif;
       font-size: 16px; }
+    #timeline-container #timeline g.context g.axis path {
+      stroke-opacity: 0; }
+    #timeline-container #timeline g.context g.axis line {
+      stroke-opacity: .1; }
+    #timeline-container #timeline g.context g.brush rect.background {
+      fill: rgba(0, 0, 0, 0.1); }
+    #timeline-container #timeline .brush .extent {
+      stroke: #000;
+      fill-opacity: .125;
+      shape-rendering: crispEdges; }
+    #timeline-container #timeline g.context rect.background {
+      fill: #c8c864;
+      visibility: visible !important; }
   #timeline-container #popup-container {
     position: absolute;
     display: none; }

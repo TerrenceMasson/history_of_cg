@@ -41,14 +41,16 @@ Hist.TimelineUtils = (function() {
 
 Hist.Timeline = (function() {
   var timelinePoints = [],
-      margin = {top: 90, right: 30, bottom: 40, left: 30},
+      margin = {top: 90, right: 30, bottom: 90, left: 30},
       width = 960,
-      height = 200,
+      height = 300,
       maxOfStacked = 4,
       pointSize = 25,
       yPosMargin = 30,
       pointClicked = false,
       pointPositions = {},
+      brush,
+      xAxis,
       xScale,
       beginning,
       ending,
@@ -59,6 +61,7 @@ Hist.Timeline = (function() {
 
   var initD3Chart = function() {
     var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); }),
+        gBrush,
         yearsToAddMultiPoint;
 
     beginning   = roundToDecade(d3.min(jsDates), true);
@@ -69,8 +72,6 @@ Hist.Timeline = (function() {
 
     yearsToAddMultiPoint = removeTallPositions();
     addMultiPoints(yearsToAddMultiPoint);
-
-
 
     chart = d3.select('#timeline')
               .attr('width', width)
@@ -83,9 +84,9 @@ Hist.Timeline = (function() {
                     .domain([beginning, ending])
                     .range([0, width - margin.right - margin.left]);
               
-    var xAxis = d3.svg.axis()
-                      .scale(xScale)
-                      .orient("bottom");
+    xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient("bottom");
 
     chart.append("g")
       .attr("class", "x axis")
@@ -107,6 +108,8 @@ Hist.Timeline = (function() {
       .on("mouseover", showActiveState)
       .on("mouseout", hideActiveState)
       .on("click", setClicked)
+
+    initContextArea();
   }
 
   // D3 Plotting Helpers
@@ -199,8 +202,69 @@ Hist.Timeline = (function() {
     yearsToAdd.forEach(function(year, idx) {
       mPoint = multiPoint(year);
       timelinePoints.push(mPoint);
-      pointPositions[mPoint.id] = { x: year, y: maxOfStacked }
+      pointPositions[mPoint.id] = { x: year, y: maxOfStacked };
     });
+  }
+
+  // SVG Brush Helpers
+  /////////////////////
+
+  var initContextArea = function() {
+    var contextWidth = 600,
+        contextHeight = 50,
+        contextTickSize = 50,
+        contextXAxis,
+        contextXScale,
+        contextArea,
+        context;
+
+    contextXScale = d3.time.scale()
+                           .range([0, contextWidth])
+                           .domain(xScale.domain());
+    contextXAxis = d3.svg.axis()
+                         .scale(contextXScale)
+                         .tickSize(contextTickSize)
+                         // .tickPadding(-10)
+                         .orient("bottom");
+
+    contextArea = d3.svg.area()
+                        .interpolate("monotone")
+                        .x(function(d) { return contextXScale(d); })
+                        .y0(contextHeight)
+                        .y1(0);
+
+    brush = d3.svg.brush()
+                  .x(contextXScale)
+                  .extent([beginning, ending])
+                  .on("brushend", brushended);
+
+    context = d3.select("#timeline").append("g")
+                                    .attr("class", "context")
+                                    .attr("transform", "translate(" + (width / 2 - contextWidth / 2) + "," + (height - margin.bottom + 25) + ")");
+
+    context.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0,0)")
+        .call(contextXAxis);
+
+    gBrush = context.append("g")
+                    .attr("class", "brush")
+                    .call(brush)
+                    .call(brush.event);
+    
+    gBrush.selectAll("rect")
+          .attr('transform', 'translate(0,0)')
+          .attr("height", contextTickSize);
+  }
+
+  var brushended = function() {
+    console.log("brushend");
+    var extent0 = brush.extent(),
+        begin = extent0[0],
+        end   = extent0[1];
+
+    xScale.domain([begin, end]);
+    chart.select(".x.axis").call(xAxis);
   }
 
   // Timeline Interaction Helpers

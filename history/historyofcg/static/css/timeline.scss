@@ -24,6 +24,25 @@
       font-family: sans-serif;
       font-size: 16px;
     }
+
+    // Context Styles
+    //////////////////
+
+    g.context g.axis path{ stroke-opacity: 0;}
+    g.context g.axis line{ stroke-opacity: .1;}
+
+    g.context g.brush rect.background{ fill: rgba(0,0,0,.1);}
+
+    .brush .extent {
+      stroke: #000;
+      fill-opacity: .125;
+      shape-rendering: crispEdges;
+    }
+
+    g.context rect.background{
+      fill: rgb(200,200,100);
+      visibility: visible !important;
+    }
   }
 
   // Popup HTML
