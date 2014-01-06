@@ -1,3 +1,8 @@
+/* 
+* @Author: Gowiem
+* @Date:   2013-12-17 14:21:17
+*/
+
 var Hist = Hist || {};
 
 Hist.TimelineUtils = (function() {
@@ -40,8 +45,7 @@ Hist.TimelineUtils = (function() {
 })();
 
 Hist.Timeline = (function() {
-  var timelinePoints = [],
-      margin = {top: 90, right: 30, bottom: 90, left: 30},
+  var margin = {top: 90, right: 30, bottom: 90, left: 30},
       width = 960,
       height = 300,
       maxOfStacked = 4,
@@ -49,6 +53,7 @@ Hist.Timeline = (function() {
       yPosMargin = 30,
       pointClicked = false,
       pointPositions = {},
+      timelinePoints,
       brush,
       xAxis,
       xScale,
@@ -60,7 +65,7 @@ Hist.Timeline = (function() {
       roundToDecade = Hist.TimelineUtils.roundToDecade;
 
   var initD3Chart = function() {
-    var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); }),
+    var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); }),
         gBrush,
         yearsToAddMultiPoint;
 
@@ -94,7 +99,7 @@ Hist.Timeline = (function() {
       .call(xAxis);
 
     chart.selectAll(".timeline-point")
-      .data(timelinePoints)
+      .data(timelinePoints.current)
     .enter().append("image")
       .attr("class", "timeline-point")
       .attr("id", function(p) { return 'point-' + p.id; })
@@ -132,14 +137,14 @@ Hist.Timeline = (function() {
   // and stores them in pointPositions for later use. 
   // Returns { point.id => { x: xPos, y: yPos }, ... }
   var buildPointPositions = function() {
-    var pointsDup = timelinePoints.clone(),
+    var pointsDup = timelinePoints.current.clone(),
         count,
         xPos,
         range,
         pointYear
         result = {};
 
-    timelinePoints.forEach(function(point, outerIndex) {
+    timelinePoints.current.forEach(function(point, outerIndex) {
       count = 0;
       xPos = null;
 
@@ -161,20 +166,13 @@ Hist.Timeline = (function() {
       });
 
       // Remove the current point from pointsDup
-      pointsDup = removePointWithId(pointsDup, point.id);
+      pointsDup = timelinePoints.hidePointWithId(point.id, pointsDup);
 
       // Set the x and y position of the current point
       result[point.id] = { 'x': xPos, 'y': count }
     });
 
     return result;
-  }
-
-  var removePointWithId = function(points, pId) {
-    var pointId = parseInt(pId);
-    return points.filter(function(p) {
-      return pointId !== p.id;
-    });
   }
 
   var removeTallPositions = function() {
@@ -189,7 +187,7 @@ Hist.Timeline = (function() {
 
       if (yPos >= maxOfStacked) {
         yearsToAddMultiPoint.push(xPos);
-        timelinePoints = removePointWithId(timelinePoints, pId);
+        timelinePoints.current = timelinePoints.hidePointWithId(pId);
       }
     });
 
@@ -201,7 +199,7 @@ Hist.Timeline = (function() {
     yearsToAdd = yearsToAdd.unique();
     yearsToAdd.forEach(function(year, idx) {
       mPoint = multiPoint(year);
-      timelinePoints.push(mPoint);
+      timelinePoints.current.push(mPoint);
       pointPositions[mPoint.id] = { x: year, y: maxOfStacked };
     });
   }
@@ -265,10 +263,24 @@ Hist.Timeline = (function() {
 
     xScale.domain([begin, end]);
     chart.select(".x.axis").call(xAxis);
+    timelinePoints.filterInRange("SHRED");
   }
 
   // Timeline Interaction Helpers
   ////////////////////////////////
+
+  var initDomEventHandlers = function() {
+    // Clicked away from a point handler, sets the state to inactive
+    $("body").live("click", function(){
+      var activePoint = $('#timeline').data('active-point'),
+          activeEl;
+      setUnclicked();
+      if (activePoint) {
+        activeEl = $('#point-' + activePoint.id)[0];
+        hideActiveState.call(activeEl, activePoint);
+      }
+    });
+  }
 
   var setClicked = function(point) {
     pointClicked = true;
@@ -353,6 +365,51 @@ Hist.Timeline = (function() {
     }
   }
 
+  // Our Collection of Point Objects
+  var pointCollection = function(pages) {
+    var collection = {},
+        allPoints = [],
+        current = [],
+        point;
+
+    // Loop through the given pages and construct our timeline points
+    pages.forEach(function(page, idx) {
+      point = timelinePoint(page);
+      if (point.isValid()) {
+        allPoints.push(point);
+        current.push(point);
+      }
+    });
+
+    // TODO: Probably a smarter way of making this reusable for both 'this.current'
+    // and the pointsDup in buildPointPosn. Can't think of it now. 
+    var hidePointWithId = function(pId, points) {
+      var pointId = parseInt(pId), 
+          points = points || this.current;
+      return points.filter(function(p) {
+        return pointId !== p.id;
+      });
+    }
+
+    var filterInRange = function(range) {
+      console.log("filterInRange");
+      this.current = [];
+      this.allPoints.filter(function() {
+        // TODO
+      });
+    }
+
+    // Fields
+    collection.allPoints = allPoints;
+    collection.current = current;
+
+    // Methods
+    collection.filterInRange = filterInRange;
+    collection.hidePointWithId = hidePointWithId;
+
+    return collection;
+  }
+
   // Our Point object
   var timelinePoint = function(page) {
     var point = {};
@@ -420,26 +477,10 @@ Hist.Timeline = (function() {
 
     init: function() {
       if (Hist.rawPages != null) {
-        var point;
-        Hist.rawPages.forEach(function(page, idx) {
-          point = timelinePoint(page);
-          if (point.isValid()) {
-            timelinePoints.push(point);
-          }
-        });
+        timelinePoints = pointCollection(Hist.rawPages);
         initD3Chart();
+        initDomEventHandlers();
       }
-
-      // Clicked away from a point handler, sets the state to inactive
-      $("body").live("click", function(){
-        var activePoint = $('#timeline').data('active-point'),
-            activeEl;
-        if (activePoint && pointClicked) {
-          setUnclicked();
-          activeEl = $('#point-' + activePoint.id)[0];
-          hideActiveState.call(activeEl, activePoint);
-        }
-      });
     }
   }
 })();
