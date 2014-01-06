@@ -66,8 +66,7 @@ Hist.Timeline = (function() {
 
   var initD3Chart = function() {
     var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); }),
-        gBrush,
-        yearsToAddMultiPoint;
+        gBrush;
 
     beginning   = roundToDecade(d3.min(jsDates), true);
     ending      = roundToDecade(d3.max(jsDates));
@@ -75,8 +74,8 @@ Hist.Timeline = (function() {
     // Create out pointPositions object
     pointPositions = buildPointPositions();
 
-    yearsToAddMultiPoint = removeTallPositions();
-    addMultiPoints(yearsToAddMultiPoint);
+    // Replace the points which are stacked too high with multiPoints
+    timelinePoints.replaceMaxStacked();
 
     chart = d3.select('#timeline')
               .attr('width', width)
@@ -173,35 +172,6 @@ Hist.Timeline = (function() {
     });
 
     return result;
-  }
-
-  var removeTallPositions = function() {
-    var yearsToAddMultiPoint = [],
-        positionKeys = Object.keys(pointPositions),
-        xPos,
-        yPos;
-
-    positionKeys.forEach(function(pId, idx) {
-      xPos = pointPositions[pId]['x'];
-      yPos = pointPositions[pId]['y'];
-
-      if (yPos >= maxOfStacked) {
-        yearsToAddMultiPoint.push(xPos);
-        timelinePoints.current = timelinePoints.hidePointWithId(pId);
-      }
-    });
-
-    return yearsToAddMultiPoint;
-  }
-
-  var addMultiPoints = function(yearsToAdd) {
-    var mPoint;
-    yearsToAdd = yearsToAdd.unique();
-    yearsToAdd.forEach(function(year, idx) {
-      mPoint = multiPoint(year);
-      timelinePoints.current.push(mPoint);
-      pointPositions[mPoint.id] = { x: year, y: maxOfStacked };
-    });
   }
 
   // SVG Brush Helpers
@@ -365,6 +335,9 @@ Hist.Timeline = (function() {
     }
   }
 
+  // Timeline Objects
+  ////////////////////
+
   // Our Collection of Point Objects
   var pointCollection = function(pages) {
     var collection = {},
@@ -399,6 +372,40 @@ Hist.Timeline = (function() {
       });
     }
 
+    var addMultiPoints = function(yearsToAdd, currentPoints) {
+      var mPoint;
+      yearsToAdd = yearsToAdd.unique();
+      yearsToAdd.forEach(function(year, idx) {
+        mPoint = multiPoint(year);
+        currentPoints.push(mPoint);
+        pointPositions[mPoint.id] = { x: year, y: maxOfStacked };
+      });
+    }
+
+    var replaceMaxStacked = function() {
+      var yearsToAddMultiPoint = [],
+          positionKeys = Object.keys(pointPositions),
+          self = this,
+          xPos,
+          yPos;
+
+      positionKeys.forEach(function(pId, idx) {
+        xPos = pointPositions[pId]['x'];
+        yPos = pointPositions[pId]['y'];
+
+        if (yPos >= maxOfStacked) {
+          yearsToAddMultiPoint.push(xPos);
+          self.current = self.hidePointWithId(pId);
+        }
+      });
+
+      // Now that we've remove the points which were stacked too high we can 
+      // add back the multiPoints in their place.
+      addMultiPoints(yearsToAddMultiPoint, this.current);
+    }
+
+    
+
     // Fields
     collection.allPoints = allPoints;
     collection.current = current;
@@ -406,6 +413,7 @@ Hist.Timeline = (function() {
     // Methods
     collection.filterInRange = filterInRange;
     collection.hidePointWithId = hidePointWithId;
+    collection.replaceMaxStacked = replaceMaxStacked;
 
     return collection;
   }
