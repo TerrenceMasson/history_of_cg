@@ -65,17 +65,10 @@ Hist.Timeline = (function() {
       roundToDecade = Hist.TimelineUtils.roundToDecade;
 
   var initD3Chart = function() {
-    var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); }),
-        gBrush;
+    var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); });
 
     beginning   = roundToDecade(d3.min(jsDates), true);
     ending      = roundToDecade(d3.max(jsDates));
-
-    // Create out pointPositions object
-    pointPositions = buildPointPositions();
-
-    // Replace the points which are stacked too high with multiPoints
-    timelinePoints.replaceMaxStacked();
 
     chart = d3.select('#timeline')
               .attr('width', width)
@@ -97,9 +90,15 @@ Hist.Timeline = (function() {
       .attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
       .call(xAxis);
 
-    chart.selectAll(".timeline-point")
-      .data(timelinePoints.current)
-    .enter().append("image")
+
+    pointPositions = buildPointPositions();
+
+    // Replace the points which are stacked too high with multiPoints
+    timelinePoints.replaceMaxStacked();
+
+    var points = chart.selectAll(".timeline-point").data(timelinePoints.current);
+    points.enter()
+      .append("image")
       .attr("class", "timeline-point")
       .attr("id", function(p) { return 'point-' + p.id; })
       .attr("x", getXPosition)
@@ -111,9 +110,40 @@ Hist.Timeline = (function() {
       .attr("xlink:href", function(p) { return p.pointImage; })
       .on("mouseover", showActiveState)
       .on("mouseout", hideActiveState)
-      .on("click", setClicked)
+      .on("click", setClicked);
 
     initContextArea();
+  }
+
+  var draw = function() {
+    var points;
+
+    // Create out pointPositions object
+    pointPositions = {};
+    pointPositions = buildPointPositions();
+
+    // Replace the points which are stacked too high with multiPoints
+    timelinePoints.replaceMaxStacked();
+
+    // Remove the current points
+    chart.selectAll(".timeline-point").remove();
+
+    // Set the newly filtered points as our new data
+    points = chart.selectAll(".timeline-point").data(timelinePoints.current);
+    points.enter()
+          .append("image")
+          .attr("class", "timeline-point")
+          .attr("id", function(p) { return 'point-' + p.id; })
+          .attr("x", getXPosition)
+          .attr("y", getYPosition)
+          .attr("cx", getXPosition)
+          .attr("cy", getYPosition)
+          .attr("height", pointSize)
+          .attr("width", pointSize)
+          .attr("xlink:href", function(p) { return p.pointImage; })
+          .on("mouseover", showActiveState)
+          .on("mouseout", hideActiveState)
+          .on("click", setClicked);
   }
 
   // D3 Plotting Helpers
@@ -226,14 +256,15 @@ Hist.Timeline = (function() {
   }
 
   var brushended = function() {
-    console.log("brushend");
     var extent0 = brush.extent(),
         begin = extent0[0],
         end   = extent0[1];
 
     xScale.domain([begin, end]);
+    xAxis.scale(xScale);
     chart.select(".x.axis").call(xAxis);
-    timelinePoints.filterInRange("SHRED");
+    timelinePoints.filterInRange([new Date(begin), new Date(end)]);
+    draw();
   }
 
   // Timeline Interaction Helpers
@@ -365,10 +396,8 @@ Hist.Timeline = (function() {
     }
 
     var filterInRange = function(range) {
-      console.log("filterInRange");
-      this.current = [];
-      this.allPoints.filter(function() {
-        // TODO
+      this.current = this.allPoints.filter(function(point, idx) {
+        return point.withinRange(range);
       });
     }
 
@@ -456,8 +485,13 @@ Hist.Timeline = (function() {
       return this.type != null && !!page['fields']['date_established'];
     }
 
+    var withinRange = function(range) {
+      return this.date.isAfter(range[0]) && this.date.isBefore(range[1]);
+    }
+
     point.toString = toString;
     point.isValid  = isValid;
+    point.withinRange = withinRange;
 
     return point;
   }
@@ -473,7 +507,7 @@ Hist.Timeline = (function() {
     }
 
     point.id = generateRandomId();
-    point.date = new Date(year, 5);
+    point.date = moment(new Date(year, 5));
 
     return point;
   }
