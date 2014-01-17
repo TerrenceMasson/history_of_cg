@@ -16,5 +16,6 @@ Setting up your machine:
   * Setup a .env file so foreman knows where to find Django's settings. You can do this by running the following from this projects top level directory (where Procfile lives):
     * `touch .env && echo "DJANGO_SETTINGS_MODULE=history.settings.development" >> .env`
   * Create the hocg database for your local Postgres install. Use the Postgres.app icon to open psql and then run `CREATE DATABASE hocg` at the prompt
-  * Use `foreman start` to start Gunicorn. localhost:5000 should be up and running. 
+  * To start the History of CG server change into the 'history' directory (`cd history`) and run `python manage.py runserver --settings=settings.development`. 
+  * You should now be able to navigate to http://localhost:8000 in your browser, and you're all set. 
 
