@@ -2,7 +2,7 @@ var Hist = Hist || {};
 
 $(document).ready(function() {
     Hist.Notifications.init();
-    if (Hist.Timeline) { Hist.Timeline.init(); }
+    if (Hist.TL) { Hist.TL.init(); }
 });
 
 // jQuery Additions
