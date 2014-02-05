@@ -583,6 +583,14 @@ Hist.TL = (function() {
     d3.select(element).attr("xlink:href", hoverImageUrl);
   }
 
+  var addDescriptionToPoint = function(description) {
+    if (description.length <= 200) {
+      $('.regular-point .description').text(description);
+    } else {
+      $('.regular-point .description').text(description.substring(0, 200) + "...");
+    }
+  }
+
   var showPopup = function(element, point) {
     var d3Element = d3.select(element),
         leftPos   = parseInt(d3Element.attr('x')),
@@ -597,7 +605,7 @@ Hist.TL = (function() {
     if (point.type !== 'multi') {
       // Setup the content now so we can grab the height and use it to calculate the topOffset
       $('.regular-point h3').text(point.name);
-      $('.regular-point .description').text(point.description);
+      addDescriptionToPoint(point.description);
       $('.regular-point .date').text(point.date.format("dddd, MMMM Do YYYY"));
       $('.regular-point a').attr('href', "/pages/" + point.vanityUrl);
       $('.regular-point').removeClass()
