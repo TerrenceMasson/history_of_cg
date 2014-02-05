@@ -490,8 +490,8 @@ Hist.TL = (function() {
 
   var initContextArea = function() {
     var contextWidth = 600,
-        contextHeight = 50,
-        contextTickSize = 50,
+        contextHeight = 30,
+        contextTickSize = 30,
         contextXAxis,
         contextXScale,
         contextArea,
@@ -503,7 +503,7 @@ Hist.TL = (function() {
     contextXAxis = d3.svg.axis()
                          .scale(contextXScale)
                          .tickSize(contextTickSize)
-                         // .tickPadding(-10)
+                         .tickPadding(5)
                          .orient("bottom");
 
     contextArea = d3.svg.area()
