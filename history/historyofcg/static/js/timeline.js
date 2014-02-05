@@ -317,7 +317,6 @@ Hist.TLO.timelinePoint = function(page) {
   point.pointImage = "/static/img/timeline/" + point.type + "-button.png";
 
   var toString = function() {
-    // console.log("point.toString - point: ", point, " this: ", this);
     return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
   }
 
@@ -473,9 +472,7 @@ Hist.TL = (function() {
 
   // D3 Plotting Helpers
   ///////////////////////
-
   var getXPosition = function(point) {
-    console.log('Point: ', point.toString());
     var date = timelinePoints.pointPositions[point.id]['x'];
     return xScale(date) - (pointSize / 2);
   }
