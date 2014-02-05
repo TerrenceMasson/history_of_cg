@@ -10,7 +10,7 @@ var Hist = Hist || {};
 Hist.TLUtils = (function() {
   var timeConversions = { "year": 31557600000,
                           "month": 2628000000,
-                          "day":     86400000,}
+                          "day":     86400000 };
   
   // Note: The following method uses memoization so it doesn't need to recalculate
   // the range for a year/mod pair that it has already seen. This is definitely
@@ -67,11 +67,18 @@ Hist.TLUtils = (function() {
     return roundedDate;
   }
 
+  var pubGenerateRandomId = function() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+               .toString(16)
+               .substring(1);
+  }
+
   return {
     buildRange: pubBuildRange,
     roundToDecade: pubRoundToDecade,
     convertTime: pubConvertTime,
     buildMonthRange: pubBuildMonthRange,
+    generateRandomId: pubGenerateRandomId
   }
 })();
 
@@ -106,6 +113,253 @@ Hist.TLO.range = function(begin, end) {
   return rangeObject;
 }
 
+// Our Collection of Point Objects
+Hist.TLO.pointCollection = function(pages) {
+  var collection = {},
+      allPoints = [],
+      current = [],
+      pointPositions = {},
+      point,
+      // Util Aliases
+      buildRange      = Hist.TLUtils.buildRange,
+      buildMonthRange = Hist.TLUtils.buildMonthRange,
+      roundToDecade   = Hist.TLUtils.roundToDecade,
+      // TLO Aliases
+      timelinePoint   = Hist.TLO.timelinePoint,
+      multiPoint      = Hist.TLO.multiPoint;
+
+
+  // Loop through the given pages and construct our timeline points
+  pages.forEach(function(page, idx) {
+    point = timelinePoint(page);
+    if (point.isValid()) {
+      allPoints.push(point);
+      current.push(point);
+    }
+  });
+
+  // Iterates through the timeline points to find their x and y positions
+  // and stores them in pointPositions for later use. 
+  // Returns { point.id => { x: xPos, y: yPos }, ... }
+  var buildPointPositions = function(timelineRange) {
+    var pointsDup = this.current.clone(),
+        self = this,
+        count,
+        xPos,
+        pointYear,
+        range,
+        i;
+
+    this.current.forEach(function(point, outerIndex) {
+      count = 0;
+      xPos = null;
+
+      // Iterate through the dups to find the range that this point belongs in
+      // and how many other points are in that same range. This determined xPos
+      // which is the approximate year for the point and the count which is how
+      // high we should stack the point.
+      pointsDup.forEach(function(p, innerIndex) {
+        pointYear = point.date.year();
+
+        // Possible ranges:
+        // 80+ years: buckets of 5 years
+        // 30+ years: buckets of 4 years
+        // 20+ years: Buckets of 2 years
+        // 10+ years: Buckets of 1 year
+        // 4+  years: Buckets of 4 months
+        // 4-  years: No Range, Only stack if in same month
+        if (timelineRange.differenceInYears >= 80) {
+          range = buildRange(p.date.year(), 10);
+          console.log("=========== range is 80+");
+        } else if (timelineRange.differenceInYears >= 30) {
+          console.log("=========== range is 30+");
+          range = buildRange(p.date.year(), 8);
+        } else if (timelineRange.differenceInYears >= 20) {
+          console.log("=========== range is 20+");
+          range = buildRange(p.date.year(), 4);
+        } else if (timelineRange.differenceInYears >= 10) {
+          console.log("=========== range is 10+");
+          range = buildMonthRange(p.date, 6);
+        } else if (timelineRange.differenceInYears >= 4) {
+          console.log("=========== range is 4+");
+          range = buildMonthRange(p.date, 2);
+        } else {
+          console.log("=========== range is 4-");
+          range = null;
+        }
+
+        // Check if point's date is within the range created by p
+        if (range && point.withinRange(range)) {
+          xPos = range.halfWayDate();
+          if (point.id !== p.id) {
+            count += 1;
+          }
+        } else if (point.isSameMonthAsPoint(p) && point.id !== p.id) {
+          xPos = p.date;
+          count += 1;
+        }
+
+
+
+      }); // End pointsDup.forEach
+
+      // Otherwise it stands alone and we should set the xPos to it's actual
+      // position.
+      if (!xPos) {
+        xPos = point.date;
+      }
+
+      // Remove the current point from pointsDup
+      pointsDup = hidePointWithId(point.id, pointsDup);
+
+      // Set the x and y position of the current point
+      self.pointPositions[point.id] = { 'x': xPos, 'y': count }
+    });
+  }
+
+  var clearPointPositions = function() {
+    this.pointPositions = {};
+  }
+
+  // TODO: Probably a smarter way of making this reusable for both 'this.current'
+  // and the pointsDup in buildPointPosn. Can't think of it now. 
+  var hidePointWithId = function(pId, points) {
+    var pointId = parseInt(pId), 
+        points = points || this.current;
+    return points.filter(function(p) {
+      return pointId !== p.id;
+    });
+  }
+
+  var filterInRange = function(range) {
+    this.current = this.allPoints.filter(function(point, idx) {
+      return point.withinRange(range);
+    });
+  }
+
+  var addMultiPoints = function(yearsToAdd) {
+    var self = this,
+        mPoint;
+
+    yearsToAdd = yearsToAdd.unique();
+    yearsToAdd.forEach(function(year, idx) {
+      mPoint = multiPoint(year);
+      self.currentPoints.push(mPoint);
+      self.pointPositions[mPoint.id] = { x: year, y: Hist.TL.config.maxOfStacked };
+    });
+  }
+
+  var replaceMaxStacked = function() {
+    var yearsToAddMultiPoint = [],
+        positionKeys = Object.keys(this.pointPositions),
+        self = this,
+        xPos,
+        yPos;
+
+    positionKeys.forEach(function(pId, idx) {
+      xPos = self.pointPositions[pId]['x'];
+      yPos = self.pointPositions[pId]['y'];
+
+      if (yPos >= Hist.TL.config.maxOfStacked) {
+        yearsToAddMultiPoint.push(xPos);
+        self.current = self.hidePointWithId(pId);
+      }
+    });
+
+    // Now that we've remove the points which were stacked too high we can 
+    // add back the multiPoints in their place.
+    addMultiPoints.bind(this, yearsToAddMultiPoint);
+  }
+
+  // Fields
+  collection.allPoints = allPoints;
+  collection.current = current;
+  collection.pointPositions = pointPositions;
+
+  // Methods
+  collection.buildPointPositions = buildPointPositions;
+  collection.clearPointPositions = clearPointPositions;
+  collection.filterInRange = filterInRange;
+  collection.hidePointWithId = hidePointWithId;
+  collection.replaceMaxStacked = replaceMaxStacked;
+
+  return collection;
+}
+
+// Our Point object
+Hist.TLO.timelinePoint = function(page) {
+  var point = {};
+
+  // This is the kind of code you have to write when people use a table to 
+  // represent a simple string. Seriously though, da fuq!
+  // TODO: I can do this simpler with an array.. doh. 
+  var findType = function(categoryId) {
+    switch (categoryId) {
+      case 1:
+        return 'person';
+      case 2:
+        return 'project';
+      case 3:
+        return 'organization';
+      case 4:
+        return 'event';
+      default:
+        return null;
+    }
+  }
+
+  point.id = page['pk'];
+  point.name = page['fields']['name'] || page['name'];
+  point.vanityUrl = page['fields']['vanity_url'] || page['vanityUrl'];
+  point.description = page['fields']['description'] || page['description'];
+  point.date = moment(page['fields']['date_established']) || moment();
+  point.type = findType(page['fields']['type']) || page['type'];
+  point.pointImage = "/static/img/timeline/" + point.type + "-button.png";
+
+  var toString = function() {
+    // console.log("point.toString - point: ", point, " this: ", this);
+    return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
+  }
+
+  var isValid = function() {
+    return this.type != null && !!page['fields']['date_established'];
+  }
+
+  var withinRange = function(range) {
+    return this.date.isAfter(range.begin) && this.date.isBefore(range.end)
+                                          || this.date.isSame(range.begin)
+                                          || this.date.isSame(range.end);
+  }
+
+  var isSameMonthAsPoint = function(point) {
+    return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month');
+  }
+
+  var isSameDayAsPoint = function(point) {
+    return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month') && this.date.isSame(point.date, 'day');
+  }
+
+  point.toString = toString;
+  point.isValid  = isValid;
+  point.withinRange = withinRange;
+  point.isSameMonthAsPoint = isSameMonthAsPoint;
+  point.isSameDayAsPoint = isSameDayAsPoint;
+
+  return point;
+}
+
+Hist.TLO.multiPoint = function(year) {
+  var pointDefaults = { name: "Multiple Available", vanityUrl: null,
+                        description: "Multiple Available", type: 'multi',
+                        fields: {} },
+      point = Hist.TLO.timelinePoint(pointDefaults);
+
+  point.id = Hist.TLUtils.generateRandomId();
+  point.date = moment(new Date(year, 5));
+
+  return point;
+}
+
 // Timeline
 ////////////
 Hist.TL = (function() {
@@ -116,7 +370,6 @@ Hist.TL = (function() {
       pointSize = 25,
       yPosMargin = 30,
       pointClicked = false,
-      pointPositions = {},
       timelinePoints,
       brush,
       xAxis,
@@ -125,9 +378,15 @@ Hist.TL = (function() {
       ending,
       chart,
       // Alias our TimelineUtils methods
-      buildRange = Hist.TLUtils.buildRange,
+      buildRange      = Hist.TLUtils.buildRange,
       buildMonthRange = Hist.TLUtils.buildMonthRange,
-      roundToDecade = Hist.TLUtils.roundToDecade;
+      roundToDecade   = Hist.TLUtils.roundToDecade,
+      // Alias our Timeline Objects
+      pointCollection = Hist.TLO.pointCollection,
+      timelinePoint   = Hist.TLO.timelinePoint,
+      multiPoint      = Hist.TLO.multiPoint;
+
+
 
   var initD3Chart = function() {
     var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); });
@@ -155,7 +414,7 @@ Hist.TL = (function() {
       .attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
       .call(xAxis);
 
-    pointPositions = timelinePoints.buildPointPositions(Hist.TLO.range(beginning, ending));
+    timelinePoints.buildPointPositions(Hist.TLO.range(beginning, ending));
 
     // Replace the points which are stacked too high with multiPoints
     timelinePoints.replaceMaxStacked();
@@ -183,16 +442,16 @@ Hist.TL = (function() {
     var points;
 
     // Create out pointPositions object
-    pointPositions = {};
-    pointPositions = timelinePoints.buildPointPositions(range);
-
+    console.log("timelinePoints.pointPositions: ", timelinePoints.pointPositions);
+    timelinePoints.clearPointPositions();
+    console.log("timelinePoints.pointPositions: ", timelinePoints.pointPositions);
+    timelinePoints.buildPointPositions(range);
+    console.log("timelinePoints.pointPositions: ", timelinePoints.pointPositions);
     // Replace the points which are stacked too high with multiPoints
     timelinePoints.replaceMaxStacked();
 
     // Remove the current points
     chart.selectAll(".timeline-point").remove();
-
-    console.log("Number of Timeline Points: ", timelinePoints.current.length);
 
     // Set the newly filtered points as our new data
     points = chart.selectAll(".timeline-point").data(timelinePoints.current);
@@ -216,7 +475,8 @@ Hist.TL = (function() {
   ///////////////////////
 
   var getXPosition = function(point) {
-    var date = pointPositions[point.id]['x'];
+    console.log('Point: ', point.toString());
+    var date = timelinePoints.pointPositions[point.id]['x'];
     return xScale(date) - (pointSize / 2);
   }
 
@@ -224,7 +484,7 @@ Hist.TL = (function() {
     // height - bottom => xAxis line
     // xAxis line - yPosMargin => Starting yPos for a 0 count point
     // starting yPos - (yPos[id] * pointSize) => final yPosition
-    return height - margin.bottom - yPosMargin - (pointSize * pointPositions[point.id]['y']);
+    return height - margin.bottom - yPosMargin - (pointSize * timelinePoints.pointPositions[point.id]['y']);
   }
 
   // SVG Brush Helpers
@@ -391,244 +651,8 @@ Hist.TL = (function() {
     }
   }
 
-  // Our Collection of Point Objects
-  var pointCollection = function(pages) {
-    var collection = {},
-        allPoints = [],
-        current = [],
-        point;
-
-    // Loop through the given pages and construct our timeline points
-    pages.forEach(function(page, idx) {
-      point = timelinePoint(page);
-      if (point.isValid()) {
-        allPoints.push(point);
-        current.push(point);
-      }
-    });
-
-    // Iterates through the timeline points to find their x and y positions
-    // and stores them in pointPositions for later use. 
-    // Returns { point.id => { x: xPos, y: yPos }, ... }
-    var buildPointPositions = function(timelineRange) {
-      var pointsDup = this.current.clone(),
-          result = {},
-          count,
-          xPos,
-          pointYear,
-          range,
-          i;
-
-      this.current.forEach(function(point, outerIndex) {
-        count = 0;
-        xPos = null;
-
-        // Iterate through the dups to find the range that this point belongs in
-        // and how many other points are in that same range. This determined xPos
-        // which is the approximate year for the point and the count which is how
-        // high we should stack the point.
-        pointsDup.forEach(function(p, innerIndex) {
-          pointYear = point.date.year();
-
-          // Possible ranges:
-          // 80+ years: buckets of 5 years
-          // 30+ years: buckets of 4 years
-          // 20+ years: Buckets of 2 years
-          // 10+ years: Buckets of 1 year
-          // 4+  years: Buckets of 4 months
-          // 4-  years: No Range, Only stack if in same month
-          if (timelineRange.differenceInYears >= 80) {
-            range = buildRange(p.date.year(), 10);
-            console.log("=========== range is 80+");
-          } else if (timelineRange.differenceInYears >= 30) {
-            console.log("=========== range is 30+");
-            range = buildRange(p.date.year(), 8);
-          } else if (timelineRange.differenceInYears >= 20) {
-            console.log("=========== range is 20+");
-            range = buildRange(p.date.year(), 4);
-          } else if (timelineRange.differenceInYears >= 10) {
-            console.log("=========== range is 10+");
-            range = buildMonthRange(p.date, 6);
-          } else if (timelineRange.differenceInYears >= 4) {
-            console.log("=========== range is 4+");
-            range = buildMonthRange(p.date, 2);
-          } else {
-            console.log("=========== range is 4-");
-            range = null;
-          }
-
-          // Check if point's date is within the range created by p
-          if (range && point.withinRange(range)) {
-            xPos = range.halfWayDate();
-            if (point.id !== p.id) {
-              count += 1;
-            }
-          } else if (point.isSameMonthAsPoint(p) && point.id !== p.id) {
-            xPos = p.date;
-            count += 1;
-          }
-
-
-
-        }); // End pointsDup.forEach
-
-        // Otherwise it stands alone and we should set the xPos to it's actual
-        // position.
-        if (!xPos) {
-          xPos = point.date;
-        }
-
-        // Remove the current point from pointsDup
-        pointsDup = hidePointWithId(point.id, pointsDup);
-
-        // Set the x and y position of the current point
-        result[point.id] = { 'x': xPos, 'y': count }
-      });
-
-      return result;
-    }
-
-    // TODO: Probably a smarter way of making this reusable for both 'this.current'
-    // and the pointsDup in buildPointPosn. Can't think of it now. 
-    var hidePointWithId = function(pId, points) {
-      var pointId = parseInt(pId), 
-          points = points || this.current;
-      return points.filter(function(p) {
-        return pointId !== p.id;
-      });
-    }
-
-    var filterInRange = function(range) {
-      this.current = this.allPoints.filter(function(point, idx) {
-        return point.withinRange(range);
-      });
-    }
-
-    var addMultiPoints = function(yearsToAdd, currentPoints) {
-      var mPoint;
-      yearsToAdd = yearsToAdd.unique();
-      yearsToAdd.forEach(function(year, idx) {
-        mPoint = multiPoint(year);
-        currentPoints.push(mPoint);
-        pointPositions[mPoint.id] = { x: year, y: maxOfStacked };
-      });
-    }
-
-    var replaceMaxStacked = function() {
-      var yearsToAddMultiPoint = [],
-          positionKeys = Object.keys(pointPositions),
-          self = this,
-          xPos,
-          yPos;
-
-      positionKeys.forEach(function(pId, idx) {
-        xPos = pointPositions[pId]['x'];
-        yPos = pointPositions[pId]['y'];
-
-        if (yPos >= maxOfStacked) {
-          yearsToAddMultiPoint.push(xPos);
-          self.current = self.hidePointWithId(pId);
-        }
-      });
-
-      // Now that we've remove the points which were stacked too high we can 
-      // add back the multiPoints in their place.
-      addMultiPoints(yearsToAddMultiPoint, this.current);
-    }
-
-    
-
-    // Fields
-    collection.allPoints = allPoints;
-    collection.current = current;
-
-    // Methods
-    collection.buildPointPositions = buildPointPositions;
-    collection.filterInRange = filterInRange;
-    collection.hidePointWithId = hidePointWithId;
-    collection.replaceMaxStacked = replaceMaxStacked;
-
-    return collection;
-  }
-
-  // Our Point object
-  var timelinePoint = function(page) {
-    var point = {};
-
-    // This is the kind of code you have to write when people use a table to 
-    // represent a simple string. Seriously though, da fuq!
-    var findType = function(categoryId) {
-      switch (categoryId) {
-        case 1:
-          return 'person';
-        case 2:
-          return 'project';
-        case 3:
-          return 'organization';
-        case 4:
-          return 'event';
-        default:
-          return null;
-      }
-    }
-
-    point.id = page['pk'];
-    point.name = page['fields']['name'] || page['name'];
-    point.vanityUrl = page['fields']['vanity_url'] || page['vanityUrl'];
-    point.description = page['fields']['description'] || page['description'];
-    point.date = moment(page['fields']['date_established']) || moment();
-    point.type = findType(page['fields']['type']) || page['type'];
-    point.pointImage = "/static/img/timeline/" + point.type + "-button.png";
-
-    var toString = function() {
-      // console.log("point.toString - point: ", point, " this: ", this);
-      return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
-    }
-
-    var isValid = function() {
-      return this.type != null && !!page['fields']['date_established'];
-    }
-
-    var withinRange = function(range) {
-      return this.date.isAfter(range.begin) && this.date.isBefore(range.end) || this.date.isSame(range.begin) || this.date.isSame(range.end);
-    }
-
-    var isSameMonthAsPoint = function(point) {
-      return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month');
-    }
-
-    var isSameDayAsPoint = function(point) {
-      return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month') && this.date.isSame(point.date, 'day');
-    }
-
-    point.toString = toString;
-    point.isValid  = isValid;
-    point.withinRange = withinRange;
-    point.isSameMonthAsPoint = isSameMonthAsPoint;
-    point.isSameDayAsPoint = isSameDayAsPoint;
-
-    return point;
-  }
-
-  var multiPoint = function(year) {
-    var pointDefaults = { name: "Multiple Available", vanityUrl: null, description: "Multiple Available", type: 'multi', fields: {} },
-        point = timelinePoint(pointDefaults);
-
-    var generateRandomId = function() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-                 .toString(16)
-                 .substring(1);
-    }
-
-    point.id = generateRandomId();
-    point.date = moment(new Date(year, 5));
-
-    return point;
-  }
-
   // Public Interface
   ////////////////////
-
   return {
 
     init: function() {
@@ -637,6 +661,9 @@ Hist.TL = (function() {
         initD3Chart();
         initDomEventHandlers();
       }
+    },
+    config: {
+      maxOfStacked: maxOfStacked
     }
   }
 })();
