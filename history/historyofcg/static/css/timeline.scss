@@ -50,11 +50,12 @@
     position: absolute;
     display: none; // Hidden until shown on mouseover/click
 
-    #popup {
+    .popup {
       background: darken($bg, 2%);
       border-radius: 5px;
       width: 200px;
       padding: 10px;
+      display: none;
 
       p {
         color: white;
@@ -65,6 +66,10 @@
     .organization { border: 1px darken($org, 20%) solid; }
     .event { border: 1px darken($event, 20%) solid; }
     .project { border: 1px darken($project, 20%) solid; }
+    .multi-point { 
+      border: 1px darken($person, 20%) solid;
+      color: $person;
+    }
 
   }
 }

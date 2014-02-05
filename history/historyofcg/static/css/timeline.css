@@ -86,12 +86,13 @@
   #timeline-container #popup-container {
     position: absolute;
     display: none; }
-    #timeline-container #popup-container #popup {
+    #timeline-container #popup-container .popup {
       background: #252a2d;
       border-radius: 5px;
       width: 200px;
-      padding: 10px; }
-      #timeline-container #popup-container #popup p {
+      padding: 10px;
+      display: none; }
+      #timeline-container #popup-container .popup p {
         color: white; }
     #timeline-container #popup-container .person {
       border: 1px #006375 solid; }
@@ -101,3 +102,6 @@
       border: 1px #7e0099 solid; }
     #timeline-container #popup-container .project {
       border: 1px #993d00 solid; }
+    #timeline-container #popup-container .multi-point {
+      border: 1px #006375 solid;
+      color: #00b9db; }

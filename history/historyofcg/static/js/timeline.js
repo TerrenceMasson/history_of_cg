@@ -591,13 +591,25 @@ Hist.TL = (function() {
         topOffset,
         popupLeft;
 
-    // Setup the content now so we can grab the height and use it to calculate the topOffset
-    $('#popup h3').text(point.name);
-    $('#popup .description').text(point.description);
-    $('#popup .date').text(point.date.format("dddd, MMMM Do YYYY"));
-    $('#popup a').attr('href', "/pages/" + point.vanityUrl);
-    popupHeight = $('#popup-container').height();
+    // Hide both popups so we aren't showing both.
+    $('.popup').hide();
 
+    if (point.type !== 'multi') {
+      // Setup the content now so we can grab the height and use it to calculate the topOffset
+      $('.regular-point h3').text(point.name);
+      $('.regular-point .description').text(point.description);
+      $('.regular-point .date').text(point.date.format("dddd, MMMM Do YYYY"));
+      $('.regular-point a').attr('href', "/pages/" + point.vanityUrl);
+      $('.regular-point').removeClass()
+                         .addClass(point.type)
+                         .addClass("popup")
+                         .addClass("regular-point")
+                         .show();
+    } else {
+      $('.multi-point').show();
+    }
+
+    popupHeight = $('#popup-container').height();
     leftOffset = (pointSize / 2);
     topOffset  = (pointSize / 2) + popupHeight + 11; // +11 px is for padding I think..
 
@@ -605,11 +617,7 @@ Hist.TL = (function() {
     popupLeft = leftPos + pointSize + leftOffset + 'px';
     popupTop  = topPos + pointSize - topOffset + 'px';
 
-    // Add the points type so we have colored borders and name text
-    $('#popup').removeClass()
-               .addClass(point.type);
-    $('#popup-container').css({ left: popupLeft, top: popupTop })
-                         .show();
+    $('#popup-container').css({ left: popupLeft, top: popupTop }).show()
   }
 
   var showActiveState = function(point) {
