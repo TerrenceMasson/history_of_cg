@@ -244,7 +244,7 @@ Hist.TLO.pointCollection = function(pages) {
     yearsToAdd = yearsToAdd.unique();
     yearsToAdd.forEach(function(year, idx) {
       mPoint = multiPoint(year);
-      self.currentPoints.push(mPoint);
+      self.current.push(mPoint);
       self.pointPositions[mPoint.id] = { x: year, y: Hist.TL.config.maxOfStacked };
     });
   }
@@ -268,7 +268,7 @@ Hist.TLO.pointCollection = function(pages) {
 
     // Now that we've remove the points which were stacked too high we can 
     // add back the multiPoints in their place.
-    addMultiPoints.bind(this, yearsToAddMultiPoint);
+    this.addMultiPoints(yearsToAddMultiPoint);
   }
 
   // Fields
@@ -282,6 +282,7 @@ Hist.TLO.pointCollection = function(pages) {
   collection.filterInRange = filterInRange;
   collection.hidePointWithId = hidePointWithId;
   collection.replaceMaxStacked = replaceMaxStacked;
+  collection.addMultiPoints = addMultiPoints;
 
   return collection;
 }
