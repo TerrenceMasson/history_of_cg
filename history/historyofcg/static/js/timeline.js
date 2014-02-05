@@ -170,21 +170,21 @@ Hist.TLO.pointCollection = function(pages) {
         // 4-  years: No Range, Only stack if in same month
         if (timelineRange.differenceInYears >= 80) {
           range = buildRange(p.date.year(), 10);
-          console.log("=========== range is 80+");
+          // console.log("=========== range is 80+");
         } else if (timelineRange.differenceInYears >= 30) {
-          console.log("=========== range is 30+");
+          // console.log("=========== range is 30+");
           range = buildRange(p.date.year(), 8);
         } else if (timelineRange.differenceInYears >= 20) {
-          console.log("=========== range is 20+");
+          // console.log("=========== range is 20+");
           range = buildRange(p.date.year(), 4);
         } else if (timelineRange.differenceInYears >= 10) {
-          console.log("=========== range is 10+");
+          // console.log("=========== range is 10+");
           range = buildMonthRange(p.date, 6);
         } else if (timelineRange.differenceInYears >= 4) {
-          console.log("=========== range is 4+");
+          // console.log("=========== range is 4+");
           range = buildMonthRange(p.date, 2);
         } else {
-          console.log("=========== range is 4-");
+          // console.log("=========== range is 4-");
           range = null;
         }
 
@@ -442,11 +442,8 @@ Hist.TL = (function() {
     var points;
 
     // Create out pointPositions object
-    console.log("timelinePoints.pointPositions: ", timelinePoints.pointPositions);
     timelinePoints.clearPointPositions();
-    console.log("timelinePoints.pointPositions: ", timelinePoints.pointPositions);
     timelinePoints.buildPointPositions(range);
-    console.log("timelinePoints.pointPositions: ", timelinePoints.pointPositions);
     // Replace the points which are stacked too high with multiPoints
     timelinePoints.replaceMaxStacked();
 
