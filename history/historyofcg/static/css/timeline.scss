@@ -31,7 +31,7 @@
     g.context g.axis path{ stroke-opacity: 0;}
     g.context g.axis line{ stroke-opacity: .1;}
 
-    g.context g.brush rect.background{ fill: rgba(0,0,0,.1);}
+    g.context g.brush rect.background{ fill: rgba(200, 200, 200,.15);}
 
     .brush .extent {
       stroke: #000;

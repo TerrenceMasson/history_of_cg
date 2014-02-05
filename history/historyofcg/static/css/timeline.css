@@ -75,7 +75,7 @@
     #timeline-container #timeline g.context g.axis line {
       stroke-opacity: .1; }
     #timeline-container #timeline g.context g.brush rect.background {
-      fill: rgba(0, 0, 0, 0.1); }
+      fill: rgba(200, 200, 200, 0.15); }
     #timeline-container #timeline .brush .extent {
       stroke: #000;
       fill-opacity: .125;
