@@ -78,10 +78,10 @@
       fill: rgba(200, 200, 200, 0.15); }
     #timeline-container #timeline .brush .extent {
       stroke: #000;
-      fill-opacity: .125;
+      fill: #bccfd5;
+      fill-opacity: .6;
       shape-rendering: crispEdges; }
     #timeline-container #timeline g.context rect.background {
-      fill: #c8c864;
       visibility: visible !important; }
   #timeline-container #popup-container {
     position: absolute;

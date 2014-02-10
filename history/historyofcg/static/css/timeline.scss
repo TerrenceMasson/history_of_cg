@@ -35,12 +35,12 @@
 
     .brush .extent {
       stroke: #000;
-      fill-opacity: .125;
+      fill: rgb(188, 207, 213);
+      fill-opacity: .6;
       shape-rendering: crispEdges;
     }
 
     g.context rect.background{
-      fill: rgb(200,200,100);
       visibility: visible !important;
     }
   }
