@@ -85,33 +85,17 @@ Hist.TLUtils = (function() {
 // Timeline Objects
 ////////////////////
 Hist.TLO = Hist.TLO || {};
-Hist.TLO.range = function(begin, end) {
-  var rangeObject = {},
-      beginEpoch  = begin,
-      endEpoch    = end,
-      begin       = new Date(begin),
-      end         = new Date(end),
-      differenceInYears = end.getYear() - begin.getYear();
-
-  var halfWayDate = function() {
-    return new Date(beginEpoch + ((endEpoch - beginEpoch)/2));
-  }
-
-  var toString = function() {
-    return "Range - begin: " + this.begin.toString() + " end: " + this.end.toString() + " halfWayDate: " + this.halfWayDate().toString();
-  }
-
-  // Fields
-  rangeObject.begin = begin;
-  rangeObject.end   = end;
-  rangeObject.differenceInYears = differenceInYears;
-
-  // Methods
-  rangeObject.halfWayDate = halfWayDate;
-  rangeObject.toString = toString;
-
-  return rangeObject;
-}
+Hist.TLO.range = function(beginEpoch, endEpoch) {
+  return {
+    begin: new Date(beginEpoch),
+    end:   new Date(endEpoch),
+    differenceInYears: new Date(endEpoch).getYear() - new Date(beginEpoch).getYear(),
+    halfwayDate: new Date(beginEpoch + ((endEpoch - beginEpoch)/2)),
+    toString: function() {
+      return "Range - begin: " + this.begin.toString() + " end: " + this.end.toString() + " halfwayDate: " + this.halfwayDate.toString();
+    }
+  };
+};
 
 // Our Collection of Point Objects
 Hist.TLO.pointCollection = function(pages) {
@@ -190,7 +174,7 @@ Hist.TLO.pointCollection = function(pages) {
 
         // Check if point's date is within the range created by p
         if (range && point.withinRange(range)) {
-          xPos = range.halfWayDate();
+          xPos = range.halfwayDate;
           if (point.id !== p.id) {
             count += 1;
           }
