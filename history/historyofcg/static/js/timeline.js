@@ -14,10 +14,10 @@ Hist.TLUtils = (function() {
   
   // Note: The following method uses memoization so it doesn't need to recalculate
   // the range for a year/mod pair that it has already seen. This is definitely
-  // overkill, but I felt like doing this. :)
+  // overkill, but I felt like doing this.
   var rangeMemo = {};
   var pubBuildRange = function(year, mod) {
-    var result = rangeMemo[year],
+    var result = rangeMemo[year + "|" + mod],
         halfMod,
         remainder,
         rangeBegin,
