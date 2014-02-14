@@ -11,45 +11,6 @@ Hist.TLUtils = (function() {
   var timeConversions = { "year": 31557600000,
                           "month": 2628000000,
                           "day":     86400000 };
-  
-  // Note: The following method uses memoization so it doesn't need to recalculate
-  // the range for a year/mod pair that it has already seen. This is definitely
-  // overkill, but I felt like doing this.
-  var rangeMemo = {};
-  var pubBuildRange = function(year, mod) {
-    var result = rangeMemo[year + "|" + mod],
-        halfMod,
-        remainder,
-        rangeBegin,
-        rangeEnd;
-    // If we haven't seen the given year yet then continue and find the range.
-    if (!result) {
-      remainder = year % mod;
-      halfMod = mod / 2;
-
-      // Find the rangeBegin by using the remainder to determine if we need to start at xxx5 or xxx0
-      rangeBegin = remainder <= halfMod ? year - remainder : year - remainder + halfMod;
-      rangeEnd = rangeBegin + halfMod;
-
-      result = Hist.TLO.range(moment(rangeBegin, 'YYYY').valueOf(), moment(rangeEnd, 'YYYY').valueOf());
-
-      // Memoize the result so we don't have to do this again.
-      rangeMemo[year + "|" + mod] = result;
-    }
-
-    return result;
-  }
-
-  // TODO: Memoize same as above
-  var pubBuildMonthRange = function(date, numberOfMonths) {
-    var monthDate = moment(date).startOf('month');
-
-    rangeBegin = monthDate.clone().subtract('months', numberOfMonths);
-    rangeEnd = monthDate.clone().add('months', numberOfMonths);
-    result = Hist.TLO.range(rangeBegin.valueOf(), rangeEnd.valueOf());
-
-    return result;
-  }
 
   var pubConvertTime = function(howMany, type) {
     if (timeConversions.hasOwnProperty(type)) {
@@ -57,7 +18,7 @@ Hist.TLUtils = (function() {
     } else {
       console.assert(false, "Hist.TLUtils.convertTime was given unknown type: ", type);
     }
-  }
+  };
 
   var pubRoundToDecade = function(date, shouldFloor) {
     var year = date.getFullYear(),
@@ -65,21 +26,19 @@ Hist.TLUtils = (function() {
         roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10,
         roundedDate = new Date(date.getTime()).setFullYear(roundedYear);
     return roundedDate;
-  }
+  };
 
   var pubGenerateRandomId = function() {
     return Math.floor((1 + Math.random()) * 0x10000)
                .toString(16)
                .substring(1);
-  }
+  };
 
   return {
-    buildRange: pubBuildRange,
     roundToDecade: pubRoundToDecade,
     convertTime: pubConvertTime,
-    buildMonthRange: pubBuildMonthRange,
     generateRandomId: pubGenerateRandomId
-  }
+  };
 })();
 
 // Timeline Objects
@@ -105,8 +64,6 @@ Hist.TLO.pointCollection = function(pages) {
       pointPositions = {},
       point,
       // Util Aliases
-      buildRange      = Hist.TLUtils.buildRange,
-      buildMonthRange = Hist.TLUtils.buildMonthRange,
       roundToDecade   = Hist.TLUtils.roundToDecade,
       // TLO Aliases
       timelinePoint   = Hist.TLO.timelinePoint,
@@ -126,78 +83,69 @@ Hist.TLO.pointCollection = function(pages) {
   // and stores them in pointPositions for later use. 
   // Returns { point.id => { x: xPos, y: yPos }, ... }
   var buildPointPositions = function(timelineRange) {
-    var pointsDup = this.current.clone(),
-        self = this,
-        count,
-        xPos,
-        pointYear,
-        range,
-        i;
+    var self = this,
+        rangeDifference = timelineRange.differenceInYears,
+        yPositions = {},
+        xPos, yPos, approximaterMod;
+    // Ranges:
+    // 80+ years: buckets of 5 years
+    // 60+ years: buckets of 4 years
+    // 45+ years: buckets of 3 years
+    // 30+ years: buckets of 2 years
+    // 20+ years: Buckets of 1 years
+    // TODO: Below are messed up. Need to be fixed
+    // 10+ years: Buckets of 
+    // 4+  years: Buckets of 
+    // 4-  years: No Range, Only stack if in same month
+    if (rangeDifference >= 80) {
+      approximaterMod = 10;
+      console.log("=========== range is 80+");
+    } else if (rangeDifference >= 60) {
+      approximaterMod = 8;
+      console.log("=========== range is 60+");
+    } else if (rangeDifference >= 45) {
+      approximaterMod = 6;
+      console.log("=========== range is 45+");
+    } else if (rangeDifference >= 30) {
+      approximaterMod = 4;
+      console.log("=========== range is 30+");
+    } else if (rangeDifference >= 20) {
+      approximaterMod = 2;
+      console.log("=========== range is 20+");
+    } else if (rangeDifference >= 10) {
+      approximaterMod = 6; 
+      console.log("=========== range is 10+");
+    } else if (rangeDifference >= 4) {
+      approximaterMod = 2;
+      console.log("=========== range is 4+");
+    } else {
+      approximaterMod = null
+      console.log("=========== range is 4-");
+    }
 
     this.current.forEach(function(point, outerIndex) {
-      count = 0;
       xPos = null;
 
-      // Iterate through the dups to find the range that this point belongs in
-      // and how many other points are in that same range. This determined xPos
-      // which is the approximate year for the point and the count which is how
-      // high we should stack the point.
-      pointsDup.forEach(function(p, innerIndex) {
-        pointYear = point.date.year();
-
-        // Possible ranges:
-        // 80+ years: buckets of 5 years
-        // 30+ years: buckets of 4 years
-        // 20+ years: Buckets of 2 years
-        // 10+ years: Buckets of 1 year
-        // 4+  years: Buckets of 4 months
-        // 4-  years: No Range, Only stack if in same month
-        if (timelineRange.differenceInYears >= 80) {
-          range = buildRange(p.date.year(), 10);
-          // console.log("=========== range is 80+");
-        } else if (timelineRange.differenceInYears >= 30) {
-          // console.log("=========== range is 30+");
-          range = buildRange(p.date.year(), 8);
-        } else if (timelineRange.differenceInYears >= 20) {
-          // console.log("=========== range is 20+");
-          range = buildRange(p.date.year(), 4);
-        } else if (timelineRange.differenceInYears >= 10) {
-          // console.log("=========== range is 10+");
-          range = buildMonthRange(p.date, 6);
-        } else if (timelineRange.differenceInYears >= 4) {
-          // console.log("=========== range is 4+");
-          range = buildMonthRange(p.date, 2);
-        } else {
-          // console.log("=========== range is 4-");
-          range = null;
-        }
-
-        // Check if point's date is within the range created by p
-        if (range && point.withinRange(range)) {
-          xPos = range.halfwayDate;
-          if (point.id !== p.id) {
-            count += 1;
-          }
-        } else if (point.isSameMonthAsPoint(p) && point.id !== p.id) {
-          xPos = p.date;
-          count += 1;
-        }
-
-
-
-      }); // End pointsDup.forEach
-
-      // Otherwise it stands alone and we should set the xPos to it's actual
-      // position.
-      if (!xPos) {
+      if (rangeDifference > 20) {
+        xPos = point.approxDateYear(approximaterMod);
+      } else if (rangeDifference >= 4) {
+        xPos = point.approxDateMonth(approximaterMod);
+      } else {
         xPos = point.date;
       }
 
-      // Remove the current point from pointsDup
-      pointsDup = hidePointWithId(point.id, pointsDup);
+      if (xPos) {
+        if (yPositions[xPos.toString()]) {
+          yPos = yPositions[xPos.toString()];
+          yPositions[xPos.toString()]++;
+        } else {
+          yPos = 0;
+          yPositions[xPos.toString()] = 1;
+        }
 
-      // Set the x and y position of the current point
-      self.pointPositions[point.id] = { 'x': xPos, 'y': count }
+        // Set the x and y position of the current point
+        self.pointPositions[point.id] = { 'x': xPos, 'y': yPos }
+      }
     });
   }
 
@@ -291,7 +239,7 @@ Hist.TLO.timelinePoint = function(page) {
       default:
         return null;
     }
-  }
+  };
 
   point.id = page['pk'];
   point.name = page['fields']['name'] || page['name'];
@@ -303,17 +251,39 @@ Hist.TLO.timelinePoint = function(page) {
 
   var toString = function() {
     return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
-  }
+  };
 
   var isValid = function() {
-    return this.type != null && !!page['fields']['date_established'];
-  }
+    return this.type !== null && !!page['fields']['date_established'];
+  };
+
+  var approxDateYear = function(mod) {
+    var year = this.date.year(),
+        remainder = year % mod,
+        halfMod = mod / 2;
+    if (remainder <= halfMod) {
+      return new Date(year - remainder, 0);
+    } else {
+      return new Date(year - remainder + halfMod, 0);
+    }
+  };
+
+  var approxDateMonth = function(mod) {
+    var month = this.date.month(),
+        remainder = month % mod,
+        halfMod = mod / 2;
+    if (remainder <= halfMod) {
+      return new Date(this.date.year(), month - remainder);
+    } else {
+      return new Date(this.date.year(), month - remainder + halfMod);
+    }
+  };
 
   var withinRange = function(range) {
-    return this.date.isAfter(range.begin) && this.date.isBefore(range.end)
-                                          || this.date.isSame(range.begin)
-                                          || this.date.isSame(range.end);
-  }
+    return this.date.isAfter(range.begin) && this.date.isBefore(range.end) ||
+                                             this.date.isSame(range.begin) ||
+                                             this.date.isSame(range.end);
+  };
 
   var isSameMonthAsPoint = function(point) {
     return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month');
@@ -328,6 +298,8 @@ Hist.TLO.timelinePoint = function(page) {
   point.withinRange = withinRange;
   point.isSameMonthAsPoint = isSameMonthAsPoint;
   point.isSameDayAsPoint = isSameDayAsPoint;
+  point.approxDateYear = approxDateYear;
+  point.approxDateMonth = approxDateMonth;
 
   return point;
 }
@@ -362,8 +334,6 @@ Hist.TL = (function() {
       ending,
       chart,
       // Alias our TimelineUtils methods
-      buildRange      = Hist.TLUtils.buildRange,
-      buildMonthRange = Hist.TLUtils.buildMonthRange,
       roundToDecade   = Hist.TLUtils.roundToDecade,
       // Alias our Timeline Objects
       pointCollection = Hist.TLO.pointCollection,
