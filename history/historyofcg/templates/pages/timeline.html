@@ -15,17 +15,29 @@
     </div>
   </div>
   <script type="text/javascript">
-    var Hist = Hist || {};
-    $.ajax({
-      url: "/timeline",
-      type: "GET",
-      success: function(data) {
-        Hist.rawPages = data;
-        if (Hist.TL) { Hist.TL.init(); }
-      },
-      error: function() {
-        console.log("Error receiving timeline data from server.");
+    // TODO: Pull this out to it's own file.
+    var Hist = Hist || {},
+        timelineDataUrl;
+    $(document).ready(function() {
+
+      // Find the url depending on which page we're on.
+      if (window.location.pathname.contains("/pages/")) {
+        timelineDataUrl = "/timeline/" + $('.entryInfo .entryVanityUrl').val();
+      } else {
+        timelineDataUrl = "/timeline/";
       }
-    })
+
+      $.ajax({
+        url: timelineDataUrl,
+        type: "GET",
+        success: function(data) {
+          Hist.rawPages = data;
+          if (Hist.TL) { Hist.TL.init(); }
+        },
+        error: function() {
+          console.log("Error receiving timeline data from server.");
+        }
+      })
+    });
     // Hist.rawPages = {{ pages_json|safe }};
   </script>

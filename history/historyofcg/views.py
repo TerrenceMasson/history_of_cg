@@ -60,6 +60,10 @@ def timeline(request):
     logger.log("pages_json: ", pages_json)
     return JsonResponse(pages_json);
 
+def timeline_page(request, vanity_url):
+    page = Page.objects.get(published=True, vanity_url=vanity_url)
+    return JsonResponse(page)
+
 @render_to('pages/entries.html')
 def view_source_entries(request, s):
     user_auth = request.user.is_authenticated()

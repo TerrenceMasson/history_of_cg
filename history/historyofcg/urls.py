@@ -18,7 +18,8 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^about/$', 'about'),
     url(r'^user/(?P<i>\d+)/$', 'user_page'),
 
-    url(r'^timeline/', 'timeline'),
+    url(r'^timeline/$', 'timeline'),
+    url(r'^timeline/(?P<vanity_url>[-\w]+)/$', 'timeline_page'),
 
     # Page URLs
     url(r'^pages/(?P<s>[-\w]+)/$', 'view_source_entries'),
