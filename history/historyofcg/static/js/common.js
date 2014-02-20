@@ -2,7 +2,6 @@ var Hist = Hist || {};
 
 $(document).ready(function() {
     Hist.Notifications.init();
-    if (Hist.TL) { Hist.TL.init(); }
 });
 
 // jQuery Additions

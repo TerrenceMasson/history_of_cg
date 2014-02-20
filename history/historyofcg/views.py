@@ -54,11 +54,11 @@ def home(request):
 def about(request):
     return render_to_response('default/about.html', locals())
 
-@render_to('pages/timeline.html')
 def timeline(request):
     pages = Page.objects.filter(published=True)
     pages_json = serializers.serialize("json", pages)
-    return locals()
+    logger.log("pages_json: ", pages_json)
+    return JsonResponse(pages_json);
 
 @render_to('pages/entries.html')
 def view_source_entries(request, s):

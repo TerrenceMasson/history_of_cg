@@ -1,12 +1,4 @@
-{% extends 'default/base.html' %}
-{% load staticfiles %}
-{% block extra_head %}
-  <script type="text/javascript" src="{% static 'js/libs/d3.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/libs/moment.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/timeline.js' %}"></script>
-  <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/timeline.css' %}">
-{% endblock %}
-{% block content %}
+
   <div id="timeline-container">
     <svg id="timeline"></svg>
     <div id="popup-container">
@@ -24,6 +16,16 @@
   </div>
   <script type="text/javascript">
     var Hist = Hist || {};
-    Hist.rawPages = {{ pages_json|safe }};
+    $.ajax({
+      url: "/timeline",
+      type: "GET",
+      success: function(data) {
+        Hist.rawPages = data;
+        if (Hist.TL) { Hist.TL.init(); }
+      },
+      error: function() {
+        console.log("Error receiving timeline data from server.");
+      }
+    })
+    // Hist.rawPages = {{ pages_json|safe }};
   </script>
-{% endblock %}

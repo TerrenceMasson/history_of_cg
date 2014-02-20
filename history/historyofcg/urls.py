@@ -18,6 +18,8 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^about/$', 'about'),
     url(r'^user/(?P<i>\d+)/$', 'user_page'),
 
+    url(r'^timeline/', 'timeline'),
+
     # Page URLs
     url(r'^pages/(?P<s>[-\w]+)/$', 'view_source_entries'),
     url(r'^add/page/$', 'add_page', name="add_page"),
@@ -63,5 +65,4 @@ urlpatterns += staticfiles_urlpatterns()
 # Add the Jasmine Test Suite URL if we're in DEBUG mode 
 if settings.DEBUG == True:
     urlpatterns += patterns('',  url(r'^jasmine/', include('django_jasmine.urls')))
-    urlpatterns += patterns('',  url(r'^timeline_testing/', 'history.historyofcg.views.timeline'))
 
