@@ -113,13 +113,13 @@ Hist.TLO.pointCollection = function(pages) {
       approximaterMod = 2;
       console.log("=========== range is 20+");
     } else if (rangeDifference >= 10) {
-      approximaterMod = 6; 
+      approximaterMod = 6;
       console.log("=========== range is 10+");
     } else if (rangeDifference >= 4) {
       approximaterMod = 2;
       console.log("=========== range is 4+");
     } else {
-      approximaterMod = null
+      approximaterMod = null;
       console.log("=========== range is 4-");
     }
 
@@ -144,30 +144,30 @@ Hist.TLO.pointCollection = function(pages) {
         }
 
         // Set the x and y position of the current point
-        self.pointPositions[point.id] = { 'x': xPos, 'y': yPos }
+        self.pointPositions[point.id] = { 'x': xPos, 'y': yPos };
       }
     });
-  }
+  };
 
   var clearPointPositions = function() {
     this.pointPositions = {};
-  }
+  };
 
   // TODO: Probably a smarter way of making this reusable for both 'this.current'
   // and the pointsDup in buildPointPosn. Can't think of it now. 
   var hidePointWithId = function(pId, points) {
-    var pointId = parseInt(pId), 
+    var pointId = parseInt(pId, 10),
         points = points || this.current;
     return points.filter(function(p) {
       return pointId !== p.id;
     });
-  }
+  };
 
   var filterInRange = function(range) {
     this.current = this.allPoints.filter(function(point, idx) {
       return point.withinRange(range);
     });
-  }
+  };
 
   var addMultiPoints = function(yearsToAdd) {
     var self = this,
@@ -179,7 +179,7 @@ Hist.TLO.pointCollection = function(pages) {
       self.current.push(mPoint);
       self.pointPositions[mPoint.id] = { x: year, y: Hist.TL.config.maxOfStacked };
     });
-  }
+  };
 
   var replaceMaxStacked = function() {
     var yearsToAddMultiPoint = [],
@@ -201,7 +201,7 @@ Hist.TLO.pointCollection = function(pages) {
     // Now that we've remove the points which were stacked too high we can 
     // add back the multiPoints in their place.
     this.addMultiPoints(yearsToAddMultiPoint);
-  }
+  };
 
   // Fields
   collection.allPoints = allPoints;
@@ -217,7 +217,7 @@ Hist.TLO.pointCollection = function(pages) {
   collection.addMultiPoints = addMultiPoints;
 
   return collection;
-}
+};
 
 // Our Point object
 Hist.TLO.timelinePoint = function(page) {
@@ -287,11 +287,11 @@ Hist.TLO.timelinePoint = function(page) {
 
   var isSameMonthAsPoint = function(point) {
     return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month');
-  }
+  };
 
   var isSameDayAsPoint = function(point) {
     return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month') && this.date.isSame(point.date, 'day');
-  }
+  };
 
   point.toString = toString;
   point.isValid  = isValid;
@@ -302,7 +302,7 @@ Hist.TLO.timelinePoint = function(page) {
   point.approxDateMonth = approxDateMonth;
 
   return point;
-}
+};
 
 Hist.TLO.multiPoint = function(year) {
   var pointDefaults = { name: "Multiple Available", vanityUrl: null,
@@ -314,7 +314,7 @@ Hist.TLO.multiPoint = function(year) {
   point.date = moment(new Date(year, 5));
 
   return point;
-}
+};
 
 // Timeline
 ////////////
@@ -389,7 +389,7 @@ Hist.TL = (function() {
       .on("click", openPage);
 
     initContextArea();
-  }
+  };
 
   var draw = function(range) {
     var points;
@@ -419,21 +419,21 @@ Hist.TL = (function() {
           .on("mouseover", showActiveState)
           .on("mouseout", hideActiveState)
           .on("click", openPage);
-  }
+  };
 
   // D3 Plotting Helpers
   ///////////////////////
   var getXPosition = function(point) {
     var date = timelinePoints.pointPositions[point.id]['x'];
     return xScale(date) - (pointSize / 2);
-  }
+  };
 
   var getYPosition = function(point) {
     // height - bottom => xAxis line
     // xAxis line - yPosMargin => Starting yPos for a 0 count point
     // starting yPos - (yPos[id] * pointSize) => final yPosition
     return height - margin.bottom - yPosMargin - (pointSize * timelinePoints.pointPositions[point.id]['y']);
-  }
+  };
 
   // SVG Brush Helpers
   /////////////////////
@@ -484,7 +484,7 @@ Hist.TL = (function() {
     gBrush.selectAll("rect")
           .attr('transform', 'translate(0,0)')
           .attr("height", contextTickSize);
-  }
+  };
 
   var brushended = function() {
     var extent0 = brush.extent(),
@@ -497,7 +497,7 @@ Hist.TL = (function() {
     chart.select(".x.axis").call(xAxis);
     timelinePoints.filterInRange(range);
     draw(range);
-  }
+  };
 
   // Timeline Interaction Helpers
   ////////////////////////////////
@@ -506,13 +506,13 @@ Hist.TL = (function() {
     if (point.type !== 'multi') {
       window.location = "/pages/" + point.vanityUrl;
     }
-  }
+  };
 
   // Active State - Mousing over or clicked
   var showActiveImage = function(element, point) {
     var hoverImageUrl = point.pointImage.replace(/(.*)\.png/, "$1-hover.png");
     d3.select(element).attr("xlink:href", hoverImageUrl);
-  }
+  };
 
   var addDescriptionToPoint = function(description) {
     if (description.length <= 200) {
@@ -520,12 +520,12 @@ Hist.TL = (function() {
     } else {
       $('.regular-point .description').text(description.substring(0, 200) + "...");
     }
-  }
+  };
 
   var showPopup = function(element, point) {
     var d3Element = d3.select(element),
-        leftPos   = parseInt(d3Element.attr('x')),
-        topPos    = parseInt(d3Element.attr('y')),
+        leftPos   = parseInt(d3Element.attr('x'), 10),
+        topPos    = parseInt(d3Element.attr('y'), 10),
         leftOffset,
         topOffset,
         popupLeft;
@@ -557,13 +557,13 @@ Hist.TL = (function() {
     popupTop  = topPos + pointSize - topOffset + 'px';
 
     $('#popup-container').css({ left: popupLeft, top: popupTop }).show();
-  }
+  };
 
   var showActiveState = function(point) {
     // Set the hover point image and configure/show the popup
     showActiveImage(this, point);
     showPopup(this, point);
-  }
+  };
 
   // Deactive State
   //////////////////
@@ -571,23 +571,23 @@ Hist.TL = (function() {
     // If we weren't passed the element then find it by the given point.id, otherwise select it
     d3El = element === null ? d3.select('#point-' + point.id) : d3.select(element);
     d3El.attr("xlink:href", point.pointImage);
-  }
+  };
 
   var hidePopup = function() {
     $('#popup-container').hide();
-  }
+  };
 
   var hideActiveState = function(point) {
     hideActiveImage(this, point);
     hidePopup();
-  }
+  };
 
   // Public Interface
   ////////////////////
   return {
 
     init: function() {
-      if (Hist.rawPages != null) {
+      if (Hist.rawPages !== null) {
         timelinePoints = pointCollection(Hist.rawPages);
         initD3Chart();
       }
@@ -595,5 +595,5 @@ Hist.TL = (function() {
     config: {
       maxOfStacked: maxOfStacked
     }
-  }
+  };
 })();
