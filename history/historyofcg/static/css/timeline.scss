@@ -33,6 +33,12 @@
 
     g.context g.brush rect.background{ fill: rgba(200, 200, 200,.15);}
 
+    .context text {
+      fill: #CCC;
+      font-size: 12px;
+      font-style: italic;
+    }
+
     .brush .extent {
       stroke: #000;
       fill: rgb(188, 207, 213);
