@@ -503,7 +503,9 @@ Hist.TL = (function() {
   ////////////////////////////////
 
   var openPage = function(point) {
-    window.location = "/pages/" + point.vanityUrl;
+    if (point.type !== 'multi') {
+      window.location = "/pages/" + point.vanityUrl;
+    }
   }
 
   // Active State - Mousing over or clicked
