@@ -440,9 +440,9 @@ Hist.TL = (function() {
   /////////////////////
 
   var initContextArea = function() {
-    var contextWidth = 600,
-        contextHeight = 30,
-        contextTickSize = 30,
+    var contextWidth = 850,
+        contextHeight = 80,
+        contextTickSize = 25,
         contextXAxis,
         contextXScale,
         contextArea,
@@ -470,7 +470,7 @@ Hist.TL = (function() {
 
     context = d3.select("#timeline").append("g")
                                     .attr("class", "context")
-                                    .attr("transform", "translate(" + (width / 2 - contextWidth / 2) + "," + (height - margin.bottom + 25) + ")");
+                                    .attr("transform", "translate(" + (width / 2 - contextWidth / 2) + "," + (height - margin.bottom + 40) + ")");
 
     context.append("g")
         .attr("class", "x axis")
