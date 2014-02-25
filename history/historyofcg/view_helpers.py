@@ -16,9 +16,11 @@ class JsonResponse(HttpResponse):
         if isinstance(content, BaseModel):
             content = serializers.serialize("json", [content])
         elif isinstance(content, dict):
-            content = simplejson.dumps(content),
+            content = simplejson.dumps(content)
+        elif isinstance(content, list):
+            content = serializers.serialize("json", content)
         else:
-            logger.log("JsonResponse content is of unknown type.")
+            logger.log("", "JsonResponse content is of unknown type.")
         super(JsonResponse, self).__init__(
             content=content,
             mimetype=mimetype,

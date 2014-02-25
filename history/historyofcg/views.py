@@ -62,7 +62,9 @@ def timeline(request):
 
 def timeline_page(request, vanity_url):
     page = Page.objects.get(published=True, vanity_url=vanity_url)
-    return JsonResponse(page)
+    result = list(page.connections.all())
+    result.append(page)
+    return JsonResponse(result)
 
 @render_to('pages/entries.html')
 def view_source_entries(request, s):

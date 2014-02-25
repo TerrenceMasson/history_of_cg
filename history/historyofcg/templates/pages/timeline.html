@@ -34,8 +34,8 @@
           Hist.rawPages = data;
           if (Hist.TL) { Hist.TL.init(); }
         },
-        error: function() {
-          console.log("Error receiving timeline data from server.");
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log("Error receiving timeline data from server. jqXHR: ", jqXHR);
         }
       })
     });
