@@ -325,7 +325,6 @@ Hist.TL = (function() {
       maxOfStacked = 4,
       pointSize = 25,
       yPosMargin = 30,
-      pointClicked = false,
       timelinePoints,
       brush,
       xAxis,
@@ -387,7 +386,7 @@ Hist.TL = (function() {
       .attr("xlink:href", function(p) { return p.pointImage; })
       .on("mouseover", showActiveState)
       .on("mouseout", hideActiveState)
-      .on("click", setClicked);
+      .on("click", openPage);
 
     initContextArea();
   }
@@ -419,7 +418,7 @@ Hist.TL = (function() {
           .attr("xlink:href", function(p) { return p.pointImage; })
           .on("mouseover", showActiveState)
           .on("mouseout", hideActiveState)
-          .on("click", setClicked);
+          .on("click", openPage);
   }
 
   // D3 Plotting Helpers
@@ -502,30 +501,9 @@ Hist.TL = (function() {
 
   // Timeline Interaction Helpers
   ////////////////////////////////
-  // TODO: Pull out to own module and merge with Hist.TL on init
-  var initDomEventHandlers = function() {
-    // Clicked away from a point handler, sets the state to inactive
-    $("body").live("click", function(){
-      var activePoint = $('#timeline').data('active-point'),
-          activeEl;
-      setUnclicked();
-      if (activePoint) {
-        activeEl = $('#point-' + activePoint.id)[0];
-        hideActiveState.call(activeEl, activePoint);
-      }
-    });
-  }
 
-  var setClicked = function(point) {
-    pointClicked = true;
-
-    // Stop the event from bubbling up to body where we have a click handler to 
-    // deactivate the current point. d3.event is the current event for this click
-    d3.event.stopPropagation();
-  }
-
-  var setUnclicked = function() {
-    pointClicked = false;
+  var openPage = function(point) {
+    window.location = "/pages/" + point.vanityUrl;
   }
 
   // Active State - Mousing over or clicked
@@ -576,23 +554,13 @@ Hist.TL = (function() {
     popupLeft = leftPos + pointSize + leftOffset + 'px';
     popupTop  = topPos + pointSize - topOffset + 'px';
 
-    $('#popup-container').css({ left: popupLeft, top: popupTop }).show()
+    $('#popup-container').css({ left: popupLeft, top: popupTop }).show();
   }
 
   var showActiveState = function(point) {
-    // We just moused into a point, clear the last clicked point (if any)
-    setUnclicked();
-    if ($('#timeline').data('active-point')) {
-      // Passing null here as hideActiveImage will find the element from the given point.id
-      hideActiveImage(null, $('#timeline').data('active-point'));
-    }
-
     // Set the hover point image and configure/show the popup
     showActiveImage(this, point);
     showPopup(this, point);
-
-    // Store the currently active point so we can deactive it later
-    $('#timeline').data('active-point', point);
   }
 
   // Deactive State
@@ -608,12 +576,8 @@ Hist.TL = (function() {
   }
 
   var hideActiveState = function(point) {
-    // If we are currently focusing on a point (have clicked it) then we don't 
-    // want to hide the active state.
-    if (!pointClicked) {
-      hideActiveImage(this, point);
-      hidePopup();
-    }
+    hideActiveImage(this, point);
+    hidePopup();
   }
 
   // Public Interface
@@ -624,7 +588,6 @@ Hist.TL = (function() {
       if (Hist.rawPages != null) {
         timelinePoints = pointCollection(Hist.rawPages);
         initD3Chart();
-        initDomEventHandlers();
       }
     },
     config: {

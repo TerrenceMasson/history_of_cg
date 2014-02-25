@@ -70,6 +70,8 @@
     #timeline-container #timeline .timeline-label {
       font-family: sans-serif;
       font-size: 16px; }
+    #timeline-container #timeline .timeline-point {
+      cursor: pointer; }
     #timeline-container #timeline g.context g.axis path {
       stroke-opacity: 0; }
     #timeline-container #timeline g.context g.axis line {
