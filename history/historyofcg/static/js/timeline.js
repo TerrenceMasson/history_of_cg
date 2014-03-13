@@ -1,4 +1,4 @@
-/* 
+/*
 * @Author: Gowiem
 * @Date:   2013-12-17 14:21:17
 */
@@ -80,7 +80,7 @@ Hist.TLO.pointCollection = function(pages) {
   });
 
   // Iterates through the timeline points to find their x and y positions
-  // and stores them in pointPositions for later use. 
+  // and stores them in pointPositions for later use.
   // Returns { point.id => { x: xPos, y: yPos }, ... }
   var buildPointPositions = function(timelineRange) {
     var self = this,
@@ -94,8 +94,8 @@ Hist.TLO.pointCollection = function(pages) {
     // 30+ years: buckets of 2 years
     // 20+ years: Buckets of 1 years
     // TODO: Below are messed up. Need to be fixed
-    // 10+ years: Buckets of 
-    // 4+  years: Buckets of 
+    // 10+ years: Buckets of
+    // 4+  years: Buckets of
     // 4-  years: No Range, Only stack if in same month
     if (rangeDifference >= 80) {
       approximaterMod = 10;
@@ -154,11 +154,10 @@ Hist.TLO.pointCollection = function(pages) {
   };
 
   // TODO: Probably a smarter way of making this reusable for both 'this.current'
-  // and the pointsDup in buildPointPosn. Can't think of it now. 
-  var hidePointWithId = function(pId, points) {
-    var pointId = parseInt(pId, 10),
-        points = points || this.current;
-    return points.filter(function(p) {
+  // and the pointsDup in buildPointPosn. Can't think of it now.
+  var hidePointWithId = function(pId) {
+    var pointId = parseInt(pId, 10);
+    return this.current.filter(function(p) {
       return pointId !== p.id;
     });
   };
@@ -189,8 +188,8 @@ Hist.TLO.pointCollection = function(pages) {
         yPos;
 
     positionKeys.forEach(function(pId, idx) {
-      xPos = self.pointPositions[pId]['x'];
-      yPos = self.pointPositions[pId]['y'];
+      xPos = self.pointPositions[pId].x;
+      yPos = self.pointPositions[pId].y;
 
       if (yPos >= Hist.TL.config.maxOfStacked) {
         yearsToAddMultiPoint.push(xPos);
@@ -198,7 +197,7 @@ Hist.TLO.pointCollection = function(pages) {
       }
     });
 
-    // Now that we've remove the points which were stacked too high we can 
+    // Now that we've remove the points which were stacked too high we can
     // add back the multiPoints in their place.
     this.addMultiPoints(yearsToAddMultiPoint);
   };
@@ -223,9 +222,9 @@ Hist.TLO.pointCollection = function(pages) {
 Hist.TLO.timelinePoint = function(page) {
   var point = {};
 
-  // This is the kind of code you have to write when people use a table to 
+  // This is the kind of code you have to write when people use a table to
   // represent a simple string. Seriously though, da fuq!
-  // TODO: I can do this simpler with an array.. doh. 
+  // TODO: I can do this simpler with an array.. doh.
   var findType = function(categoryId) {
     switch (categoryId) {
       case 1:
@@ -363,7 +362,7 @@ Hist.TL = (function() {
                     .nice(d3.time.year, 100)
                     .domain([beginning, ending])
                     .range([0, width - margin.right - margin.left]);
-              
+
     xAxis = d3.svg.axis()
                   .scale(xScale)
                   .orient("bottom");
@@ -486,7 +485,7 @@ Hist.TL = (function() {
                     .attr("class", "brush")
                     .call(brush)
                     .call(brush.event);
-    
+
     gBrush.selectAll("rect")
           .attr('transform', 'translate(0,0)')
           .attr("height", contextTickSize);
