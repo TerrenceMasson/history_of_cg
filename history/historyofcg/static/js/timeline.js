@@ -153,8 +153,6 @@ Hist.TLO.pointCollection = function(pages) {
     this.pointPositions = {};
   };
 
-  // TODO: Probably a smarter way of making this reusable for both 'this.current'
-  // and the pointsDup in buildPointPosn. Can't think of it now.
   var hidePointWithId = function(pId) {
     var pointId = parseInt(pId, 10);
     return this.current.filter(function(p) {
@@ -338,8 +336,6 @@ Hist.TL = (function() {
       timelinePoint   = Hist.TLO.timelinePoint,
       multiPoint      = Hist.TLO.multiPoint;
 
-
-
   var initD3Chart = function() {
     var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); });
 
@@ -394,6 +390,17 @@ Hist.TL = (function() {
       .on("click", openPage);
 
     initContextArea();
+  };
+
+  var showTimeline = function() {
+    $('#timeline-loader').fadeOut(function() {
+      $('#timeline-container').addClass('animated fadeInDown').show();
+    });
+  };
+
+  var removeTimeline = function() {
+    $('#timeline-container').remove();
+    $('#timeline-loader').remove();
   };
 
   var draw = function(range) {
@@ -591,10 +598,15 @@ Hist.TL = (function() {
   ////////////////////
   return {
 
-    init: function() {
-      if (Hist.rawPages !== null) {
-        timelinePoints = pointCollection(Hist.rawPages);
-        initD3Chart();
+    init: function(data) {
+      if (data && data.length > 0) {
+        timelinePoints = pointCollection(data);
+        if (timelinePoints.allPoints.length > 0) {
+          initD3Chart();
+          showTimeline();
+        } else {
+          setTimeout(removeTimeline, 1500);
+        }
       }
     },
     config: {
@@ -602,3 +614,25 @@ Hist.TL = (function() {
     }
   };
 })();
+
+$(document).ready(function() {
+  var timelineDataUrl;
+
+  // Find the url depending on which page we're on.
+  if (window.location.pathname.contains("/pages/")) {
+    timelineDataUrl = "/timeline/" + $('.entryInfo .entryVanityUrl').val();
+  } else {
+    timelineDataUrl = "/timeline/";
+  }
+
+  $.ajax({
+    url: timelineDataUrl,
+    type: "GET",
+    success: function(data) {
+      Hist.TL.init(data);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log("Error receiving timeline data from server. jqXHR: ", jqXHR);
+    }
+  });
+});

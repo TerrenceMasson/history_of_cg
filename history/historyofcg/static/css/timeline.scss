@@ -1,9 +1,23 @@
 @import "colors";
 
+#timeline-loader {
+  width: 960px;
+  height: 200px;
+  margin: 0 auto;
+
+  img {
+    display: block;
+    position: relative;
+    top: 90px;
+    margin: 0 auto;
+  }
+}
+
 #timeline-container {
   position: relative;
   width: 960px;
   margin: 0 auto;
+  display: none;
 
   // Timeline SVG Elements
   #timeline {
@@ -76,7 +90,7 @@
     .organization { border: 1px darken($org, 20%) solid; }
     .event { border: 1px darken($event, 20%) solid; }
     .project { border: 1px darken($project, 20%) solid; }
-    .multi-point { 
+    .multi-point {
       border: 1px darken($person, 20%) solid;
       color: $person;
     }

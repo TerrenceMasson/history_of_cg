@@ -54,10 +54,21 @@
 .none-hover:hover {
   color: #adadad !important; }
 
+#timeline-loader {
+  width: 960px;
+  height: 200px;
+  margin: 0 auto; }
+  #timeline-loader img {
+    display: block;
+    position: relative;
+    top: 90px;
+    margin: 0 auto; }
+
 #timeline-container {
   position: relative;
   width: 960px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  display: none; }
   #timeline-container #timeline {
     width: 100%; }
     #timeline-container #timeline .axis path, #timeline-container #timeline .axis line {
