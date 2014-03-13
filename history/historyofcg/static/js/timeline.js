@@ -344,8 +344,14 @@ Hist.TL = (function() {
   var initD3Chart = function() {
     var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); });
 
-    beginning   = roundToDecade(d3.min(jsDates), true);
-    ending      = roundToDecade(d3.max(jsDates));
+    // Default to 1940 for the beginning if the min year is less than 1940
+    if (d3.min(jsDates).getFullYear() > 1940) {
+      beginning = roundToDecade(d3.min(jsDates), true);
+    } else {
+      beginning = moment("1940-01-01").valueOf();
+    }
+
+    ending = roundToDecade(d3.max(jsDates));
 
     chart = d3.select('#timeline')
               .attr('width', width)
