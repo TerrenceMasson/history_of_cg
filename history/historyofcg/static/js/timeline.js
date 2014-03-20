@@ -93,10 +93,12 @@ Hist.TLO.pointCollection = function(pages) {
     // 45+ years: buckets of 3 years
     // 30+ years: buckets of 2 years
     // 20+ years: Buckets of 1 years
-    // TODO: Below are messed up. Need to be fixed
-    // 10+ years: Buckets of
-    // 4+  years: Buckets of
+    // 15+ years: Buckets of 1/2 year
+    // 12+ years: Buckets of 5 months
+    // 8+  years: Buckets of 3 months
+    // 4+  years: Buckets of 2 months
     // 4-  years: No Range, Only stack if in same month
+    console.log("rangeDifference: ", rangeDifference);
     if (rangeDifference >= 80) {
       approximaterMod = 10;
       console.log("=========== range is 80+");
@@ -112,9 +114,15 @@ Hist.TLO.pointCollection = function(pages) {
     } else if (rangeDifference >= 20) {
       approximaterMod = 2;
       console.log("=========== range is 20+");
-    } else if (rangeDifference >= 10) {
+     } else if (rangeDifference >= 15) {
+      approximaterMod = 1;
+      console.log("=========== range is 15+");
+    } else if (rangeDifference >= 12) {
+      approximaterMod = 10;
+      console.log("=========== range is 12+");
+    } else if (rangeDifference >= 8) {
       approximaterMod = 6;
-      console.log("=========== range is 10+");
+      console.log("=========== range is 8+");
     } else if (rangeDifference >= 4) {
       approximaterMod = 2;
       console.log("=========== range is 4+");
@@ -126,7 +134,7 @@ Hist.TLO.pointCollection = function(pages) {
     this.current.forEach(function(point, outerIndex) {
       xPos = null;
 
-      if (rangeDifference > 20) {
+      if (rangeDifference >= 15) {
         xPos = point.approxDateYear(approximaterMod);
       } else if (rangeDifference >= 4) {
         xPos = point.approxDateMonth(approximaterMod);
