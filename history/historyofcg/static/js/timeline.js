@@ -14,6 +14,7 @@ Hist.TLUtils = (function() {
                           "month": 2628000000,
                           "day":     86400000 };
 
+
   var pubConvertTime = function(howMany, type) {
     if (timeConversions.hasOwnProperty(type)) {
       return howMany * timeConversions[type];
@@ -40,7 +41,7 @@ Hist.TLUtils = (function() {
     if (Hist.TL_DEBUG) {
       console.log(message);
     }
-  }
+  };
 
   return {
     roundToDecade: pubRoundToDecade,
@@ -340,6 +341,8 @@ Hist.TL = (function() {
       maxOfStacked = 4,
       pointSize = 25,
       yPosMargin = 30,
+      tickFormatter,
+      monthFormatter,
       timelinePoints,
       brush,
       xAxis,
@@ -377,9 +380,14 @@ Hist.TL = (function() {
                     .domain([beginning, ending])
                     .range([0, width - margin.right - margin.left]);
 
+    // Setup our formatter which we'll be using in abbreviateMonthTicks
+    tickFormatter = xScale.tickFormat();
+    monthFormatter = d3.time.format('%b');
+
     xAxis = d3.svg.axis()
                   .scale(xScale)
-                  .orient("bottom");
+                  .orient("bottom")
+                  .tickFormat(abbreviateMonthTicks);
 
     chart.append("g")
       .attr("class", "x axis")
@@ -463,6 +471,16 @@ Hist.TL = (function() {
     // xAxis line - yPosMargin => Starting yPos for a 0 count point
     // starting yPos - (yPos[id] * pointSize) => final yPosition
     return height - margin.bottom - yPosMargin - (pointSize * timelinePoints.pointPositions[point.id]['y']);
+  };
+
+  var abbreviateMonthTicks = function(d) {
+    var formatted = tickFormatter(d);
+    // If this formatted date is a year (ex. 1991) then just return that year.
+    if (!isNaN(parseInt(formatted, 10))) {
+      return formatted;
+    } else { // Otherwise use the monthFormatter which will abbreviate it.
+      return monthFormatter(d);
+    }
   };
 
   // SVG Brush Helpers
