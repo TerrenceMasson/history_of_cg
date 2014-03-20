@@ -5,6 +5,8 @@
 
 var Hist = Hist || {};
 
+Hist.TL_DEBUG = false;
+
 // Timeline Utils
 //////////////////
 Hist.TLUtils = (function() {
@@ -34,10 +36,17 @@ Hist.TLUtils = (function() {
                .substring(1);
   };
 
+  var pubDebugLog = function(message) {
+    if (Hist.TL_DEBUG) {
+      console.log(message);
+    }
+  }
+
   return {
     roundToDecade: pubRoundToDecade,
     convertTime: pubConvertTime,
-    generateRandomId: pubGenerateRandomId
+    generateRandomId: pubGenerateRandomId,
+    debugLog: pubDebugLog
   };
 })();
 
@@ -65,6 +74,7 @@ Hist.TLO.pointCollection = function(pages) {
       point,
       // Util Aliases
       roundToDecade   = Hist.TLUtils.roundToDecade,
+      debugLog        = Hist.TLUtils.debugLog,
       // TLO Aliases
       timelinePoint   = Hist.TLO.timelinePoint,
       multiPoint      = Hist.TLO.multiPoint;
@@ -98,37 +108,37 @@ Hist.TLO.pointCollection = function(pages) {
     // 8+  years: Buckets of 3 months
     // 4+  years: Buckets of 2 months
     // 4-  years: No Range, Only stack if in same month
-    console.log("rangeDifference: ", rangeDifference);
+    debugLog("rangeDifference: " + rangeDifference);
     if (rangeDifference >= 80) {
       approximaterMod = 10;
-      console.log("=========== range is 80+");
+      debugLog("=========== range is 80+");
     } else if (rangeDifference >= 60) {
       approximaterMod = 8;
-      console.log("=========== range is 60+");
+      debugLog("=========== range is 60+");
     } else if (rangeDifference >= 45) {
       approximaterMod = 6;
-      console.log("=========== range is 45+");
+      debugLog("=========== range is 45+");
     } else if (rangeDifference >= 30) {
       approximaterMod = 4;
-      console.log("=========== range is 30+");
+      debugLog("=========== range is 30+");
     } else if (rangeDifference >= 20) {
       approximaterMod = 2;
-      console.log("=========== range is 20+");
+      debugLog("=========== range is 20+");
      } else if (rangeDifference >= 15) {
       approximaterMod = 1;
-      console.log("=========== range is 15+");
+      debugLog("=========== range is 15+");
     } else if (rangeDifference >= 12) {
       approximaterMod = 10;
-      console.log("=========== range is 12+");
+      debugLog("=========== range is 12+");
     } else if (rangeDifference >= 8) {
       approximaterMod = 6;
-      console.log("=========== range is 8+");
+      debugLog("=========== range is 8+");
     } else if (rangeDifference >= 4) {
       approximaterMod = 2;
-      console.log("=========== range is 4+");
+      debugLog("=========== range is 4+");
     } else {
       approximaterMod = null;
-      console.log("=========== range is 4-");
+      debugLog("=========== range is 4-");
     }
 
     this.current.forEach(function(point, outerIndex) {
