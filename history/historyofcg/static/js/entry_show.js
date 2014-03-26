@@ -52,12 +52,18 @@ Hist.VideoHandler = function() {
             });
         },
         init: function() {
-            var $vimeos = $('.vimeo_video');
+            var $vimeos = $('.vimeo_video'),
+                $badVideos = $('.destroy_me');
             if ($vimeos.length > 0) {
                 this.updateVimeos($vimeos);
             }
+
+            // Remove videos which have a bad url
+            $badVideos.each(function(idx, video) {
+                $(video).parent('.story-video').remove();
+            });
         }
-    }
+    };
 }();
 
 // Nivo LightBox Config

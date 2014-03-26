@@ -80,8 +80,10 @@
                         {% elif story|get_story_type == "story-video" %}
                             {% if story|is_youtube_video %}
                                 <img src="{{ story|get_youtube_img }}" class='story_video_image'>
-                            {% else %}
+                            {% elif story|is_vimeo_video %}
                                 <div class="vimeo_video hide" data-url="{{story.video}}">
+                            {% else %}
+                                <div class="destroy_me hide" data-url="{{story.video}}">
                             {% endif %}
                         {% endif %}
                     </div>
