@@ -41,6 +41,10 @@ def is_youtube_video(story):
     return True if "youtube" in story.video else False
 
 @register.filter
+def is_vimeo_video(story):
+    return True if "vimeo" in story.video else False
+
+@register.filter
 def get_story_icon(story):
     if story.text != "":
         return "story-type-icon-text"
