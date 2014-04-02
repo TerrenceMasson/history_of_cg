@@ -221,11 +221,11 @@ var StoryForm = function() {
         } else if (type === "image" || type === "video") {
             var $urlField = $form.find('.story-url input');
             if ($urlField.val().isEmpty()) {
-                errors.push("The URL for the story is required.")
+                errors.push("The URL for the story is required.");
             }
         }
         return errors;
-    }
+    };
 
     // Error Handling
     //////////////////
@@ -235,11 +235,11 @@ var StoryForm = function() {
         $.each(errors, function(index, error) {
             $errors.append("<li> " + error + " </li>");
         });
-    }
+    };
 
     var clearErrors = function($form) {
         $form.find('.errors').html('');
-    }
+    };
 
     // Open/Collapse a Story via it's Header
     var toggleStoryHeader = function(header) {
@@ -250,7 +250,7 @@ var StoryForm = function() {
             $header.next().slideUp();
         }
         $header.toggleClass("story-collapsed-heading story-opened-heading");
-    }
+    };
 
     var resetForm = function($form) {
         var $chosenSelects = $form.find('.chosen-select');
@@ -259,7 +259,7 @@ var StoryForm = function() {
             $select.val('').trigger('chosen:updated');
         });
         $form[0].reset();
-    }
+    };
 
     // AJAX
     ////////
@@ -276,13 +276,13 @@ var StoryForm = function() {
                 Hist.Notifications.error("Failed to delete story. Please try again later.");
             }
         });
-    }
+    };
 
     var submitForm = function(form, isNewStory) {
         var $form = $(form),
             errors = validateStory($form);
         clearErrors($form);
-        if (errors.length != 0) {
+        if (errors.length !== 0) {
             Hist.Notifications.error("Failed to submit the story. Please check the form, fix any issues, and try again.");
             showErrors($form, errors);
             return false;
@@ -312,7 +312,7 @@ var StoryForm = function() {
                 showErrors($form, errors);
             }
         });
-    }
+    };
 
     return {
         init: function() {
@@ -342,7 +342,7 @@ var StoryForm = function() {
                 toggleStoryHeader(this);
             });
         }
-    }
+    };
 }();
 Hist.StoryForm = StoryForm;
 
