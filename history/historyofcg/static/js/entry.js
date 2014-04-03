@@ -218,10 +218,16 @@ var StoryForm = function() {
             if ($storyField.val().isEmpty()) {
                 errors.push("The story body is required.");
             }
-        } else if (type === "image" || type === "video") {
+        } else if (type === "video") {
             var $urlField = $form.find('.story-url input');
             if ($urlField.val().isEmpty()) {
                 errors.push("The URL for the story is required.");
+            }
+        } else if (type === "image") {
+            // TODO: Size in bytes should be one of the validation categories.
+            var $urlField = $form.find('.story-image-file #id_image');
+            if ($urlField.val().isEmpty()) {
+                errors.push("Please upload an image before saving.");
             }
         }
         return errors;
@@ -282,11 +288,13 @@ var StoryForm = function() {
         var $form = $(form),
             errors = validateStory($form);
         clearErrors($form);
+
         if (errors.length !== 0) {
             Hist.Notifications.error("Failed to submit the story. Please check the form, fix any issues, and try again.");
             showErrors($form, errors);
             return false;
         }
+
         $.ajax({
             data: $form.serialize(),
             type: "POST",
@@ -314,6 +322,21 @@ var StoryForm = function() {
         });
     };
 
+    var s3Upload = function() {
+        var s3Upload = new S3Upload({
+            file_dom_selector: 'story-image-file',
+            s3_sign_put_url: '/sign_s3_upload/',
+            onProgress: function() {},
+            onFinishS3Put: function(url) {
+                Hist.Notifications.success("Successfully saved image.");
+                $('.story-image-file #id_image').val(url);
+            },
+            onError: function(status) {
+                Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");
+            }
+        });
+    };
+
     return {
         init: function() {
             var self = this;
@@ -329,6 +352,9 @@ var StoryForm = function() {
                 submitForm($(this).closest('form'), true);
                 return false;
             });
+
+            $('#story-image-file').on('change', s3Upload);
+
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);
                 return false;
