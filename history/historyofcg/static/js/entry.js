@@ -95,7 +95,7 @@ Hist.TokenInput = function() {
 ///////////////////
 Hist.getCookie = function(name) {
     var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
+    if (document.cookie && document.cookie !== '') {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
             var cookie = jQuery.trim(cookies[i]);
@@ -107,12 +107,12 @@ Hist.getCookie = function(name) {
         }
     }
     return cookieValue;
-}
+};
 
 Hist.csrfSafeMethod = function(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+};
 
 Hist.initCSRF = function() {
     $.ajaxSetup({
@@ -124,7 +124,7 @@ Hist.initCSRF = function() {
             }
         }
     });
-}
+};
 
 // Publishing/Unpublishing Page/Story
 //////////////////////////////////////
@@ -149,7 +149,7 @@ Hist.publishForType = function(type, identifier, $storyButton) {
             Hist.Notifications.error("Failed to publish " + type + ". Please try again later");
         }
     });
-}
+};
 
 Hist.unpublishForType = function(type, identifier, $storyButton) {
     $.ajax({
@@ -159,7 +159,7 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
             Hist.Notifications.success("Successfully unpublished " + type);
             if (type === STORY_TYPE) {
                 $storyButton.text('PUBLISH');
-                $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED')
+                $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED');
             } else {
                 $('.publish-page').html('PUBLISH');
                 $('.publish-status').html('UNPUBLISHED');
@@ -168,8 +168,8 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
         error: function(jqXHR, textStatus, errorThrown) {
             Hist.Notifications.error("Failed to unpublish " + type + ". Please try again later");
         }
-    })
-}
+    });
+};
 // PageForm
 /////////////
 
@@ -177,11 +177,11 @@ Hist.PageForm = (function() {
     var showEventFields = function() {
         $('.label-entry-location').show();
         $('.entry-location').show();
-    }
+    };
     var hideEventFields = function() {
         $('.label-entry-location').hide();
         $('.entry-location').hide();
-    }
+    };
 
     return {
         init: function() {
@@ -195,7 +195,7 @@ Hist.PageForm = (function() {
             hideEventFields();
             if (newType === 'event') { showEventFields(); }
         }
-    }
+    };
 })();
 
 // StoryForm
