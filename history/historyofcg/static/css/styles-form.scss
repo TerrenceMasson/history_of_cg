@@ -364,7 +364,13 @@ div.form-container {
         margin-bottom: 20px;
         top: 5px;
         position: relative;
+
+        #id_image {
+          display: none;
+        }
       }
+
+
 
       li.story-save {
         margin-bottom: 10px;
