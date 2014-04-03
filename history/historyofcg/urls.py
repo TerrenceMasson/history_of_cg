@@ -31,6 +31,7 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^unpublish/story/(?P<id>\d+)/$', 'unpublish_story'),
     url(r'^save/story/(?P<story_type>[-\w]+)/(?P<vanity_url>[-\w]+)/$', 'new_story'),
     url(r'^delete/story/(?P<id>\d+)/$', 'delete_story'),
+    url(r'^sign_s3_upload/$', 'sign_s3_upload'),
 
 
     url(r'^vote/up/(?P<story_id>\d+)/$', 'up_vote_story'),
