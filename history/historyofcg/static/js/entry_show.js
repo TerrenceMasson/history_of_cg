@@ -77,15 +77,15 @@ Hist.Lightbox = function() {
         } else {
             $('.lightbox-item-details').html("Story " + currentIndex + " of " + itemCount);
         }
-    }
+    };
     var setCurrentIndex = function(item) {
         var $currentItem = $(item.target).closest('.nivo-lightbox-item');
-        currentIndex = $currentItem.data('index')
-    }
+        currentIndex = $currentItem.data('index');
+    };
     var updateItemDetails = function(item) {
         currentIndex = $(item[0]).data('index');
         setItemDetails();
-    }
+    };
     return {
         init: function() {
             itemCount = $('.nivo-lightbox-item').length;
@@ -98,5 +98,5 @@ Hist.Lightbox = function() {
 
             $('.tile.nivo-lightbox-item').on('click', setCurrentIndex);
         }
-    }
+    };
 }();
