@@ -322,9 +322,10 @@ var StoryForm = function() {
         });
     };
 
-    var s3Upload = function() {
+    var s3Upload = function(e) {
+        var inputId = $(this).attr('id');
         var s3Upload = new S3Upload({
-            file_dom_selector: 'story-image-file',
+            file_dom_selector: inputId,
             s3_sign_put_url: '/sign_s3_upload/',
             onProgress: function() {},
             onFinishS3Put: function(url) {
@@ -353,7 +354,7 @@ var StoryForm = function() {
                 return false;
             });
 
-            $('#story-image-file').on('change', s3Upload);
+            $('input[name="story-image"').on('change', s3Upload);
 
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);

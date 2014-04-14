@@ -58,8 +58,9 @@
                 {# Image #}
                 {#########}
                 {% elif story_form.instance.type == "image" %}
-                    <li class="story-url fields">
+                    <li class="story-image-file fields">
                         {{ story_form.image.errors }}
+                        <input type="file" name="story-image" id="image-file-input-{{story_form.initial.id}}">
                         {{ story_form.image }}
                     </li>
                 {# Video #}
