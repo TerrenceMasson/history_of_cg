@@ -265,6 +265,7 @@ var StoryForm = function() {
             $select.val('').trigger('chosen:updated');
         });
         $form[0].reset();
+        $form.find('.image-preview').attr('src', '');
     };
 
     // AJAX
@@ -323,7 +324,8 @@ var StoryForm = function() {
     };
 
     var s3Upload = function(e) {
-        var inputId = $(this).attr('id');
+        var inputId = $(this).attr('id'),
+            previewImage = $(this).siblings('img');
         var s3Upload = new S3Upload({
             file_dom_selector: inputId,
             s3_sign_put_url: '/sign_s3_upload/',
@@ -331,6 +333,7 @@ var StoryForm = function() {
             onFinishS3Put: function(url) {
                 Hist.Notifications.success("Successfully saved image.");
                 $('.story-image-file #id_image').val(url);
+                $(previewImage).attr('src', url);
             },
             onError: function(status) {
                 Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");

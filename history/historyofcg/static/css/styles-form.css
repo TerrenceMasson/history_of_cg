@@ -341,6 +341,13 @@ div.form-container {
       margin-bottom: 20px;
       top: 5px;
       position: relative; }
+      div.form-container div.stories-col ul.story-fields li.story-image-file .image-preview {
+        width: 100px;
+        height: 100px; }
+      div.form-container div.stories-col ul.story-fields li.story-image-file input[name="story-image"] {
+        position: relative;
+        bottom: 10px;
+        left: 10px; }
       div.form-container div.stories-col ul.story-fields li.story-image-file #id_image {
         display: none; }
     div.form-container div.stories-col ul.story-fields li.story-save {
