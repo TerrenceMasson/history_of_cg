@@ -357,7 +357,7 @@ var StoryForm = function() {
                 return false;
             });
 
-            $('input[name="story-image"').on('change', s3Upload);
+            $('input[name="story-image"]').on('change', s3Upload);
 
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);
