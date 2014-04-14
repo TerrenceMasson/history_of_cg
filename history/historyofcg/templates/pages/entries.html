@@ -6,7 +6,6 @@
     <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/nivo-theme/default.css' %}">
     <script type="text/javascript" src="{% static 'js/libs/nivo-lightbox.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/entry_show.js' %}"></script>
-
 {% endblock %}
 {% block content %}
     <div id="content">
@@ -62,11 +61,11 @@
                 {% for story in all_stories %}
                     <li class="tile story isotope-item nivo-lightbox-item
                         {{ story|get_story_type }} {% random_double_size %}"
-                        {% if story.text != "" %}
+                        {% if story.text != "" and story.text != None %}
                             href="#story-{{story.id}}"
-                        {% elif story.image != "" %}
+                        {% elif story.image != "" and story.image != None %}
                             href="{{ story.image|safe }}"
-                        {% elif story.video != "" %}
+                        {% elif story.video != "" and story.video != None %}
                             href="{{ story.video|safe }}"
                         {% endif %}
                         data-index={{ forloop.counter }}
