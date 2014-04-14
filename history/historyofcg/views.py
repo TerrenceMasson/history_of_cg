@@ -1,5 +1,5 @@
 from hashlib import sha1
-import json, base64, hmac, urllib, time, os, datetime, itertools, uuid
+import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
 
 from django import http
 from django.core import serializers
@@ -266,7 +266,9 @@ def sign_s3_upload(request):
     S3_BUCKET = os.environ.get('S3_BUCKET')
 
     mime_type = request.GET['s3_object_type']
-    new_file_name = str(request.user.pk) + "-" + str(uuid.uuid1())
+    inverse_type_lookup = dict((v, k) for k, v in mimetypes.types_map.items())
+    extension = inverse_type_lookup[mime_type]
+    new_file_name = str(request.user.pk) + "-" + str(uuid.uuid1()) + extension
 
     expires = int(time.time()+10)
     amz_headers = "x-amz-acl:public-read"
