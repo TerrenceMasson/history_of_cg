@@ -390,12 +390,12 @@ Hist.ConnectEntries = function() {
                 window.location = "/edit/page/" + currentPageVanity;
             }
         });
-    }
+    };
 
     var initAutoComplete = function() {
         // Get pagename
         var path = window.location.pathname;
-        var pagename = path.substring(path.lastIndexOf("/") + 1)
+        var pagename = path.substring(path.lastIndexOf("/") + 1);
         pagename = pagename.toLowerCase();
 
         $('#connectionSearchBox').autocomplete({
@@ -427,7 +427,7 @@ Hist.ConnectEntries = function() {
             .append(innerContent)
             .appendTo(ul);
         };
-    }
+    };
 
     return {
         init: function() {
