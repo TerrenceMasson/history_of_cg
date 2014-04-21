@@ -54,10 +54,21 @@
 .none-hover:hover {
   color: #adadad !important; }
 
+#timeline-loader {
+  width: 960px;
+  height: 303px;
+  margin: 0 auto; }
+  #timeline-loader img {
+    display: block;
+    position: relative;
+    top: 90px;
+    margin: 0 auto; }
+
 #timeline-container {
   position: relative;
   width: 960px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  display: none; }
   #timeline-container #timeline {
     width: 100%; }
     #timeline-container #timeline .axis path, #timeline-container #timeline .axis line {
@@ -70,15 +81,35 @@
     #timeline-container #timeline .timeline-label {
       font-family: sans-serif;
       font-size: 16px; }
+    #timeline-container #timeline .timeline-point {
+      cursor: pointer; }
+    #timeline-container #timeline g.context g.axis path {
+      stroke-opacity: 0; }
+    #timeline-container #timeline g.context g.axis line {
+      stroke-opacity: .1; }
+    #timeline-container #timeline g.context g.brush rect.background {
+      fill: rgba(200, 200, 200, 0.15); }
+    #timeline-container #timeline .context text {
+      fill: #CCC;
+      font-size: 12px;
+      font-style: italic; }
+    #timeline-container #timeline .brush .extent {
+      stroke: #000;
+      fill: #bccfd5;
+      fill-opacity: .6;
+      shape-rendering: crispEdges; }
+    #timeline-container #timeline g.context rect.background {
+      visibility: visible !important; }
   #timeline-container #popup-container {
     position: absolute;
     display: none; }
-    #timeline-container #popup-container #popup {
+    #timeline-container #popup-container .popup {
       background: #252a2d;
       border-radius: 5px;
       width: 200px;
-      padding: 10px; }
-      #timeline-container #popup-container #popup p {
+      padding: 10px;
+      display: none; }
+      #timeline-container #popup-container .popup p {
         color: white; }
     #timeline-container #popup-container .person {
       border: 1px #006375 solid; }
@@ -88,3 +119,6 @@
       border: 1px #7e0099 solid; }
     #timeline-container #popup-container .project {
       border: 1px #993d00 solid; }
+    #timeline-container #popup-container .multi-point {
+      border: 1px #006375 solid;
+      color: #00b9db; }

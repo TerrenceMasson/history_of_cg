@@ -1,24 +1,22 @@
-{% extends 'default/base.html' %}
 {% load staticfiles %}
 {% block extra_head %}
-  <script type="text/javascript" src="{% static 'js/libs/d3.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/libs/moment.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/timeline.js' %}"></script>
-  <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/timeline.css' %}">
+  <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/animate.min.css' %}">
 {% endblock %}
-{% block content %}
-  <div id="timeline-container">
-    <svg id="timeline"></svg>
-    <div id="popup-container">
-      <div id="popup">
-        <h3> Title </h3>
-        <p>Description</p>
-        <a href="/">Open page</a>
-      </div>
+<div id="timeline-loader">
+  <img src="/static/img/ajax-loader.gif" alt="Loading Animation" />
+</div>
+<div id="timeline-container">
+  <svg id="timeline"></svg>
+  <div id="popup-container">
+    <div class="popup regular-point">
+      <h3>Title</h3>
+      <p class="date">Date</p>
+      <hr>
+      <p class="description">Description</p>
+    </div>
+    <div class="popup multi-point">
+      <h3>Multiple Available</h3>
+      <p class="description">There are multiple entries on this date. You can use the context tool below to see them all.</p>
     </div>
   </div>
-  <script type="text/javascript">
-    var Hist = Hist || {};
-    Hist.rawPages = {{ pages_json|safe }};
-  </script>
-{% endblock %}
+</div>

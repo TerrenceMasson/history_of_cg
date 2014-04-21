@@ -18,10 +18,19 @@ Hist.VideoHandler = function() {
     // var CLIENT_ID = 'b3804a2a4c901fecb87a26138bb322c244432283';
     // Random StackOverflow dude's client_id
     var CLIENT_ID = 'd0b4a83fc5c12570e9270fc54ef6ecabb8675fcf';
+
+    var removeStory = function($videoElement) {
+        $videoElement.parent('.story-video').remove();
+    };
+
     return {
         getVimeoId: function(url) {
             var regex = /vimeo.com\/(\d*)/i;
-            return url.match(regex)[1];
+            if (url.match(regex)) {
+                return url.match(regex)[1];
+            } else {
+                return null;
+            }
         },
         grabVimeoImage: function($urlContainer, vimeoId) {
             var vimeoUrl = 'https://api.vimeo.com/videos/' + vimeoId + '?client_id=' + CLIENT_ID;
@@ -48,7 +57,11 @@ Hist.VideoHandler = function() {
                 var $this = $(this),
                     dataUrl = $this.data('url'),
                     vimeoId = self.getVimeoId(dataUrl);
-                self.grabVimeoImage($this, vimeoId);
+                if (vimeoId) {
+                    self.grabVimeoImage($this, vimeoId);
+                } else {
+                    removeStory($this);
+                }
             });
         },
         init: function() {
@@ -61,6 +74,7 @@ Hist.VideoHandler = function() {
             // Remove videos which have a bad url
             $badVideos.each(function(idx, video) {
                 $(video).parent('.story-video').remove();
+                removeStory($(video));
             });
         }
     };

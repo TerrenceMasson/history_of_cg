@@ -5,6 +5,12 @@
 {% block extra_head %}
     <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/styles-home.css' %}">
     <script type="text/javascript" src="{% static 'js/home.js' %}"></script>
+
+    <!-- Timeline Specific Assets -->
+    <script type="text/javascript" src="{% static 'js/libs/d3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/timeline.js' %}"></script>
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/timeline.css' %}">
 {% endblock %}
 {% block body_header %}
     <div id="homeBranding">
@@ -22,12 +28,8 @@
 {% endblock %}
 {% block content %}
 <section>
-    <div class="timeline">
-        <img src="{% static 'img/timeline/timeline.png' %}">
-
-        <div class="tooltip" style="left: 840px; top: 0px;">Timeline coming soon!</div>
-        <span><h1>RECENTLY UPDATED ENTRIES:</h1></span>
-    </div>
+    {% include "pages/timeline.html" %}
+    <h1>RECENTLY UPDATED ENTRIES:</h1>
     <div id="updated-entries-container" class="isotope cf">
         {% for entry in updated_entries %}
         <a class="tile connection {{ entry.type.name }} isotope-item" href="/pages/{{ entry.vanity_url }}">

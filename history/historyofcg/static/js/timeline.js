@@ -1,198 +1,249 @@
+/*
+* @Author: Gowiem
+* @Date:   2013-12-17 14:21:17
+*/
+
 var Hist = Hist || {};
 
-Hist.Timeline = (function() {
-  var timelinePoints = [],
-      margin = {top: 90, right: 30, bottom: 40, left: 30},
-      width = 960,
-      height = 200,
-      yPositions = {},
-      pointSize = 25,
-      yPosMargin = 30,
-      pointClicked = false,
-      xScale,
-      beginning,
-      ending,
-      highestYPosition,
-      chart;
+Hist.TL_DEBUG = false;
 
-  var initD3Chart = function() {
-    var jsDates = timelinePoints.map(function(p) { return p.date.toDate(); });
+// Timeline Utils
+//////////////////
+Hist.TLUtils = (function() {
+  var timeConversions = { "year": 31557600000,
+                          "month": 2628000000,
+                          "day":     86400000 };
 
-    beginning   = roundToDecade(d3.min(jsDates), true);
-    ending      = roundToDecade(d3.max(jsDates));
-    yPositions  = buildYPositions();
-    highestYPosition = d3.max(d3.values(yPositions));
 
-    chart = d3.select('#timeline')
-              .attr('width', width)
-              .attr('height', height)
-            .append("g")
-              .attr("transform", "translate(" + margin.left + ",0)");
+  var pubConvertTime = function(howMany, type) {
+    if (timeConversions.hasOwnProperty(type)) {
+      return howMany * timeConversions[type];
+    } else {
+      console.assert(false, "Hist.TLUtils.convertTime was given unknown type: ", type);
+    }
+  };
 
-    xScale = d3.time.scale()
-                    .nice(d3.time.year, 100)
-                    .domain([beginning, ending])
-                    .range([0, width - margin.right - margin.left]);
-              
-    var xAxis = d3.svg.axis()
-                      .scale(xScale)
-                      .orient("bottom");
-
-    chart.append("g")
-      .attr("class", "x axis")
-      .attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
-      .call(xAxis);
-
-    chart.selectAll(".timeline-point")
-      .data(timelinePoints)
-    .enter().append("image")
-      .attr("class", "timeline-point")
-      .attr("id", function(p) { return 'point-' + p.id; })
-      .attr("x", getXPosition)
-      .attr("y", getYPosition)
-      .attr("cx", getXPosition)
-      .attr("cy", getYPosition)
-      .attr("height", pointSize)
-      .attr("width", pointSize)
-      .attr("xlink:href", function(p) { return p.pointImage; })
-      .on("mouseover", showActiveState)
-      .on("mouseout", hideActiveState)
-      .on("click", setClicked)
-  }
-
-  // D3 Plotting Helpers
-  ///////////////////////
-
-  var getXPosition = function(point) {
-    return xScale(point.date.toDate()) - (pointSize / 2);
-  }
-
-  var getYPosition = function(point) {
-    // height - bottom => xAxis line
-    // xAxis line - yPosMargin => Starting yPos for a 0 count point
-    // starting yPos - (yPos[id] * pointSize) => final yPosition
-    return height - margin.bottom - yPosMargin - (pointSize * yPositions[point.id]);
-  }
-
-  // Loop through the timelinePoints and count those which have the same year.
-  // We use this later to determine if we should stack a point.
-  var buildYPositions = function() {
-    timelinePoints.forEach(function(point, idx) {
-      var count = 0;
-      timelinePoints.forEach(function(p, idx) {
-        if (point.date.year() === p.date.year() && point.id !== p.id && !p.counted) {
-          count += 1;
-        }
-      });
-      yPositions[point.id] = count;
-      point.counted = true;
-    });
-    return yPositions;
-  }
-
-  var roundToDecade = function(date, shouldFloor) {
+  var pubRoundToDecade = function(date, shouldFloor) {
     var year = date.getFullYear(),
         remainder = year % 10,
         roundedYear = shouldFloor ? (year - remainder) - 10 : (year - remainder) + 10,
         roundedDate = new Date(date.getTime()).setFullYear(roundedYear);
     return roundedDate;
-  }
+  };
 
-  // Timeline Interaction Helpers
-  ////////////////////////////////
+  var pubGenerateRandomId = function() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+               .toString(16)
+               .substring(1);
+  };
 
-  var setClicked = function(point) {
-    pointClicked = true;
+  var pubDebugLog = function(message) {
+    if (Hist.TL_DEBUG) {
+      console.log(message);
+    }
+  };
 
-    // Stop the event from bubbling up to body where we have a click handler to 
-    // deactivate the current point. d3.event is the current event for this click
-    d3.event.stopPropagation();
-  }
+  return {
+    roundToDecade: pubRoundToDecade,
+    convertTime: pubConvertTime,
+    generateRandomId: pubGenerateRandomId,
+    debugLog: pubDebugLog
+  };
+})();
 
-  var setUnclicked = function() {
-    pointClicked = false;
-  }
+// Timeline Objects
+////////////////////
+Hist.TLO = Hist.TLO || {};
+Hist.TLO.range = function(beginEpoch, endEpoch) {
+  return {
+    begin: new Date(beginEpoch),
+    end:   new Date(endEpoch),
+    differenceInYears: new Date(endEpoch).getYear() - new Date(beginEpoch).getYear(),
+    halfwayDate: new Date(beginEpoch + ((endEpoch - beginEpoch)/2)),
+    toString: function() {
+      return "Range - begin: " + this.begin.toString() + " end: " + this.end.toString() + " halfwayDate: " + this.halfwayDate.toString();
+    }
+  };
+};
 
-  // Active State - Mousing over or clicked
-  var showActiveImage = function(element, point) {
-    var hoverImageUrl = point.pointImage.replace(/(.*)\.png/, "$1-hover.png");
-    d3.select(element).attr("xlink:href", hoverImageUrl);
-  }
+// Our Collection of Point Objects
+Hist.TLO.pointCollection = function(pages) {
+  var collection = {},
+      allPoints = [],
+      current = [],
+      pointPositions = {},
+      point,
+      // Util Aliases
+      roundToDecade   = Hist.TLUtils.roundToDecade,
+      debugLog        = Hist.TLUtils.debugLog,
+      // TLO Aliases
+      timelinePoint   = Hist.TLO.timelinePoint,
+      multiPoint      = Hist.TLO.multiPoint;
 
-  var showPopup = function(element, point) {
-    var d3Element = d3.select(element),
-        leftPos   = parseInt(d3Element.attr('x')),
-        topPos    = parseInt(d3Element.attr('y')),
-        leftOffset,
-        topOffset,
-        popupLeft;
 
-    // Setup the content now so we can grab the height and use it to calculate the topOffset
-    $('#popup h3').text(point.name);
-    $('#popup p').text(point.description);
-    $('#popup a').attr('href', "/pages/" + point.vanityUrl);
-    popupHeight = $('#popup-container').height();
+  // Loop through the given pages and construct our timeline points
+  pages.forEach(function(page, idx) {
+    point = timelinePoint(page);
+    if (point.isValid()) {
+      allPoints.push(point);
+      current.push(point);
+    }
+  });
 
-    leftOffset = (pointSize / 2);
-    topOffset  = (pointSize / 2) + popupHeight + 11; // +11 px is for padding I think..
-
-    // Now that we have the offset we can find the absolute position of the popup
-    popupLeft = leftPos + pointSize + leftOffset + 'px';
-    popupTop  = topPos + pointSize - topOffset + 'px';
-
-    // Add the points type so we have colored borders and name text
-    $('#popup').removeClass()
-               .addClass(point.type);
-    $('#popup-container').css({ left: popupLeft, top: popupTop })
-                         .show();
-  }
-
-  var showActiveState = function(point) {
-    // We just moused into a point, clear the last clicked point (if any)
-    setUnclicked();
-    if ($('#timeline').data('active-point')) {
-      // Passing null here as hideActiveImage will find the element from the given point.id
-      hideActiveImage(null, $('#timeline').data('active-point'));
+  // Iterates through the timeline points to find their x and y positions
+  // and stores them in pointPositions for later use.
+  // Returns { point.id => { x: xPos, y: yPos }, ... }
+  var buildPointPositions = function(timelineRange) {
+    var self = this,
+        rangeDifference = timelineRange.differenceInYears,
+        yPositions = {},
+        xPos, yPos, approximaterMod;
+    // Ranges:
+    // 80+ years: buckets of 5 years
+    // 60+ years: buckets of 4 years
+    // 45+ years: buckets of 3 years
+    // 30+ years: buckets of 2 years
+    // 20+ years: Buckets of 1 years
+    // 15+ years: Buckets of 1/2 year
+    // 12+ years: Buckets of 5 months
+    // 8+  years: Buckets of 3 months
+    // 4+  years: Buckets of 2 months
+    // 4-  years: No Range, Only stack if in same month
+    debugLog("rangeDifference: " + rangeDifference);
+    if (rangeDifference >= 80) {
+      approximaterMod = 10;
+      debugLog("=========== range is 80+");
+    } else if (rangeDifference >= 60) {
+      approximaterMod = 8;
+      debugLog("=========== range is 60+");
+    } else if (rangeDifference >= 45) {
+      approximaterMod = 6;
+      debugLog("=========== range is 45+");
+    } else if (rangeDifference >= 30) {
+      approximaterMod = 4;
+      debugLog("=========== range is 30+");
+    } else if (rangeDifference >= 20) {
+      approximaterMod = 2;
+      debugLog("=========== range is 20+");
+     } else if (rangeDifference >= 15) {
+      approximaterMod = 1;
+      debugLog("=========== range is 15+");
+    } else if (rangeDifference >= 12) {
+      approximaterMod = 10;
+      debugLog("=========== range is 12+");
+    } else if (rangeDifference >= 8) {
+      approximaterMod = 6;
+      debugLog("=========== range is 8+");
+    } else if (rangeDifference >= 4) {
+      approximaterMod = 2;
+      debugLog("=========== range is 4+");
+    } else {
+      approximaterMod = null;
+      debugLog("=========== range is 4-");
     }
 
-    // Set the hover point image and configure/show the popup
-    showActiveImage(this, point);
-    showPopup(this, point);
+    this.current.forEach(function(point, outerIndex) {
+      xPos = null;
 
-    // Store the currently active point so we can deactive it later
-    $('#timeline').data('active-point', point);
-  }
+      if (rangeDifference >= 15) {
+        xPos = point.approxDateYear(approximaterMod);
+      } else if (rangeDifference >= 4) {
+        xPos = point.approxDateMonth(approximaterMod);
+      } else {
+        xPos = point.date;
+      }
 
-  // Deactive State
-  //////////////////
-  var hideActiveImage = function(element, point) {
-    // If we weren't passed the element then find it by the given point.id, otherwise select it
-    d3El = element === null ? d3.select('#point-' + point.id) : d3.select(element);
-    d3El.attr("xlink:href", point.pointImage);
-  }
+      if (xPos) {
+        if (yPositions[xPos.toString()]) {
+          yPos = yPositions[xPos.toString()];
+          yPositions[xPos.toString()]++;
+        } else {
+          yPos = 0;
+          yPositions[xPos.toString()] = 1;
+        }
 
-  var hidePopup = function() {
-    $('#popup-container').hide();
-  }
+        // Set the x and y position of the current point
+        self.pointPositions[point.id] = { 'x': xPos, 'y': yPos };
+      }
+    });
+  };
 
-  var hideActiveState = function(point) {
-    // If we are currently focusing on a point (have clicked it) then we don't 
-    // want to hide the active state.
-    if (!pointClicked) {
-      hideActiveImage(this, point);
-      hidePopup();
-    }
-  }
+  var clearPointPositions = function() {
+    this.pointPositions = {};
+  };
 
-  // Data Initialization Helpers
-  ///////////////////////////////
+  var hidePointWithId = function(pId) {
+    var pointId = parseInt(pId, 10);
+    return this.current.filter(function(p) {
+      return pointId !== p.id;
+    });
+  };
 
-  // TODO: Create TimelinePoint object/constructor to clean this shit up.s
+  var filterInRange = function(range) {
+    this.current = this.allPoints.filter(function(point, idx) {
+      return point.withinRange(range);
+    });
+  };
 
-  // This is the kind of code you have to write when people use a table to 
-  // represent a simple string type. Seriously though, da fuq!
-  var findTypeFromStupidFuckingCategoryId = function(stupidFuckingCategoryId) {
-    switch (stupidFuckingCategoryId) {
+  var addMultiPoints = function(yearsToAdd) {
+    var self = this,
+        mPoint;
+
+    yearsToAdd = yearsToAdd.unique();
+    yearsToAdd.forEach(function(year, idx) {
+      mPoint = multiPoint(year);
+      self.current.push(mPoint);
+      self.pointPositions[mPoint.id] = { x: year, y: Hist.TL.config.maxOfStacked };
+    });
+  };
+
+  var replaceMaxStacked = function() {
+    var yearsToAddMultiPoint = [],
+        positionKeys = Object.keys(this.pointPositions),
+        self = this,
+        xPos,
+        yPos;
+
+    positionKeys.forEach(function(pId, idx) {
+      xPos = self.pointPositions[pId].x;
+      yPos = self.pointPositions[pId].y;
+
+      if (yPos >= Hist.TL.config.maxOfStacked) {
+        yearsToAddMultiPoint.push(xPos);
+        self.current = self.hidePointWithId(pId);
+      }
+    });
+
+    // Now that we've remove the points which were stacked too high we can
+    // add back the multiPoints in their place.
+    this.addMultiPoints(yearsToAddMultiPoint);
+  };
+
+  // Fields
+  collection.allPoints = allPoints;
+  collection.current = current;
+  collection.pointPositions = pointPositions;
+
+  // Methods
+  collection.buildPointPositions = buildPointPositions;
+  collection.clearPointPositions = clearPointPositions;
+  collection.filterInRange = filterInRange;
+  collection.hidePointWithId = hidePointWithId;
+  collection.replaceMaxStacked = replaceMaxStacked;
+  collection.addMultiPoints = addMultiPoints;
+
+  return collection;
+};
+
+// Our Point object
+Hist.TLO.timelinePoint = function(page) {
+  var point = {};
+
+  // This is the kind of code you have to write when people use a table to
+  // represent a simple string. Seriously though, da fuq!
+  // TODO: I can do this simpler with an array.. doh.
+  var findType = function(categoryId) {
+    switch (categoryId) {
       case 1:
         return 'person';
       case 2:
@@ -204,48 +255,420 @@ Hist.Timeline = (function() {
       default:
         return null;
     }
-  }
+  };
 
-  var buildTimelinePoints = function(pages) {
-    var result = [];
-    pages.forEach(function(page) {
-      var mDate = moment(page['fields']['date_established']),
-          type  = findTypeFromStupidFuckingCategoryId(page['fields']['type']);
-      if (type && page['fields']['date_established']) {
-        result.push({
-          'id': page['pk'],
-          'name': page['fields']['name'],
-          'vanityUrl': page['fields']['vanity_url'],
-          'description': page['fields']['description'],
-          'date': mDate,
-          'type': type,
-          'pointImage': "/static/img/timeline/" + type + "-button.png",
-          'counted': false
-        });
-      }
+  point.id = page['pk'];
+  point.name = page['fields']['name'] || page['name'];
+  point.vanityUrl = page['fields']['vanity_url'] || page['vanityUrl'];
+  point.description = page['fields']['description'] || page['description'];
+  point.date = moment(page['fields']['date_established']) || moment();
+  point.type = findType(page['fields']['type']) || page['type'];
+  point.pointImage = "/static/img/timeline/" + point.type + "-button.png";
+
+  var toString = function() {
+    return "Point -> id: " + this.id + " name: " + this.name + " date: " + this.date.format('l') + " type: " + this.type;
+  };
+
+  var isValid = function() {
+    return this.type !== null && !!page['fields']['date_established'];
+  };
+
+  var approxDateYear = function(mod) {
+    var year = this.date.year(),
+        remainder = year % mod,
+        halfMod = mod / 2;
+    if (remainder <= halfMod) {
+      return new Date(year - remainder, 0);
+    } else {
+      return new Date(year - remainder + halfMod, 0);
+    }
+  };
+
+  var approxDateMonth = function(mod) {
+    var month = this.date.month(),
+        remainder = month % mod,
+        halfMod = mod / 2;
+    if (remainder <= halfMod) {
+      return new Date(this.date.year(), month - remainder);
+    } else {
+      return new Date(this.date.year(), month - remainder + halfMod);
+    }
+  };
+
+  var withinRange = function(range) {
+    return this.date.isAfter(range.begin) && this.date.isBefore(range.end) ||
+                                             this.date.isSame(range.begin) ||
+                                             this.date.isSame(range.end);
+  };
+
+  var isSameMonthAsPoint = function(point) {
+    return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month');
+  };
+
+  var isSameDayAsPoint = function(point) {
+    return this.date.isSame(point.date, 'year') && this.date.isSame(point.date, 'month') && this.date.isSame(point.date, 'day');
+  };
+
+  point.toString = toString;
+  point.isValid  = isValid;
+  point.withinRange = withinRange;
+  point.isSameMonthAsPoint = isSameMonthAsPoint;
+  point.isSameDayAsPoint = isSameDayAsPoint;
+  point.approxDateYear = approxDateYear;
+  point.approxDateMonth = approxDateMonth;
+
+  return point;
+};
+
+Hist.TLO.multiPoint = function(year) {
+  var pointDefaults = { name: "Multiple Available", vanityUrl: null,
+                        description: "Multiple Available", type: 'multi',
+                        fields: {} },
+      point = Hist.TLO.timelinePoint(pointDefaults);
+
+  point.id = Hist.TLUtils.generateRandomId();
+  point.date = moment(new Date(year, 5));
+
+  return point;
+};
+
+// Timeline
+////////////
+Hist.TL = (function() {
+  var margin = {top: 90, right: 30, bottom: 90, left: 30},
+      width = 960,
+      height = 300,
+      maxOfStacked = 4,
+      pointSize = 25,
+      yPosMargin = 30,
+      tickFormatter,
+      monthFormatter,
+      timelinePoints,
+      brush,
+      xAxis,
+      xScale,
+      beginning,
+      ending,
+      chart,
+      // Alias our TimelineUtils methods
+      roundToDecade   = Hist.TLUtils.roundToDecade,
+      // Alias our Timeline Objects
+      pointCollection = Hist.TLO.pointCollection,
+      timelinePoint   = Hist.TLO.timelinePoint,
+      multiPoint      = Hist.TLO.multiPoint;
+
+  var initD3Chart = function() {
+    var jsDates = timelinePoints.current.map(function(p) { return p.date.toDate(); });
+
+    // Default to 1940 for the beginning if the min year is less than 1940
+    if (d3.min(jsDates).getFullYear() > 1940) {
+      beginning = roundToDecade(d3.min(jsDates), true);
+    } else {
+      beginning = moment("1940-01-01").valueOf();
+    }
+
+    ending = roundToDecade(d3.max(jsDates));
+
+    chart = d3.select('#timeline')
+              .attr('width', width)
+              .attr('height', height)
+            .append("g")
+              .attr("transform", "translate(" + margin.left + ",0)");
+
+    xScale = d3.time.scale()
+                    .nice(d3.time.year, 100)
+                    .domain([beginning, ending])
+                    .range([0, width - margin.right - margin.left]);
+
+    // Setup our formatter which we'll be using in abbreviateMonthTicks
+    tickFormatter = xScale.tickFormat();
+    monthFormatter = d3.time.format('%b');
+
+    xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient("bottom")
+                  .tickFormat(abbreviateMonthTicks);
+
+    chart.append("g")
+      .attr("class", "x axis")
+      .attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
+      .call(xAxis);
+
+    timelinePoints.buildPointPositions(Hist.TLO.range(beginning, ending));
+
+    // Replace the points which are stacked too high with multiPoints
+    timelinePoints.replaceMaxStacked();
+
+    var points = chart.selectAll(".timeline-point").data(timelinePoints.current);
+    points.enter()
+      .append("image")
+      .attr("class", "timeline-point")
+      .attr("id", function(p) { return 'point-' + p.id; })
+      .attr("x", getXPosition)
+      .attr("y", getYPosition)
+      .attr("cx", getXPosition)
+      .attr("cy", getYPosition)
+      .attr("height", pointSize)
+      .attr("width", pointSize)
+      .attr("xlink:href", function(p) { return p.pointImage; })
+      .on("mouseover", showActiveState)
+      .on("mouseout", hideActiveState)
+      .on("click", openPage);
+
+    initContextArea();
+  };
+
+  var showTimeline = function() {
+    $('#timeline-loader').fadeOut(function() {
+      $('#timeline-container').addClass('animated fadeInDown').show();
     });
-    return result;
-  }
+  };
 
+  var removeTimeline = function() {
+    $('#timeline-container').remove();
+    $('#timeline-loader').remove();
+  };
+
+  var draw = function(range) {
+    var points;
+
+    // Create out pointPositions object
+    timelinePoints.clearPointPositions();
+    timelinePoints.buildPointPositions(range);
+    // Replace the points which are stacked too high with multiPoints
+    timelinePoints.replaceMaxStacked();
+
+    // Remove the current points
+    chart.selectAll(".timeline-point").remove();
+
+    // Set the newly filtered points as our new data
+    points = chart.selectAll(".timeline-point").data(timelinePoints.current);
+    points.enter()
+          .append("image")
+          .attr("class", "timeline-point")
+          .attr("id", function(p) { return 'point-' + p.id; })
+          .attr("x", getXPosition)
+          .attr("y", getYPosition)
+          .attr("cx", getXPosition)
+          .attr("cy", getYPosition)
+          .attr("height", pointSize)
+          .attr("width", pointSize)
+          .attr("xlink:href", function(p) { return p.pointImage; })
+          .on("mouseover", showActiveState)
+          .on("mouseout", hideActiveState)
+          .on("click", openPage);
+  };
+
+  // D3 Plotting Helpers
+  ///////////////////////
+  var getXPosition = function(point) {
+    var date = timelinePoints.pointPositions[point.id]['x'];
+    return xScale(date) - (pointSize / 2);
+  };
+
+  var getYPosition = function(point) {
+    // height - bottom => xAxis line
+    // xAxis line - yPosMargin => Starting yPos for a 0 count point
+    // starting yPos - (yPos[id] * pointSize) => final yPosition
+    return height - margin.bottom - yPosMargin - (pointSize * timelinePoints.pointPositions[point.id]['y']);
+  };
+
+  var abbreviateMonthTicks = function(d) {
+    var formatted = tickFormatter(d);
+    // If this formatted date is a year (ex. 1991) then just return that year.
+    if (!isNaN(parseInt(formatted, 10))) {
+      return formatted;
+    } else { // Otherwise use the monthFormatter which will abbreviate it.
+      return monthFormatter(d);
+    }
+  };
+
+  // SVG Brush Helpers
+  /////////////////////
+
+  var initContextArea = function() {
+    var contextWidth = 850,
+        contextHeight = 80,
+        contextTickSize = 25,
+        contextXAxis,
+        contextXScale,
+        contextArea,
+        context;
+
+    contextXScale = d3.time.scale()
+                           .range([0, contextWidth])
+                           .domain(xScale.domain());
+    contextXAxis = d3.svg.axis()
+                         .scale(contextXScale)
+                         .tickSize(contextTickSize)
+                         .tickPadding(5)
+                         .orient("bottom");
+
+    contextArea = d3.svg.area()
+                        .interpolate("monotone")
+                        .x(function(d) { return contextXScale(d); })
+                        .y0(contextHeight)
+                        .y1(0);
+
+    brush = d3.svg.brush()
+                  .x(contextXScale)
+                  .extent([beginning, ending])
+                  .on("brushend", brushended);
+
+    context = d3.select("#timeline").append("g")
+                                    .attr("class", "context")
+                                    .attr("transform", "translate(" + (width / 2 - contextWidth / 2) + "," + (height - margin.bottom + 40) + ")");
+
+    context.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0,0)")
+        .call(contextXAxis);
+
+    gBrush = context.append("g")
+                    .attr("class", "brush")
+                    .call(brush)
+                    .call(brush.event);
+
+    gBrush.selectAll("rect")
+          .attr('transform', 'translate(0,0)')
+          .attr("height", contextTickSize);
+  };
+
+  var brushended = function() {
+    var extent0 = brush.extent(),
+        begin = extent0[0],
+        end   = extent0[1],
+        range = Hist.TLO.range(begin, end);
+
+    xScale.domain([begin, end]);
+    xAxis.scale(xScale);
+    chart.select(".x.axis").call(xAxis);
+    timelinePoints.filterInRange(range);
+    draw(range);
+  };
+
+  // Timeline Interaction Helpers
+  ////////////////////////////////
+
+  var openPage = function(point) {
+    if (point.type !== 'multi') {
+      window.location = "/pages/" + point.vanityUrl;
+    }
+  };
+
+  // Active State - Mousing over or clicked
+  var showActiveImage = function(element, point) {
+    var hoverImageUrl = point.pointImage.replace(/(.*)\.png/, "$1-hover.png");
+    d3.select(element).attr("xlink:href", hoverImageUrl);
+  };
+
+  var addDescriptionToPoint = function(description) {
+    if (description.length <= 200) {
+      $('.regular-point .description').text(description);
+    } else {
+      $('.regular-point .description').text(description.substring(0, 200) + "...");
+    }
+  };
+
+  var showPopup = function(element, point) {
+    var d3Element = d3.select(element),
+        leftPos   = parseInt(d3Element.attr('x'), 10),
+        topPos    = parseInt(d3Element.attr('y'), 10),
+        leftOffset,
+        topOffset,
+        popupLeft;
+
+    // Hide both popups so we aren't showing both.
+    $('.popup').hide();
+
+    if (point.type !== 'multi') {
+      // Setup the content now so we can grab the height and use it to calculate the topOffset
+      $('.regular-point h3').text(point.name);
+      addDescriptionToPoint(point.description);
+      $('.regular-point .date').text(point.date.format("dddd, MMMM Do YYYY"));
+      $('.regular-point a').attr('href', "/pages/" + point.vanityUrl);
+      $('.regular-point').removeClass()
+                         .addClass(point.type)
+                         .addClass("popup")
+                         .addClass("regular-point")
+                         .show();
+    } else {
+      $('.multi-point').show();
+    }
+
+    popupHeight = $('#popup-container').height();
+    leftOffset = (pointSize / 2);
+    topOffset  = (pointSize / 2) + popupHeight + 11; // +11 px is for padding I think..
+
+    // Now that we have the offset we can find the absolute position of the popup
+    popupLeft = leftPos + pointSize + leftOffset + 'px';
+    popupTop  = topPos + pointSize - topOffset + 'px';
+
+    $('#popup-container').css({ left: popupLeft, top: popupTop }).show();
+  };
+
+  var showActiveState = function(point) {
+    // Set the hover point image and configure/show the popup
+    showActiveImage(this, point);
+    showPopup(this, point);
+  };
+
+  // Deactive State
+  //////////////////
+  var hideActiveImage = function(element, point) {
+    // If we weren't passed the element then find it by the given point.id, otherwise select it
+    d3El = element === null ? d3.select('#point-' + point.id) : d3.select(element);
+    d3El.attr("xlink:href", point.pointImage);
+  };
+
+  var hidePopup = function() {
+    $('#popup-container').hide();
+  };
+
+  var hideActiveState = function(point) {
+    hideActiveImage(this, point);
+    hidePopup();
+  };
 
   // Public Interface
   ////////////////////
-
   return {
-    init: function() {
-      timelinePoints = buildTimelinePoints(Hist.rawPages);
-      initD3Chart();
 
-      // Clicked away from a point handler, sets the state to inactive
-      $("body").live("click", function(){
-        var activePoint = $('#timeline').data('active-point'),
-            activeEl;
-        if (activePoint && pointClicked) {
-          setUnclicked();
-          activeEl = $('#point-' + activePoint.id)[0];
-          hideActiveState.call(activeEl, activePoint);
+    init: function(data) {
+      if (data && data.length > 0) {
+        timelinePoints = pointCollection(data);
+        if (timelinePoints.allPoints.length > 0) {
+          initD3Chart();
+          showTimeline();
+        } else {
+          setTimeout(removeTimeline, 1500);
         }
-      });
+      }
+    },
+    config: {
+      maxOfStacked: maxOfStacked
     }
-  }
+  };
 })();
+
+$(document).ready(function() {
+  var timelineDataUrl;
+
+  // Find the url depending on which page we're on.
+  if (window.location.pathname.contains("/pages/")) {
+    timelineDataUrl = "/timeline/" + $('.entryInfo .entryVanityUrl').val();
+  } else {
+    timelineDataUrl = "/timeline/";
+  }
+
+  $.ajax({
+    url: timelineDataUrl,
+    type: "GET",
+    success: function(data) {
+      Hist.TL.init(data);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log("Error receiving timeline data from server. jqXHR: ", jqXHR);
+    }
+  });
+});

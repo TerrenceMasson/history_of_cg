@@ -7,15 +7,17 @@
     <script type="text/javascript" src="{% static 'js/libs/nivo-lightbox.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/entry_show.js' %}"></script>
 
+    <!-- Timeline Specific Assets -->
+    <script type="text/javascript" src="{% static 'js/libs/d3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/timeline.js' %}"></script>
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/timeline.css' %}">
+
 {% endblock %}
 {% block content %}
     <div id="content">
         <div class="message" style="display: none;"></div>
-        <div class="timeline">
-            <img src="{% static 'img/timeline/timeline.png' %}">
-
-            <div class="tooltip" style="left: 187px; top: 505px; display: none;">Timeline coming soon!</div>
-        </div>
+        {% include "pages/timeline.html" %}
         <!-- start of page content -->
         <section class="entryMast">
             <h1 class="entry_title {{ page.type }}" data-type="{{ page.type }}">{{ page.name }}</h1>
@@ -119,6 +121,7 @@
         </section>
         <section class="entryInfo" style="display: none;">
             <input type="hidden" class="entryName" value="{{ page.name }}">
+            <input type="hidden" class="entryVanityUrl" value="{{ page.vanity_url }}">
             <input type="hidden" class="entryId" value="{{ page.id }}">
             <input type="hidden" class="entryCategory" value="{{ page.type }}">
 
