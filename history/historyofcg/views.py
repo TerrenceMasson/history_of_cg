@@ -1,6 +1,5 @@
-import json
-import datetime
-import itertools
+from hashlib import sha1
+import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
 
 from django import http
 from django.core import serializers
@@ -266,6 +265,34 @@ def get_pages(request):
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype=mimetype)
+
+def sign_s3_upload(request):
+    AWS_ACCESS_KEY = os.environ.get('HIST_AWS_ACCESS_KEY_ID')
+    AWS_SECRET_KEY = os.environ.get('HIST_AWS_SECRET_ACCESS_KEY')
+    S3_BUCKET = os.environ.get('S3_BUCKET')
+
+    mime_type = request.GET['s3_object_type']
+    inverse_type_lookup = dict((v, k) for k, v in mimetypes.types_map.items())
+    extension = inverse_type_lookup[mime_type]
+    new_file_name = str(request.user.pk) + "-" + str(uuid.uuid1()) + extension
+
+    expires = int(time.time()+10)
+    amz_headers = "x-amz-acl:public-read"
+
+    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, new_file_name)
+
+    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+
+    # Gotta #quote_plus it twice: http://stackoverflow.com/a/20712482/1159410
+    signature = urllib.quote_plus(signature.strip())
+    signature = urllib.quote_plus(signature.strip())
+
+    url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, new_file_name)
+
+    return JsonResponse({
+        'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
+         'url': url
+      })
 
 
 ## Add/Remove Connections

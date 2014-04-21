@@ -95,7 +95,7 @@ Hist.TokenInput = function() {
 ///////////////////
 Hist.getCookie = function(name) {
     var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
+    if (document.cookie && document.cookie !== '') {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
             var cookie = jQuery.trim(cookies[i]);
@@ -107,12 +107,12 @@ Hist.getCookie = function(name) {
         }
     }
     return cookieValue;
-}
+};
 
 Hist.csrfSafeMethod = function(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+};
 
 Hist.initCSRF = function() {
     $.ajaxSetup({
@@ -124,7 +124,7 @@ Hist.initCSRF = function() {
             }
         }
     });
-}
+};
 
 // Publishing/Unpublishing Page/Story
 //////////////////////////////////////
@@ -149,7 +149,7 @@ Hist.publishForType = function(type, identifier, $storyButton) {
             Hist.Notifications.error("Failed to publish " + type + ". Please try again later");
         }
     });
-}
+};
 
 Hist.unpublishForType = function(type, identifier, $storyButton) {
     $.ajax({
@@ -159,7 +159,7 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
             Hist.Notifications.success("Successfully unpublished " + type);
             if (type === STORY_TYPE) {
                 $storyButton.text('PUBLISH');
-                $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED')
+                $('#' + $storyButton.data('id') + "-story").html('UNPUBLISHED');
             } else {
                 $('.publish-page').html('PUBLISH');
                 $('.publish-status').html('UNPUBLISHED');
@@ -168,8 +168,8 @@ Hist.unpublishForType = function(type, identifier, $storyButton) {
         error: function(jqXHR, textStatus, errorThrown) {
             Hist.Notifications.error("Failed to unpublish " + type + ". Please try again later");
         }
-    })
-}
+    });
+};
 // PageForm
 /////////////
 
@@ -177,11 +177,11 @@ Hist.PageForm = (function() {
     var showEventFields = function() {
         $('.label-entry-location').show();
         $('.entry-location').show();
-    }
+    };
     var hideEventFields = function() {
         $('.label-entry-location').hide();
         $('.entry-location').hide();
-    }
+    };
 
     return {
         init: function() {
@@ -195,18 +195,24 @@ Hist.PageForm = (function() {
             hideEventFields();
             if (newType === 'event') { showEventFields(); }
         }
-    }
+    };
 })();
 
 // StoryForm
 /////////////
 var StoryForm = function() {
+    // Max file size is 15mb. 
+    var MAX_FILE_SIZE = 15728640;
 
     // Validation
     //////////////
     var validateStory = function($form) {
         var errors = [],
-            type = $form.data('type');
+            type = $form.data('type'),
+            $storyField,
+            $urlField,
+            $fileInput,
+            file;
         // Always check for a title, since it's always required
         if ($form.find('.story-title input').val().isEmpty()) {
             errors.push("The story title is required.");
@@ -214,18 +220,33 @@ var StoryForm = function() {
         
         // Check for the individual story types required fields
         if (type === "text") {
-            var $storyField = $form.find('.story-body textarea');
+            $storyField = $form.find('.story-body textarea');
             if ($storyField.val().isEmpty()) {
                 errors.push("The story body is required.");
             }
-        } else if (type === "image" || type === "video") {
-            var $urlField = $form.find('.story-url input');
+        } else if (type === "video") {
+            $urlField = $form.find('.story-url input');
             if ($urlField.val().isEmpty()) {
-                errors.push("The URL for the story is required.")
+                errors.push("The URL for the story is required.");
+            }
+        } else if (type === "image") {
+            $urlField  = $form.find('.story-image-file #id_image');
+            $fileInput = $form.find('.story-image-file input[name="story-image"]');
+            files = $fileInput.get(0).files; // FileList Object
+
+            if ($urlField.val().isEmpty()) {
+                errors.push("Please upload an image before saving.");
+            } else {
+                // If we have a value for our urlField then we have a file. 
+                // Grab it and check it's size again our max file size
+                file = files[0];
+                if (file.size > MAX_FILE_SIZE) {
+                    errors.push("The max file size is 15mb. Please upload a smaller version of this image.");
+                }
             }
         }
         return errors;
-    }
+    };
 
     // Error Handling
     //////////////////
@@ -235,11 +256,11 @@ var StoryForm = function() {
         $.each(errors, function(index, error) {
             $errors.append("<li> " + error + " </li>");
         });
-    }
+    };
 
     var clearErrors = function($form) {
         $form.find('.errors').html('');
-    }
+    };
 
     // Open/Collapse a Story via it's Header
     var toggleStoryHeader = function(header) {
@@ -250,7 +271,7 @@ var StoryForm = function() {
             $header.next().slideUp();
         }
         $header.toggleClass("story-collapsed-heading story-opened-heading");
-    }
+    };
 
     var resetForm = function($form) {
         var $chosenSelects = $form.find('.chosen-select');
@@ -259,7 +280,8 @@ var StoryForm = function() {
             $select.val('').trigger('chosen:updated');
         });
         $form[0].reset();
-    }
+        $form.find('.image-preview').attr('src', '');
+    };
 
     // AJAX
     ////////
@@ -276,17 +298,19 @@ var StoryForm = function() {
                 Hist.Notifications.error("Failed to delete story. Please try again later.");
             }
         });
-    }
+    };
 
     var submitForm = function(form, isNewStory) {
         var $form = $(form),
             errors = validateStory($form);
         clearErrors($form);
-        if (errors.length != 0) {
+
+        if (errors.length !== 0) {
             Hist.Notifications.error("Failed to submit the story. Please check the form, fix any issues, and try again.");
             showErrors($form, errors);
             return false;
         }
+
         $.ajax({
             data: $form.serialize(),
             type: "POST",
@@ -312,7 +336,25 @@ var StoryForm = function() {
                 showErrors($form, errors);
             }
         });
-    }
+    };
+
+    var s3Upload = function(e) {
+        var inputId = $(this).attr('id'),
+            previewImage = $(this).siblings('img');
+        var s3Upload = new S3Upload({
+            file_dom_selector: inputId,
+            s3_sign_put_url: '/sign_s3_upload/',
+            onProgress: function() {},
+            onFinishS3Put: function(url) {
+                Hist.Notifications.success("Successfully saved image.");
+                $('.story-image-file #id_image').val(url);
+                $(previewImage).attr('src', url);
+            },
+            onError: function(status) {
+                Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");
+            }
+        });
+    };
 
     return {
         init: function() {
@@ -329,6 +371,9 @@ var StoryForm = function() {
                 submitForm($(this).closest('form'), true);
                 return false;
             });
+
+            $('input[name="story-image"]').on('change', s3Upload);
+
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);
                 return false;
@@ -342,7 +387,7 @@ var StoryForm = function() {
                 toggleStoryHeader(this);
             });
         }
-    }
+    };
 }();
 Hist.StoryForm = StoryForm;
 
@@ -360,12 +405,12 @@ Hist.ConnectEntries = function() {
                 window.location = "/edit/page/" + currentPageVanity;
             }
         });
-    }
+    };
 
     var initAutoComplete = function() {
         // Get pagename
         var path = window.location.pathname;
-        var pagename = path.substring(path.lastIndexOf("/") + 1)
+        var pagename = path.substring(path.lastIndexOf("/") + 1);
         pagename = pagename.toLowerCase();
 
         $('#connectionSearchBox').autocomplete({
@@ -397,7 +442,7 @@ Hist.ConnectEntries = function() {
             .append(innerContent)
             .appendTo(ul);
         };
-    }
+    };
 
     return {
         init: function() {
