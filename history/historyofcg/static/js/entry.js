@@ -201,12 +201,18 @@ Hist.PageForm = (function() {
 // StoryForm
 /////////////
 var StoryForm = function() {
+    // Max file size is 15mb. 
+    var MAX_FILE_SIZE = 15728640;
 
     // Validation
     //////////////
     var validateStory = function($form) {
         var errors = [],
-            type = $form.data('type');
+            type = $form.data('type'),
+            $storyField,
+            $urlField,
+            $fileInput,
+            file;
         // Always check for a title, since it's always required
         if ($form.find('.story-title input').val().isEmpty()) {
             errors.push("The story title is required.");
@@ -214,20 +220,29 @@ var StoryForm = function() {
         
         // Check for the individual story types required fields
         if (type === "text") {
-            var $storyField = $form.find('.story-body textarea');
+            $storyField = $form.find('.story-body textarea');
             if ($storyField.val().isEmpty()) {
                 errors.push("The story body is required.");
             }
         } else if (type === "video") {
-            var $urlField = $form.find('.story-url input');
+            $urlField = $form.find('.story-url input');
             if ($urlField.val().isEmpty()) {
                 errors.push("The URL for the story is required.");
             }
         } else if (type === "image") {
-            // TODO: Size in bytes should be one of the validation categories.
-            var $urlField = $form.find('.story-image-file #id_image');
+            $urlField  = $form.find('.story-image-file #id_image');
+            $fileInput = $form.find('.story-image-file input[name="story-image"]');
+            files = $fileInput.get(0).files; // FileList Object
+
             if ($urlField.val().isEmpty()) {
                 errors.push("Please upload an image before saving.");
+            } else {
+                // If we have a value for our urlField then we have a file. 
+                // Grab it and check it's size again our max file size
+                file = files[0];
+                if (file.size > MAX_FILE_SIZE) {
+                    errors.push("The max file size is 15mb. Please upload a smaller version of this image.");
+                }
             }
         }
         return errors;
