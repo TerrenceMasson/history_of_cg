@@ -25,6 +25,10 @@ DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
 EMAIL_BACKEND = 'django_ses.SESBackend'
 LOGIN_REDIRECT_URL = '/'
 
+## TODO: Move these to environment variables on Heroku
+AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
+AWS_SECRET_ACCESS_KEY = '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'
+
 # Empty DATABASES hash to be overridden by environment settings
 DATABASES = {}
 
