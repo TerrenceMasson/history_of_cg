@@ -24,10 +24,11 @@ ACCOUNT_ACTIVATION_DAYS = 7
 DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
 EMAIL_BACKEND = 'django_ses.SESBackend'
 LOGIN_REDIRECT_URL = '/'
+AWS_SES_REGION_NAME = 'us-east-1'
 
-## TODO: Move these to environment variables on Heroku
-AWS_ACCESS_KEY_ID = 'AKIAIMDAZASEZ652PKHA'
-AWS_SECRET_ACCESS_KEY = '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'
+# Keys used for django SES: https://github.com/hmarr/django-ses
+AWS_ACCESS_KEY_ID = os.environ['HIST_AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['HIST_AWS_SECRET_ACCESS_KEY']
 
 # Empty DATABASES hash to be overridden by environment settings
 DATABASES = {}
