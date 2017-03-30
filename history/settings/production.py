@@ -22,3 +22,6 @@ DATABASES = {
 
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
