@@ -24,5 +24,5 @@ db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
 middleware = list(MIDDLEWARE_CLASSES)
-middleware.append('historyofcg.middleware.HttpsRedirect')
+middleware.append('historyofcg.middleware.https_redirect.HttpsRedirect')
 MIDDLEWARE_CLASSES = tuple(middleware)
