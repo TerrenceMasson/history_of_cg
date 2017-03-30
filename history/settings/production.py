@@ -26,3 +26,5 @@ DATABASES['default'].update(db_from_env)
 middleware = list(MIDDLEWARE_CLASSES)
 middleware.append('history.historyofcg.middleware.https_redirect.HttpsRedirect')
 MIDDLEWARE_CLASSES = tuple(middleware)
+
+print >> sys.stderr, "*** MIDDLEWARE_CLASSES: " + str(MIDDLEWARE_CLASSES)
