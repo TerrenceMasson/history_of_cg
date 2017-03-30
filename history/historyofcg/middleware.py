@@ -4,8 +4,8 @@ from django.http import HttpResponseRedirect
 class HttpsRedirect(object):
     # Redirect http => https
     def process_request(self, request):
-        print >> sys.stderr, "TEST"
-        if True:
+        print >> sys.stderr, request.scheme
+        if request.scheme != 'https':
             # print >> sys.stderr, "TRYING TO REDIRECT"
             # request_url = request.build_absolute_uri(request.get_full_path())
             # secure_url = request_url.replace('http://', 'https://')
