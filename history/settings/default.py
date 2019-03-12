@@ -21,12 +21,16 @@ ADMINS = (
 MANAGERS = ADMINS
 
 ACCOUNT_ACTIVATION_DAYS = 7
-DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
-EMAIL_BACKEND = 'django_ses.SESBackend'
 LOGIN_REDIRECT_URL = '/'
-AWS_SES_REGION_NAME = 'us-east-1'
 
-# Keys used for django SES: https://github.com/hmarr/django-ses
+DEFAULT_FROM_EMAIL = 'History of CG <noreply@historyofcg.com>'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.historyofcg.com'
+EMAIL_HOST_USER = 'noreply@historyofcg.com'
+EMAIL_HOST_PASSWORD = os.environ['HIST_SMTP_PASS']
+EMAIL_PORT = 587
+
 AWS_ACCESS_KEY_ID = os.environ['HIST_AWS_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = os.environ['HIST_AWS_SECRET_ACCESS_KEY']
 
