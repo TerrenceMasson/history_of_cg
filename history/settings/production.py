@@ -9,6 +9,8 @@ print >> sys.stderr, "*** RUNNING PRODUCTION SETTINGS ***"
 print >> sys.stderr, "*** STATICFILES DIRS: ***",  STATICFILES_DIRS
 print >> sys.stderr, "*** STATIC ROOT: ***", STATIC_ROOT
 
+# These credentials have been changed by Heroku as part of rolling the database to a new instance on their side.
+# TODO: Remove this config and update/confirm use of Heroku set DATABASE_URL var.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
