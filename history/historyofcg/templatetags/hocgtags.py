@@ -32,7 +32,7 @@ def get_story_type(story):
 def get_youtube_img(story):
     if story.video != "":
         video_id = story.video.split('?v=')[1]
-        return "http://img.youtube.com/vi/%s/sddefault.jpg" % video_id
+        return "https://img.youtube.com/vi/%s/hqdefault.jpg" % video_id
     else:
         logger.log("story.video equals empty string. Can't grab image for this story: ", story)
 
