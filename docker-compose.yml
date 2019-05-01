@@ -1,0 +1,19 @@
+version: '3'
+services:
+  webserver:
+    container_name: hocg-webserver
+    build: .
+    ports:
+      - "8000:8000"
+
+  postgres:
+    container_name: hocg-postgres
+    image: postgres:10.1
+
+    expose:
+      - 5432
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data: {}
