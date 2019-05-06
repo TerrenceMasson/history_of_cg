@@ -11,7 +11,16 @@ print >> sys.stderr, "*** RUNNING DEVELOPMENT SETTINGS ***"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-DATABASES['default'] = dj_database_url.config(default='postgres://localhost/hocg')
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hocg',
+        'USER': 'hocg',
+        'PASSWORD': 'development',
+        'HOST': 'postgres',
+        'PORT': '5432',
+    }
+}
 
 # Custom logging for development
 LOGGING = {
@@ -51,4 +60,3 @@ LOGGING = {
         },
     }
 }
-
