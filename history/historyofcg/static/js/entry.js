@@ -75,13 +75,13 @@ Hist.TokenInput = function() {
     return {
         init: function() {
             $("input.tokeninput").each(function () {
-                var $field = $(this), 
+                var $field = $(this),
                     options = $field.data("settings");
                 options.onReady = addCreateButton;
                 $field.tokenInput($field.data("search-url"), options);
             });
 
-            // Grab the input value before InputToken wipes it out. 
+            // Grab the input value before InputToken wipes it out.
             // Uses jQuery preBind addition from common.js
             $('.token-input-input-token-hcg input').preBind('blur', function(e) {
                 inputValue = $(this).val();
@@ -201,7 +201,7 @@ Hist.PageForm = (function() {
 // StoryForm
 /////////////
 var StoryForm = function() {
-    // Max file size is 15mb. 
+    // Max file size is 15mb.
     var MAX_FILE_SIZE = 15728640;
 
     // Validation
@@ -217,7 +217,7 @@ var StoryForm = function() {
         if ($form.find('.story-title input').val().isEmpty()) {
             errors.push("The story title is required.");
         }
-        
+
         // Check for the individual story types required fields
         if (type === "text") {
             $storyField = $form.find('.story-body textarea');
@@ -237,7 +237,7 @@ var StoryForm = function() {
             if ($urlField.val().isEmpty()) {
                 errors.push("Please upload an image before saving.");
             } else {
-                // If we have a value for our urlField then we have a file. 
+                // If we have a value for our urlField then we have a file.
                 // Grab it and check it's size again our max file size
                 file = files[0];
                 if (file.size > MAX_FILE_SIZE) {
@@ -338,14 +338,14 @@ var StoryForm = function() {
         });
     };
 
-    var s3Upload = function(e) {
+    var gcpUpload = function(e) {
         var inputId = $(this).attr('id'),
             previewImage = $(this).siblings('img');
-        var s3Upload = new S3Upload({
+        var gcpUpload = new GCPUpload({
             file_dom_selector: inputId,
-            s3_sign_put_url: '/sign_s3_upload/',
+            gcp_sign_put_url: '/sign_gcp_upload/',
             onProgress: function() {},
-            onFinishS3Put: function(url) {
+            onFinishGCPPut: function(url) {
                 Hist.Notifications.success("Successfully saved image.");
                 $('.story-image-file #id_image').val(url);
                 $(previewImage).attr('src', url);
@@ -372,7 +372,7 @@ var StoryForm = function() {
                 return false;
             });
 
-            $('input[name="story-image"]').on('change', s3Upload);
+            $('input[name="story-image"]').on('change', gcpUpload);
 
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);

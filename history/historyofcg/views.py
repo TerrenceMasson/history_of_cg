@@ -169,7 +169,7 @@ def _tokens(query_set, keys=("id", "name")):
 def add_tag(request):
     new_tag, created = Tag.objects.get_or_create(name=request.POST.get('tag_name'))
     return JsonResponse(new_tag)
-    
+
 
 def search(req, app_label, model):
     content_type = get_object_or_404(ContentType, app_label=app_label, model=model)
@@ -266,12 +266,12 @@ def get_pages(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype=mimetype)
 
-def sign_s3_upload(request):
-    AWS_ACCESS_KEY = os.environ.get('HIST_AWS_ACCESS_KEY_ID')
-    AWS_SECRET_KEY = os.environ.get('HIST_AWS_SECRET_ACCESS_KEY')
-    S3_BUCKET = os.environ.get('S3_BUCKET')
+def sign_gcp_upload(request):
+    GCP_ACCESS_KEY = os.environ.get('HIST_GCP_ACCESS_KEY_ID')
+    GCP_SECRET_KEY = os.environ.get('HIST_GCP_SECRET_ACCESS_KEY')
+    GCP_BUCKET = os.environ.get('GCP_BUCKET')
 
-    mime_type = request.GET['s3_object_type']
+    mime_type = request.GET['gcp_object_type']
     inverse_type_lookup = dict((v, k) for k, v in mimetypes.types_map.items())
     extension = inverse_type_lookup[mime_type]
     new_file_name = str(request.user.pk) + "-" + str(uuid.uuid1()) + extension
@@ -279,18 +279,18 @@ def sign_s3_upload(request):
     expires = int(time.time()+10)
     amz_headers = "x-amz-acl:public-read"
 
-    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, new_file_name)
+    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, GCP_BUCKET, new_file_name)
 
-    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+    signature = base64.encodestring(hmac.new(GCP_SECRET_KEY, put_request, sha1).digest())
 
     # Gotta #quote_plus it twice: http://stackoverflow.com/a/20712482/1159410
     signature = urllib.quote_plus(signature.strip())
     signature = urllib.quote_plus(signature.strip())
 
-    url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, new_file_name)
+    url = 'https://%s.storage.googleapis.com/%s' % (GCP_BUCKET, new_file_name)
 
     return JsonResponse({
-        'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
+        'signed_request': '%s?GCPAccessKeyId=%s&Expires=%d&Signature=%s' % (url, GCP_ACCESS_KEY, expires, signature),
          'url': url
       })
 
@@ -298,8 +298,8 @@ def sign_s3_upload(request):
 ## Add/Remove Connections
 ##########################
 
-## TODO: This should return an AJAX response. 
-## I'm getting tired of this send ajax and then return the full page bullshit. 
+## TODO: This should return an AJAX response.
+## I'm getting tired of this send ajax and then return the full page bullshit.
 @require_POST
 def add_connection(request, connect_to, to_connect):
     if Page.objects.filter(pk=to_connect).exists() and Page.objects.filter(pk=connect_to).exists():
@@ -308,7 +308,7 @@ def add_connection(request, connect_to, to_connect):
         page_connect_to.connections.add(page_to_connect)
         page_connect_to.save()
         return HttpResponse('')
-    else: 
+    else:
         ## TODO: We should notify user of error finding the connection
         logger.log_simple("Failed to find one of the pages with the given vanity urls")
         raise Http404

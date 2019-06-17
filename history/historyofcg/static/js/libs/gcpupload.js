@@ -1,26 +1,26 @@
 (function() {
 
-  window.S3Upload = (function() {
+  window.GCPUpload = (function() {
 
-    S3Upload.prototype.s3_object_name = 'default_name';
+    GCPUpload.prototype.gcp_object_name = 'default_name';
 
-    S3Upload.prototype.s3_sign_put_url = '/signS3put';
+    GCPUpload.prototype.gcp_sign_put_url = '/signGCPput';
 
-    S3Upload.prototype.file_dom_selector = 'file_upload';
+    GCPUpload.prototype.file_dom_selector = 'file_upload';
 
-    S3Upload.prototype.onFinishS3Put = function(public_url) {
-      return console.log('base.onFinishS3Put()', public_url);
+    GCPUpload.prototype.onFinishGCPPut = function(public_url) {
+      return console.log('base.onFinishGCPPut()', public_url);
     };
 
-    S3Upload.prototype.onProgress = function(percent, status) {
+    GCPUpload.prototype.onProgress = function(percent, status) {
       return console.log('base.onProgress()', percent, status);
     };
 
-    S3Upload.prototype.onError = function(status) {
+    GCPUpload.prototype.onError = function(status) {
       return console.log('base.onError()', status);
     };
 
-    function S3Upload(options) {
+    function GCPUpload(options) {
       if (options == null) options = {};
       for (option in options) {
         this[option] = options[option];
@@ -28,7 +28,7 @@
       this.handleFileSelect(document.getElementById(this.file_dom_selector));
     }
 
-    S3Upload.prototype.handleFileSelect = function(file_element) {
+    GCPUpload.prototype.handleFileSelect = function(file_element) {
       var f, files, output, _i, _len, _results;
       this.onProgress(0, 'Upload started.');
       files = file_element.files;
@@ -41,7 +41,7 @@
       return _results;
     };
 
-    S3Upload.prototype.createCORSRequest = function(method, url) {
+    GCPUpload.prototype.createCORSRequest = function(method, url) {
       var xhr;
       xhr = new XMLHttpRequest();
       if (xhr.withCredentials != null) {
@@ -55,11 +55,11 @@
       return xhr;
     };
 
-    S3Upload.prototype.executeOnSignedUrl = function(file, callback) {
-      var this_s3upload, xhr;
-      this_s3upload = this;
+    GCPUpload.prototype.executeOnSignedUrl = function(file, callback) {
+      var this_gcpupload, xhr;
+      this_gcpupload = this;
       xhr = new XMLHttpRequest();
-      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&s3_object_name=' + this.s3_object_name, true);
+      xhr.open('GET', this.gcp_sign_put_url + '?gcp_object_type=' + file.type + '&gcp_object_name=' + this.gcp_object_name, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
       xhr.onreadystatechange = function(e) {
         var result;
@@ -67,40 +67,40 @@
           try {
             result = JSON.parse(this.responseText);
           } catch (error) {
-            this_s3upload.onError('Signing server returned some ugly/empty JSON: "' + this.responseText + '"');
+            this_gcpupload.onError('Signing server returned some ugly/empty JSON: "' + this.responseText + '"');
             return false;
           }
           return callback(decodeURIComponent(result.signed_request), result.url);
         } else if (this.readyState === 4 && this.status !== 200) {
-          return this_s3upload.onError('Could not contact request signing server. Status = ' + this.status);
+          return this_gcpupload.onError('Could not contact request signing server. Status = ' + this.status);
         }
       };
       return xhr.send();
     };
 
-    S3Upload.prototype.uploadToS3 = function(file, url, public_url) {
-      var this_s3upload, xhr;
-      this_s3upload = this;
+    GCPUpload.prototype.uploadToGCP = function(file, url, public_url) {
+      var this_gcpupload, xhr;
+      this_gcpupload = this;
       xhr = this.createCORSRequest('PUT', url);
       if (!xhr) {
         this.onError('CORS not supported');
       } else {
         xhr.onload = function() {
           if (xhr.status === 200) {
-            this_s3upload.onProgress(100, 'Upload completed.');
-            return this_s3upload.onFinishS3Put(public_url);
+            this_gcpupload.onProgress(100, 'Upload completed.');
+            return this_gcpupload.onFinishGCPPut(public_url);
           } else {
-            return this_s3upload.onError('Upload error: ' + xhr.status);
+            return this_gcpupload.onError('Upload error: ' + xhr.status);
           }
         };
         xhr.onerror = function() {
-          return this_s3upload.onError('XHR error.');
+          return this_gcpupload.onError('XHR error.');
         };
         xhr.upload.onprogress = function(e) {
           var percentLoaded;
           if (e.lengthComputable) {
             percentLoaded = Math.round((e.loaded / e.total) * 100);
-            return this_s3upload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.');
+            return this_gcpupload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.');
           }
         };
       }
@@ -109,15 +109,15 @@
       return xhr.send(file);
     };
 
-    S3Upload.prototype.uploadFile = function(file) {
-      var this_s3upload;
-      this_s3upload = this;
+    GCPUpload.prototype.uploadFile = function(file) {
+      var this_gcpupload;
+      this_gcpupload = this;
       return this.executeOnSignedUrl(file, function(signedURL, publicURL) {
-        return this_s3upload.uploadToS3(file, signedURL, publicURL);
+        return this_gcpupload.uploadToGCP(file, signedURL, publicURL);
       });
     };
 
-    return S3Upload;
+    return GCPUpload;
 
   })();
 
