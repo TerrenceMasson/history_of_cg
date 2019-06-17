@@ -56,8 +56,8 @@
     };
 
     GCPUpload.prototype.executeOnSignedUrl = function(file, callback) {
-      var this_gcpupload, xhr;
-      this_gcpupload = this;
+      var this_gcpUpload, xhr;
+      this_gcpUpload = this;
       xhr = new XMLHttpRequest();
       xhr.open('GET', this.gcp_sign_put_url + '?gcp_object_type=' + file.type + '&gcp_object_name=' + this.gcp_object_name, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
@@ -67,7 +67,7 @@
           try {
             result = JSON.parse(this.responseText);
           } catch (error) {
-            this_gcpupload.onError('Signing server returned some ugly/empty JSON: "' + this.responseText + '"');
+            this_gcpUpload.onError('Signing server returned some ugly/empty JSON: "' + this.responseText + '"');
             return false;
           }
           return callback(decodeURIComponent(result.signed_request), result.url);
@@ -79,28 +79,28 @@
     };
 
     GCPUpload.prototype.uploadToGCP = function(file, url, public_url) {
-      var this_gcpupload, xhr;
-      this_gcpupload = this;
+      var this_gcpUpload, xhr;
+      this_gcpUpload = this;
       xhr = this.createCORSRequest('PUT', url);
       if (!xhr) {
         this.onError('CORS not supported');
       } else {
         xhr.onload = function() {
           if (xhr.status === 200) {
-            this_gcpupload.onProgress(100, 'Upload completed.');
-            return this_gcpupload.onFinishGCPPut(public_url);
+            this_gcpUpload.onProgress(100, 'Upload completed.');
+            return this_gcpUpload.onFinishGCPPut(public_url);
           } else {
-            return this_gcpupload.onError('Upload error: ' + xhr.status);
+            return this_gcpUpload.onError('Upload error: ' + xhr.status);
           }
         };
         xhr.onerror = function() {
-          return this_gcpupload.onError('XHR error.');
+          return this_gcpUpload.onError('XHR error.');
         };
         xhr.upload.onprogress = function(e) {
           var percentLoaded;
           if (e.lengthComputable) {
             percentLoaded = Math.round((e.loaded / e.total) * 100);
-            return this_gcpupload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.');
+            return this_gcpUpload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.');
           }
         };
       }
@@ -110,10 +110,10 @@
     };
 
     GCPUpload.prototype.uploadFile = function(file) {
-      var this_gcpupload;
-      this_gcpupload = this;
+      var this_gcpUpload;
+      this_gcpUpload = this;
       return this.executeOnSignedUrl(file, function(signedURL, publicURL) {
-        return this_gcpupload.uploadToGCP(file, signedURL, publicURL);
+        return this_gcpUpload.uploadToGCP(file, signedURL, publicURL);
       });
     };
 
