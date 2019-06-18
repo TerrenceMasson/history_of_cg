@@ -8,7 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('history.historyofcg.views',
 
-    ## Overriding django password change views to include request, 
+    ## Overriding django password change views to include request,
     ## so this way templates will know that the user is authenticated
     url(r'^accounts/password/change/$', 'password_change'),
     url(r'^accounts/password/change/done/$', 'password_change_done'),
@@ -28,13 +28,13 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^unpublish/page/(?P<vanity_url>[-\w]+)/$', 'unpublish_page'),
     url(r'^publish/page/(?P<vanity_url>[-\w]+)/$', 'publish_page'),
 
-    # Story URLs - AJAX 
+    # Story URLs - AJAX
     url(r'^edit/story/(?P<type>[-\w]+)/(?P<id>\d+)/$', 'edit_story'),
     url(r'^publish/story/(?P<id>\d+)/$', 'publish_story'),
     url(r'^unpublish/story/(?P<id>\d+)/$', 'unpublish_story'),
     url(r'^save/story/(?P<story_type>[-\w]+)/(?P<vanity_url>[-\w]+)/$', 'new_story'),
     url(r'^delete/story/(?P<id>\d+)/$', 'delete_story'),
-    url(r'^sign_s3_upload/$', 'sign_s3_upload'),
+    url(r'^gcp_upload/$', 'gcp_upload'),
 
 
     url(r'^vote/up/(?P<story_id>\d+)/$', 'up_vote_story'),
@@ -51,7 +51,7 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^remove/connection/(?P<remove_to>[-\w]+)/(?P<to_remove>[-\w]+)/$', 'remove_connection', name='remove_connection'),
 )
 
-urlpatterns += patterns('', 
+urlpatterns += patterns('',
     # Admin URLs
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
@@ -64,7 +64,6 @@ urlpatterns += patterns('',
 
 urlpatterns += staticfiles_urlpatterns()
 
-# Add the Jasmine Test Suite URL if we're in DEBUG mode 
+# Add the Jasmine Test Suite URL if we're in DEBUG mode
 if settings.DEBUG == True:
     urlpatterns += patterns('',  url(r'^jasmine/', include('django_jasmine.urls')))
-

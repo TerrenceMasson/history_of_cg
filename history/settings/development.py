@@ -14,10 +14,11 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hocg',
-        'USER': 'hocg',
+        'NAME': 'postgres',
+        'USER': 'postgres',
         'PASSWORD': 'development',
-        'HOST': 'postgres',
+        # 'HOST': 'postgres',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -60,3 +61,5 @@ LOGGING = {
         },
     }
 }
+
+print >> sys.stderr, "*** FINISHED LOADING DEVELOPMENT SETTINGS ***"

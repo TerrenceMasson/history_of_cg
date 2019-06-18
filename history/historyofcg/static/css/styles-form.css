@@ -343,7 +343,8 @@ div.form-container {
       position: relative; }
       div.form-container div.stories-col ul.story-fields li.story-image-file .image-preview {
         width: 100px;
-        height: 100px; }
+        height: 100px;
+        margin-bottom: 30px; }
       div.form-container div.stories-col ul.story-fields li.story-image-file input[name="story-image"] {
         position: relative;
         bottom: 10px;
