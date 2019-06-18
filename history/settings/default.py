@@ -31,9 +31,6 @@ EMAIL_HOST_USER = 'noreply@historyofcg.com'
 EMAIL_HOST_PASSWORD = os.environ['HIST_SMTP_PASS']
 EMAIL_PORT = 587
 
-AWS_ACCESS_KEY_ID = os.environ['HIST_AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['HIST_AWS_SECRET_ACCESS_KEY']
-
 # Empty DATABASES hash to be overridden by environment settings
 DATABASES = {}
 
