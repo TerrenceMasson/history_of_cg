@@ -18,3 +18,5 @@ factory-boy==2.2.1
 django-jasmine==0.4
 unidecode==0.04.14
 google-cloud-storage==1.16.1
+google-resumable-media==0.3.2
+requests==2.21.0
