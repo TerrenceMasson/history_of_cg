@@ -27,12 +27,20 @@ def read_env():
             if m3:
                 val = re.sub(r'\\(.)', r'\1', m3.group(1))
             os.environ.setdefault(key, val)
- 
- 
+
+
 if __name__ == "__main__":
+    print >> sys.stderr, "*** MANAGE PY MAIN - START ***"
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_name.settings")
- 
+
     from django.core.management import execute_from_command_line
- 
+
+    print >> sys.stderr, "*** MANAGE PY MAIN - BEFORE READ_ENV ***"
+
     read_env()
+
+    print >> sys.stderr, "*** MANAGE PY MAIN - AFTER READ_ENV ***"
+
     execute_from_command_line(sys.argv)
+
+    print >> sys.stderr, "*** MANAGE PY MAIN - AFTER EXECUTE_FROM_COMMAND_LINE ***"

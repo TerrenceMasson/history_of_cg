@@ -280,7 +280,7 @@ var StoryForm = function() {
             $select.val('').trigger('chosen:updated');
         });
         $form[0].reset();
-        $form.find('.image-preview').attr('src', '');
+        $form.find('.image-preview').attr('src', "https://storage.googleapis.com/hist-images/Preview-icon.png");
     };
 
     // AJAX
@@ -338,24 +338,6 @@ var StoryForm = function() {
         });
     };
 
-    var gcpUpload = function(e) {
-        var inputId = $(this).attr('id'),
-            previewImage = $(this).siblings('img');
-        var gcpUpload = new GCPUpload({
-            file_dom_selector: inputId,
-            gcp_sign_put_url: '/sign_gcp_upload/',
-            onProgress: function() {},
-            onFinishGCPPut: function(url) {
-                Hist.Notifications.success("Successfully saved image.");
-                $('.story-image-file #id_image').val(url);
-                $(previewImage).attr('src', url);
-            },
-            onError: function(status) {
-                Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");
-            }
-        });
-    };
-
     return {
         init: function() {
             var self = this;
@@ -372,7 +354,26 @@ var StoryForm = function() {
                 return false;
             });
 
-            $('input[name="story-image"]').on('change', gcpUpload);
+            var csrfToken = Hist.getCookie('csrftoken');
+            $('input[name="story-image"]').ajaxfileupload({
+                action: '/gcp_upload/',
+                params: {
+                  'csrfmiddlewaretoken': csrfToken
+                },
+                onComplete: function(response) {
+                  var url = response['url']
+                  var previewImage = $(this).siblings('img');
+                  $('.story-image-file #id_image').val(url);
+                  $(previewImage).attr('src', url);
+                  Hist.Notifications.success("Successfully saved image.");
+                },
+                onError: function() {
+                  Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");
+                },
+                onCancel: function() {
+                  console.log('No file selected!');
+                }
+              });
 
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);

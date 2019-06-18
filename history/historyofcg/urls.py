@@ -34,7 +34,7 @@ urlpatterns = patterns('history.historyofcg.views',
     url(r'^unpublish/story/(?P<id>\d+)/$', 'unpublish_story'),
     url(r'^save/story/(?P<story_type>[-\w]+)/(?P<vanity_url>[-\w]+)/$', 'new_story'),
     url(r'^delete/story/(?P<id>\d+)/$', 'delete_story'),
-    url(r'^sign_gcp_upload/$', 'sign_gcp_upload'),
+    url(r'^gcp_upload/$', 'gcp_upload'),
 
 
     url(r'^vote/up/(?P<story_id>\d+)/$', 'up_vote_story'),
@@ -67,4 +67,3 @@ urlpatterns += staticfiles_urlpatterns()
 # Add the Jasmine Test Suite URL if we're in DEBUG mode
 if settings.DEBUG == True:
     urlpatterns += patterns('',  url(r'^jasmine/', include('django_jasmine.urls')))
-

@@ -1,5 +1,7 @@
+import sys
 from hashlib import sha1
 import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
+from google.cloud import storage
 
 from django import http
 from django.core import serializers
@@ -266,33 +268,25 @@ def get_pages(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype=mimetype)
 
-def sign_gcp_upload(request):
-    GCP_ACCESS_KEY = os.environ.get('HIST_GCP_ACCESS_KEY_ID')
-    GCP_SECRET_KEY = os.environ.get('HIST_GCP_SECRET_ACCESS_KEY')
-    GCP_BUCKET = os.environ.get('GCP_BUCKET')
+def gcp_upload(request):
+    print >> sys.stderr, "*** GCP_UPLOAD ***"
+    storage_client = storage.Client()
 
-    mime_type = request.GET['gcp_object_type']
+    bucket_name = os.environ.get('GCP_BUCKET')
+    bucket = storage_client.get_bucket(bucket_name)
+
+    mime_type = request.FILES['story-image'].content_type
     inverse_type_lookup = dict((v, k) for k, v in mimetypes.types_map.items())
     extension = inverse_type_lookup[mime_type]
-    new_file_name = str(request.user.pk) + "-" + str(uuid.uuid1()) + extension
 
-    expires = int(time.time()+10)
-    amz_headers = "x-amz-acl:public-read"
-
-    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, GCP_BUCKET, new_file_name)
-
-    signature = base64.encodestring(hmac.new(GCP_SECRET_KEY, put_request, sha1).digest())
-
-    # Gotta #quote_plus it twice: http://stackoverflow.com/a/20712482/1159410
-    signature = urllib.quote_plus(signature.strip())
-    signature = urllib.quote_plus(signature.strip())
-
-    url = 'https://%s.storage.googleapis.com/%s' % (GCP_BUCKET, new_file_name)
+    blob_name = str(request.user.pk) + "-" + str(uuid.uuid1()) + extension
+    blob = bucket.blob(blob_name)
+    blob.upload_from_file(request.FILES['story-image'])
+    blob.make_public()
 
     return JsonResponse({
-        'signed_request': '%s?GCPAccessKeyId=%s&Expires=%d&Signature=%s' % (url, GCP_ACCESS_KEY, expires, signature),
-         'url': url
-      })
+        'url': blob.public_url
+    })
 
 
 ## Add/Remove Connections
@@ -427,4 +421,3 @@ def user_page(request, i):
         return locals()
     else:
         return HttpResponseNotFound()
-
