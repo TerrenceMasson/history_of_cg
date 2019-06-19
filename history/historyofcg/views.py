@@ -275,7 +275,7 @@ def gcp_upload(request):
     raw_creds = os.environ.get('GOOGLE_CREDS')
     creds_json = json.loads(raw_creds)
     creds = service_account.Credentials.from_service_account_info(creds_json)
-    storage_client = storage.Client(credentials=creds)
+    storage_client = storage.Client(project='lively-aloe-233614', credentials=creds)
 
     bucket_name = os.environ.get('GCP_BUCKET')
     bucket = storage_client.get_bucket(bucket_name)
