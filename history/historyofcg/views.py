@@ -2,6 +2,7 @@ import sys
 from hashlib import sha1
 import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
 from google.cloud import storage
+from google.oauth2 import service_account
 
 from django import http
 from django.core import serializers
@@ -270,7 +271,11 @@ def get_pages(request):
 
 def gcp_upload(request):
     print >> sys.stderr, "*** GCP_UPLOAD ***"
-    storage_client = storage.Client()
+
+    raw_creds = os.environ.get('GOOGLE_CREDS')
+    creds_json = json.loads(raw_creds)
+    creds = service_account.Credentials.from_service_account_info(creds_json)
+    storage_client = storage.Client(credentials=creds)
 
     bucket_name = os.environ.get('GCP_BUCKET')
     bucket = storage_client.get_bucket(bucket_name)
