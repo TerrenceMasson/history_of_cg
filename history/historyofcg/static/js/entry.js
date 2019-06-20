@@ -355,25 +355,27 @@ var StoryForm = function() {
             });
 
             var csrfToken = Hist.getCookie('csrftoken');
-            $('input[name="story-image"]').ajaxfileupload({
-                action: '/gcp_upload/',
-                params: {
-                  'csrfmiddlewaretoken': csrfToken
-                },
-                onComplete: function(response) {
-                  var url = response['url']
-                  var previewImage = $(this).siblings('img');
-                  $('.story-image-file #id_image').val(url);
-                  $(previewImage).attr('src', url);
-                  Hist.Notifications.success("Successfully saved image.");
-                },
-                onError: function() {
-                  Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");
-                },
-                onCancel: function() {
-                  console.log('No file selected!');
-                }
-              });
+            if ($().ajaxfileupload !== undefined) {
+                $('input[name="story-image"]').ajaxfileupload({
+                    action: '/gcp_upload/',
+                    params: {
+                      'csrfmiddlewaretoken': csrfToken
+                    },
+                    onComplete: function(response) {
+                      var url = response['url']
+                      var previewImage = $(this).siblings('img');
+                      $('.story-image-file #id_image').val(url);
+                      $(previewImage).attr('src', url);
+                      Hist.Notifications.success("Successfully saved image.");
+                    },
+                    onError: function() {
+                      Hist.Notifications.error("Sorry, we failed to save that image. Please try again later.");
+                    },
+                    onCancel: function() {
+                      console.log('No file selected!');
+                    }
+                });
+            }
 
             $('.stories-col').on('click', '.story-edit-button', function(e) {
                 submitForm($(this).closest('form'), false);
