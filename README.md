@@ -6,6 +6,17 @@ Requirements:
   * [virtualenv](https://pypi.python.org/pypi/virtualenv)
   * [heroku-toolbelt](https://toolbelt.heroku.com/osx)
   * [PostgresApp](http://postgresapp.com/) - Mac Users only. Linux users install and create the DB and add instructions on doing so.
+  
+Setting up Docker / Compose Workflow (Not well tested)
+------------------------
+
+docker-compose up
+docker exec -it hocg-postgres bash
+Inside postgres container > psql
+Inside postgres shell > CREATE DATABASE hocg;
+docker exec -it hocg-webserver bash
+Inside python project > python manage.py syncdb --settings=settings.development
+Inside python project > python manage.py migrate --settings=settings.development
 
 Setting up your machine:
 ------------------------
