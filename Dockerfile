@@ -8,5 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 WORKDIR /usr/src/app/history
+RUN mkdir log
 
 CMD [ "python", "./manage.py", "runserver", "--settings=settings.development"]
