@@ -12,8 +12,6 @@ Setting up Docker / Compose Workflow (Not well tested)
 
 1. docker-compose up
 1. docker exec -it hocg-postgres bash
-1. Inside postgres container > psql
-1. Inside postgres shell > CREATE DATABASE hocg;
 1. docker exec -it hocg-webserver bash
 1. Inside python project > python manage.py syncdb --settings=settings.development
 1. Inside python project > python manage.py migrate --settings=settings.development
