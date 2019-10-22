@@ -1,7 +1,7 @@
 Django==1.5.1
 setuptools==40.8.0
 Fabric==1.5.1
-Pillow==3.0.0
+Pillow==6.2.0
 South==0.7.6
 boto==2.7.0
 dj-database-url==0.2.1
