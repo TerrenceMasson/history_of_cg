@@ -1,4 +1,4 @@
-Django==1.5.1
+Django==1.11.23
 setuptools==40.8.0
 Fabric==1.5.1
 Pillow==3.0.0
