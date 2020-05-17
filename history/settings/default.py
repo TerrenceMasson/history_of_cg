@@ -28,7 +28,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.historyofcg.com'
 EMAIL_HOST_USER = 'noreply@historyofcg.com'
-EMAIL_HOST_PASSWORD = os.environ['HIST_SMTP_PASS']
+EMAIL_HOST_PASSWORD = os.environ.get('HIST_SMTP_PASS', '')
 EMAIL_PORT = 587
 
 # Empty DATABASES hash to be overridden by environment settings

@@ -7,6 +7,9 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+    volumes: 
+      - ".:/usr/src/app"
+      - "/usr/src/app/history/log"
 
   postgres:
     container_name: hocg-postgres
