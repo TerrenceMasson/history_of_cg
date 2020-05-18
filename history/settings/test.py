@@ -10,13 +10,6 @@ TESTING = True
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-
-## Test Settings
-TEST_RUNNER = "discover_runner.DiscoverRunner"
-TEST_DISCOVER_TOP_LEVEL = PROJECT_PATH
-TEST_DISCOVER_ROOT = PROJECT_PATH
-TEST_DISCOVER_PATTERN = "test_*"
-
 ## In-Memory Test Database
 DATABASES = {
     "default": {

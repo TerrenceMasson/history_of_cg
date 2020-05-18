@@ -141,7 +141,6 @@ INSTALLED_APPS = (
 
     # Testing Apps
     'django_jasmine',
-    'discover_runner',
 
     # Admin
     'django.contrib.admin',

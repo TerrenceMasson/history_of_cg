@@ -9,7 +9,7 @@ from history import logger
 class UpcomingFeature(BaseModel):
     name = models.CharField(max_length=20)
     text = models.TextField()
-    display = models.BooleanField()
+    display = models.BooleanField(default=False)
 
 # TODO: If it's possible it be amazing to get rid of this waste of a model
 #  Don't know who designed this schema, but they fucked up. 
@@ -27,7 +27,7 @@ class Category(BaseModel):
 
 class Tag(BaseModel):
     name = models.CharField(max_length=20)
-    approved = models.BooleanField()
+    approved = models.BooleanField(default=False)
     old_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __unicode__(self):

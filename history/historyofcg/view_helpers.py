@@ -1,8 +1,7 @@
-import re
+import re, json
 from unidecode import unidecode
 
 from django.http import HttpResponse
-from django.utils import simplejson
 from django.core import serializers
 
 from history.base.models import BaseModel
@@ -16,7 +15,7 @@ class JsonResponse(HttpResponse):
         if isinstance(content, BaseModel):
             content = serializers.serialize("json", [content])
         elif isinstance(content, dict):
-            content = simplejson.dumps(content)
+            content = json.dumps(content)
         elif isinstance(content, list):
             content = serializers.serialize("json", content)
         else:

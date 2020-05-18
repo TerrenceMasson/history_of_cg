@@ -1,4 +1,4 @@
-import sys
+import sys, json
 from hashlib import sha1
 import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
 from google.cloud import storage
@@ -12,7 +12,6 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpRespons
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.template import RequestContext
 from django.template.response import TemplateResponse
-from django.utils import simplejson
 from django.views.decorators.http import require_safe, require_POST
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import password_change as django_password_change
@@ -263,7 +262,7 @@ def get_pages(request):
                 "vanity": str(page.vanity_url)
             }
             results.append(page_json)
-        data = simplejson.dumps(results)
+        data = json.dumps(results)
     else:
         data = 'fail'
     mimetype = 'application/json'
