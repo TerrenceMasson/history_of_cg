@@ -9,7 +9,6 @@ services:
       - postgres
     volumes: 
       - ".:/usr/src/app"
-      - "/usr/src/app/history/log"
 
   postgres:
     container_name: hocg-postgres
