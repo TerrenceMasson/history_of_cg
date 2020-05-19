@@ -13,8 +13,7 @@ def update_django_project():
         run('git pull')
         with prefix('source /historyofcg/dj_history/env/Scripts/activate'):
             run('pip install -r requirements.txt')
-            run('python manage.py syncdb')
-            run('python manage.py migrate') # if you use south
+            run('python manage.py migrate')
             run('python manage.py collectstatic --noinput')
 
 def restart_webserver():

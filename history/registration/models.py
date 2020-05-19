@@ -248,7 +248,7 @@ class RegistrationProfile(models.Model):
             is installed, this may be an instance of either
             ``django.contrib.sites.models.Site`` (if the sites
             application is installed) or
-            ``django.contrib.sites.models.RequestSite`` (if
+            ``django.contrib.sites.requests.RequestSite`` (if
             not). Consult the documentation for the Django sites
             framework for details regarding these objects' interfaces.
 

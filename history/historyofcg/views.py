@@ -265,8 +265,8 @@ def get_pages(request):
         data = json.dumps(results)
     else:
         data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype=mimetype)
+    content_type = 'application/json'
+    return HttpResponse(data, content_type=content_type)
 
 def gcp_upload(request):
     print >> sys.stderr, "*** GCP_UPLOAD ***"

@@ -11,7 +11,7 @@ from history import logger
 
 class JsonResponse(HttpResponse):
     """ JSON response """
-    def __init__(self, content, mimetype='application/json', status=None, content_type=None):
+    def __init__(self, content, status=None, content_type='application/json'):
         if isinstance(content, BaseModel):
             content = serializers.serialize("json", [content])
         elif isinstance(content, dict):
@@ -22,7 +22,6 @@ class JsonResponse(HttpResponse):
             logger.log("", "JsonResponse content is of unknown type.")
         super(JsonResponse, self).__init__(
             content=content,
-            mimetype=mimetype,
             status=status,
             content_type=content_type,
         )

@@ -8,6 +8,8 @@ from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.handlers.wsgi import WSGIRequest
+from django.core.urlresolvers import reverse
+from django.utils.http import urlquote
 from django.test import Client
 from django.test import TestCase
 
@@ -457,7 +459,7 @@ class SimpleRegistrationBackendTests(TestCase):
                                          password1='secret')
         
         self.assertEqual(self.backend.post_registration_redirect(_mock_request(), new_user),
-                         (new_user.get_absolute_url(), (), {}))
+                         (reverse("user_page", args=[urlquote(new_user.username)]), (), {}))
 
     def test_registration_signal(self):
         """

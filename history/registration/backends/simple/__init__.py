@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.utils.http import urlquote
 
 from registration import signals
 from registration.forms import RegistrationForm
@@ -61,7 +63,8 @@ class SimpleBackend(object):
         After registration, redirect to the user's account page.
         
         """
-        return (user.get_absolute_url(), (), {})
+        url = reverse("user_page", args=[urlquote(user.username)])
+        return (url, (), {})
 
     def post_activation_redirect(self, request, user):
         raise NotImplementedError
