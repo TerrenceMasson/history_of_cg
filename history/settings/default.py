@@ -137,7 +137,6 @@ INSTALLED_APPS = (
 
     # Helper Apps
     'history.registration',
-    'south',
 
     # Testing Apps
     'django_jasmine',
