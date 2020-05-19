@@ -1,5 +1,5 @@
 import factory
-from historyofcg.models import *
+from ..models import Category, Page, Tag
 from django.contrib.auth.models import User
 from history import logger
 
