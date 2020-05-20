@@ -2,7 +2,7 @@ from django.forms import ModelForm, Select, Textarea, DateField, DateInput, Char
 from django.forms.extras.widgets import SelectDateWidget
 from fields import TokenField
 from widgets import TokenWidget
-from models import *
+from models import Page, Tag, Story
 from datetime import date
 
 CURRENT_YEAR = date.today().year
@@ -21,7 +21,7 @@ class PageForm(ModelForm):
         widgets = {
             'type': Select(attrs={'class': 'entry-type-select none', 'id': 'EntryCategoryId'}),
         }
-        exclude = ('user', 'published', 'connections', 'published', 'vanity_url', 'image')
+        fields = ['type', 'location', 'name', 'tags', 'description', 'homepage', 'date_established', 'old_id', 'is_deceased', 'date_deceased', 'user_made']
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -45,7 +45,7 @@ class StoryForm(ModelForm):
         widgets = {
             'text': Textarea(attrs={'style': 'width:340px;'})
         }
-        exclude = ('user', 'published', 'page')
+        fields = ['title', 'date', 'source', 'source_url', 'old_id', 'video', 'image', 'text', 'deleted']
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
