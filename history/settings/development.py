@@ -9,7 +9,7 @@ import sys
 print >> sys.stderr, "*** RUNNING DEVELOPMENT SETTINGS ***"
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
 DATABASES = {
     'default': {

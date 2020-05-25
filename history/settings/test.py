@@ -8,7 +8,7 @@ print >> sys.stderr, "*** RUNNING TEST SETTINGS ***"
 
 TESTING = True
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
 ## In-Memory Test Database
 DATABASES = {

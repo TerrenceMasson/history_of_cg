@@ -11,7 +11,23 @@ sys.path.append(PROJECT_CONTAINER_PATH)
 
 TESTING = False
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                'django.template.loaders.eggs.Loader',
+            ]
+        },
+        'DIRS': ['history/historyofcg/templates'],
+    },
+]
 
 
 ADMINS = (
@@ -101,13 +117,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = ')9d)j0btj_)tbxro8pw_vbt)$gv(m$#qth@f1jw&amp;yb$z=z3p%!'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-     'django.template.loaders.eggs.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -118,8 +127,6 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
-
-TEMPLATE_DIRS = ('history/historyofcg/templates',)
 
 INSTALLED_APPS = (
     # Django Apps
