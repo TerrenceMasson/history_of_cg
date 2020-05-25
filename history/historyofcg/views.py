@@ -11,7 +11,6 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.template import RequestContext
-from django.template.response import TemplateResponse
 from django.views.decorators.http import require_safe, require_POST
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import password_change as django_password_change
@@ -215,7 +214,7 @@ def new_story(request, story_type, vanity_url):
         story_form = StoryForm(instance=story)
         # Return the edit_story template back to the AJAX call
         # so we can insert it into the DOM
-        return render_to_response('pages/edit_story.html', { 'story_form': story_form, 'page': story_page }, context_instance=RequestContext(request))
+        return render('pages/edit_story.html', { 'story_form': story_form, 'page': story_page })
     else:
         return JsonResponse(form.errors, status=400)
 
