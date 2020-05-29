@@ -26,29 +26,33 @@ from history import logger
 def home(request):
     updated_entries = Page.objects.filter(published=True).order_by('-date_modified')[:4]
     rendering_home = True # Not a great idea, but better than not extending from base
+    context = {}
     if request.user.is_authenticated():
         # TODO: This NEEDS to be pulled out to a helper.
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
+            context.update({'show_badge1': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
+            context.update({'show_badge2': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
+            context.update({'show_badge3': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
+            context.update({'show_badge4': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
+            context.update({'show_badge5': True})
 
-    upcoming_features = UpcomingFeature.objects.filter(display=True)
-
-    return render(request, 'default/home.html', context=locals())
+    context.update({
+        'request': request,
+        'updated_entries': updated_entries,
+        'rendering_home': rendering_home,
+    })
+    return render(request, 'default/home.html', context=context)
 
 def about(request):
-    return render(request, 'default/about.html', context=locals())
+    return render(request, 'default/about.html', context={'request': request})
 
 def timeline(request):
     pages = Page.objects.filter(published=True)
@@ -67,7 +71,11 @@ def view_source_entries(request, s):
     if Page.objects.filter(published=True, vanity_url=s):
         page = Page.objects.get(published=True, vanity_url=s)
     else:
-        return render(request, 'errors/entry_does_not_exist.html', context=locals())
+        context = {
+            'request': request,
+            'user_auth': user_auth,
+        }
+        return render(request, 'errors/entry_does_not_exist.html', context=context)
 
     all_stories = Story.objects.filter(page__vanity_url=s, published=True, deleted=False)
 
@@ -82,7 +90,13 @@ def view_source_entries(request, s):
                 __present_values.append(tag.name)
     print tag_dict
 
-    return render(request, 'pages/entries.html', context=locals())
+    context = {
+        'request': request,
+        'all_stories': all_stories,
+        'connections': connections,
+        'tag_dict': tag_dict,
+    }
+    return render(request, 'pages/entries.html', context=context)
 
 ## Page Views
 ##############
@@ -102,7 +116,11 @@ def add_page(request):
     else:
         form = PageForm()
 
-    return render(request, 'pages/add.html', context=locals())
+    context = {
+        'request': request,
+        'form': form,
+    }
+    return render(request, 'pages/add.html', context=context)
 
 def edit_page(request, vanity_url):
     if request.user.is_authenticated():
@@ -132,7 +150,16 @@ def edit_page(request, vanity_url):
         for story in stories:
             story_forms.append(StoryForm(instance=story))
 
-    return render(request, 'pages/edit.html', context=locals())
+    context = {
+        'request': request,
+        'page': page,
+        'connections': connections,
+        'form': form,
+        'story_forms': story_forms,
+        'story_form': story_form,
+        'story_types': story_types,
+    }
+    return render(request, 'pages/edit.html', context=context)
 
 # Publishing/Upublishing Pages
 @require_POST
@@ -393,26 +420,31 @@ def no_vote_story(request, story_id):
 
 
 def user_page(request, i):
+    context = {}
     if request.user.is_authenticated():
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
+            context.update({'show_badge1': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
+            context.update({'show_badge2': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
+            context.update({'show_badge3': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
+            context.update({'show_badge4': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
+            context.update({'show_badge5': True})
 
     if request.user.id == int(i):
         user = request.user
         user_pages = Page.objects.filter(user__id=user.id)
 
-        return render(request, 'pages/user.html', context=locals())
+        context.update({
+            'request': request,
+            'user_pages': user_pages,
+        })
+        return render(request, 'pages/user.html', context=context)
     else:
         raise Http404
