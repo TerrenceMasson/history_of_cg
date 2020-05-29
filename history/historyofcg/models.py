@@ -55,7 +55,7 @@ class Page(BaseModel):
     #  person, event, organization, or project, but someone created a many-to-one relationship
     #  for some reason (I'm guessing easier querying? but that seems absurd). This should be
     #  changed to just have a CharField type and the category model can be done away with.
-    type = models.ForeignKey(Category)
+    type = models.ForeignKey(Category, on_delete=models.CASCADE)
     location = models.CharField(max_length=20, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
     vanity_url = models.CharField(max_length=100, unique=True)
@@ -64,7 +64,7 @@ class Page(BaseModel):
     homepage = models.URLField(blank=True, null=True)
     date_established = models.DateField(blank=True, null=True)
     published = models.BooleanField(default=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     old_id = models.PositiveIntegerField(blank=True, null=True)
@@ -79,8 +79,8 @@ class Page(BaseModel):
 class Story(BaseModel):
     title = models.CharField(max_length=50)
     date = models.DateField(blank=True, null=True)
-    page = models.ForeignKey(Page)
-    user = models.ForeignKey(User)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     source = models.CharField(max_length=200, blank=True, null=True)
     source_url = models.URLField(blank=True, null=True)
     published = models.BooleanField(default=False)
@@ -109,6 +109,6 @@ class Story(BaseModel):
 
 class Review(BaseModel):
     type = models.CharField(choices=(("UP", "up"), ("DOWN", 'down')), max_length=4)
-    user = models.ForeignKey(User)
-    story = models.ForeignKey(Story)
-    page = models.ForeignKey(Page)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
