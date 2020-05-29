@@ -342,19 +342,13 @@ def remove_connection(request, remove_to, to_remove):
 
 ## Registration Overrides
 ##########################
-def password_change(request,
-                    template_name='registration/password_change_form.html',
-                    post_change_redirect=None,
-                    password_change_form=PasswordChangeForm,
-                    current_app=None, extra_context=None):
+def password_change(request, *args, **kwargs):
     extra_context = { "request": request }
-    return django_password_change(request, extra_context=extra_context)
+    return django_password_change(request, extra_context=extra_context, *args, **kwargs)
 
-def password_change_done(request,
-                         template_name='registration/password_change_done.html',
-                         current_app=None, extra_context=None):
+def password_change_done(request, *args, **kwargs):
     extra_context = { "request": request }
-    return django_password_change_done(request, extra_context=extra_context)
+    return django_password_change_done(request, extra_context=extra_context, *args, **kwargs)
 
 
 
