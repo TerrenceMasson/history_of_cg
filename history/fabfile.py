@@ -1,7 +1,7 @@
 """ Deployment of your django project.
 """
 
-from fabric.api import *
+from fabric.api import env, cd, run, sudo, settings, prefix
 
 env.hosts = ['historyofcg.com']
 env.user = "root"
