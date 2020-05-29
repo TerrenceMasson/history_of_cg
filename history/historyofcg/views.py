@@ -4,20 +4,16 @@ import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetype
 from google.cloud import storage
 from google.oauth2 import service_account
 
-from django import http
 from django.core import serializers
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
-from django.shortcuts import render_to_response, render, redirect, get_object_or_404
-from django.template import RequestContext
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_safe, require_POST
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import password_change as django_password_change
 from django.contrib.auth.views import password_change_done as django_password_change_done
 
-
-from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category, Tag
 from view_helpers import create_page, update_story, JsonResponse
@@ -49,16 +45,16 @@ def home(request):
 
     upcoming_features = UpcomingFeature.objects.filter(display=True)
 
-    return render_to_response('default/home.html', locals())
+    return render(request, 'default/home.html', context=locals())
 
 def about(request):
-    return render_to_response('default/about.html', locals())
+    return render(request, 'default/about.html', context=locals())
 
 def timeline(request):
     pages = Page.objects.filter(published=True)
     pages_json = serializers.serialize("json", pages)
     logger.log("pages_json: ", pages_json)
-    return JsonResponse(pages_json);
+    return JsonResponse(pages_json)
 
 def timeline_page(request, vanity_url):
     page = Page.objects.get(published=True, vanity_url=vanity_url)
@@ -66,13 +62,12 @@ def timeline_page(request, vanity_url):
     result.append(page)
     return JsonResponse(result)
 
-@render_to('pages/entries.html')
 def view_source_entries(request, s):
     user_auth = request.user.is_authenticated()
     if Page.objects.filter(published=True, vanity_url=s):
         page = Page.objects.get(published=True, vanity_url=s)
     else:
-        return render_to_response('errors/entry_does_not_exist.html', locals())
+        return render(request, 'errors/entry_does_not_exist.html', context=locals())
 
     all_stories = Story.objects.filter(page__vanity_url=s, published=True, deleted=False)
 
@@ -87,12 +82,11 @@ def view_source_entries(request, s):
                 __present_values.append(tag.name)
     print tag_dict
 
-    return locals()
+    return render(request, 'pages/entries.html', context=locals())
 
 ## Page Views
 ##############
 
-@render_to('pages/add.html')
 def add_page(request):
     if not request.user.is_authenticated():
         return redirect('/accounts/login/')
@@ -108,9 +102,8 @@ def add_page(request):
     else:
         form = PageForm()
 
-    return locals()
+    return render(request, 'pages/add.html', context=locals())
 
-@render_to('pages/edit.html')
 def edit_page(request, vanity_url):
     if request.user.is_authenticated():
         page = Page.objects.get(vanity_url=vanity_url)
@@ -139,7 +132,7 @@ def edit_page(request, vanity_url):
         for story in stories:
             story_forms.append(StoryForm(instance=story))
 
-    return locals()
+    return render(request, 'pages/edit.html', context=locals())
 
 # Publishing/Upublishing Pages
 @require_POST
@@ -147,7 +140,7 @@ def unpublish_page(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
     page.published = False
     page.save()
-    return JsonResponse({ 'message': "Page was unpublished successfully" });
+    return JsonResponse({ 'message': "Page was unpublished successfully" })
 
 
 @require_POST
@@ -155,7 +148,7 @@ def publish_page(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
     page.published = True
     page.save()
-    return JsonResponse({ 'message': "Page was published successfully" });
+    return JsonResponse({ 'message': "Page was published successfully" })
 
 
 def _tokens(query_set, keys=("id", "name")):
@@ -184,12 +177,12 @@ def search(req, app_label, model):
         else:
             tokens = []
 
-        return http.HttpResponse(
+        return HttpResponse(
             json.dumps(tokens),
             content_type="application/json")
 
     else:
-        raise http.Http404
+        raise Http404
 
 
 ## STORY VIEWS
@@ -214,7 +207,7 @@ def new_story(request, story_type, vanity_url):
         story_form = StoryForm(instance=story)
         # Return the edit_story template back to the AJAX call
         # so we can insert it into the DOM
-        return render('pages/edit_story.html', { 'story_form': story_form, 'page': story_page })
+        return render(request, 'pages/edit_story.html', context={ 'story_form': story_form, 'page': story_page })
     else:
         return JsonResponse(form.errors, status=400)
 
@@ -237,7 +230,7 @@ def unpublish_story(request, id):
     story = Story.objects.get(id=id)
     story.published = False
     story.save()
-    return JsonResponse({ 'message': "Story was unpublished successfully" });
+    return JsonResponse({ 'message': "Story was unpublished successfully" })
 
 
 @require_POST
@@ -245,7 +238,7 @@ def publish_story(request, id):
     story = Story.objects.get(id=id)
     story.published = True
     story.save()
-    return JsonResponse({ 'message': "Story was published successfully" });
+    return JsonResponse({ 'message': "Story was published successfully" })
 
 
 def get_pages(request):
@@ -399,7 +392,6 @@ def no_vote_story(request, story_id):
         return HttpResponse('')
 
 
-@render_to('pages/user.html')
 def user_page(request, i):
     if request.user.is_authenticated():
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
@@ -421,6 +413,6 @@ def user_page(request, i):
         user = request.user
         user_pages = Page.objects.filter(user__id=user.id)
 
-        return locals()
+        return render(request, 'pages/user.html', context=locals())
     else:
-        return HttpResponseNotFound()
+        raise Http404

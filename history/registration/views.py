@@ -83,11 +83,11 @@ def activate(request, backend,
 
     if extra_context is None:
         extra_context = {}
-    context = RequestContext(request)
+    context = kwargs
     for key, value in extra_context.items():
-        context[key] = callable(value) and value() or value
+        context[key] = value
 
-    return render(template_name, kwargs, context=context)
+    return render(request, template_name, context=context)
 
 
 def register(request, backend, success_url=None, form_class=None,
@@ -193,8 +193,8 @@ def register(request, backend, success_url=None, form_class=None,
     
     if extra_context is None:
         extra_context = {}
-    context = RequestContext(request)
+    context = {'form': form}
     for key, value in extra_context.items():
-        context[key] = callable(value) and value() or value
+        context[key] = value
 
-    return render(template_name, {'form': form}, context=context)
+    return render(request, template_name, context=context)
