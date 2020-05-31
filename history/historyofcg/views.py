@@ -27,7 +27,7 @@ def home(request):
     updated_entries = Page.objects.filter(published=True).order_by('-date_modified')[:4]
     rendering_home = True # Not a great idea, but better than not extending from base
     context = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # TODO: This NEEDS to be pulled out to a helper.
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
             context.update({'show_badge1': True})
@@ -67,7 +67,7 @@ def timeline_page(request, vanity_url):
     return JsonResponse(result)
 
 def view_source_entries(request, s):
-    user_auth = request.user.is_authenticated()
+    user_auth = request.user.is_authenticated
     if Page.objects.filter(published=True, vanity_url=s):
         page = Page.objects.get(published=True, vanity_url=s)
     else:
@@ -102,7 +102,7 @@ def view_source_entries(request, s):
 ##############
 
 def add_page(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/accounts/login/')
     if request.method == 'POST':
         form = PageForm(request.POST)
@@ -123,7 +123,7 @@ def add_page(request):
     return render(request, 'pages/add.html', context=context)
 
 def edit_page(request, vanity_url):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         page = Page.objects.get(vanity_url=vanity_url)
         connections = page.connections
 
@@ -359,7 +359,7 @@ def password_change_done(request, *args, **kwargs):
 
 @require_POST
 def up_vote_story(request, story_id):
-    if request.is_ajax() & request.user.is_authenticated():
+    if request.is_ajax() & request.user.is_authenticated:
         if not Review.objects.filter(story__id=story_id, type="UP"):
 
             if Review.objects.filter(story__id=story_id, type="DOWN"):
@@ -381,7 +381,7 @@ def up_vote_story(request, story_id):
 
 @require_POST
 def down_vote_story(request, story_id):
-    if request.is_ajax() & request.user.is_authenticated():
+    if request.is_ajax() & request.user.is_authenticated:
         if not Review.objects.filter(story__id=story_id, type="DOWN"):
 
             if Review.objects.filter(story__id=story_id, type="UP"):
@@ -403,7 +403,7 @@ def down_vote_story(request, story_id):
 
 @require_POST
 def no_vote_story(request, story_id):
-    if request.is_ajax() & request.user.is_authenticated():
+    if request.is_ajax() & request.user.is_authenticated:
         if Review.objects.filter(story__id=story_id, type="DOWN"):
             vote = Review.objects.get(story__id=story_id, type="DOWN")
             vote.delete()
@@ -415,7 +415,7 @@ def no_vote_story(request, story_id):
 
 def user_page(request, i):
     context = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
             context.update({'show_badge1': True})
 

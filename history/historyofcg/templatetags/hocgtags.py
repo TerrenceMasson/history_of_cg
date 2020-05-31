@@ -138,7 +138,7 @@ class GroupCheckNode(template.Node):
             print 'user'
             user = context['user']
 
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return self.nodelist_false.render(context)
 
         try:
