@@ -95,6 +95,7 @@ def view_source_entries(request, s):
         'all_stories': all_stories,
         'connections': connections,
         'tag_dict': tag_dict,
+        'page': page,
     }
     return render(request, 'pages/entries.html', context=context)
 
