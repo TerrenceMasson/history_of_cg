@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.handlers.wsgi import WSGIRequest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlquote
 from django.test import Client
 from django.test import TestCase
