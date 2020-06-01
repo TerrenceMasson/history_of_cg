@@ -25,6 +25,4 @@ DATABASES = {
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
-middleware = list(MIDDLEWARE_CLASSES)
-middleware.append('history.historyofcg.middleware.HttpsRedirect')
-MIDDLEWARE_CLASSES = tuple(middleware)
+SECURE_SSL_REDIRECT = True

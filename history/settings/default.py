@@ -116,18 +116,18 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = ')9d)j0btj_)tbxro8pw_vbt)$gv(m$#qth@f1jw&amp;yb$z=z3p%!'
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    #'historyofcg.middleware.HttpResponseNotAllowedMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     # Django Apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -149,7 +149,7 @@ INSTALLED_APPS = (
     # Admin
     'django.contrib.admin',
 
-)
+]
 
 JASMINE_TEST_DIRECTORY = os.path.join(PROJECT_PATH, 'jasmine')
 
