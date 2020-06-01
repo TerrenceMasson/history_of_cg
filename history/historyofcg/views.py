@@ -74,6 +74,7 @@ def view_source_entries(request, s):
         context = {
             'request': request,
             'user_auth': user_auth,
+            's': s,
         }
         return render(request, 'errors/entry_does_not_exist.html', context=context)
 
