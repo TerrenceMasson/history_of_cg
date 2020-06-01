@@ -1,5 +1,4 @@
 import sys, json
-from hashlib import sha1
 import json, base64, hmac, time, os, datetime, itertools, uuid, mimetypes
 from google.cloud import storage
 from google.oauth2 import service_account
@@ -276,7 +275,7 @@ def get_pages(request):
         for page in pages:
             page_json = {
                 "id": str(page.id),
-                "name": page.name.encode('utf-8'),
+                "name": str(page.name),
                 "type": str(page.type.name),
                 "vanity": str(page.vanity_url)
             }

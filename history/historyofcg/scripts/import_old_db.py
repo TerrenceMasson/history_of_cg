@@ -139,7 +139,7 @@ def initial_stories_fill():
                                 #this is just temporary, really sloppy but works T_T
                                 page=Page.objects.get(id=1),
                                 published=row_data['published'] == '1',
-                                text=row_data['story'].encode('utf-8'),
+                                text=str(row_data['story']),
                                 date_created=date(int(row_data['created'][:4]), int(row_data['created'][5:7]),
                                                   int(row_data['created'][8:10])),
                                 date_modified=date(int(row_data['modified'][:4]), int(row_data['modified'][5:7]),
