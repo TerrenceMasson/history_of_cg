@@ -41,7 +41,7 @@ class TokenWidget(forms.TextInput):
         return value.replace(" ", "-")
 
     def render(self, name, value, attrs=None):
-        flat_value = ",".join(map(unicode, value or []))
+        flat_value = ",".join(map(str, value or []))
         settings = copy.copy(self.settings)
 
         url_name = getattr(self, "search_url", "djtokeninput_search")
@@ -53,7 +53,7 @@ class TokenWidget(forms.TextInput):
 
         if value is not None:
             settings["prePopulate"] = [
-                {"id": pk, "name": unicode(self.choices.queryset.get(pk=pk))}
+                {"id": pk, "name": str(self.choices.queryset.get(pk=pk))}
                 for pk in value
             ]
 
@@ -62,7 +62,7 @@ class TokenWidget(forms.TextInput):
 
     @staticmethod
     def _class_name(class_name=None, extra=None):
-        return " ".join(filter(None, [class_name, extra]))
+        return " ".join([x for x in [class_name, extra] if x])
 
     def value_from_datadict(self, data, files, name):
         values = data.get(name, "").split(",")

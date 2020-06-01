@@ -2,10 +2,10 @@
 ## STAGING SETTINGS ##
 ######################
 import os
-from default import *
+from .default import *
 
 import sys
-print >> sys.stderr, "*** RUNNING STAGING SETTINGS ***"
+print("*** RUNNING STAGING SETTINGS ***", file=sys.stderr)
 
 DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG

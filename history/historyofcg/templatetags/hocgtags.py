@@ -1,6 +1,4 @@
-import StringIO
-import struct
-import urllib2
+import io, struct, urllib
 from django import template
 from django.core.files.images import ImageFile
 from django.template import NodeList
@@ -69,7 +67,7 @@ def replace(value, args):
 @register.filter
 def get_random_image(page):
     images = Story.objects.filter(page__pk=page.id, published=True, deleted=False)
-    images = filter(lambda x: x.type() == "image", images)
+    images = [x for x in images if x.type() == "image"]
     if len(images) == 0:
         ## TODO: We're hot linking our random person image from clker.com
         return "/static/img/P_desatCentered02.png" if page.type.name != "person" else "/static/img/missing-image.jpg"
@@ -130,12 +128,12 @@ class GroupCheckNode(template.Node):
         self.nodelist_false = nodelist_false
 
     def render(self, context):
-        print context
+        print(context)
         if "request" in context:
-            print 'request'
+            print('request')
             user = context['request'].user
         elif "user" in context:
-            print 'user'
+            print('user')
             user = context['user']
 
         if not user.is_authenticated:
@@ -155,7 +153,7 @@ class GroupCheckNode(template.Node):
 
 @register.filter
 def get_img_width(value):
-    header = urllib2.urlopen(value).read(24)
+    header = urllib.request.urlopen(value).read(24)
     return_list = getImageInfo(header)
     return int(return_list[1])
 
@@ -197,7 +195,7 @@ def getImageInfo(data):
     elif (size >= 20):
     # and data.startswith('\377\370'):
         content_type = 'image/jpeg'
-        jpeg = StringIO.StringIO(data)
+        jpeg = io.StringIO(data)
         jpeg.read(2)
         b = jpeg.read(1)
         try:

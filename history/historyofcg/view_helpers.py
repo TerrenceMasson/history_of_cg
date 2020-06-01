@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.core import serializers
 
 from history.base.models import BaseModel
-from models import Page
+from .models import Page
 from history import logger
 
 
@@ -33,11 +33,11 @@ def update_story(form, story):
     story.title = data['title']
     story.date = data['date']
     story.source = data['source']
-    if data['text'] != u'':
+    if data['text'] != '':
         story.text = data['text']
-    elif data['image'] != u'':        
+    elif data['image'] != '':        
         story.image = data['image'] 
-    elif data['video'] != u'':        
+    elif data['video'] != '':        
         story.video = data['video']
     return story
 

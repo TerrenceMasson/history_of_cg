@@ -1,10 +1,10 @@
 ####################
 ## TEST SETTINGS ##
 ###################
-from default import *
+from .default import *
 
 import sys
-print >> sys.stderr, "*** RUNNING TEST SETTINGS ***"
+print("*** RUNNING TEST SETTINGS ***", file=sys.stderr)
 
 TESTING = True
 DEBUG = True

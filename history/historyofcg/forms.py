@@ -1,12 +1,12 @@
 from django.forms import ModelForm, Select, Textarea, DateField, DateInput, CharField
 from django.forms.extras.widgets import SelectDateWidget
-from fields import TokenField
-from widgets import TokenWidget
-from models import Page, Tag, Story
+from .fields import TokenField
+from .widgets import TokenWidget
+from .models import Page, Tag, Story
 from datetime import date
 
 CURRENT_YEAR = date.today().year
-YEARS_RANGE = range(1900, CURRENT_YEAR + 8)
+YEARS_RANGE = list(range(1900, CURRENT_YEAR + 8))
 
 class PageForm(ModelForm):
     tags = TokenField(Tag, required=True, widget=TokenWidget(

@@ -1,6 +1,6 @@
 import sys, json
 from hashlib import sha1
-import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
+import json, base64, hmac, time, os, datetime, itertools, uuid, mimetypes
 from google.cloud import storage
 from google.oauth2 import service_account
 
@@ -16,7 +16,7 @@ from django.contrib.auth.views import password_change_done as django_password_ch
 
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category, Tag
-from view_helpers import create_page, update_story, JsonResponse
+from .view_helpers import create_page, update_story, JsonResponse
 from history import logger
 
 
@@ -89,7 +89,7 @@ def view_source_entries(request, s):
             if tag.name not in __present_values:
                 tag_dict.append([c.type.name, tag.name])
                 __present_values.append(tag.name)
-    print tag_dict
+    print(tag_dict)
 
     context = {
         'request': request,
@@ -181,9 +181,7 @@ def publish_page(request, vanity_url):
 
 
 def _tokens(query_set, keys=("id", "name")):
-    return map(
-        lambda v: dict(zip(keys, v)),
-        query_set.values_list(*keys))
+    return [dict(zip(keys, v)) for v in query_set.values_list(*keys)]
 
 ## TAGS
 ########
@@ -290,7 +288,7 @@ def get_pages(request):
     return HttpResponse(data, content_type=content_type)
 
 def gcp_upload(request):
-    print >> sys.stderr, "*** GCP_UPLOAD ***"
+    print("*** GCP_UPLOAD ***", file=sys.stderr)
 
     raw_creds = os.environ.get('GOOGLE_CREDS')
     creds_json = json.loads(raw_creds)

@@ -1,13 +1,13 @@
 #########################
 ## PRODUCTION SETTINGS ##
 #########################
-from default import *
+from .default import *
 import dj_database_url
 import sys
 
-print >> sys.stderr, "*** RUNNING PRODUCTION SETTINGS ***"
-print >> sys.stderr, "*** STATICFILES DIRS: ***",  STATICFILES_DIRS
-print >> sys.stderr, "*** STATIC ROOT: ***", STATIC_ROOT
+print("*** RUNNING PRODUCTION SETTINGS ***", file=sys.stderr)
+print("*** STATICFILES DIRS: ***",  STATICFILES_DIRS, file=sys.stderr)
+print("*** STATIC ROOT: ***", STATIC_ROOT, file=sys.stderr)
 
 # These credentials have been changed by Heroku as part of rolling the database to a new instance on their side.
 # TODO: Remove this config and update/confirm use of Heroku set DATABASE_URL var.

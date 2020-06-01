@@ -3,10 +3,10 @@
 ##########################
 import os
 import dj_database_url # Parse database configuration from $DATABASE_URL
-from default import *
+from .default import *
 
 import sys
-print >> sys.stderr, "*** RUNNING DEVELOPMENT SETTINGS ***"
+print("*** RUNNING DEVELOPMENT SETTINGS ***", file=sys.stderr)
 
 DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
@@ -63,4 +63,4 @@ LOGGING = {
     }
 }
 
-print >> sys.stderr, "*** FINISHED LOADING DEVELOPMENT SETTINGS ***"
+print("*** FINISHED LOADING DEVELOPMENT SETTINGS ***", file=sys.stderr)

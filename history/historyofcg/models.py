@@ -21,7 +21,7 @@ class Category(BaseModel):
     # 4 -> event
     name = models.CharField(max_length=15)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -30,7 +30,7 @@ class Tag(BaseModel):
     approved = models.BooleanField(default=False)
     old_id = models.PositiveIntegerField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @classmethod
@@ -45,7 +45,7 @@ class Location(BaseModel):
     latitude = models.FloatField(blank=True, null=True, unique=True)
     longitude = models.FloatField(blank=True, null=True, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.city
 
 
@@ -72,7 +72,7 @@ class Page(BaseModel):
     date_deceased = models.DateField(blank=True, null=True)
     user_made = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "---> name: %s published: %s" % (self.name, self.published)
 
 
@@ -90,7 +90,7 @@ class Story(BaseModel):
     text = models.TextField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def type(self):
