@@ -13,10 +13,10 @@ TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd35h42qdt5qleh',
-        'USER': 'aujjmjyfaootpi',
-        'PASSWORD': 'XFmOBtt7djazOBDp2P0tSQrfvA',
-        'HOST': 'ec2-23-21-196-147.compute-1.amazonaws.com',
+        'NAME': 'dfkn4o32i0mhkr',
+        'USER': 'crbgynglqugddq',
+        'PASSWORD': '8bfced0fc50a210f5ac6a0611c0a43bbbc64909fcf0f04abd1c1efc98102565d',
+        'HOST': 'ec2-54-83-49-44.compute-1.amazonaws.com',
         'PORT': '5432'
     }
 }
