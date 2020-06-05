@@ -30,7 +30,7 @@ class SimpleBackend(object):
         
         # authenticate() always has to be called before login(), and
         # will return the user we just created.
-        new_user = authenticate(username=username, password=password)
+        new_user = authenticate(request=request, username=username, password=password)
         login(request, new_user)
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,

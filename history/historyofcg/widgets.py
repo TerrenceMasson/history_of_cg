@@ -40,7 +40,7 @@ class TokenWidget(forms.TextInput):
     def _class_name(value):
         return value.replace(" ", "-")
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         flat_value = ",".join(map(str, value or []))
         settings = copy.copy(self.settings)
 
@@ -58,7 +58,7 @@ class TokenWidget(forms.TextInput):
             ]
 
         attrs["data-settings"] = json.dumps(settings)
-        return super(TokenWidget, self).render(name, flat_value, attrs)
+        return super(TokenWidget, self).render(name, flat_value, attrs=attrs, renderer=renderer)
 
     @staticmethod
     def _class_name(class_name=None, extra=None):
