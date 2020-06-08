@@ -88,5 +88,5 @@ urlpatterns += [
 urlpatterns += staticfiles_urlpatterns()
 
 # Add the Jasmine Test Suite URL if we're in DEBUG mode
-if settings.DEBUG == True:
+if settings.DEBUG:
     urlpatterns += [url(r'^jasmine/', include('django_jasmine.urls'))]

@@ -33,11 +33,11 @@ def update_story(form, story):
     story.title = data['title']
     story.date = data['date']
     story.source = data['source']
-    if data['text'] != '':
+    if data['text']:
         story.text = data['text']
-    elif data['image'] != '':        
+    elif data['image']:        
         story.image = data['image'] 
-    elif data['video'] != '':        
+    elif data['video']:        
         story.video = data['video']
     return story
 

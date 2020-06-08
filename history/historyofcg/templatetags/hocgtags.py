@@ -19,16 +19,16 @@ def random_double_size():
 
 @register.filter
 def get_story_type(story):
-    if story.text != None and story.text != "":
+    if story.text:
         return "story-text"
-    elif story.image != None and story.image != "":
+    elif story.image:
         return "story-image"
-    elif story.video != None and story.video != "":
+    elif story.video:
         return "story-video"
 
 @register.filter
 def get_youtube_img(story):
-    if story.video != "":
+    if story.video:
         video_id = story.video.split('?v=')[1]
         if '&' in video_id:
             video_id = video_id[0:video_id.index('&')]
@@ -46,11 +46,11 @@ def is_vimeo_video(story):
 
 @register.filter
 def get_story_icon(story):
-    if story.text != "":
+    if story.text:
         return "story-type-icon-text"
-    elif story.image != "":
+    elif story.image:
         return "story-type-icon-image"
-    elif story.video != "":
+    elif story.video:
         return "story-type-icon-video"
 
 @register.filter

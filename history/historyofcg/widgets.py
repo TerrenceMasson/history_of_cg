@@ -51,7 +51,7 @@ class TokenWidget(forms.TextInput):
         attrs["class"] = self._class_name(
             attrs.get("class"), "tokeninput")
 
-        if value is not None:
+        if value:
             settings["prePopulate"] = [
                 {"id": pk, "name": str(self.choices.queryset.get(pk=pk))}
                 for pk in value
