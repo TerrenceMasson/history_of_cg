@@ -13,7 +13,7 @@ print("*** STATIC ROOT: ***", STATIC_ROOT, file=sys.stderr)
 # TODO: Remove this config and update/confirm use of Heroku set DATABASE_URL var.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'd9ed7eiaff0eij',
         'USER': 'olwqqhvokshkbc',
         'PASSWORD': '3HX2T9zzb0dwP3S36Do_mQIFFl',
