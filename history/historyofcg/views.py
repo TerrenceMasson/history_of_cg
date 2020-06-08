@@ -134,7 +134,7 @@ def edit_page(request, vanity_url):
                 page.location = form.cleaned_data['location']
                 page.type = form.cleaned_data['type']
                 page.name = form.cleaned_data['name']
-                page.tags = form.cleaned_data['tags']
+                page.tags.set(form.cleaned_data['tags'])
                 page.description = form.cleaned_data['description']
                 page.homepage = form.cleaned_data['homepage']
                 page.date_established = form.cleaned_data['date_established']

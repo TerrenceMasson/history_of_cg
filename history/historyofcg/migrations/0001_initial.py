@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_modified', models.DateTimeField(auto_now=True)),
                 ('type', models.CharField(max_length=4, choices=[(b'UP', b'up'), (b'DOWN', b'down')])),
-                ('page', models.ForeignKey(to='historyofcg.Page')),
+                ('page', models.ForeignKey(to='historyofcg.Page', on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -96,8 +96,8 @@ class Migration(migrations.Migration):
                 ('image', models.URLField(null=True, blank=True)),
                 ('text', models.TextField(null=True, blank=True)),
                 ('deleted', models.BooleanField(default=False)),
-                ('page', models.ForeignKey(to='historyofcg.Page')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('page', models.ForeignKey(to='historyofcg.Page', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -137,13 +137,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='review',
             name='story',
-            field=models.ForeignKey(to='historyofcg.Story'),
+            field=models.ForeignKey(to='historyofcg.Story', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='review',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -155,13 +155,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='page',
             name='type',
-            field=models.ForeignKey(to='historyofcg.Category'),
+            field=models.ForeignKey(to='historyofcg.Category', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='page',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

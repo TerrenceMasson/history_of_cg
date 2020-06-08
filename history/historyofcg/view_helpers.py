@@ -57,7 +57,7 @@ def create_page(form, request):
 
     ## Non Required: tags, homepage, established date, deceased date, location
     page.location = form.cleaned_data['location']
-    page.tags = form.cleaned_data['tags']
+    page.tags.set(form.cleaned_data['tags'])
     page.homepage = form.cleaned_data['homepage']
     page.date_established = form.cleaned_data['date_established']
     page.is_deceased = form.cleaned_data['is_deceased']

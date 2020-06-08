@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Select, Textarea, DateField, DateInput, CharField
-from django.forms.extras.widgets import SelectDateWidget
+from django.forms import SelectDateWidget
 from .fields import TokenField
 from .widgets import TokenWidget
 from .models import Page, Tag, Story
