@@ -31,7 +31,7 @@ def read_env():
 
 if __name__ == "__main__":
     print("*** MANAGE PY MAIN - START ***", file=sys.stderr)
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_name.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.development")
 
     from django.core.management import execute_from_command_line
 

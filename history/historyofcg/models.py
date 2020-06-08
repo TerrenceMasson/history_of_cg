@@ -1,9 +1,19 @@
 from django.db import models
 from django.forms import forms
-from history.base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 from random import choice
 from history import logger
+
+
+class BaseModel(models.Model):
+    """
+    Base abstract model
+    """
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
 
 
 class UpcomingFeature(BaseModel):

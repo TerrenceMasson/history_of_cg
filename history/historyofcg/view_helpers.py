@@ -4,7 +4,7 @@ from unidecode import unidecode
 from django.http import HttpResponse
 from django.core import serializers
 
-from history.base.models import BaseModel
+from history.historyofcg.models import BaseModel
 from .models import Page
 from history import logger
 

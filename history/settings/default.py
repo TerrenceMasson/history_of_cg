@@ -138,7 +138,6 @@ INSTALLED_APPS = [
 
     # Our Apps
     'history.historyofcg',
-    'history.base',
 
     # Helper Apps
     'history.registration',
