@@ -42,14 +42,13 @@ def home(request):
             context.update({'show_badge5': True})
 
     context.update({
-        'request': request,
         'updated_entries': updated_entries,
         'rendering_home': rendering_home,
     })
     return render(request, 'default/home.html', context=context)
 
 def about(request):
-    return render(request, 'default/about.html', context={'request': request})
+    return render(request, 'default/about.html')
 
 def timeline(request):
     pages = Page.objects.filter(published=True)
@@ -69,7 +68,6 @@ def view_source_entries(request, s):
         page = Page.objects.get(published=True, vanity_url=s)
     else:
         context = {
-            'request': request,
             'user_auth': user_auth,
             's': s,
         }
@@ -89,7 +87,6 @@ def view_source_entries(request, s):
     print(tag_dict)
 
     context = {
-        'request': request,
         'all_stories': all_stories,
         'connections': connections,
         'tag_dict': tag_dict,
@@ -116,7 +113,6 @@ def add_page(request):
         form = PageForm()
 
     context = {
-        'request': request,
         'form': form,
     }
     return render(request, 'pages/add.html', context=context)
@@ -150,7 +146,6 @@ def edit_page(request, vanity_url):
             story_forms.append(StoryForm(instance=story))
 
     context = {
-        'request': request,
         'page': page,
         'connections': connections,
         'form': form,
@@ -422,7 +417,6 @@ def user_page(request, i):
         user_pages = Page.objects.filter(user__id=user.id)
 
         context.update({
-            'request': request,
             'user_pages': user_pages,
         })
         return render(request, 'pages/user.html', context=context)
