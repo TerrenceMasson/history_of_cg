@@ -10,8 +10,6 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_safe, require_POST
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import password_change as django_password_change
-from django.contrib.auth.views import password_change_done as django_password_change_done
 
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category, Tag
@@ -338,17 +336,6 @@ def remove_connection(request, remove_to, to_remove):
     page_remove_to.save()
 
     return HttpResponse('')
-
-## Registration Overrides
-##########################
-def password_change(request, *args, **kwargs):
-    extra_context = { "request": request }
-    return django_password_change(request, extra_context=extra_context, *args, **kwargs)
-
-def password_change_done(request, *args, **kwargs):
-    extra_context = { "request": request }
-    return django_password_change_done(request, extra_context=extra_context, *args, **kwargs)
-
 
 
 ## Voting

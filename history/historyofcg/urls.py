@@ -41,12 +41,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-
-    ## Overriding django password change views to include request,
-    ## so this way templates will know that the user is authenticated
-    url(r'^accounts/password/change/$', views.password_change),
-    url(r'^accounts/password/change/done/$', views.password_change_done),
-
     # Top Level URLs
     url(r'^$', views.home, name="home"),
     url(r'^about/$', views.about),
