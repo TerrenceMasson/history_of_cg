@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from registration import signals
 from registration.forms import RegistrationForm
@@ -63,7 +63,7 @@ class SimpleBackend(object):
         After registration, redirect to the user's account page.
         
         """
-        url = reverse("user_page", args=[urlquote(user.username)])
+        url = reverse("user_page", args=[quote(user.username)])
         return (url, (), {})
 
     def post_activation_redirect(self, request, user):

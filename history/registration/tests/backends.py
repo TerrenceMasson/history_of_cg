@@ -1,4 +1,5 @@
 import datetime
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import admin
@@ -9,7 +10,6 @@ from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.handlers.wsgi import WSGIRequest
 from django.urls import reverse
-from django.utils.http import urlquote
 from django.test import Client
 from django.test import TestCase
 
@@ -459,7 +459,7 @@ class SimpleRegistrationBackendTests(TestCase):
                                          password1='secret')
         
         self.assertEqual(self.backend.post_registration_redirect(_mock_request(), new_user),
-                         (reverse("user_page", args=[urlquote(new_user.username)]), (), {}))
+                         (reverse("user_page", args=[quote(new_user.username)]), (), {}))
 
     def test_registration_signal(self):
         """
