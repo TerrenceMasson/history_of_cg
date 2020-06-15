@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.db import models, migrations
+from django.db import models, migrations, transaction
 from django.db.utils import IntegrityError
 
 
@@ -8,12 +8,13 @@ def forward(apps, schema_editor):
     Category = apps.get_model('historyofcg', 'Category')
     db_alias = schema_editor.connection.alias
     try:
-        Category.objects.using(db_alias).bulk_create([
-            Category(id=1, name='person'),
-            Category(id=2, name='project'),
-            Category(id=3, name='organization'),
-            Category(id=4, name='event'),
-        ])
+        with transaction.atomic():
+            Category.objects.using(db_alias).bulk_create([
+                Category(id=1, name='person'),
+                Category(id=2, name='project'),
+                Category(id=3, name='organization'),
+                Category(id=4, name='event'),
+            ])
     except IntegrityError:
         pass
     
