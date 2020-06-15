@@ -6,7 +6,7 @@ If the default behavior of these views is acceptable to you, simply
 use a line like this in your root URLconf to set up the default URLs
 for registration::
 
-    (r'^accounts/', include('registration.backends.simple.urls')),
+    (r'^accounts/', include('history.registration.backends.simple.urls')),
 
 This will also automatically set up the views in
 ``django.contrib.auth`` at sensible default locations.
@@ -28,7 +28,7 @@ from registration.views import register
 urlpatterns = [
     url(r'^register/$',
         register,
-        {'backend': 'registration.backends.simple.SimpleBackend'},
+        {'backend': 'history.registration.backends.simple.SimpleBackend'},
         name='registration_register'),
     url(r'^register/closed/$',
         TemplateView.as_view(template_name='registration/registration_closed.html'),

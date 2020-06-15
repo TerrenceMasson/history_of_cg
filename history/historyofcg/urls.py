@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home),
     url(r'^about/$', views.about),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('history.registration.backends.default.urls')),
 
     url(r'^pages/(?P<s>[-\w]+)/$', views.view_source_entries),
     url(r'^add/page/$', views.add_page, name="add_page"),
