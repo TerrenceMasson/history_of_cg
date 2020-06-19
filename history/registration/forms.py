@@ -6,7 +6,7 @@ Forms and validation code for user registration.
 
 from django.contrib.auth.models import User
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 # I put this on all required fields, because it's easier to pick up
@@ -78,7 +78,7 @@ class RegistrationFormTermsOfService(RegistrationForm):
     
     """
     tos = forms.BooleanField(widget=forms.CheckboxInput(attrs=attrs_dict),
-                             label=_(u'I have read and agree to the Terms of Service'),
+                             label=_('I have read and agree to the Terms of Service'),
                              error_messages={'required': _("You must agree to the terms to register")})
 
 

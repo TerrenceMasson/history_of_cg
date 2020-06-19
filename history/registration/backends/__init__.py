@@ -1,12 +1,7 @@
+from importlib import import_module
+
 from django.core.exceptions import ImproperlyConfigured
 
-
-# Python 2.7 has an importlib with import_module; for older Pythons,
-# Django's bundled copy provides it.
-try: # pragma: no cover
-    from importlib import import_module # pragma: no cover
-except ImportError: # pragma: no cover
-    from django.utils.importlib import import_module # pragma: no cover
 
 def get_backend(path):
     """
@@ -23,7 +18,7 @@ def get_backend(path):
     module, attr = path[:i], path[i+1:]
     try:
         mod = import_module(module)
-    except ImportError, e:
+    except ImportError as e:
         raise ImproperlyConfigured('Error loading registration backend %s: "%s"' % (module, e))
     try:
         backend_class = getattr(mod, attr)

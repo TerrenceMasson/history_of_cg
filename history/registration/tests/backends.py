@@ -1,4 +1,5 @@
 import datetime
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import admin
@@ -8,6 +9,7 @@ from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.handlers.wsgi import WSGIRequest
+from django.urls import reverse
 from django.test import Client
 from django.test import TestCase
 
@@ -83,7 +85,7 @@ class BackendRetrievalTests(TestCase):
         passed a valid backend.
 
         """
-        self.failUnless(isinstance(get_backend('registration.backends.default.DefaultBackend'),
+        self.assertTrue(isinstance(get_backend('registration.backends.default.DefaultBackend'),
                                    DefaultBackend))
 
     def test_backend_error_invalid(self):
@@ -151,11 +153,11 @@ class DefaultRegistrationBackendTests(TestCase):
 
         # Details of the returned user must match what went in.
         self.assertEqual(new_user.username, 'bob')
-        self.failUnless(new_user.check_password('secret'))
+        self.assertTrue(new_user.check_password('secret'))
         self.assertEqual(new_user.email, 'bob@example.com')
 
         # New user must not be active.
-        self.failIf(new_user.is_active)
+        self.assertFalse(new_user.is_active)
 
         # A registration profile was created, and an activation email
         # was sent.
@@ -176,10 +178,10 @@ class DefaultRegistrationBackendTests(TestCase):
                                          password1='secret')
 
         self.assertEqual(new_user.username, 'bob')
-        self.failUnless(new_user.check_password('secret'))
+        self.assertTrue(new_user.check_password('secret'))
         self.assertEqual(new_user.email, 'bob@example.com')
 
-        self.failIf(new_user.is_active)
+        self.assertFalse(new_user.is_active)
 
         self.assertEqual(RegistrationProfile.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
@@ -202,7 +204,7 @@ class DefaultRegistrationBackendTests(TestCase):
         activated = self.backend.activate(_mock_request(),
                                           valid_profile.activation_key)
         self.assertEqual(activated.username, valid_user.username)
-        self.failUnless(activated.is_active)
+        self.assertTrue(activated.is_active)
 
         # Fetch the profile again to verify its activation key has
         # been reset.
@@ -224,9 +226,9 @@ class DefaultRegistrationBackendTests(TestCase):
         expired_user.date_joined = expired_user.date_joined - datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         expired_user.save()
         expired_profile = RegistrationProfile.objects.get(user=expired_user)
-        self.failIf(self.backend.activate(_mock_request(),
+        self.assertFalse(self.backend.activate(_mock_request(),
                                           expired_profile.activation_key))
-        self.failUnless(expired_profile.activation_key_expired())
+        self.assertTrue(expired_profile.activation_key_expired())
 
     def test_allow(self):
         """
@@ -236,10 +238,10 @@ class DefaultRegistrationBackendTests(TestCase):
         """
         old_allowed = getattr(settings, 'REGISTRATION_OPEN', True)
         settings.REGISTRATION_OPEN = True
-        self.failUnless(self.backend.registration_allowed(_mock_request()))
+        self.assertTrue(self.backend.registration_allowed(_mock_request()))
 
         settings.REGISTRATION_OPEN = False
-        self.failIf(self.backend.registration_allowed(_mock_request()))
+        self.assertFalse(self.backend.registration_allowed(_mock_request()))
         settings.REGISTRATION_OPEN = old_allowed
 
     def test_form_class(self):
@@ -248,7 +250,7 @@ class DefaultRegistrationBackendTests(TestCase):
         ``registration.forms.RegistrationForm``.
 
         """
-        self.failUnless(self.backend.get_form_class(_mock_request()) is forms.RegistrationForm)
+        self.assertTrue(self.backend.get_form_class(_mock_request()) is forms.RegistrationForm)
 
     def test_post_registration_redirect(self):
         """
@@ -266,10 +268,10 @@ class DefaultRegistrationBackendTests(TestCase):
         
         """
         def receiver(sender, **kwargs):
-            self.failUnless('user' in kwargs)
+            self.assertTrue('user' in kwargs)
             self.assertEqual(kwargs['user'].username, 'bob')
-            self.failUnless('request' in kwargs)
-            self.failUnless(isinstance(kwargs['request'], WSGIRequest))
+            self.assertTrue('request' in kwargs)
+            self.assertTrue(isinstance(kwargs['request'], WSGIRequest))
             received_signals.append(kwargs.get('signal'))
 
         received_signals = []
@@ -290,10 +292,10 @@ class DefaultRegistrationBackendTests(TestCase):
         
         """
         def receiver(sender, **kwargs):
-            self.failUnless('user' in kwargs)
+            self.assertTrue('user' in kwargs)
             self.assertEqual(kwargs['user'].username, 'bob')
-            self.failUnless('request' in kwargs)
-            self.failUnless(isinstance(kwargs['request'], WSGIRequest))
+            self.assertTrue('request' in kwargs)
+            self.assertTrue(isinstance(kwargs['request'], WSGIRequest))
             received_signals.append(kwargs.get('signal'))
 
         received_signals = []
@@ -391,7 +393,7 @@ class DefaultRegistrationBackendTests(TestCase):
 
         admin_class.activate_users(_mock_request(),
                                    RegistrationProfile.objects.all())
-        self.failUnless(User.objects.get(username='alice').is_active)
+        self.assertTrue(User.objects.get(username='alice').is_active)
 
 
 class SimpleRegistrationBackendTests(TestCase):
@@ -417,11 +419,11 @@ class SimpleRegistrationBackendTests(TestCase):
 
         # Details of the returned user must match what went in.
         self.assertEqual(new_user.username, 'bob')
-        self.failUnless(new_user.check_password('secret'))
+        self.assertTrue(new_user.check_password('secret'))
         self.assertEqual(new_user.email, 'bob@example.com')
 
         # New user must not be active.
-        self.failUnless(new_user.is_active)
+        self.assertTrue(new_user.is_active)
 
     def test_allow(self):
         """
@@ -431,10 +433,10 @@ class SimpleRegistrationBackendTests(TestCase):
         """
         old_allowed = getattr(settings, 'REGISTRATION_OPEN', True)
         settings.REGISTRATION_OPEN = True
-        self.failUnless(self.backend.registration_allowed(_mock_request()))
+        self.assertTrue(self.backend.registration_allowed(_mock_request()))
 
         settings.REGISTRATION_OPEN = False
-        self.failIf(self.backend.registration_allowed(_mock_request()))
+        self.assertFalse(self.backend.registration_allowed(_mock_request()))
         settings.REGISTRATION_OPEN = old_allowed
 
     def test_form_class(self):
@@ -443,7 +445,7 @@ class SimpleRegistrationBackendTests(TestCase):
         ``registration.forms.RegistrationForm``.
 
         """
-        self.failUnless(self.backend.get_form_class(_mock_request()) is forms.RegistrationForm)
+        self.assertTrue(self.backend.get_form_class(_mock_request()) is forms.RegistrationForm)
 
     def test_post_registration_redirect(self):
         """
@@ -457,7 +459,7 @@ class SimpleRegistrationBackendTests(TestCase):
                                          password1='secret')
         
         self.assertEqual(self.backend.post_registration_redirect(_mock_request(), new_user),
-                         (new_user.get_absolute_url(), (), {}))
+                         (reverse("user_page", args=[quote(new_user.username)]), (), {}))
 
     def test_registration_signal(self):
         """
@@ -466,10 +468,10 @@ class SimpleRegistrationBackendTests(TestCase):
         
         """
         def receiver(sender, **kwargs):
-            self.failUnless('user' in kwargs)
+            self.assertTrue('user' in kwargs)
             self.assertEqual(kwargs['user'].username, 'bob')
-            self.failUnless('request' in kwargs)
-            self.failUnless(isinstance(kwargs['request'], WSGIRequest))
+            self.assertTrue('request' in kwargs)
+            self.assertTrue(isinstance(kwargs['request'], WSGIRequest))
             received_signals.append(kwargs.get('signal'))
 
         received_signals = []

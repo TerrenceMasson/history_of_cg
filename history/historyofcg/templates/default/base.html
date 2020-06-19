@@ -1,4 +1,4 @@
-{% load staticfiles %}{% load hocgtags %}
+{% load static %}{% load hocgtags %}
 <!DOCTYPE html>
 {% comment %}
     <!--[if IE 8]>
@@ -55,13 +55,13 @@
             <div class="topRight internal">
                 <a href="mailto:terrence.masson@gmail.com?Subject=Feedback%20for%20History%20of%20CG">Contact</a>
                 <a href="/about">About</a>
-                {% if not request.user.is_authenticated %}
+                {% if not user.is_authenticated %}
                 <a href="/accounts/login">Login</a>
                 {% endif %}
-                {% if request.user.is_authenticated %}
+                {% if user.is_authenticated %}
                 <a href="/accounts/logout">Logout</a>
                 <a href="/add/page">Add an Entry</a>
-                <a href="/user/{{ request.user.id }}/">Your Pages</a>
+                <a href="/user/{{ user.id }}/">Your Pages</a>
                 {% endif %}
                 {% comment %}
             <!-- Note: Below is for the gamification stuff which is just sitting around...

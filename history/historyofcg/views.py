@@ -1,28 +1,19 @@
-import sys
-from hashlib import sha1
-import json, base64, hmac, urllib, time, os, datetime, itertools, uuid, mimetypes
+import sys, json
+import json, base64, hmac, time, os, datetime, itertools, uuid, mimetypes
 from google.cloud import storage
 from google.oauth2 import service_account
 
-from django import http
 from django.core import serializers
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotFound
-from django.shortcuts import render_to_response, render, redirect, get_object_or_404
-from django.template import RequestContext
-from django.template.response import TemplateResponse
-from django.utils import simplejson
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_safe, require_POST
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import password_change as django_password_change
-from django.contrib.auth.views import password_change_done as django_password_change_done
 
-
-from history.base.decorators import render_to
 from history.historyofcg.forms import PageForm, StoryForm
 from history.historyofcg.models import Page, Review, UpcomingFeature, Story, Category, Tag
-from view_helpers import create_page, update_story, JsonResponse
+from .view_helpers import create_page, update_story, JsonResponse
 from history import logger
 
 
@@ -32,35 +23,38 @@ from history import logger
 def home(request):
     updated_entries = Page.objects.filter(published=True).order_by('-date_modified')[:4]
     rendering_home = True # Not a great idea, but better than not extending from base
-    if request.user.is_authenticated():
+    context = {}
+    if request.user.is_authenticated:
         # TODO: This NEEDS to be pulled out to a helper.
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
+            context.update({'show_badge1': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
+            context.update({'show_badge2': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
+            context.update({'show_badge3': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
+            context.update({'show_badge4': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
+            context.update({'show_badge5': True})
 
-    upcoming_features = UpcomingFeature.objects.filter(display=True)
-
-    return render_to_response('default/home.html', locals())
+    context.update({
+        'updated_entries': updated_entries,
+        'rendering_home': rendering_home,
+    })
+    return render(request, 'default/home.html', context=context)
 
 def about(request):
-    return render_to_response('default/about.html', locals())
+    return render(request, 'default/about.html')
 
 def timeline(request):
     pages = Page.objects.filter(published=True)
     pages_json = serializers.serialize("json", pages)
     logger.log("pages_json: ", pages_json)
-    return JsonResponse(pages_json);
+    return JsonResponse(pages_json)
 
 def timeline_page(request, vanity_url):
     page = Page.objects.get(published=True, vanity_url=vanity_url)
@@ -68,13 +62,16 @@ def timeline_page(request, vanity_url):
     result.append(page)
     return JsonResponse(result)
 
-@render_to('pages/entries.html')
 def view_source_entries(request, s):
-    user_auth = request.user.is_authenticated()
+    user_auth = request.user.is_authenticated
     if Page.objects.filter(published=True, vanity_url=s):
         page = Page.objects.get(published=True, vanity_url=s)
     else:
-        return render_to_response('errors/entry_does_not_exist.html', locals())
+        context = {
+            'user_auth': user_auth,
+            's': s,
+        }
+        return render(request, 'errors/entry_does_not_exist.html', context=context)
 
     all_stories = Story.objects.filter(page__vanity_url=s, published=True, deleted=False)
 
@@ -87,16 +84,21 @@ def view_source_entries(request, s):
             if tag.name not in __present_values:
                 tag_dict.append([c.type.name, tag.name])
                 __present_values.append(tag.name)
-    print tag_dict
+    print(tag_dict)
 
-    return locals()
+    context = {
+        'all_stories': all_stories,
+        'connections': connections,
+        'tag_dict': tag_dict,
+        'page': page,
+    }
+    return render(request, 'pages/entries.html', context=context)
 
 ## Page Views
 ##############
 
-@render_to('pages/add.html')
 def add_page(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/accounts/login/')
     if request.method == 'POST':
         form = PageForm(request.POST)
@@ -110,11 +112,13 @@ def add_page(request):
     else:
         form = PageForm()
 
-    return locals()
+    context = {
+        'form': form,
+    }
+    return render(request, 'pages/add.html', context=context)
 
-@render_to('pages/edit.html')
 def edit_page(request, vanity_url):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         page = Page.objects.get(vanity_url=vanity_url)
         connections = page.connections
 
@@ -124,7 +128,7 @@ def edit_page(request, vanity_url):
                 page.location = form.cleaned_data['location']
                 page.type = form.cleaned_data['type']
                 page.name = form.cleaned_data['name']
-                page.tags = form.cleaned_data['tags']
+                page.tags.set(form.cleaned_data['tags'])
                 page.description = form.cleaned_data['description']
                 page.homepage = form.cleaned_data['homepage']
                 page.date_established = form.cleaned_data['date_established']
@@ -141,7 +145,15 @@ def edit_page(request, vanity_url):
         for story in stories:
             story_forms.append(StoryForm(instance=story))
 
-    return locals()
+    context = {
+        'page': page,
+        'connections': connections,
+        'form': form,
+        'story_forms': story_forms,
+        'story_form': story_form,
+        'story_types': story_types,
+    }
+    return render(request, 'pages/edit.html', context=context)
 
 # Publishing/Upublishing Pages
 @require_POST
@@ -149,7 +161,7 @@ def unpublish_page(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
     page.published = False
     page.save()
-    return JsonResponse({ 'message': "Page was unpublished successfully" });
+    return JsonResponse({ 'message': "Page was unpublished successfully" })
 
 
 @require_POST
@@ -157,13 +169,11 @@ def publish_page(request, vanity_url):
     page = Page.objects.get(vanity_url=vanity_url)
     page.published = True
     page.save()
-    return JsonResponse({ 'message': "Page was published successfully" });
+    return JsonResponse({ 'message': "Page was published successfully" })
 
 
 def _tokens(query_set, keys=("id", "name")):
-    return map(
-        lambda v: dict(zip(keys, v)),
-        query_set.values_list(*keys))
+    return [dict(zip(keys, v)) for v in query_set.values_list(*keys)]
 
 ## TAGS
 ########
@@ -186,12 +196,12 @@ def search(req, app_label, model):
         else:
             tokens = []
 
-        return http.HttpResponse(
+        return HttpResponse(
             json.dumps(tokens),
             content_type="application/json")
 
     else:
-        raise http.Http404
+        raise Http404
 
 
 ## STORY VIEWS
@@ -216,7 +226,7 @@ def new_story(request, story_type, vanity_url):
         story_form = StoryForm(instance=story)
         # Return the edit_story template back to the AJAX call
         # so we can insert it into the DOM
-        return render_to_response('pages/edit_story.html', { 'story_form': story_form, 'page': story_page }, context_instance=RequestContext(request))
+        return render(request, 'pages/edit_story.html', context={ 'story_form': story_form, 'page': story_page })
     else:
         return JsonResponse(form.errors, status=400)
 
@@ -239,7 +249,7 @@ def unpublish_story(request, id):
     story = Story.objects.get(id=id)
     story.published = False
     story.save()
-    return JsonResponse({ 'message': "Story was unpublished successfully" });
+    return JsonResponse({ 'message': "Story was unpublished successfully" })
 
 
 @require_POST
@@ -247,7 +257,7 @@ def publish_story(request, id):
     story = Story.objects.get(id=id)
     story.published = True
     story.save()
-    return JsonResponse({ 'message': "Story was published successfully" });
+    return JsonResponse({ 'message': "Story was published successfully" })
 
 
 def get_pages(request):
@@ -258,19 +268,19 @@ def get_pages(request):
         for page in pages:
             page_json = {
                 "id": str(page.id),
-                "name": page.name.encode('utf-8'),
+                "name": str(page.name),
                 "type": str(page.type.name),
                 "vanity": str(page.vanity_url)
             }
             results.append(page_json)
-        data = simplejson.dumps(results)
+        data = json.dumps(results)
     else:
         data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype=mimetype)
+    content_type = 'application/json'
+    return HttpResponse(data, content_type=content_type)
 
 def gcp_upload(request):
-    print >> sys.stderr, "*** GCP_UPLOAD ***"
+    print("*** GCP_UPLOAD ***", file=sys.stderr)
 
     raw_creds = os.environ.get('GOOGLE_CREDS')
     creds_json = json.loads(raw_creds)
@@ -322,23 +332,6 @@ def remove_connection(request, remove_to, to_remove):
 
     return HttpResponse('')
 
-## Registration Overrides
-##########################
-def password_change(request,
-                    template_name='registration/password_change_form.html',
-                    post_change_redirect=None,
-                    password_change_form=PasswordChangeForm,
-                    current_app=None, extra_context=None):
-    extra_context = { "request": request }
-    return django_password_change(request, extra_context=extra_context)
-
-def password_change_done(request,
-                         template_name='registration/password_change_done.html',
-                         current_app=None, extra_context=None):
-    extra_context = { "request": request }
-    return django_password_change_done(request, extra_context=extra_context)
-
-
 
 ## Voting
 ##########
@@ -347,7 +340,7 @@ def password_change_done(request,
 
 @require_POST
 def up_vote_story(request, story_id):
-    if request.is_ajax() & request.user.is_authenticated():
+    if request.is_ajax() & request.user.is_authenticated:
         if not Review.objects.filter(story__id=story_id, type="UP"):
 
             if Review.objects.filter(story__id=story_id, type="DOWN"):
@@ -369,7 +362,7 @@ def up_vote_story(request, story_id):
 
 @require_POST
 def down_vote_story(request, story_id):
-    if request.is_ajax() & request.user.is_authenticated():
+    if request.is_ajax() & request.user.is_authenticated:
         if not Review.objects.filter(story__id=story_id, type="DOWN"):
 
             if Review.objects.filter(story__id=story_id, type="UP"):
@@ -391,7 +384,7 @@ def down_vote_story(request, story_id):
 
 @require_POST
 def no_vote_story(request, story_id):
-    if request.is_ajax() & request.user.is_authenticated():
+    if request.is_ajax() & request.user.is_authenticated:
         if Review.objects.filter(story__id=story_id, type="DOWN"):
             vote = Review.objects.get(story__id=story_id, type="DOWN")
             vote.delete()
@@ -401,28 +394,31 @@ def no_vote_story(request, story_id):
         return HttpResponse('')
 
 
-@render_to('pages/user.html')
 def user_page(request, i):
-    if request.user.is_authenticated():
+    context = {}
+    if request.user.is_authenticated:
         if len(Review.objects.filter(type="UP", user__id=request.user.id)) == 1:
-            show_badge1 = True
+            context.update({'show_badge1': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 2:
-            show_badge2 = True
+            context.update({'show_badge2': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 3:
-            show_badge3 = True
+            context.update({'show_badge3': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) == 4:
-            show_badge4 = True
+            context.update({'show_badge4': True})
 
         elif len(Review.objects.filter(type="UP", user__id=request.user.id)) >= 5:
-            show_badge5 = True
+            context.update({'show_badge5': True})
 
     if request.user.id == int(i):
         user = request.user
         user_pages = Page.objects.filter(user__id=user.id)
 
-        return locals()
+        context.update({
+            'user_pages': user_pages,
+        })
+        return render(request, 'pages/user.html', context=context)
     else:
-        return HttpResponseNotFound()
+        raise Http404

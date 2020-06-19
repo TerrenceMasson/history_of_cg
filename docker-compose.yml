@@ -7,6 +7,9 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+    volumes: 
+      - ".:/usr/src/app"
+    command: python manage.py runserver 0.0.0.0:8000 --settings=settings.development
 
   postgres:
     container_name: hocg-postgres
@@ -19,6 +22,7 @@ services:
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'development'
+      POSTGRES_DB: 'hocg'
     volumes:
       - data:/var/lib/postgresql/data
 

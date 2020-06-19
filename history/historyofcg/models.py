@@ -1,15 +1,25 @@
 from django.db import models
 from django.forms import forms
-from history.base.models import BaseModel
 from django.contrib.auth.models import User, UserManager
 from random import choice
 from history import logger
 
 
+class BaseModel(models.Model):
+    """
+    Base abstract model
+    """
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class UpcomingFeature(BaseModel):
     name = models.CharField(max_length=20)
     text = models.TextField()
-    display = models.BooleanField()
+    display = models.BooleanField(default=False)
 
 # TODO: If it's possible it be amazing to get rid of this waste of a model
 #  Don't know who designed this schema, but they fucked up. 
@@ -21,16 +31,16 @@ class Category(BaseModel):
     # 4 -> event
     name = models.CharField(max_length=15)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
 class Tag(BaseModel):
     name = models.CharField(max_length=20)
-    approved = models.BooleanField()
+    approved = models.BooleanField(default=False)
     old_id = models.PositiveIntegerField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @classmethod
@@ -45,7 +55,7 @@ class Location(BaseModel):
     latitude = models.FloatField(blank=True, null=True, unique=True)
     longitude = models.FloatField(blank=True, null=True, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.city
 
 
@@ -55,7 +65,7 @@ class Page(BaseModel):
     #  person, event, organization, or project, but someone created a many-to-one relationship
     #  for some reason (I'm guessing easier querying? but that seems absurd). This should be
     #  changed to just have a CharField type and the category model can be done away with.
-    type = models.ForeignKey(Category)
+    type = models.ForeignKey(Category, on_delete=models.CASCADE)
     location = models.CharField(max_length=20, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
     vanity_url = models.CharField(max_length=100, unique=True)
@@ -64,7 +74,7 @@ class Page(BaseModel):
     homepage = models.URLField(blank=True, null=True)
     date_established = models.DateField(blank=True, null=True)
     published = models.BooleanField(default=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     connections = models.ManyToManyField('self', related_name=name, blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     old_id = models.PositiveIntegerField(blank=True, null=True)
@@ -72,15 +82,15 @@ class Page(BaseModel):
     date_deceased = models.DateField(blank=True, null=True)
     user_made = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "---> name: %s published: %s" % (self.name, self.published)
 
 
 class Story(BaseModel):
     title = models.CharField(max_length=50)
     date = models.DateField(blank=True, null=True)
-    page = models.ForeignKey(Page)
-    user = models.ForeignKey(User)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     source = models.CharField(max_length=200, blank=True, null=True)
     source_url = models.URLField(blank=True, null=True)
     published = models.BooleanField(default=False)
@@ -90,15 +100,15 @@ class Story(BaseModel):
     text = models.TextField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def type(self):
-        if self.text != None and self.text != "":
+        if self.text:
             return "text"
-        elif self.video != None and self.video != "":
+        elif self.video:
             return "video"
-        elif self.image != None and self.image != "":
+        elif self.image:
             return "image"
         else:
             logger.log_simple("NO TYPE FOR STORY: " + self.title)
@@ -109,6 +119,6 @@ class Story(BaseModel):
 
 class Review(BaseModel):
     type = models.CharField(choices=(("UP", "up"), ("DOWN", 'down')), max_length=4)
-    user = models.ForeignKey(User)
-    story = models.ForeignKey(Story)
-    page = models.ForeignKey(Page)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)

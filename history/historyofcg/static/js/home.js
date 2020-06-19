@@ -17,7 +17,7 @@ $(document).ready(function() {
     $(window).smartresize(function () {
         $container.isotope({
             // update columnWidth to a percentage of container width
-            masonry: { columnWidth: $container.width() / 5 }
+            masonry: { columnWidth: $container.width() / 4 }
         });
     });
 });
