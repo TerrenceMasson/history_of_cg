@@ -3,17 +3,17 @@
 ##########################
 import os
 import dj_database_url # Parse database configuration from $DATABASE_URL
-from default import *
+from .default import *
 
 import sys
-print >> sys.stderr, "*** RUNNING DEVELOPMENT SETTINGS ***"
+print("*** RUNNING DEVELOPMENT SETTINGS ***", file=sys.stderr)
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'development',
@@ -38,7 +38,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
@@ -63,4 +63,4 @@ LOGGING = {
     }
 }
 
-print >> sys.stderr, "*** FINISHED LOADING DEVELOPMENT SETTINGS ***"
+print("*** FINISHED LOADING DEVELOPMENT SETTINGS ***", file=sys.stderr)

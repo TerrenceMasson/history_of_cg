@@ -1,5 +1,5 @@
 from django import forms
-from widgets import TokenWidget
+from .widgets import TokenWidget
 
 
 class TokenField(forms.ModelMultipleChoiceField):

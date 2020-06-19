@@ -1,29 +1,27 @@
-import re
+import re, json
 from unidecode import unidecode
 
 from django.http import HttpResponse
-from django.utils import simplejson
 from django.core import serializers
 
-from history.base.models import BaseModel
-from models import Page
+from history.historyofcg.models import BaseModel
+from .models import Page
 from history import logger
 
 
 class JsonResponse(HttpResponse):
     """ JSON response """
-    def __init__(self, content, mimetype='application/json', status=None, content_type=None):
+    def __init__(self, content, status=None, content_type='application/json'):
         if isinstance(content, BaseModel):
             content = serializers.serialize("json", [content])
         elif isinstance(content, dict):
-            content = simplejson.dumps(content)
+            content = json.dumps(content)
         elif isinstance(content, list):
             content = serializers.serialize("json", content)
         else:
             logger.log("", "JsonResponse content is of unknown type.")
         super(JsonResponse, self).__init__(
             content=content,
-            mimetype=mimetype,
             status=status,
             content_type=content_type,
         )
@@ -35,11 +33,11 @@ def update_story(form, story):
     story.title = data['title']
     story.date = data['date']
     story.source = data['source']
-    if data['text'] != u'':
+    if data['text']:
         story.text = data['text']
-    elif data['image'] != u'':        
+    elif data['image']:        
         story.image = data['image'] 
-    elif data['video'] != u'':        
+    elif data['video']:        
         story.video = data['video']
     return story
 
@@ -59,7 +57,7 @@ def create_page(form, request):
 
     ## Non Required: tags, homepage, established date, deceased date, location
     page.location = form.cleaned_data['location']
-    page.tags = form.cleaned_data['tags']
+    page.tags.set(form.cleaned_data['tags'])
     page.homepage = form.cleaned_data['homepage']
     page.date_established = form.cleaned_data['date_established']
     page.is_deceased = form.cleaned_data['is_deceased']

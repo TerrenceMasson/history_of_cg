@@ -21,9 +21,9 @@ def populate_page():
                     for row in child.iter():
                         if row.tag == 'field':
                             row_data[row.attrib['name']] = row.text
-                    print row_data
+                    print(row_data)
                     if Page.objects.filter(name=row_data['name']):
-                        print 'page already exists'
+                        print('page already exists')
                     else:
                         if row_data['slug']:
                             if row_data['date_1']:
@@ -81,7 +81,7 @@ def hackish_migration_for_source_fields():
                         story.source_url = row_data['source_url']
                         story.save()
     for s in stories_to_manual:
-        print s
+        print(s)
 
 
 def initial_stories_fill():
@@ -96,7 +96,7 @@ def initial_stories_fill():
                             row_data[row.attrib['name']] = row.text
                     if row_data['title']:
                         if row_data['story_type_id'] == '1':
-                            print 'video story: ', row_data
+                            print('video story: ', row_data)
                             Story.objects.create(
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
@@ -113,7 +113,7 @@ def initial_stories_fill():
                                 old_id=row_data['id']
                             ).save()
                         if row_data['story_type_id'] == '2':
-                            print 'image story: ', row_data
+                            print('image story: ', row_data)
                             Story.objects.create(
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
@@ -130,7 +130,7 @@ def initial_stories_fill():
                                 old_id=row_data['id']
                             ).save()
                         if row_data['story_type_id'] == '3':
-                            print 'text story: ', row_data
+                            print('text story: ', row_data)
                             Story.objects.create(
                                 title=row_data['title'],
                                 date=date(int(row_data['date'][:4]), int(row_data['date'][5:7]),
@@ -139,7 +139,7 @@ def initial_stories_fill():
                                 #this is just temporary, really sloppy but works T_T
                                 page=Page.objects.get(id=1),
                                 published=row_data['published'] == '1',
-                                text=row_data['story'].encode('utf-8'),
+                                text=str(row_data['story']),
                                 date_created=date(int(row_data['created'][:4]), int(row_data['created'][5:7]),
                                                   int(row_data['created'][8:10])),
                                 date_modified=date(int(row_data['modified'][:4]), int(row_data['modified'][5:7]),
@@ -157,7 +157,7 @@ def correct_story_page():
                     for row in child.iter():
                         if row.tag == 'field':
                             row_data[row.attrib['name']] = row.text
-                    print row_data
+                    print(row_data)
                     page = Page.objects.filter(old_id=int(row_data['entry_id']))
                     story = Story.objects.filter(old_id=int(row_data['story_id']))
                     if page and story:
@@ -180,7 +180,7 @@ def create_tags():
                     for row in child.iter():
                         if row.tag == 'field':
                             row_data[row.attrib['name']] = row.text
-                    print row_data
+                    print(row_data)
                     if row_data['name']:
                         Tag.objects.create(
                             name=row_data['name'],
@@ -198,7 +198,7 @@ def assign_tags():
                     for row in child.iter():
                         if row.tag == 'field':
                             row_data[row.attrib['name']] = row.text
-                    print row_data
+                    print(row_data)
                     page = Page.objects.filter(old_id=int(row_data['entry_id']))
                     tag = Tag.objects.filter(old_id=int(row_data['tag_id']))
                     if page and tag:
@@ -220,7 +220,7 @@ def create_connections():
                     for row in child.iter():
                         if row.tag == 'field':
                             row_data[row.attrib['name']] = row.text
-                    print row_data
+                    print(row_data)
                     page_1 = Page.objects.filter(old_id=int(row_data['entry_id_1']))
                     page_2 = Page.objects.filter(old_id=int(row_data['entry_id_2']))
                     if page_1 and page_2:

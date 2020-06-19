@@ -11,13 +11,29 @@ sys.path.append(PROJECT_CONTAINER_PATH)
 
 TESTING = False
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ]
+        },
+        'DIRS': ['history/historyofcg/templates'],
+    },
+]
 
 
-ADMINS = (
+ADMINS = [
     ('hocg', 'thekylemontag@gmail.com'),
     ('gowie', 'gowie.matt@gmail.com')
-)
+]
 MANAGERS = ADMINS
 
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -28,7 +44,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.historyofcg.com'
 EMAIL_HOST_USER = 'noreply@historyofcg.com'
-EMAIL_HOST_PASSWORD = os.environ['HIST_SMTP_PASS']
+EMAIL_HOST_PASSWORD = os.environ.get('HIST_SMTP_PASS', '')
 EMAIL_PORT = 587
 
 # Empty DATABASES hash to be overridden by environment settings
@@ -83,45 +99,36 @@ STATIC_ROOT = os.path.join( PROJECT_PATH, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Additional locations of static files
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join( PROJECT_PATH, 'historyofcg/static'),
-)
+]
 
 # List of finder classes that know how to find static files in
 # various locations.
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
+]
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = ')9d)j0btj_)tbxro8pw_vbt)$gv(m$#qth@f1jw&amp;yb$z=z3p%!'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-     'django.template.loaders.eggs.Loader',
-)
-
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    #'historyofcg.middleware.HttpResponseNotAllowedMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
-TEMPLATE_DIRS = ('history/historyofcg/templates',)
-
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     # Django Apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,24 +136,20 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.webdesign',
 
     # Our Apps
     'history.historyofcg',
-    'history.base',
 
     # Helper Apps
     'history.registration',
-    'south',
 
     # Testing Apps
     'django_jasmine',
-    'discover_runner',
 
     # Admin
     'django.contrib.admin',
 
-)
+]
 
 JASMINE_TEST_DIRECTORY = os.path.join(PROJECT_PATH, 'jasmine')
 

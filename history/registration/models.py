@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db import transaction
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 try:
     from django.utils.timezone import now as datetime_now
@@ -65,6 +65,7 @@ class RegistrationManager(models.Manager):
                 return user
         return False
     
+    @transaction.atomic
     def create_inactive_user(self, username, email, password, first_name, last_name,
                              site, send_email=True):
         """
@@ -88,7 +89,6 @@ class RegistrationManager(models.Manager):
             registration_profile.send_activation_email(site)
 
         return new_user
-    create_inactive_user = transaction.commit_on_success(create_inactive_user)
 
     def create_profile(self, user):
         """
@@ -100,10 +100,10 @@ class RegistrationManager(models.Manager):
         username and a random salt.
         
         """
-        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        salt = hashlib.sha1(str(random.random()).encode()).hexdigest()[:5].encode()
         username = user.username
-        if isinstance(username, unicode):
-            username = username.encode('utf-8')
+        if isinstance(username, str):
+            username = username.encode()
         activation_key = hashlib.sha1(salt+username).hexdigest()
         return self.create(user=user,
                            activation_key=activation_key)
@@ -174,9 +174,9 @@ class RegistrationProfile(models.Model):
     account registration and activation.
     
     """
-    ACTIVATED = u"ALREADY_ACTIVATED"
+    ACTIVATED = "ALREADY_ACTIVATED"
     
-    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('user'))
     activation_key = models.CharField(_('activation key'), max_length=40)
     
     objects = RegistrationManager()
@@ -185,8 +185,8 @@ class RegistrationProfile(models.Model):
         verbose_name = _('registration profile')
         verbose_name_plural = _('registration profiles')
     
-    def __unicode__(self):
-        return u"Registration information for %s" % self.user
+    def __str__(self):
+        return "Registration information for %s" % self.user
     
     def activation_key_expired(self):
         """
@@ -248,7 +248,7 @@ class RegistrationProfile(models.Model):
             is installed, this may be an instance of either
             ``django.contrib.sites.models.Site`` (if the sites
             application is installed) or
-            ``django.contrib.sites.models.RequestSite`` (if
+            ``django.contrib.sites.requests.RequestSite`` (if
             not). Consult the documentation for the Django sites
             framework for details regarding these objects' interfaces.
 
@@ -263,6 +263,6 @@ class RegistrationProfile(models.Model):
         
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
-        print 'blah'
+        print('blah')
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['{}'.format(self.user.email)])
     

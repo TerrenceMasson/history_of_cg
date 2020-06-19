@@ -1,21 +1,14 @@
 ####################
 ## TEST SETTINGS ##
 ###################
-from default import *
+from .default import *
 
 import sys
-print >> sys.stderr, "*** RUNNING TEST SETTINGS ***"
+print("*** RUNNING TEST SETTINGS ***", file=sys.stderr)
 
 TESTING = True
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
-
-## Test Settings
-TEST_RUNNER = "discover_runner.DiscoverRunner"
-TEST_DISCOVER_TOP_LEVEL = PROJECT_PATH
-TEST_DISCOVER_ROOT = PROJECT_PATH
-TEST_DISCOVER_PATTERN = "test_*"
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
 ## In-Memory Test Database
 DATABASES = {

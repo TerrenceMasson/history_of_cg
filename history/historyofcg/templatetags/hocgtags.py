@@ -1,9 +1,7 @@
-import StringIO
-import struct
-import urllib2
+import io, struct, urllib
 from django import template
 from django.core.files.images import ImageFile
-from django.template import resolve_variable, NodeList
+from django.template import NodeList
 from django.contrib.auth.models import Group
 from history.historyofcg.models import Review, Story, Page
 from random import choice, uniform
@@ -21,17 +19,19 @@ def random_double_size():
 
 @register.filter
 def get_story_type(story):
-    if story.text != None and story.text != "":
+    if story.text:
         return "story-text"
-    elif story.image != None and story.image != "":
+    elif story.image:
         return "story-image"
-    elif story.video != None and story.video != "":
+    elif story.video:
         return "story-video"
 
 @register.filter
 def get_youtube_img(story):
-    if story.video != "":
+    if story.video:
         video_id = story.video.split('?v=')[1]
+        if '&' in video_id:
+            video_id = video_id[0:video_id.index('&')]
         return "https://img.youtube.com/vi/%s/hqdefault.jpg" % video_id
     else:
         logger.log("story.video equals empty string. Can't grab image for this story: ", story)
@@ -46,11 +46,11 @@ def is_vimeo_video(story):
 
 @register.filter
 def get_story_icon(story):
-    if story.text != "":
+    if story.text:
         return "story-type-icon-text"
-    elif story.image != "":
+    elif story.image:
         return "story-type-icon-image"
-    elif story.video != "":
+    elif story.video:
         return "story-type-icon-video"
 
 @register.filter
@@ -69,7 +69,7 @@ def replace(value, args):
 @register.filter
 def get_random_image(page):
     images = Story.objects.filter(page__pk=page.id, published=True, deleted=False)
-    images = filter(lambda x: x.type() == "image", images)
+    images = [x for x in images if x.type() == "image"]
     if len(images) == 0:
         ## TODO: We're hot linking our random person image from clker.com
         return "/static/img/P_desatCentered02.png" if page.type.name != "person" else "/static/img/missing-image.jpg"
@@ -130,15 +130,15 @@ class GroupCheckNode(template.Node):
         self.nodelist_false = nodelist_false
 
     def render(self, context):
-        print context
+        print(context)
         if "request" in context:
-            print 'request'
+            print('request')
             user = context['request'].user
         elif "user" in context:
-            print 'user'
+            print('user')
             user = context['user']
 
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return self.nodelist_false.render(context)
 
         try:
@@ -155,7 +155,7 @@ class GroupCheckNode(template.Node):
 
 @register.filter
 def get_img_width(value):
-    header = urllib2.urlopen(value).read(24)
+    header = urllib.request.urlopen(value).read(24)
     return_list = getImageInfo(header)
     return int(return_list[1])
 
@@ -197,7 +197,7 @@ def getImageInfo(data):
     elif (size >= 20):
     # and data.startswith('\377\370'):
         content_type = 'image/jpeg'
-        jpeg = StringIO.StringIO(data)
+        jpeg = io.StringIO(data)
         jpeg.read(2)
         b = jpeg.read(1)
         try:

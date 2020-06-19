@@ -1,8 +1,7 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
-from historyofcg.models import Page
-from factories import *
+from .factories import TagFactory, PageFactory
 from history import logger
 
 class ViewTests(TestCase):

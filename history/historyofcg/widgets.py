@@ -2,7 +2,7 @@ import re
 import json
 import copy
 from django import forms
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class TokenWidget(forms.TextInput):
@@ -40,8 +40,8 @@ class TokenWidget(forms.TextInput):
     def _class_name(value):
         return value.replace(" ", "-")
 
-    def render(self, name, value, attrs=None):
-        flat_value = ",".join(map(unicode, value or []))
+    def render(self, name, value, attrs=None, renderer=None):
+        flat_value = ",".join(map(str, value or []))
         settings = copy.copy(self.settings)
 
         url_name = getattr(self, "search_url", "djtokeninput_search")
@@ -51,18 +51,18 @@ class TokenWidget(forms.TextInput):
         attrs["class"] = self._class_name(
             attrs.get("class"), "tokeninput")
 
-        if value is not None:
+        if value:
             settings["prePopulate"] = [
-                {"id": pk, "name": unicode(self.choices.queryset.get(pk=pk))}
+                {"id": pk, "name": str(self.choices.queryset.get(pk=pk))}
                 for pk in value
             ]
 
         attrs["data-settings"] = json.dumps(settings)
-        return super(TokenWidget, self).render(name, flat_value, attrs)
+        return super(TokenWidget, self).render(name, flat_value, attrs=attrs, renderer=renderer)
 
     @staticmethod
     def _class_name(class_name=None, extra=None):
-        return " ".join(filter(None, [class_name, extra]))
+        return " ".join([x for x in [class_name, extra] if x])
 
     def value_from_datadict(self, data, files, name):
         values = data.get(name, "").split(",")
