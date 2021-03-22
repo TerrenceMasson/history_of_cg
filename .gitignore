@@ -8,3 +8,5 @@ staticfiles/.*
 
 log/
 .vscode
+
+node_modules
