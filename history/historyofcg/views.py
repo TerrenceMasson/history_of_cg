@@ -263,7 +263,7 @@ def publish_story(request, id):
 def get_pages(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
-        pages = Page.objects.filter(name__icontains=q)[0:20]
+        pages = Page.objects.filter(name__icontains=q)[0:40]
         results = []
         for page in pages:
             page_json = {

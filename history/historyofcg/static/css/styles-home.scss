@@ -31,6 +31,8 @@
 .ui-autocomplete.ui-menu {
     margin-left: 3px;
     width: 370px !important;
+    height: 240px;
+    overflow-y: scroll;
 }
 
 div.timeline {
