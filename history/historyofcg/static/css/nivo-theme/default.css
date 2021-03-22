@@ -6,7 +6,15 @@
  * Free to use and abuse under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
  */
- 
+
+.nivo-lightbox-inline {
+	background: #222228 !important;
+}
+
+.nivo-lightbox-inline .inline-story-text {
+	color: white !important;
+}
+
 .nivo-lightbox-theme-default.nivo-lightbox-overlay { 
 	background: #666;
 	background: rgba(0,0,0,0.6); 

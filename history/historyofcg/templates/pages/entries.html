@@ -65,12 +65,13 @@
                         {{ story|get_story_type }} {% random_double_size %}"
                         {% if story.text != "" and story.text != None %}
                             href="#story-{{story.id}}"
+                            data-lightbox-type="inline"
                         {% elif story.image != "" and story.image != None %}
                             href="{{ story.image|safe }}"
                         {% elif story.video != "" and story.video != None %}
                             href="{{ story.video|safe }}"
                         {% endif %}
-                        data-index={{ forloop.counter }}
+                        data-index="{{ forloop.counter }}"
                         title="{{ story.title|safe }}"
                         data-lightbox-gallery="gallery1">
                     <div class="container {{ story|get_story_type }}">
